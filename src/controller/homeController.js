@@ -1,6 +1,8 @@
+import pool from '../configs/connectDB';
 
-let getHomePage = (req, res) => {
-  return res.send('Hello World')
+let getHomePage = async (req, res) => {
+  const [rows, fields] = await pool.query('SELECT * FROM vehicles')
+  return res.send(rows)
 }
 
 module.exports = {
