@@ -1,10 +1,13 @@
-const express = require('express')
-const app = express()
-const port = 1111
+import express from 'express'
+import configViewEngine from './configs/viewEngine'
+import initWebRoute from './route/web'
+require('dotenv').config()
 
-app.get('/', (req, res) => {
-  res.send('Hello World!')
-})
+const app = express()
+const port = process.env.PORT || 1111
+
+configViewEngine(app)
+initWebRoute(app)
 
 app.listen(port, () => {
   console.log(`Example app listening on port ${port}`)
