@@ -1,0 +1,13 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+@font-face {
+    font-family: montserrat;
+    src: url(Montserrat-VariableFont_wght.ttf);
+}
+
+body {
+    background-color: #f5f7fb;
+    font-family: montserrat;
+}
