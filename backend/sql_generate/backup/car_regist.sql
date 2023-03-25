@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Host: localhost
--- Generation Time: Mar 20, 2023 at 08:22 PM
+-- Generation Time: Mar 25, 2023 at 08:17 PM
 -- Server version: 10.4.21-MariaDB
 -- PHP Version: 8.1.6
 
@@ -21,11 +21,12 @@ SET time_zone = "+00:00";
 -- Database: `car_regist`
 --
 
+-- --------------------------------------------------------
+
+
 drop database if exists `car_regist`;
 create database `car_regist`;
 use `car_regist`;
-
--- --------------------------------------------------------
 
 --
 -- Table structure for table `account`
@@ -33,10 +34,116 @@ use `car_regist`;
 
 CREATE TABLE `account` (
   `id` int(11) NOT NULL,
-  `email` varchar(20) NOT NULL,
-  `password` int(11) NOT NULL,
+  `email` varchar(50) NOT NULL,
+  `password` varchar(50) NOT NULL,
   `type` tinyint(1) NOT NULL DEFAULT 0
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
+
+--
+-- Dumping data for table `account`
+--
+
+INSERT INTO `account` (`id`, `email`, `password`, `type`) VALUES
+(353, 'charliehuy333@ttdk.vn', '1TQNcOPB', 0),
+(354, 'williamminh787@ttdk.vn', 'mKlUNsGW', 0),
+(355, 'davidlinh828@ttdk.vn', 'u3mke3bu', 0),
+(356, 'baongan844@ttdk.vn', 'zsIMQ4eB', 0),
+(357, 'davidduc188@ttdk.vn', 'NOU56Jq8', 0),
+(358, 'ananh732@ttdk.vn', 'gSVniiO5', 0),
+(359, 'charlieyen564@ttdk.vn', 'W6t7mCTe', 0),
+(360, 'emmadung930@ttdk.vn', 'seZLw80r', 0),
+(361, 'umanam439@ttdk.vn', 'NWUsxDgz', 0),
+(362, 'hongcong588@ttdk.vn', 'GyABp8fj', 0),
+(363, 'annauyen703@ttdk.vn', 'SDbIryqk', 0),
+(364, 'charlieha134@ttdk.vn', 'r8xsBWvL', 0),
+(365, 'xavierdung735@ttdk.vn', 'FOxrI1jV', 0),
+(366, 'viktoryen179@ttdk.vn', 'OtJ9XiX0', 0),
+(367, 'leoan431@ttdk.vn', 'vbmyMA4Y', 0),
+(368, 'bobdung952@ttdk.vn', 'mfe11qHS', 0),
+(369, 'thanhlinh575@ttdk.vn', 'U1RvK5T0', 0),
+(370, 'williamquan873@ttdk.vn', 'mHrKaDV3', 0),
+(371, 'baohung431@ttdk.vn', 'ok4CUkUs', 0),
+(372, 'emilymanh520@ttdk.vn', 'Ygfb0Q1k', 0),
+(373, 'duyhieu894@ttdk.vn', 'EJzDJV8I', 0),
+(374, 'williamthao749@ttdk.vn', 'GNo8abvL', 0),
+(375, 'kateuyen931@ttdk.vn', 'iWR1sSkT', 0),
+(376, 'trungduc273@ttdk.vn', 'CRab50Ri', 0),
+(377, 'graceyen254@ttdk.vn', 'y6mIvbm0', 0),
+(378, 'hongcong622@ttdk.vn', 'xWDfxsNt', 0),
+(379, 'wendyuyen708@ttdk.vn', 'KFNJa4PR', 0),
+(380, 'williamkhang687@ttdk.vn', 'GjM64JlS', 0),
+(381, 'danielan705@ttdk.vn', 'KQI9GCrm', 0),
+(382, 'hoailan949@ttdk.vn', '6P3yyu8Z', 0),
+(383, 'gracecuong696@ttdk.vn', 'lCsfNlDJ', 0),
+(384, 'minhhuy402@ttdk.vn', 'Re31LvEC', 0),
+(385, 'noahtu186@ttdk.vn', 'AqM221kP', 0),
+(386, 'jamesquang334@ttdk.vn', 'diMNCoVB', 0),
+(387, 'danielmanh408@ttdk.vn', 'q3hD3tyf', 0),
+(388, 'miayen442@ttdk.vn', 'DsX299f4', 0),
+(389, 'davidquang647@ttdk.vn', 'PAEAU3EU', 0),
+(390, 'leolong048@ttdk.vn', 'q5gtQImn', 0),
+(391, 'baophong081@ttdk.vn', 'njrXBkht', 0),
+(392, 'alexhoang395@ttdk.vn', 'hKqDJ2wR', 0),
+(393, 'huuhieu101@ttdk.vn', '4I54Ka8R', 0),
+(394, 'elizabethcong729@ttdk.vn', 'a54DWoTD', 0),
+(395, 'benvinh572@ttdk.vn', 'K2f2FtND', 0),
+(396, 'graceminh563@ttdk.vn', 'wGsWzIRf', 0),
+(397, 'hoaivinh776@ttdk.vn', 'xMe89Npy', 0),
+(398, 'xavierlong285@ttdk.vn', 'zTVQdS3R', 0),
+(399, 'quinnquang876@ttdk.vn', 't0oZibna', 0),
+(400, 'katethang972@ttdk.vn', 'xGWqM68t', 0),
+(401, 'kateminh336@ttdk.vn', 'XCPLS4DU', 0),
+(402, 'quochung125@ttdk.vn', 'K91rPteK', 0),
+(403, 'wendynga098@ttdk.vn', 'RBeaz93I', 0),
+(404, 'taraquang561@ttdk.vn', '4wT8fdr3', 0),
+(405, 'huunam305@ttdk.vn', 'FV6ZVCAh', 0),
+(406, 'quocvuong526@ttdk.vn', 'U2dxjGL6', 0),
+(407, 'elizabethduc066@ttdk.vn', 'Aol0S00O', 0),
+(408, 'miahuy994@ttdk.vn', 'jVsy6wNn', 0),
+(409, 'michaeldung410@ttdk.vn', 'dtlUWa7d', 0),
+(410, 'huuhieu977@ttdk.vn', 'iKdg1R1K', 0),
+(411, 'honeylan064@ttdk.vn', 'cj2JLmJZ', 0),
+(412, 'kateanh037@ttdk.vn', 'ozrmYiHC', 0),
+(413, 'ngocquang143@ttdk.vn', 'r6eF1TYy', 0),
+(414, 'charliethao378@ttdk.vn', 'KmWmNYrC', 0),
+(415, 'davidlinh148@ttdk.vn', 'uYW8fDek', 0),
+(416, 'vodkacong924@ttdk.vn', 'M6hUxNFn', 0),
+(417, 'katenga931@ttdk.vn', 'FLnxgTIC', 0),
+(418, 'xavieryen107@ttdk.vn', 'U37Hu9KX', 0),
+(419, 'ngoctrung586@ttdk.vn', '81TLgiok', 0),
+(420, 'johnybinh486@ttdk.vn', 'wtitmb8l', 0),
+(421, 'vladimirvuong727@ttdk.vn', 'po376vqs', 0),
+(422, 'honeyvuong576@ttdk.vn', 'EEcshjkn', 0),
+(423, 'thanhcong143@ttdk.vn', 'p9IiB9UA', 0),
+(424, 'emilyvy357@ttdk.vn', 'qWIPro1I', 0),
+(425, 'yaravuong475@ttdk.vn', '3BkQ54Vz', 0),
+(426, 'vladimirvu968@ttdk.vn', 'Ri6BSGin', 0),
+(427, 'xaviertuan985@ttdk.vn', 'qGPJFb18', 0),
+(428, 'wendyphong068@ttdk.vn', '1YBEVgCS', 0),
+(429, 'baovuong522@ttdk.vn', 'VkAN8DFC', 0),
+(430, 'wendyuyen985@ttdk.vn', 'Swkj9bH4', 0),
+(431, 'clairequang475@ttdk.vn', 'Gck1dBGN', 0),
+(432, 'ngocthao891@ttdk.vn', 'qeQOTvlH', 0),
+(433, 'katemanh794@ttdk.vn', 'AF1u6jCe', 0),
+(434, 'tarauyen131@ttdk.vn', 'WCZxHR9r', 0),
+(435, 'johnyvu250@ttdk.vn', '5g7RoJTq', 0),
+(436, 'katetuan084@ttdk.vn', 'FQZHaRv2', 0),
+(437, 'vanha456@ttdk.vn', 'WVeyUvrc', 0),
+(438, 'viktornam411@ttdk.vn', 'aKGORLEA', 0),
+(439, 'anthao899@ttdk.vn', '4zV3DY1Q', 0),
+(440, 'quinnhieu057@ttdk.vn', 'lsX4Rh2H', 0),
+(441, 'bobkhang481@ttdk.vn', 'XnCA8Wdu', 0),
+(442, 'duyanh922@ttdk.vn', 'zUKfl1JJ', 0),
+(443, 'alicedung564@ttdk.vn', '1XkIUnHi', 0),
+(444, 'rubybinh770@ttdk.vn', 'XKVONWrP', 0),
+(445, 'oliviaphuc223@ttdk.vn', 'vB8Xgctj', 0),
+(446, 'vanphuc004@ttdk.vn', 'G4srykT3', 0),
+(447, 'jamescuong823@ttdk.vn', 'iLLJd4sa', 0),
+(448, 'frankvinh212@ttdk.vn', 'fgPDia73', 0),
+(449, 'samminh014@ttdk.vn', 'CZLEc6Iy', 0),
+(450, 'noahbinh266@ttdk.vn', 'VFNdMM6F', 0),
+(451, 'peterhuong693@ttdk.vn', '1kGh6Sd7', 0),
+(452, 'alextrung197@ttdk.vn', 'tp7GL9PO', 0);
 
 -- --------------------------------------------------------
 
@@ -46,11 +153,117 @@ CREATE TABLE `account` (
 
 CREATE TABLE `centre` (
   `id` int(11) NOT NULL,
-  `name` varchar(20) NOT NULL,
+  `name` varchar(50) NOT NULL,
   `city` varchar(20) NOT NULL,
   `district` varchar(50) NOT NULL,
   `activation` date NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
+
+--
+-- Dumping data for table `centre`
+--
+
+INSERT INTO `centre` (`id`, `name`, `city`, `district`, `activation`) VALUES
+(353, 'Trung tâm Đăng kiểm Charlie Huy', 'Tuyên Quang', 'Sơn Trà', '1995-06-04'),
+(354, 'Trung tâm Đăng kiểm William Minh', 'Long An', 'Bắc Từ Liêm', '2013-04-04'),
+(355, 'Trung tâm Đăng kiểm David Linh', 'Bình Dương', 'Đống Đa', '2000-05-05'),
+(356, 'Trung tâm Đăng kiểm Bảo Ngân', 'Bắc Kạn', 'Đống Đa', '1994-08-29'),
+(357, 'Trung tâm Đăng kiểm David Đức', 'Tiền Giang', 'Long Biên', '2002-09-06'),
+(358, 'Trung tâm Đăng kiểm An Anh', 'Hà Nam', 'Bình Thạnh', '1992-07-29'),
+(359, 'Trung tâm Đăng kiểm Charlie Yến', 'Hà Tĩnh', 'Ba Đình', '2010-05-18'),
+(360, 'Trung tâm Đăng kiểm Emma Dũng', 'Hà Giang', 'Hoàn Kiếm', '1992-08-12'),
+(361, 'Trung tâm Đăng kiểm Uma Nam', 'Bà Rịa - Vũng Tàu', 'Hoàn Kiếm', '2012-10-27'),
+(362, 'Trung tâm Đăng kiểm Hồng Công', 'Quảng Ninh', 'Ba Đình', '1998-06-25'),
+(363, 'Trung tâm Đăng kiểm Anna Uyên', 'Hải Dương', 'Hai Bà Trưng', '2013-01-29'),
+(364, 'Trung tâm Đăng kiểm Charlie Hà', 'Hậu Giang', 'Hải Châu', '1997-11-30'),
+(365, 'Trung tâm Đăng kiểm Xavier Dũng', 'Yên Bái', 'Tây Hồ', '2011-02-03'),
+(366, 'Trung tâm Đăng kiểm Viktor Yến', 'Lào Cai', 'Hai Bà Trưng', '2008-09-09'),
+(367, 'Trung tâm Đăng kiểm Leo An', 'Đồng Nai', 'Tây Hồ', '1993-05-23'),
+(368, 'Trung tâm Đăng kiểm Bob Dũng', 'Hồ Chí Minh', 'Ba Đình', '2011-08-14'),
+(369, 'Trung tâm Đăng kiểm Thanh Linh', 'Bắc Ninh', 'Hoàn Kiếm', '2003-07-18'),
+(370, 'Trung tâm Đăng kiểm William Quân', 'Bình Phước', 'Đống Đa', '1990-08-14'),
+(371, 'Trung tâm Đăng kiểm Bảo Hùng', 'Cao Bằng', 'Ba Đình', '2006-06-20'),
+(372, 'Trung tâm Đăng kiểm Emily Mạnh', 'Sóc Trăng', 'Bắc Từ Liêm', '2000-02-08'),
+(373, 'Trung tâm Đăng kiểm Duy Hiếu', 'Thái Bình', 'Nam Từ Liêm', '1996-01-02'),
+(374, 'Trung tâm Đăng kiểm William Thảo', 'Bạc Liêu', 'Tây Hồ', '2002-05-28'),
+(375, 'Trung tâm Đăng kiểm Kate Uyên', 'Bạc Liêu', 'Long Biên', '1993-01-11'),
+(376, 'Trung tâm Đăng kiểm Trung Đức', 'Phú Thọ', 'Thanh Khê', '2014-04-22'),
+(377, 'Trung tâm Đăng kiểm Grace Yến', 'Quảng Trị', 'Long Biên', '1990-09-08'),
+(378, 'Trung tâm Đăng kiểm Hồng Công', 'Vĩnh Long', 'Hai Bà Trưng', '1993-07-14'),
+(379, 'Trung tâm Đăng kiểm Wendy Uyên', 'Hà Nội', 'Hoàn Kiếm', '2006-06-09'),
+(380, 'Trung tâm Đăng kiểm William Khang', 'Thừa Thiên Huế', 'Đống Đa', '2007-06-10'),
+(381, 'Trung tâm Đăng kiểm Daniel An', 'Tây Ninh', 'Hai Bà Trưng', '2007-11-24'),
+(382, 'Trung tâm Đăng kiểm Hoài Lan', 'Bạc Liêu', 'Đống Đa', '1999-01-14'),
+(383, 'Trung tâm Đăng kiểm Grace Cường', 'Kon Tum', 'Tây Hồ', '1992-03-08'),
+(384, 'Trung tâm Đăng kiểm Minh Huy', 'Bà Rịa - Vũng Tàu', 'Thanh Xuân', '1993-07-06'),
+(385, 'Trung tâm Đăng kiểm Noah Tú', 'Đắk Lắk', 'Hoàng Mai', '2007-06-29'),
+(386, 'Trung tâm Đăng kiểm James Quang', 'Tây Ninh', 'Sơn Trà', '1998-01-17'),
+(387, 'Trung tâm Đăng kiểm Daniel Mạnh', 'Bình Dương', 'Thanh Xuân', '1998-01-22'),
+(388, 'Trung tâm Đăng kiểm Mia Yến', 'Thanh Hóa', 'Tây Hồ', '2007-11-09'),
+(389, 'Trung tâm Đăng kiểm David Quang', 'Hưng Yên', 'Đống Đa', '1994-04-28'),
+(390, 'Trung tâm Đăng kiểm Leo Long', 'Nam Định', 'Cầu Giấy', '1996-08-24'),
+(391, 'Trung tâm Đăng kiểm Bảo Phong', 'Bà Rịa - Vũng Tàu', 'Ba Đình', '2012-11-16'),
+(392, 'Trung tâm Đăng kiểm Alex Hoàng', 'Hà Tĩnh', 'Cầu Giấy', '1995-07-12'),
+(393, 'Trung tâm Đăng kiểm Hữu Hiếu', 'Nam Định', 'Hải Châu', '2009-04-01'),
+(394, 'Trung tâm Đăng kiểm Elizabeth Công', 'Long An', 'Hà Đông', '1994-07-03'),
+(395, 'Trung tâm Đăng kiểm Ben Vinh', 'Đà Nẵng', 'Cầu Giấy', '2005-07-28'),
+(396, 'Trung tâm Đăng kiểm Grace Minh', 'Thái Nguyên', 'Ba Đình', '2010-07-02'),
+(397, 'Trung tâm Đăng kiểm Hoài Vinh', 'Sơn La', 'Ba Đình', '2012-10-17'),
+(398, 'Trung tâm Đăng kiểm Xavier Long', 'Hà Giang', 'Hoàn Kiếm', '1991-05-29'),
+(399, 'Trung tâm Đăng kiểm Quinn Quang', 'Cà Mau', 'Long Biên', '2014-05-28'),
+(400, 'Trung tâm Đăng kiểm Kate Thắng', 'Bình Phước', 'Hoàn Kiếm', '2007-09-10'),
+(401, 'Trung tâm Đăng kiểm Kate Minh', 'Phú Thọ', 'Đống Đa', '2009-02-06'),
+(402, 'Trung tâm Đăng kiểm Quốc Hùng', 'Đồng Nai', 'Hoàn Kiếm', '2000-02-08'),
+(403, 'Trung tâm Đăng kiểm Wendy Nga', 'Quảng Trị', 'Tây Hồ', '2014-04-16'),
+(404, 'Trung tâm Đăng kiểm Tara Quang', 'Tiền Giang', 'Đống Đa', '2004-10-04'),
+(405, 'Trung tâm Đăng kiểm Hữu Nam', 'Gia Lai', 'Tây Hồ', '2006-07-23'),
+(406, 'Trung tâm Đăng kiểm Quốc Vương', 'Hà Giang', 'Cầu Giấy', '2011-06-29'),
+(407, 'Trung tâm Đăng kiểm Elizabeth Đức', 'Bà Rịa - Vũng Tàu', 'Hải Châu', '1991-08-19'),
+(408, 'Trung tâm Đăng kiểm Mia Huy', 'Quảng Trị', 'Nam Từ Liêm', '1998-03-27'),
+(409, 'Trung tâm Đăng kiểm Michael Dũng', 'Ninh Thuận', 'Bình Thạnh', '1995-01-18'),
+(410, 'Trung tâm Đăng kiểm Hữu Hiếu', 'Quảng Bình', 'Hoàn Kiếm', '2003-01-27'),
+(411, 'Trung tâm Đăng kiểm Honey Lan', 'Thanh Hóa', 'Nam Từ Liêm', '2013-04-11'),
+(412, 'Trung tâm Đăng kiểm Kate Anh', 'Sơn La', 'Thanh Xuân', '2008-05-22'),
+(413, 'Trung tâm Đăng kiểm Ngọc Quang', 'Quảng Nam', 'Ba Đình', '2007-11-11'),
+(414, 'Trung tâm Đăng kiểm Charlie Thảo', 'Quảng Nam', 'Ba Đình', '1994-07-05'),
+(415, 'Trung tâm Đăng kiểm David Linh', 'Thanh Hóa', 'Hoàng Mai', '2001-01-30'),
+(416, 'Trung tâm Đăng kiểm Vodka Công', 'Kiên Giang', 'Thanh Xuân', '2004-11-02'),
+(417, 'Trung tâm Đăng kiểm Kate Nga', 'Quảng Bình', 'Cầu Giấy', '2008-12-27'),
+(418, 'Trung tâm Đăng kiểm Xavier Yến', 'Trà Vinh', 'Thanh Xuân', '1990-09-19'),
+(419, 'Trung tâm Đăng kiểm Ngọc Trung', 'Bình Phước', 'Bình Thạnh', '2009-08-24'),
+(420, 'Trung tâm Đăng kiểm Johny Bình', 'Vĩnh Phúc', 'Thanh Xuân', '2007-04-15'),
+(421, 'Trung tâm Đăng kiểm Vladimir Vương', 'Bắc Giang', 'Hai Bà Trưng', '2006-11-30'),
+(422, 'Trung tâm Đăng kiểm Honey Vượng', 'Bắc Ninh', 'Ba Đình', '1992-04-13'),
+(423, 'Trung tâm Đăng kiểm Thanh Công', 'Đồng Tháp', 'Long Biên', '1996-01-22'),
+(424, 'Trung tâm Đăng kiểm Emily Vy', 'Sóc Trăng', 'Nam Từ Liêm', '2010-08-31'),
+(425, 'Trung tâm Đăng kiểm Yara Vương', 'Tuyên Quang', 'Thanh Xuân', '2012-05-02'),
+(426, 'Trung tâm Đăng kiểm Vladimir Vũ', 'Đồng Tháp', 'Ba Đình', '2000-07-20'),
+(427, 'Trung tâm Đăng kiểm Xavier Tuấn', 'Đà Nẵng', 'Hoàn Kiếm', '2011-12-18'),
+(428, 'Trung tâm Đăng kiểm Wendy Phong', 'Đắk Nông', 'Hải Châu', '2011-01-25'),
+(429, 'Trung tâm Đăng kiểm Bảo Vượng', 'Hà Nội', 'Thanh Khê', '2000-03-05'),
+(430, 'Trung tâm Đăng kiểm Wendy Uyên', 'Đồng Tháp', 'Hai Bà Trưng', '2010-07-17'),
+(431, 'Trung tâm Đăng kiểm Claire Quang', 'Đồng Tháp', 'Hai Bà Trưng', '1992-11-16'),
+(432, 'Trung tâm Đăng kiểm Ngọc Thảo', 'Bắc Kạn', 'Cầu Giấy', '2004-10-06'),
+(433, 'Trung tâm Đăng kiểm Kate Mạnh', 'Quảng Trị', 'Nam Từ Liêm', '2007-12-20'),
+(434, 'Trung tâm Đăng kiểm Tara Uyên', 'Ninh Bình', 'Ba Đình', '2009-04-06'),
+(435, 'Trung tâm Đăng kiểm Johny Vũ', 'Điện Biên', 'Hoàn Kiếm', '2002-04-13'),
+(436, 'Trung tâm Đăng kiểm Kate Tuấn', 'Điện Biên', 'Nam Từ Liêm', '2011-07-22'),
+(437, 'Trung tâm Đăng kiểm Văn Hà', 'Khánh Hòa', 'Cầu Giấy', '2007-01-12'),
+(438, 'Trung tâm Đăng kiểm Viktor Nam', 'Đồng Tháp', 'Cầu Giấy', '2008-10-21'),
+(439, 'Trung tâm Đăng kiểm An Thảo', 'Lai Châu', 'Bắc Từ Liêm', '1993-04-27'),
+(440, 'Trung tâm Đăng kiểm Quinn Hiếu', 'Kiên Giang', 'Hoàng Mai', '1992-04-04'),
+(441, 'Trung tâm Đăng kiểm Bob Khang', 'Lâm Đồng', 'Ba Đình', '2005-08-20'),
+(442, 'Trung tâm Đăng kiểm Duy Anh', 'Đà Nẵng', 'Thanh Xuân', '1997-07-17'),
+(443, 'Trung tâm Đăng kiểm Alice Dũng', 'Kon Tum', 'Hoàng Mai', '1991-12-17'),
+(444, 'Trung tâm Đăng kiểm Ruby Bình', 'Hà Tĩnh', 'Bắc Từ Liêm', '2006-01-30'),
+(445, 'Trung tâm Đăng kiểm Olivia Phúc', 'Ninh Bình', 'Bắc Từ Liêm', '1997-05-28'),
+(446, 'Trung tâm Đăng kiểm Văn Phúc', 'Trà Vinh', 'Thanh Xuân', '1994-04-27'),
+(447, 'Trung tâm Đăng kiểm James Cường', 'Hồ Chí Minh', 'Hai Bà Trưng', '2006-10-18'),
+(448, 'Trung tâm Đăng kiểm Frank Vinh', 'An Giang', 'Hoàn Kiếm', '2012-03-16'),
+(449, 'Trung tâm Đăng kiểm Sam Minh', 'Vĩnh Phúc', 'Hoàng Mai', '2014-05-11'),
+(450, 'Trung tâm Đăng kiểm Noah Bình', 'Bình Dương', 'Ba Đình', '1999-12-28'),
+(451, 'Trung tâm Đăng kiểm Peter Hương', 'Quảng Trị', 'Cầu Giấy', '1992-09-05'),
+(452, 'Trung tâm Đăng kiểm Alex Trung', 'Trà Vinh', 'Cầu Giấy', '2014-01-16');
 
 -- --------------------------------------------------------
 
@@ -6322,7 +6535,7 @@ ALTER TABLE `vehicles`
 -- AUTO_INCREMENT for table `account`
 --
 ALTER TABLE `account`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=453;
 
 --
 -- AUTO_INCREMENT for table `owner`
