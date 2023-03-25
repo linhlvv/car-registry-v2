@@ -24,11 +24,13 @@ for i in range(100):
     name = random.choice(heads) + " " + part_name
     ran_names.append(name)
     short = unidecode(part_name.lower().replace(" ",""))
-    accounts.append(short)
+    acc = str(short) + "@ttdk.vn"
+    accounts.append(acc)
     
 
 # Tạo 1000 địa chỉ khác nhau
-ran_adds = []
+ran_diss = []
+ran_pros = []
 
 district = ["Cầu Giấy", "Đống Đa", "Ba Đình", "Hai Bà Trưng", "Hoàn Kiếm", "Hoàng Mai", "Long Biên", "Tây Hồ", "Thanh Xuân", "Bắc Từ Liêm", "Cầu Giấy", "Đống Đa",
             "Hà Đông", "Hai Bà Trưng", "Hoàn Kiếm", "Hoàng Mai", "Long Biên", "Nam Từ Liêm", "Tây Hồ", "Thanh Xuân", "Ba Đình", "Sơn Trà", "Bình Thạnh", "Hải Châu", "Thanh Khê"]
@@ -36,9 +38,10 @@ province = ["Hà Nội", "Hồ Chí Minh", "Đà Nẵng", "Hải Phòng", "Cần
             "Khánh Hòa", "Kiên Giang", "Kon Tum", "Lai Châu", "Lâm Đồng", "Lạng Sơn", "Lào Cai", "Long An", "Nam Định", "Nghệ An", "Ninh Bình", "Ninh Thuận", "Phú Thọ", "Quảng Bình", "Quảng Nam", "Quảng Ngãi", "Quảng Ninh", "Quảng Trị", "Sóc Trăng", "Sơn La", "Tây Ninh", "Thái Bình", "Thái Nguyên", "Thanh Hóa", "Thừa Thiên Huế", "Tiền Giang", "Trà Vinh", "Tuyên Quang", "Vĩnh Long", "Vĩnh Phúc", "Yên Bái"]
 
 for i in range(1000):
-    ran_add = random.choice(district) + \
-        "/" + random.choice(province)
-    ran_adds.append(ran_add)
+    ran_dis = random.choice(district)
+    ran_diss.append(ran_dis) 
+    ran_pro = random.choice(province)
+    ran_pros.append(ran_pro)
 
 # Activation date
 act_dates = []
@@ -61,12 +64,9 @@ for i in range(100):
     passwords.append(random_string)
 
 # Tạo file text và ghi danh sách biển số xe vào file
-with io.open('./sql/centre.sql', 'w', encoding='utf-8') as f:
-    f.write("\n".join([address + "/" + name + "/" + str(act_date) + "/"
-            for address, name, act_date in zip(ran_adds, ran_names,act_dates)]))
-    f.close()
-    
-with io.open('./sql/account.sql', 'w', encoding='utf-8') as f:
-    f.write("\n".join([str(acc) + "@ttdk.vn" + "/" + pw
-            for acc, pw in zip(accounts, passwords)]))
-    f.close()
+with io.open('sql_generate/sql/account_centre.sql', 'w', encoding='utf-8') as f:
+    f.write("\n".join(["insert into `account` (`email`, `password`, `type`) values ('" + email + "', '" + pw + "', '0');\n" 
+                   + "insert into `centre` (`id`, `name`,`city`,`district`,`activation`) values ((SELECT MAX(ID) FROM `account`), '" + name + "', '" + province + "', '" + district + "', '" + str(date) + "');" 
+        for name, province, district, date, email, pw  in zip(ran_names, ran_pros, ran_diss, act_dates, accounts, passwords)]))
+
+
