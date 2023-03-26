@@ -6,7 +6,7 @@ let test = async (req, res) => {
 }
 
 let homePage = async (req, res) => {
-  if (req.session.username === undefined) {
+  if (req.session.email === undefined) {
     return res.send(`<form action="/test" method="POST">
     <label for="fname">First name:</label>
     <input type="text" id="fname" name="fname"><br><br>
@@ -24,16 +24,16 @@ let homePage = async (req, res) => {
 }
 
 let authenticate = async (req, res) => {
-  let username = req.body.username;
+  let email = req.body.email;
   let password = req.body.password;
   
-  if (username && password) {
+  if (email && password) {
     let query = `select * from account where email = ? and password = ?`;
-    let [result] = await pool.execute(query, [username, password]);
+    let [result] = await pool.execute(query, [email, password]);
       
       if (result.length > 0) {
         req.session.loggedin = true;
-        req.session.username = username;
+        req.session.email = email;
         res.redirect('/');
       } else {
         res.send({ loginErr: 'Incorrect Username or Password!' });
@@ -43,7 +43,7 @@ let authenticate = async (req, res) => {
 }
 
 let logout = async (req, res) => {
-  req.session.username = undefined;
+  req.session.email = undefined;
   req.session.loggedin = false;
   return res.redirect('/');
 }
