@@ -37,5 +37,5 @@ let logout = async (req, res) => {
 }
 
 module.exports = {
-  homePage, logout, authenticate
+  homePage, authenticate, logout 
 }

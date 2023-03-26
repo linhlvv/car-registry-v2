@@ -1,6 +1,6 @@
-import express from 'express'
-import initWebRoute from './route/web.js'
+import express from 'express';
 import session from 'express-session';
+import initWebRoute from './route/web.js';
 
 require('dotenv').config()
 
