@@ -2,35 +2,48 @@
 import Input from '@/components/UI/Input.vue';
 import Intro from './Intro.vue'
 import Button from '../UI/Button.vue';
+import { useAccountStore } from '../../stores/AccountStore'
 import { ref } from 'vue';
 
-const email = ref('')
-const password = ref('')
+const accountStore = useAccountStore()
+const accountInfo = ref({email: '', password: ''});
 
-const loginHandler = () => {
-    console.log("login");
+const loginHandler = async() => {
+    console.log(`account info: ${JSON.stringify(accountInfo.value)}`);
+    const res = await fetch("http://localhost:1111/auth", {
+        method: 'POST',
+        body: JSON.stringify(accountInfo.value),
+        headers: {'Content-Type': 'application/json'},
+    })
+    if(res.error) {
+        console.log(res.error);
+    }
+    const data = JSON.parse(await res.text())[0]
+    console.log(data);
+    
 };
 
 </script>
 
 <template>
-    <div class="login">
-        <div class="login-inner w-[60%]">
+    <div class="flex justify-center">
+        <div class="login-inner flex rounded-md overflow-hidden w-[60%]">
             <Intro class="w-[45%]"/>
-            <div class="login-form bg-white w-[55%]">
-                <div class="title">Login</div>
+            <div class="flex flex-col justify-center gap-4 p-4 max-[928px]:w-[100%] bg-white w-[55%]">
+                <div class="text-center text-[2rem] font-semibold">Login</div>
                 <div class="w-full flex flex-col">
                     <div class="text-[10px] font-bold text-[#1d1d1d] text-opacity-90">Email</div>
-                    <Input placeholder="Email" type="email" v-model="email"/>
+                    <Input placeholder="Email" type="email" v-model="accountInfo.email"/>
                 </div>
                 <div class="w-full flex flex-col">
                     <div class="text-[10px] font-bold text-[#1d1d1d] text-opacity-90">Password</div>
-                    <Input placeholder="Password" type="password" v-model="password"/>
+                    <Input placeholder="Password" type="password" v-model="accountInfo.password"/>
                 </div>
                 <!-- <div>{{ email }}</div> -->
                 <Button @clicked="loginHandler" icon="fa-sharp fa-solid fa-right-to-bracket">
                     <template #content>Login</template>
                 </Button>
+                <!-- <div>{{ accountInfo }}</div> -->
                 <div>
 
                 </div>
@@ -40,45 +53,19 @@ const loginHandler = () => {
 </template>
 
 <style scoped>
-    .login {
-        display: flex;
-        justify-content: center;
-    }
     .login-inner {
-        display: flex;
-        border-radius: 6px;
-        overflow: hidden;
-        box-shadow: 4px 5px 8px rgb(218, 218, 218);
-        animation: pop-out 1s;
+        box-shadow: 4px 4px 8px rgb(218, 218, 218);
+        animation: pop-out 0.75s;
     }
 
     @keyframes pop-out {
         from {
             opacity: 0;
-            transform: translateY(1rem);
+            transform: scale(0);
         }
         to {
             opacity: 1;
-            transform: translateY(0);
-        }
-    }
-    .login-form {
-        display: flex;
-        flex-direction: column;
-        justify-content: center;
-        gap: 1rem;
-        padding: 1rem;
-    }
-
-    .title {
-        text-align: center;
-        font-size: 2rem;
-        font-weight: 600;
-    }
-
-    @media screen and (max-width: 768px) {
-        .login-form {
-            width: 70vw;
+            transform: scale(1);
         }
     }
 </style>
