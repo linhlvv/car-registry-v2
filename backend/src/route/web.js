@@ -8,6 +8,7 @@ const initWebRoute = (app) => {
 
   router.post('/auth', homeController.authenticate);
   router.get('/logout', homeController.logout);
+  router.post('/test', homeController.test);
 
   return app.use('/', router)
 }

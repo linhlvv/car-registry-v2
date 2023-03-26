@@ -1,8 +1,20 @@
 import pool from '../configs/connectDB';
 
+let test = async (req, res) => {
+  let ans = req.body;
+  return res.send(ans)
+}
+
 let homePage = async (req, res) => {
   if (req.session.username === undefined) {
-    return res.send('')
+    return res.send(`<form action="/test" method="POST">
+    <label for="fname">First name:</label>
+    <input type="text" id="fname" name="fname"><br><br>
+    <label for="lname">Last name:</label>
+    <input type="text" id="lname" name="lname"><br><br>
+    <input type="submit" value="Submit">
+  </form>`
+    )
   }
   else{
     const [rows, fields] = await pool.query('select * from vehicles')
@@ -37,5 +49,5 @@ let logout = async (req, res) => {
 }
 
 module.exports = {
-  homePage, authenticate, logout 
+  homePage, authenticate, logout, test 
 }
