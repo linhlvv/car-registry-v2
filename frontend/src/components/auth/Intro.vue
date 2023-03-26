@@ -1,6 +1,6 @@
 <template>
-    <div class="intro text-white text-opacity-90">
-        <p>
+    <div class="flex flex-col justify-center bg-[#2acc97] px-[2rem] py-4 gap-4 text-white text-opacity-90 max-[928px]:hidden">
+        <p class="text-center">
             <strong>RegistryTotal</strong>
         </p>
         <p class="flex items-center justify-center text-center font-medium">
@@ -32,20 +32,5 @@
 </template>
 
 <style scoped>
-    .intro {
-        display: flex;
-        flex-direction: column;
-        justify-content: center;
-        background-color: #2acc97;
-        padding: 2rem 1rem;
-        gap: 1rem;
-    }
-    p {
-        text-align: center;
-    }
-    @media screen and (max-width: 768px) {
-        .intro {
-            display: none;
-        }
-    }
+
 </style>
