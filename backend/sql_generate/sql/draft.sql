@@ -14,8 +14,9 @@ join owner o
   on v.ownerId = o.id 
 join personal p
   on o.id = p.id
-left join registry re
-  on v.licenseId = re.licenseId
-where re.licenseId is null
-  and o.type = 1;
+-- left join registry re
+--   on v.licenseId = re.licenseId
+-- where re.licenseId is null
+--   and 
+o.type = 1;
 

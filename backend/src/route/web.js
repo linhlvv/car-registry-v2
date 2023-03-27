@@ -8,7 +8,9 @@ const initWebRoute = (app) => {
 
   router.post('/auth', homeController.authenticate);
   router.get('/logout', homeController.logout);
-  router.post('/test', homeController.test);
+
+  router.get('/vehicles', homeController.vehicles)
+  router.get('/centre-info', homeController.centreInfo)
 
   return app.use('/', router)
 }
