@@ -2,35 +2,8 @@ import pool from '../configs/connectDB';
 
 let homePage = async (req, res) => {
   console.log(`Email: `, req.session.email)
-  if (req.session.email === undefined) {
-    return res.send(`<form action="/auth" method="POST">
-    <label>Email:</label>
-    <input type="text" id="email" name="email"><br><br>
-    <label>Password:</label>
-    <input type="text" id="password" name="password"><br><br>
-    <input type="submit" value="Login">
-    </form>`
-    )
-}
-  else{
-    const [rows, fields] = await pool.query('select * from vehicles')
-    return res.send(`<form action="/logout" method="get">
-                      <input type="submit" value="Logout">
-                      </form>
-                      <form action="/vehicles" method="post">
-                      <label>Page:</label>
-                      <input type="number" name="page"><br><br>
-                      <label>Result per page: </label>
-                      <input type="number" name="result"><br><br>
-                      <lable>Area: </lable>
-                      <input type="number" name="area"><br><br>
-                      <input type="submit" value="Vehicles">
-                      </form>
-                      <form action="/centre-info" method="get">
-                      <input type="submit" value="Info">
-                      </form>`
-                      )
-  }
+  const [rows, fields] = await pool.query('select * from vehicles')
+  return res.send(rows)
 }
 
 let authenticate = async (req, res) => {
@@ -44,7 +17,7 @@ let authenticate = async (req, res) => {
       if (result.length > 0) {
         req.session.email = email;
         console.log('Login success')
-        res.redirect('/')
+        res.send('Login success')
       } else {
         res.send('Incorrect email or Password!');
       }
