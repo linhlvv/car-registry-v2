@@ -34,7 +34,6 @@ const turnOffModal = () => {
             <div class="flex justify-center">
                 <div class="flex items-center flex-col w-[80vw] custom-shadow rounded-2xl overflow-hidden">
                     <SearchField />
-                    <RootRow />
                     <CarList @openCarInfo="openCarInfo" @openCarRegistration="openCarRegistration"/>
                 </div>
             </div>

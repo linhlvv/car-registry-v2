@@ -5,10 +5,8 @@ const props = defineProps(['width', 'placeholder']);
 const emit = defineEmits(['searchEntered'])
 
 const searchInput = ref('');
-const searchHandler = (event) => {
-    if(event) {
-        event.preventDefault()
-    }
+const searchHandler = () => {
+    console.log(`search bar entered ${searchInput.value}`);
     emit('searchEntered', searchInput.value)
 };
 
