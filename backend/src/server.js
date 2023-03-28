@@ -21,5 +21,6 @@ app.use(express.json());
 initWebRoute(app)
 
 app.listen(port, () => {
-  console.log(`\nApp running at: \n\t\thttp://localhost:${port}`)
+  console.log(`\nApp running at:`)
+  console.log("\t\t\x1b[4m",`localhost:${port}`, "\x1b[0m")
 })

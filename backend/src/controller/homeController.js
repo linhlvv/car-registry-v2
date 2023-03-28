@@ -9,15 +9,21 @@ let homePage = async (req, res) => {
     <label>Password:</label>
     <input type="text" id="password" name="password"><br><br>
     <input type="submit" value="Login">
-  </form>`
+    </form>`
     )
-  }
+}
   else{
     const [rows, fields] = await pool.query('select * from vehicles')
     return res.send(`<form action="/logout" method="get">
                       <input type="submit" value="Logout">
                       </form>
-                      <form action="/vehicles" method="get">
+                      <form action="/vehicles" method="post">
+                      <label>Page:</label>
+                      <input type="number" name="page"><br><br>
+                      <label>Result per page: </label>
+                      <input type="number" name="result"><br><br>
+                      <lable>Area: </lable>
+                      <input type="number" name="area"><br><br>
                       <input type="submit" value="Vehicles">
                       </form>
                       <form action="/centre-info" method="get">
@@ -57,10 +63,7 @@ let vehicles = async (req, res) => {
   if (req.session.email === undefined) {
     return res.redirect('/')
   }
-  const [rows, fields] = await pool.query(`select 
-  v.licenseId as license,
-  r.name as region,
-  p.name as owner
+  const [rows1, fields1] = await pool.query(`select count(licenseId)
   from vehicles v 
 join region r 
   on v.regionId = r.id 
@@ -69,8 +72,30 @@ join owner o
 join personal p
   on o.id = p.id
 where
-o.type = 1;`)
-  return res.send(rows)
+o.type = 1
+and 
+r.id = ?;`, [req.body.area])
+  console.log(req.body)
+  let num = rows1[0]['count(licenseId)'] / req.body.result
+  if (req.body.page == '')
+    console.log('ok')
+  const [rows2, fields2] = await pool.query(`select license, region, owner, area from (
+    select  v.licenseId as license, r.name as region, r.id as area, p.name as owner,
+    ntile(?) over(order by v.licenseId) as tile_nr
+  from vehicles v 
+join region r 
+  on v.regionId = r.id 
+join owner o 
+  on v.ownerId = o.id 
+join personal p
+  on o.id = p.id
+where
+o.type = 1
+and
+r.id = ?
+) x
+where x.tile_nr = ?;`, [num,  req.body.area, req.body.page])
+  return res.send({count: num*req.body.result,result: rows2})
 }
 
 let centreInfo = async (req, res) => {
