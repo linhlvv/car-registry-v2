@@ -9,8 +9,11 @@
   },
   "dependencies": {
     "chart.js": "^4.2.1",
+    "chartjs": "^0.3.24",
     "pinia": "^2.0.32",
     "vue": "^3.2.47",
+    "vue-chart": "^2.0.0",
+    "vue-chartjs": "^5.2.0",
     "vue-router": "^4.1.6"
   },
   "devDependencies": {

@@ -1,4 +1,3 @@
-
 import { defineStore } from 'pinia'
 
 export const useAccountStore = defineStore('accountStore', {
@@ -17,6 +16,7 @@ export const useAccountStore = defineStore('accountStore', {
         this.email = data.email
       }
       console.log(`accountStore email: ${this.email}`);
+      localStorage.setItem("email", this.email)
     }
 
   }

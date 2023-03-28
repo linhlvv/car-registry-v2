@@ -13,7 +13,7 @@ const verticalNavClickedHandler = () => {
 </script>
 
 <template>
-    <nav class="bg-[#2acc97] border-gray-200 dark:bg-gray-900 py-4">
+    <nav class="bg-[#2acc97] border-gray-200 dark:bg-gray-900 py-4 w-full">
         <div class="flex flex-wrap justify-between items-center mx-auto max-w-screen-xl px-4 md:px-6 ">
             <router-link to="/" >
                 <div class="text-3xl font-bold text-white cursor-pointer">RegistryTotal</div>
@@ -32,7 +32,7 @@ const verticalNavClickedHandler = () => {
             </div>
         </div>
     </nav>
-    <div v-show="route.path !== '/'" class="max-[732px]:hidden">
+    <div v-show="route.path !== '/'" class="max-[732px]:hidden w-full">
         <nav class="bg-white dark:bg-gray-700">
             <div class="max-w-screen-xl px-4 mx-auto md:px-6">
                 <div class="flex items-center justify-center">

@@ -3,8 +3,12 @@ import Input from '@/components/UI/Input.vue';
 import Intro from './Intro.vue'
 import Button from '../UI/Button.vue';
 import { useAccountStore } from '../../stores/AccountStore'
+import { useRouter } from 'vue-router';
 import { ref } from 'vue';
 
+localStorage.removeItem('email')
+
+const router = useRouter();
 const accountStore = useAccountStore()
 const accountInfo = ref({email: '', password: ''});
 
@@ -19,8 +23,11 @@ const loginHandler = async() => {
         console.log(res.error);
     }
     const data = JSON.parse(await res.text())[0]
-    console.log(data);
-    
+    console.log(`account data login: ${data}`);
+    accountStore.authenticate(data);
+    if(data !== undefined) {
+        router.push('/')
+    }
 };
 
 </script>
