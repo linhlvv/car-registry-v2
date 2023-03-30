@@ -10,7 +10,11 @@ const initWebRoute = (app) => {
   router.post('/auth', homeController.authenticate);
   router.get('/logout', homeController.logout);
 
-  router.post('/vehicles', homeController.vehicles)
+  router.post('/vehicles/all', homeController.vehicles)
+  router.post('/vehicles/registried', homeController.registried)
+  router.post('/vehicles/unregistried', homeController.unregistried)
+  router.post('/vehicles/expire', homeController.expire)
+
   router.get('/centre-info/:id', homeController.centreInfo)
 
   return app.use('/', router)

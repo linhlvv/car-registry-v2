@@ -1,9 +1,9 @@
 import pool from '../configs/connectDB';
 import crypto from 'crypto'
+import { query } from 'express';
 
 let homepage = async (req, res) => {
   console.log(`Session ID: `, req.session.id)
-  console.log(`Session Email: `, req.session.email)
   console.log(`Session User ID: `, req.session.userid)
 
   return res.send([{id: req.session.id}])
@@ -29,43 +29,8 @@ let authenticate = async (req, res) => {
 }
 
 let logout = async (req, res) => {
-  
-}
-
-let vehicles = async (req, res) => {
-  const [rows1, fields1] = await pool.query(`select count(licenseId)
-  from vehicles v 
-join region r 
-  on v.regionId = r.id 
-join owner o 
-  on v.ownerId = o.id 
-join personal p
-  on o.id = p.id
-where
-o.type = 1
-and 
-r.id = ?;`, [req.body.area])
-  console.log(req.body)
-  let num = rows1[0]['count(licenseId)'] / req.body.result
-  
-  
-  const [rows2, fields2] = await pool.query(`select license, region, owner, area from (
-    select  v.licenseId as license, r.name as region, r.id as area, p.name as owner,
-    ntile(?) over(order by v.licenseId) as tile_nr
-  from vehicles v 
-join region r 
-  on v.regionId = r.id 
-join owner o 
-  on v.ownerId = o.id 
-join personal p
-  on o.id = p.id
-where
-o.type = 1
-and
-r.id = ?
-) x
-where x.tile_nr = ?;`, [num,  req.body.area, req.body.page])
-  return res.send({count: num*req.body.result,result: rows2})
+  req.session.destroy();
+  res.end()
 }
 
 let centreInfo = async (req, res) => {
@@ -81,6 +46,119 @@ let centreInfo = async (req, res) => {
   return res.send(rows)
 }
 
+let vehicles = async (req, res) => {
+  let resPerPage = req.body.resPerPage
+  let page = req.body.page
+  if (resPerPage === undefined)
+    resPerPage = 10
+  if (page === undefined)
+    page = 1
+
+  let query = 
+  `select v.licenseId, certId, certDate, r.name, v.brand, v.model, v.version,
+  case 
+    when expire >= CURRENT_DATE() then true
+      else false
+  end as status
+    from vehicles v 
+  join region r 
+    on v.regionId = r.id 
+  join owner o 
+    on v.ownerId = o.id
+  left join registry re
+    on re.licenseId = v.licenseId
+    limit ? offset ?`
+  
+  const [rows, fields] = await pool.query(query, [resPerPage, 
+                                                  resPerPage * (page - 1)])
+  return res.send(rows)
+}
+
+let registried = async (req, res) => {
+  let resPerPage = req.body.resPerPage
+  let page = req.body.page
+  if (resPerPage === undefined)
+    resPerPage = 10
+  if (page === undefined)
+    page = 1
+
+  let query = `select v.licenseId, certId, certDate, r.name, v.brand, v.model, v.version,
+  case 
+    when expire >= CURRENT_DATE() then true
+      else false
+  end as status
+    from vehicles v 
+  join region r 
+    on v.regionId = r.id 
+  join owner o 
+    on v.ownerId = o.id
+  left join registry re
+    on re.licenseId = v.licenseId
+  where expire >= CURRENT_DATE()
+    limit ? offset ?`
+
+  const [rows, fields] = await pool.query(query, [resPerPage, 
+                                                    resPerPage * (page - 1)])
+  return res.send(rows)
+}
+
+let unregistried = async (req, res) => {
+  let resPerPage = req.body.resPerPage
+  let page = req.body.page
+  if (resPerPage === undefined)
+    resPerPage = 10
+  if (page === undefined)
+    page = 1
+  
+  let query = `select v.licenseId, certId, certDate, r.name, v.brand, v.model, v.version,
+  case 
+    when expire >= CURRENT_DATE() then true
+      else false
+  end as status
+    from vehicles v 
+  join region r 
+    on v.regionId = r.id 
+  join owner o 
+    on v.ownerId = o.id
+  left join registry re
+    on re.licenseId = v.licenseId
+  where expire is null
+    limit ? offset ?`
+
+  const [rows, fields] = await pool.query(query, [resPerPage, 
+                                                  resPerPage * (page - 1)])
+  return res.send(rows)
+}
+
+let expire = async (req, res) => {
+  let resPerPage = req.body.resPerPage
+  let page = req.body.page  
+  if (resPerPage === undefined)
+    resPerPage = 10
+  if (page === undefined)
+    page = 1
+  
+  let query = `select v.licenseId, certId, certDate, r.name, v.brand, v.model, v.version,
+  case 
+    when expire >= CURRENT_DATE() then true
+      else false
+  end as status
+    from vehicles v 
+  join region r 
+    on v.regionId = r.id 
+  join owner o 
+    on v.ownerId = o.id
+  left join registry re
+    on re.licenseId = v.licenseId
+  where expire < CURRENT_DATE
+    limit 5 offset 10`
+
+  const [rows, fields] = await pool.query(query, [resPerPage, 
+                                                  resPerPage * (page - 1)])
+  return res.send(rows)
+}
+
 module.exports = {
-  authenticate, logout, vehicles, centreInfo, homepage
+  homepage, authenticate, logout, centreInfo, 
+  vehicles, registried, unregistried, expire
 }
