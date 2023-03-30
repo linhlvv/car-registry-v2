@@ -1,13 +1,11 @@
 import pool from '../configs/connectDB';
 
-let homePage = async (req, res) => {
-  console.log(`Email: `, req.session.email)
-  const [rows, fields] = await pool.query('select * from vehicles')
-  return res.send(rows)
+let homepage = async (req, res) => {
+  console.log(`Session ID: `, req.session.id)
+  return res.send([{id: req.session.id}])
 }
 
 let authenticate = async (req, res) => {
-  
   let email = req.body.email;
   let password = req.body.password;
   if (email && password) {
@@ -15,27 +13,21 @@ let authenticate = async (req, res) => {
     let [result] = await pool.execute(query, [email, password]);
       
       if (result.length > 0) {
-        req.session.email = email;
         console.log('Login success')
-        res.send('Login success')
+        res.send(result)
       } else {
-        res.send('Incorrect email or Password!');
+        // res.send('Incorrect email or Password!');
+        console.log('Login failed')
+        res.end();
       }
-      res.end();
     }
 }
 
 let logout = async (req, res) => {
-  req.session.email = undefined;
-  req.session.loggedin = false;
-  console.log('Logout success')
-  return res.redirect('/');
+  
 }
 
 let vehicles = async (req, res) => {
-  if (req.session.email === undefined) {
-    return res.redirect('/')
-  }
   const [rows1, fields1] = await pool.query(`select count(licenseId)
   from vehicles v 
 join region r 
@@ -50,8 +42,8 @@ and
 r.id = ?;`, [req.body.area])
   console.log(req.body)
   let num = rows1[0]['count(licenseId)'] / req.body.result
-  if (req.body.page == '')
-    console.log('ok')
+  
+  
   const [rows2, fields2] = await pool.query(`select license, region, owner, area from (
     select  v.licenseId as license, r.name as region, r.id as area, p.name as owner,
     ntile(?) over(order by v.licenseId) as tile_nr
@@ -85,5 +77,5 @@ let centreInfo = async (req, res) => {
 }
 
 module.exports = {
-  homePage, authenticate, logout, vehicles, centreInfo
+  authenticate, logout, vehicles, centreInfo, homepage
 }
