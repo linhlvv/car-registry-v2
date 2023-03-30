@@ -1,4 +1,5 @@
 import pool from '../configs/connectDB';
+import crypto from 'crypto'
 
 let homepage = async (req, res) => {
   console.log(`Session ID: `, req.session.id)
@@ -10,7 +11,7 @@ let homepage = async (req, res) => {
 
 let authenticate = async (req, res) => {
   let email = req.body.email;
-  let password = req.body.password;
+  let password = crypto.createHash('sha256').update(req.body.password).digest('hex');
   if (email && password) {
     let query = `select email, id from account where email = ? and password = ?`;
     let [result] = await pool.execute(query, [email, password]);
