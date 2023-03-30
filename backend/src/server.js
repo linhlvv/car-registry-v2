@@ -8,7 +8,7 @@ const app = express()
 const port = process.env.PORT || 1111
 const cors = require("cors");
 
-app.use(cors());
+app.use(cors({ credentials: true, origin: true }));
 
 app.use(session({
   secret: 'secret',

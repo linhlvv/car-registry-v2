@@ -9,7 +9,9 @@ const route = useRoute();
 
 const data = ref([]);
 const fetchData = async() => {
-    const res = await fetch(`http://localhost:1111/`)
+    const res = await fetch(`http://localhost:1111/`, {
+        credentials: "include",
+    })
     const dataList = JSON.parse(await res.text())
     data.value = dataList;
 }
