@@ -1,6 +1,9 @@
+require('dotenv').config()
+
 import pool from '../configs/connectDB';
 import crypto from 'crypto'
 import { query } from 'express';
+import jwt from 'jsonwebtoken'
 
 let homepage = async (req, res) => {
   console.log(`Session ID: `, req.session.id)
@@ -8,6 +11,8 @@ let homepage = async (req, res) => {
 
   return res.send([{id: req.session.id}])
 }
+
+
 
 let authenticate = async (req, res) => {
   let email = req.body.email;
@@ -19,13 +24,35 @@ let authenticate = async (req, res) => {
       if (result.length > 0) {
         req.session.email = email;
         req.session.userid = result[0].id;
+        const payload = {
+          email: req.session.email,
+          id: req.session.userid
+        }
+        const authToken = jwt.sign(payload, process.env.SECRET, {expiresIn: '20s'})
+        req.session.token = authToken
+        console.log(authToken)
         console.log('Login success')
-        res.send(result)
+        res.send(authToken)
       } else {
         console.log('Login failed')
         res.end();
       }
     }
+}
+
+let verifyToken = (req, res, next) => {
+  const token = req.session.token;
+  if (!token) return res.sendStatus(401)
+  try {
+    const verified = jwt.verify(token, process.env.SECRET)
+    console.log(verified)
+    req.user = verified
+    next()
+  }
+  catch (err) {
+    console.log(err)
+    return res.sendStatus(403)
+  }
 }
 
 let logout = async (req, res) => {
@@ -244,7 +271,8 @@ let expire = async (req, res) => {
   return res.send(rows)
 }
 
+
 module.exports = {
   homepage, authenticate, logout, centreInfo, 
-  vehicles, registried, unregistried, expire
+  vehicles, registried, unregistried, expire, verifyToken
 }
