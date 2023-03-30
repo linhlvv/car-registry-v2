@@ -30,7 +30,6 @@ let authenticate = async (req, res) => {
         }
         const authToken = jwt.sign(payload, process.env.SECRET, {expiresIn: '20s'})
         req.session.token = authToken
-        console.log(authToken)
         console.log('Login success')
         res.send(authToken)
       } else {
@@ -45,7 +44,6 @@ let verifyToken = (req, res, next) => {
   if (!token) return res.sendStatus(401)
   try {
     const verified = jwt.verify(token, process.env.SECRET)
-    console.log(verified)
     req.user = verified
     next()
   }
