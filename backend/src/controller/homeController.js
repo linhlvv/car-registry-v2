@@ -2,6 +2,9 @@ import pool from '../configs/connectDB';
 
 let homepage = async (req, res) => {
   console.log(`Session ID: `, req.session.id)
+  console.log(`Session Email: `, req.session.email)
+  console.log(`Session User ID: `, req.session.userid)
+
   return res.send([{id: req.session.id}])
 }
 
@@ -9,14 +12,15 @@ let authenticate = async (req, res) => {
   let email = req.body.email;
   let password = req.body.password;
   if (email && password) {
-    let query = `select * from account where email = ? and password = ?`;
+    let query = `select email, id from account where email = ? and password = ?`;
     let [result] = await pool.execute(query, [email, password]);
       
       if (result.length > 0) {
+        req.session.email = email;
+        req.session.userid = result[0].id;
         console.log('Login success')
         res.send(result)
       } else {
-        // res.send('Incorrect email or Password!');
         console.log('Login failed')
         res.end();
       }
