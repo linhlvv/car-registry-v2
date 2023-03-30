@@ -6,10 +6,13 @@ import { query } from 'express';
 import jwt from 'jsonwebtoken'
 
 let homepage = async (req, res) => {
-  console.log(`Session ID: `, req.session.id)
-  console.log(`Session User ID: `, req.session.userid)
+  console.log(req.session.id === undefined ? `Session: ` : `\x1b[4mSession\x1b[0m: `, req.session.id)
+  console.log(req.session.userid === undefined ? `Userid: ` : `\x1b[4mUserid\x1b[0m: `, req.session.userid)
+  console.log(req.session.token === undefined ? `Token: ` : `\x1b[4mToken\x1b[0m: `, req.session.token)
 
-  return res.send([{id: req.session.id}])
+  return res.send([{session: req.session.id,
+                    userid: req.session.userid, 
+                    token: req.session.token}])
 }
 
 
@@ -30,7 +33,7 @@ let authenticate = async (req, res) => {
         }
         const authToken = jwt.sign(payload, process.env.SECRET, {expiresIn: '20s'})
         req.session.token = authToken
-        console.log('Login success')
+        console.log('\t\t\x1b[4mLogin succeeded\x1b[0m')
         res.send(authToken)
       } else {
         console.log('Login failed')
