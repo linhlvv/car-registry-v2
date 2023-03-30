@@ -16,12 +16,14 @@ const loginHandler = async() => {
     console.log(`account info: ${JSON.stringify(accountInfo.value)}`);
     const res = await fetch("http://localhost:1111/auth", {
         method: 'POST',
+        credentials: 'include',
         body: JSON.stringify(accountInfo.value),
         headers: {'Content-Type': 'application/json'},
     })
     if(res.error) {
         console.log(res.error);
     }
+    console.log(`res: ${JSON.stringify(res)}`);
     const data = JSON.parse(await res.text())[0]
     console.log(`account data login: ${data}`);
     accountStore.authenticate(data);
