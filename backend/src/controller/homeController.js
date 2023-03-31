@@ -16,7 +16,6 @@ let homepage = async (req, res) => {
 }
 
 
-
 let authenticate = async (req, res) => {
   let email = req.body.email;
   let password = crypto.createHash('sha256').update(req.body.password).digest('hex');

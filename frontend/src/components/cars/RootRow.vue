@@ -11,7 +11,7 @@
             Name
         </div>
         <div class="font-bold text-[12px] max-[900px]:text-[11px] text-[#4f555a] flex items-center text-center justify-center w-[12%] max-[736px]:hidden">
-            City
+            Register date
         </div>
         <div class="font-bold text-[12px] max-[900px]:text-[11px] text-[#4f555a] flex items-center text-center justify-center w-[10%] max-[736px]:hidden">
             Valid

@@ -17,8 +17,11 @@ const loginHandler = async() => {
     const res = await fetch("http://localhost:1111/auth", {
         method: 'POST',
         credentials: 'include',
+        credentials: "include",
+        headers: {
+            'Content-Type': 'application/json',
+        },
         body: JSON.stringify(accountInfo.value),
-        headers: {'Content-Type': 'application/json'},
     })
     if(res.error) {
         console.log(res.error);

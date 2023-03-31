@@ -8,14 +8,13 @@ const router = useRouter();
 const route = useRoute();
 
 const data = ref([]);
-const fetchData = async () => {
-  const res = await fetch(`http://localhost:1111/`, {
-    credentials: "include",
-  });
-  console.log(`res: ${JSON.stringify(res)}`);
-  const dataList = JSON.parse(await res.text());
-  data.value = dataList;
-};
+const fetchData = async() => {
+    const res = await fetch(`http://localhost:1111/`, {
+        credentials: "include",
+    })
+    const dataList = JSON.parse(await res.text())
+    data.value = dataList;
+}
 fetchData();
 </script>
 

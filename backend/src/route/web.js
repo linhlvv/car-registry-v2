@@ -17,6 +17,8 @@ const initWebRoute = (app) => {
 
   router.get('/centre-info/', homeController.centreInfo)
 
+  router.get('/centre-info', homeController.centreInfo)
+
   return app.use('/', router)
 }
 
