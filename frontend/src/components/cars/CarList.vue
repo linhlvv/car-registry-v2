@@ -11,6 +11,7 @@ const props = defineProps([
     'brand',
     'owner',
     'time',
+    'carType'
 ])
 
 const openCarInfo = () => {
@@ -76,6 +77,12 @@ watch(() => props.time, async(newTime, oldTime) => {
         console.log(`time has changed to: ${props.time}`);
     }
 });
+
+watch(() => props.carType, async(newCarType, oldCarType) => {
+    if(newCarType !== oldCarType) {
+        console.log('car type changed');
+    }
+})
 
 </script>
 
