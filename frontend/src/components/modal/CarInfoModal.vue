@@ -3,18 +3,22 @@ import CarInformationBlock from './CarInformationBlock.vue'
 import CarRegistryInformationBlock from './CarRegistryInformationBlock.vue';
 import OwnerBrief from './OwnerBrief.vue';
 
+const props = defineProps(['licenseId']);
 const emit = defineEmits(['exitModal']);
 const exitModal = () => {
     emit('exitModal');
 };
+
+const carDetailedInfo = [];
+
 </script>
 
 <template>
     <div class="bg-black/40 backdrop-blur-[2px] top-0 left-0 w-full h-screen blur-xl fixed z-10 backdrop-animation" @click="exitModal"></div>
-    <div class="bg-white rounded-[8px] absolute top-[5vh] left-[20%] w-3/5 z-50 flex modal-animation overflow-hidden">
+    <div class="bg-white rounded-[8px] fixed top-[5vh] left-[20%] w-3/5 z-50 flex modal-animation overflow-hidden">
         <div class="w-3/5 border-r text-[#1d1d1d] mb-3">
             <div class="flex flex-col items-center w-full">
-                <div class="text-3xl font-semibold py-5 hover:underline">21-F1 615.89</div>
+                <div class="text-3xl font-semibold py-5 hover:underline">{{ licenseId }}</div>
                 <CarRegistryInformationBlock 
                     registry-code="810" 
                     registry-date="23/2/2020" 
