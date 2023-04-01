@@ -81,6 +81,9 @@ let vehicles = async (req, res) => {
   if (page === undefined)
     page = 1
 
+  let count = `select count(*) as total from vehicles`
+  const [countRows, countFields] = await pool.query(count)
+
   let query = `
   select v.licenseId, certDate, 
   o.type, v.brand, v.model, v.version, p.name as owner,
@@ -118,16 +121,23 @@ let vehicles = async (req, res) => {
   
   const [rows, fields] = await pool.query(query, [resPerPage, 
                                                   resPerPage * (page - 1)])
-  return res.send(rows)
+  return res.send({data: rows, count: Math.ceil(countRows[0].total / resPerPage)})
 }
 
-let registried = async (req, res) => {
+let registed = async (req, res) => {
   let resPerPage = parseInt(req.body.resPerPage)
   let page = parseInt(req.body.page)
   if (resPerPage === undefined)
     resPerPage = 10
   if (page === undefined)
     page = 1
+
+  let count = `select count(*) as total
+  from vehicles v 
+  left join registry re
+  on re.licenseId = v.licenseId
+  where expire >= CURRENT_DATE()`
+  const [countRows, countFields] = await pool.query(count)
 
   let query = `
   select v.licenseId, certDate, 
@@ -168,16 +178,23 @@ let registried = async (req, res) => {
 
   const [rows, fields] = await pool.query(query, [resPerPage, 
                                                     resPerPage * (page - 1)])
-  return res.send(rows)
+  return res.send({data: rows, count: Math.ceil(countRows[0].total / resPerPage)})
 }
 
-let unregistried = async (req, res) => {
+let unregisted = async (req, res) => {
   let resPerPage = parseInt(req.body.resPerPage)
   let page = parseInt(req.body.page)
   if (resPerPage === undefined)
     resPerPage = 10
   if (page === undefined)
     page = 1
+
+  let count = `select count(*) as total
+  from vehicles v
+  left join registry re
+  on re.licenseId = v.licenseId
+  where expire is null`
+  const [countRows, countFields] = await pool.query(count)
   
   let query = `
   select v.licenseId, certDate, 
@@ -218,16 +235,23 @@ let unregistried = async (req, res) => {
 
   const [rows, fields] = await pool.query(query, [resPerPage, 
                                                   resPerPage * (page - 1)])
-  return res.send(rows)
+  return res.send({data: rows, count: Math.ceil(countRows[0].total / resPerPage)})
 }
 
-let expire = async (req, res) => {
+let expired = async (req, res) => {
   let resPerPage = parseInt(req.body.resPerPage)
   let page = parseInt(req.body.page) 
   if (resPerPage === undefined)
     resPerPage = 10
   if (page === undefined)
     page = 1
+
+  let count = `select count(*) as total
+  from vehicles v
+  left join registry re
+  on re.licenseId = v.licenseId
+  where expire < CURRENT_DATE()`
+  const [countRows, countFields] = await pool.query(count)
   
   let query = `
   select v.licenseId, certDate, 
@@ -268,15 +292,38 @@ let expire = async (req, res) => {
 
   const [rows, fields] = await pool.query(query, [resPerPage, 
                                                   resPerPage * (page - 1)])
-  return res.send(rows)
+  return res.send({data: rows, count: Math.ceil(countRows[0].total / resPerPage)})
 }
 
 let findByLicense = async (req, res) => {
   let licenseId = req.body.licenseId
-  
+  let base = `select * from vehicles v join `
+
+  let type = `select type 
+  from owner o 
+  join vehicles v 
+  on o.id = v.ownerId
+  where v.licenseId = ?`
+  const [rows, fields] = await pool.query(type, [licenseId])
+
+  if (rows[0].type === 1) {
+    let query = base + `personal p 
+    on v.ownerId = p.id
+    where v.licenseId = ?`
+    const [rows, fields] = await pool.query(query, [licenseId])
+    return res.send(rows)
+  }
+  else {
+    let query = base + `company c 
+    on v.ownerId = c.id
+    where v.licenseId = ?`
+    const [rows, fields] = await pool.query(query, [licenseId])
+    return res.send(rows)
+  }
+
 }
 
 module.exports = {
-  homepage, authenticate, logout, centreInfo, 
-  vehicles, registried, unregistried, expire, verifyToken
+  homepage, authenticate,  verifyToken, logout, centreInfo, 
+  vehicles, registed, unregisted, expired, findByLicense
 }
