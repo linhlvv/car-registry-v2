@@ -2,6 +2,7 @@
 import CarInformationBlock from './CarInformationBlock.vue'
 import CarRegistryInformationBlock from './CarRegistryInformationBlock.vue';
 import OwnerBrief from './OwnerBrief.vue';
+import { ref } from 'vue';
 
 const props = defineProps(['licenseId']);
 const emit = defineEmits(['exitModal']);
@@ -9,8 +10,27 @@ const exitModal = () => {
     emit('exitModal');
 };
 
-const carDetailedInfo = [];
-
+const carDetailedInfo = ref([]);
+const ownerType = ref()
+const findCarInfo = async() => {
+    const res = await fetch(`http://localhost:1111/vehicles/find`, {
+        method: 'POST',
+        credentials: "include",
+        headers: {
+            'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({licenseId: props.licenseId}),
+    })
+    if(res.error) {
+        console.log(res.error);
+    }
+    const dataFetched = JSON.parse(await res.text())
+    console.log(`car info: ${JSON.stringify(dataFetched.data[0])}`);
+    carDetailedInfo.value = dataFetched.data[0]
+    console.log(dataFetched.ownerType);
+    ownerType.value = dataFetched.ownerType
+};
+findCarInfo()
 </script>
 
 <template>
@@ -20,18 +40,18 @@ const carDetailedInfo = [];
             <div class="flex flex-col items-center w-full">
                 <div class="text-3xl font-semibold py-5 hover:underline">{{ licenseId }}</div>
                 <CarRegistryInformationBlock 
-                    registry-code="810" 
+                    registry-code="2812-0810-2001" 
                     registry-date="23/2/2020" 
                     expired-date="23/2/2022" 
                     center-name="Trung tam dang kiem HP"
                 />
                 <div class="flex w-full justify-evenly flex-wrap gap-y-4">
-                    <CarInformationBlock description="Registration code" icon="fa-solid fa-hashtag" detail="2812"/>
-                    <CarInformationBlock description="Registration date" icon="fa-solid fa-calendar-check" detail="08/10/2003"/>
+                    <CarInformationBlock description="Registration code" icon="fa-solid fa-hashtag" :detail="carDetailedInfo.certId"/>
+                    <CarInformationBlock description="Registration date" icon="fa-solid fa-calendar-check" :detail="carDetailedInfo.certDate"/>
                     <CarInformationBlock description="Registration city" icon="fa-solid fa-city" detail="Ho Chi Minh"/>
-                    <CarInformationBlock description="Car model" icon="fa-solid fa-car" detail="Lamborghini Aventador"/>
-                    <CarInformationBlock description="Manufacture date" icon="fa-solid fa-calendar-days" detail="28/12/2003"/>
-                    <CarInformationBlock description="Purpose" icon="fa-solid fa-gears" detail="Personal"/>
+                    <CarInformationBlock description="Car model" icon="fa-solid fa-car" :detail="carDetailedInfo.brand + ' ' + carDetailedInfo.model + ' ' + carDetailedInfo.version"/>
+                    <CarInformationBlock description="Manufacture date" icon="fa-solid fa-calendar-days" :detail="carDetailedInfo.manafractureDate"/>
+                    <CarInformationBlock description="Purpose" icon="fa-solid fa-gears" :detail="ownerType === 1 ? 'Personal' : 'Business'"/>
                 </div>
             </div>
         </div>
@@ -39,7 +59,23 @@ const carDetailedInfo = [];
             <div class="h-[5%] flex items-start justify-end p-1">
                 <i class="fa-sharp fa-solid fa-circle-xmark cursor-pointer active:text-[#cc2a5f]" @click="exitModal"></i>
             </div>
-            <OwnerBrief />
+            <OwnerBrief 
+                :owner-type="ownerType"
+                :owner-info="ownerType === 1 ? {
+                    ownerId: carDetailedInfo.id,
+                    ownerName: carDetailedInfo.name,
+                    ownerPhone: carDetailedInfo.phone,
+                    ownerAddress: carDetailedInfo.address,
+                    ownerDOB: carDetailedInfo.dob,
+                    ownerSSN: carDetailedInfo.ssn,
+                } : {
+                    ownerId: carDetailedInfo.id,
+                    ownerName: carDetailedInfo.name,
+                    ownerPhone: carDetailedInfo.phone,
+                    ownerAddress: carDetailedInfo.address,
+                    ownerTax: carDetailedInfo.taxnum
+                }"
+            />
         </div>
     </div>
 </template>
