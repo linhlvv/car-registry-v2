@@ -33,7 +33,7 @@ let authenticate = async (req, res) => {
         const authToken = jwt.sign(payload, process.env.SECRET, {expiresIn: '20000000000000s'})
         req.session.token = authToken
         console.log('\t\t\x1b[4mLogin succeeded\x1b[0m')
-        res.send(authToken)
+        res.send({token: authToken})
       } else {
         console.log('Login failed')
         res.end();
