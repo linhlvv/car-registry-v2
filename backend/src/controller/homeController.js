@@ -1,9 +1,9 @@
 require('dotenv').config()
 
-import pool from '../configs/connectDB';
-import crypto from 'crypto'
+import crypto from 'crypto';
 import { query } from 'express';
-import jwt from 'jsonwebtoken'
+import jwt from 'jsonwebtoken';
+import pool from '../configs/connectDB';
 
 let homepage = async (req, res) => {
   console.log(req.session.id === undefined ? `Session: ` : `\x1b[4mSession\x1b[0m: `, req.session.id)
@@ -30,7 +30,7 @@ let authenticate = async (req, res) => {
           email: req.session.email,
           id: req.session.userid
         }
-        const authToken = jwt.sign(payload, process.env.SECRET, {expiresIn: '20s'})
+        const authToken = jwt.sign(payload, process.env.SECRET, {expiresIn: '20000000000000s'})
         req.session.token = authToken
         console.log('\t\t\x1b[4mLogin succeeded\x1b[0m')
         res.send(authToken)
@@ -42,7 +42,7 @@ let authenticate = async (req, res) => {
 }
 
 let verifyToken = (req, res, next) => {
-  const token = req.session.token;
+  const token = req.get('Authorization') || req.session.token;
   if (!token) return res.sendStatus(401)
   try {
     const verified = jwt.verify(token, process.env.SECRET)
@@ -82,12 +82,12 @@ let vehicles = async (req, res) => {
     page = 1
 
   let query = `
-  select v.licenseId, certId, certDate, r.name as region,
+  select v.licenseId, certDate, 
   o.type, v.brand, v.model, v.version, p.name as owner,
     case 
       when expire >= CURRENT_DATE() then true
         else false
-    end as status
+    end as valid
       from vehicles v 
     join region r 
       on v.regionId = r.id 
@@ -98,12 +98,12 @@ let vehicles = async (req, res) => {
     left join registry re
       on re.licenseId = v.licenseId
           union all
-  select v.licenseId, certId, certDate, r.name as region,
+  select v.licenseId, certDate, 
   o.type, v.brand, v.model, v.version, c.name as owner,
     case
       when expire >= CURRENT_DATE() then true
         else false
-    end as status
+    end as valid
       from vehicles v
     join region r
       on v.regionId = r.id
@@ -130,12 +130,12 @@ let registried = async (req, res) => {
     page = 1
 
   let query = `
-  select v.licenseId, certId, certDate, r.name as region,
+  select v.licenseId, certDate, 
   o.type, v.brand, v.model, v.version, p.name as owner,
     case 
       when expire >= CURRENT_DATE() then true
         else false
-    end as status
+    end as valid
       from vehicles v 
     join region r 
       on v.regionId = r.id 
@@ -147,12 +147,12 @@ let registried = async (req, res) => {
       on re.licenseId = v.licenseId
     where expire >= CURRENT_DATE()
           union all
-  select v.licenseId, certId, certDate, r.name as region,
+  select v.licenseId, certDate, 
   o.type, v.brand, v.model, v.version, c.name as owner,
     case
       when expire >= CURRENT_DATE() then true
         else false
-    end as status
+    end as valid
       from vehicles v
     join region r
       on v.regionId = r.id
@@ -180,12 +180,12 @@ let unregistried = async (req, res) => {
     page = 1
   
   let query = `
-  select v.licenseId, certId, certDate, r.name as region,
+  select v.licenseId, certDate, 
   o.type, v.brand, v.model, v.version, p.name as owner,
     case 
       when expire >= CURRENT_DATE() then true
         else false
-    end as status
+    end as valid
       from vehicles v 
     join region r 
       on v.regionId = r.id 
@@ -197,12 +197,12 @@ let unregistried = async (req, res) => {
       on re.licenseId = v.licenseId
     where expire is null
           union all
-  select v.licenseId, certId, certDate, r.name as region,
+  select v.licenseId, certDate, 
   o.type, v.brand, v.model, v.version, c.name as owner,
     case
       when expire >= CURRENT_DATE() then true
         else false
-    end as status
+    end as valid
       from vehicles v
     join region r
       on v.regionId = r.id
@@ -230,12 +230,12 @@ let expire = async (req, res) => {
     page = 1
   
   let query = `
-  select v.licenseId, certId, certDate, r.name as region,
+  select v.licenseId, certDate, 
   o.type, v.brand, v.model, v.version, p.name as owner,
     case 
       when expire >= CURRENT_DATE() then true
         else false
-    end as status
+    end as valid
       from vehicles v 
     join region r 
       on v.regionId = r.id 
@@ -247,12 +247,12 @@ let expire = async (req, res) => {
       on re.licenseId = v.licenseId
     where expire < CURRENT_DATE()
           union all
-  select v.licenseId, certId, certDate, r.name as region,
+  select v.licenseId, certDate, 
   o.type, v.brand, v.model, v.version, c.name as owner,
     case
       when expire >= CURRENT_DATE() then true
         else false
-    end as status
+    end as valid
       from vehicles v
     join region r
       on v.regionId = r.id
