@@ -11,9 +11,9 @@ const initWebRoute = (app) => {
   router.get('/logout', homeController.logout);
 
   router.post('/vehicles/all', verifyToken, homeController.vehicles)
-  router.post('/vehicles/registried', verifyToken, homeController.registried)
-  router.post('/vehicles/unregistried', verifyToken, homeController.unregistried)
-  router.post('/vehicles/expire', verifyToken, homeController.expire)
+  router.post('/vehicles/registed', verifyToken, homeController.registried)
+  router.post('/vehicles/unregisted', verifyToken, homeController.unregistried)
+  router.post('/vehicles/expired', verifyToken, homeController.expire)
 
   router.get('/centre-info/', homeController.centreInfo)
 
