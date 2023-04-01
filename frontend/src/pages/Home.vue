@@ -1,18 +1,20 @@
 <script setup>
 import Introduction from "../components/home/Introduction.vue";
 import Categories from "../components/home/Categories.vue";
+import { useAccountStore } from "../stores/AccountStore";
 import { useRouter, useRoute } from "vue-router";
 import { ref } from "vue";
 
 const router = useRouter();
 const route = useRoute();
+const accountStore = useAccountStore();
 
 const data = ref([]);
 const fetchData = async() => {
     const res = await fetch(`http://localhost:1111/`, {
         credentials: "include",
         headers: {
-            'Authorization': `${localStorage.getItem('token')}`
+            'Authorization': `${accountStore.getToken}`
         }
     })
     const dataList = JSON.parse(await res.text())

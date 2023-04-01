@@ -7,7 +7,9 @@ export const useAccountStore = defineStore('accountStore', {
     }
   },
   getters: {
-
+    getToken() {
+      return localStorage.getItem('token')
+    }
   },
   actions: {
     authenticate(token, email) {

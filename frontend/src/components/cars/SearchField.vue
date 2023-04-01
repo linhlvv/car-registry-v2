@@ -2,7 +2,7 @@
 import { ref } from 'vue';
 import SearchBar from '../UI/SearchBar.vue';
 
-// const props = defineProps(['pageNumber']);
+const props = defineProps(['pageNum']);
 const emit = defineEmits([
     'nextPage',
     'prevPage',
@@ -15,7 +15,8 @@ const emit = defineEmits([
     'selectedTimeClicked',
 ]);
 const selected = ref('No filter');
-const pageNumber = ref(1);
+const pageNumber = ref(props.pageNum);
+console.log(pageNumber.value);
 
 const pageHandler = (direction) => {
     if(direction === 'left') {
@@ -140,7 +141,7 @@ const licenseSearch = (content) => {
             <div class="flex items-center gap-2 w-[20%] justify-end">
                 <i class="fa-solid fa-circle-arrow-left text-[#1d1d1d] text-base cursor-pointer hover:text-[#2acc97]" @click="pageHandler('left')"></i>
                 <div class="flex items-center">
-                    <input type="number" min="1" :value="pageNumber" @keyup.enter="enterHandler($event.target.value)" class="border border-[#1d1d1d] border-opacity-10 p-[2px] w-10">
+                    <input type="number" min="1" :value="props.pageNum" @keyup.enter="enterHandler($event.target.value)" class="border border-[#1d1d1d] border-opacity-10 p-[2px] w-10">
                     <div>/100</div>
                     <!-- <div class="text-green-400">{{ typeof pageNumber }}</div> -->
                 </div>
