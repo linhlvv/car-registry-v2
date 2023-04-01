@@ -271,6 +271,10 @@ let expire = async (req, res) => {
   return res.send(rows)
 }
 
+let findByLicense = async (req, res) => {
+  let licenseId = req.body.licenseId
+  
+}
 
 module.exports = {
   homepage, authenticate, logout, centreInfo, 
