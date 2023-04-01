@@ -4,19 +4,18 @@ export const useAccountStore = defineStore('accountStore', {
   state: () => {
     return {
       email: '',
-
     }
   },
   getters: {
 
   },
   actions: {
-    authenticate(data) {
-      if(data !== undefined) {
-        this.email = data.email
+    authenticate(token, email) {
+      if(token !== undefined) {
+        this.email = email
       }
-      console.log(`accountStore email: ${this.email}`);
-      localStorage.setItem("email", this.email)
+      console.log(`accountStore email: ${email}`);
+      localStorage.setItem("token", token)
     }
 
   }
