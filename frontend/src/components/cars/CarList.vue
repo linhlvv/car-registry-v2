@@ -1,7 +1,10 @@
 <script setup>
 import RootRow from './RootRow.vue';
 import { watch, ref } from 'vue';
+import { useAccountStore } from '../../stores/AccountStore';
 import CarCard from './CarCard.vue';
+
+const accountStore = useAccountStore();
 
 const emit = defineEmits(['openCarInfo', 'openCarRegistration']);
 const props = defineProps([
@@ -21,21 +24,33 @@ const openCarRegistration = () => {
     emit('openCarRegistration');
 }
 
-const list = [
-    {name: 'Mercedes G63', licensePlate: '29-F1 61589', owner: 'Tran Ha Phuong', city: 'Ha Noi', valid: true},
-    {name: 'Mercedes GLC', licensePlate: '29-F1 61589', owner: 'Vu Minh Tuan', city: 'Ho Chi Minh', valid: false},
-    {name: 'RollRoyce Phantom', licensePlate: '29-F1 61589', owner: 'Le Viet Viet Linh', city: 'Thanh Hoa', valid: true},
-    {name: 'Bentley Continental', licensePlate: '29-F1 61589', owner: 'Hoang Thai Quang', city: 'Vinh', valid: false},
-    {name: 'Kia Morning', licensePlate: '29-F1 61589', owner: 'Vu Minh Tuan', city: 'Ha Tinh', valid: true},
-    {name: 'Lamborghini Aventador', licensePlate: '29-F1 61589', owner: 'Vu Minh Tuan', city: 'Yen Bai', valid: true},
-    {name: 'Mercedes Maybach S600', licensePlate: '29-F1 61589', owner: 'Tran Ha Phuong', city: 'Nghe An', valid: false},
-];
+const list = ref([]);
+
+const fetchCarData = async() => {
+    const res = await fetch(`http://localhost:1111/vehicles/${props.carType}`, {
+        method: 'POST',
+        credentials: "include",
+        headers: {
+            'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({page: props.pageNumber, resPerPage: 7}),
+    })
+    if(res.error) {
+        console.log(res.error);
+    }
+    const data = JSON.parse(await res.text())
+    console.log(`car list: ${data}`);
+    list.value = data
+}
+fetchCarData()
+
 // page number watcher
 watch(() => props.pageNumber, async(newPageNumber, oldPageNumber) => {
     // console.log(props.pageNumber, newPageNumber, oldPageNumber);
     if(newPageNumber !== oldPageNumber) {
         console.log(`page number of carlist has changed to: ${props.pageNumber}`);
     }
+    fetchCarData()
 });
 
 // filter watcher
@@ -78,10 +93,12 @@ watch(() => props.time, async(newTime, oldTime) => {
     }
 });
 
+// car type
 watch(() => props.carType, async(newCarType, oldCarType) => {
     if(newCarType !== oldCarType) {
         console.log('car type changed');
     }
+    fetchCarData()
 });
 
 

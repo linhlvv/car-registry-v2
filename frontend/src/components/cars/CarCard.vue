@@ -14,13 +14,13 @@ const regist = () => {
 <template>
     <div class="bg-white p-2 flex w-full mt-[2px]">
         <div class="max-[736px]:w-[28%] font-semibold text-[#616367] text-[11px] max-[900px]:text-[10px] flex justify-center items-center w-[14%]">
-            {{ car.licensePlate }}
+            {{ car.licenseId }}
         </div>
         <div class="max-[736px]:w-[36%] font-semibold text-[#616367] text-[11px] max-[900px]:text-[10px] flex items-center w-[22%]">
-            {{ car.name }}
+            {{ car.brand }} {{ car.model }} {{ car.version }}
         </div>
         <div class="max-[736px]:hidden font-semibold text-[#616367] text-[11px] max-[900px]:text-[10px] flex justify-center items-center w-[12%]">
-            {{ car.city }}
+            {{ car.certDate }}
         </div>
         <div class="max-[736px]:hidden font-bold text-[11px] max-[900px]:text-[10px] flex justify-center items-center w-[10%]">
             <div v-if="car.valid">
