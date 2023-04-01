@@ -81,6 +81,9 @@ let vehicles = async (req, res) => {
   if (page === undefined)
     page = 1
 
+  let count = `select count(*) as total from vehicles`
+  const [countRows, countFields] = await pool.query(count)
+
   let query = `
   select v.licenseId, certDate, 
   o.type, v.brand, v.model, v.version, p.name as owner,
@@ -118,7 +121,7 @@ let vehicles = async (req, res) => {
   
   const [rows, fields] = await pool.query(query, [resPerPage, 
                                                   resPerPage * (page - 1)])
-  return res.send(rows)
+  return res.send({data: rows, count: Math.ceil(countRows[0].total / resPerPage)})
 }
 
 let registed = async (req, res) => {
@@ -128,6 +131,13 @@ let registed = async (req, res) => {
     resPerPage = 10
   if (page === undefined)
     page = 1
+
+  let count = `select count(*) as total
+  from vehicles v 
+  left join registry re
+  on re.licenseId = v.licenseId
+  where expire >= CURRENT_DATE()`
+  const [countRows, countFields] = await pool.query(count)
 
   let query = `
   select v.licenseId, certDate, 
@@ -168,7 +178,7 @@ let registed = async (req, res) => {
 
   const [rows, fields] = await pool.query(query, [resPerPage, 
                                                     resPerPage * (page - 1)])
-  return res.send(rows)
+  return res.send({data: rows, count: Math.ceil(countRows[0].total / resPerPage)})
 }
 
 let unregisted = async (req, res) => {
@@ -178,6 +188,13 @@ let unregisted = async (req, res) => {
     resPerPage = 10
   if (page === undefined)
     page = 1
+
+  let count = `select count(*) as total
+  from vehicles v
+  left join registry re
+  on re.licenseId = v.licenseId
+  where expire is null`
+  const [countRows, countFields] = await pool.query(count)
   
   let query = `
   select v.licenseId, certDate, 
@@ -218,7 +235,7 @@ let unregisted = async (req, res) => {
 
   const [rows, fields] = await pool.query(query, [resPerPage, 
                                                   resPerPage * (page - 1)])
-  return res.send(rows)
+  return res.send({data: rows, count: Math.ceil(countRows[0].total / resPerPage)})
 }
 
 let expired = async (req, res) => {
@@ -228,6 +245,13 @@ let expired = async (req, res) => {
     resPerPage = 10
   if (page === undefined)
     page = 1
+
+  let count = `select count(*) as total
+  from vehicles v
+  left join registry re
+  on re.licenseId = v.licenseId
+  where expire < CURRENT_DATE()`
+  const [countRows, countFields] = await pool.query(count)
   
   let query = `
   select v.licenseId, certDate, 
@@ -268,7 +292,7 @@ let expired = async (req, res) => {
 
   const [rows, fields] = await pool.query(query, [resPerPage, 
                                                   resPerPage * (page - 1)])
-  return res.send(rows)
+  return res.send({data: rows, count: Math.ceil(countRows[0].total / resPerPage)})
 }
 
 let findByLicense = async (req, res) => {
