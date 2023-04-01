@@ -1,9 +1,14 @@
 require('dotenv').config()
 
-import crypto from 'crypto';
-import { query } from 'express';
-import jwt from 'jsonwebtoken';
 import pool from '../configs/connectDB';
+import  {authenticate} from './auth/authenticate';
+import  {verifyToken} from './auth/verifyToken';
+import  {logout} from './auth/logout';
+
+import {centreInfo} from './info/centreInfo';
+import {findByLicense} from './info/findByLicense';
+
+
 
 let homepage = async (req, res) => {
   console.log(req.session.id === undefined ? `Session: ` : `\x1b[4mSession\x1b[0m: `, req.session.id)
@@ -15,63 +20,6 @@ let homepage = async (req, res) => {
                     token: req.session.token}])
 }
 
-
-let authenticate = async (req, res) => {
-  let email = req.body.email;
-  let password = crypto.createHash('sha256').update(req.body.password).digest('hex');
-  if (email && password) {
-    let query = `select email, id from account where email = ? and password = ?`;
-    let [result] = await pool.execute(query, [email, password]);
-      
-      if (result.length > 0) {
-        req.session.email = email;
-        req.session.userid = result[0].id;
-        const payload = {
-          email: req.session.email,
-          id: req.session.userid
-        }
-        const authToken = jwt.sign(payload, process.env.SECRET, {expiresIn: '20000000000000s'})
-        req.session.token = authToken
-        console.log('\t\t\x1b[4mLogin succeeded\x1b[0m')
-        res.send({token: authToken})
-      } else {
-        console.log('Login failed')
-        res.end();
-      }
-    }
-}
-
-let verifyToken = (req, res, next) => {
-  const token = req.get('Authorization') || req.session.token;
-  if (!token) return res.sendStatus(401)
-  try {
-    const verified = jwt.verify(token, process.env.SECRET)
-    req.user = verified
-    next()
-  }
-  catch (err) {
-    console.log(err)
-    return res.sendStatus(403)
-  }
-}
-
-let logout = async (req, res) => {
-  req.session.destroy();
-  res.end()
-}
-
-let centreInfo = async (req, res) => {
-  if (req.session.email === undefined) {
-    return res.redirect('/')
-  }
-  let query = `select c.* from account a
-  join centre c
-  on c.id = a.id
-  where
-  a.email = ?`
-  const [rows, fields] = await pool.query(query, [req.session.email])
-  return res.send(rows)
-}
 
 let vehicles = async (req, res) => {
   let resPerPage = parseInt(req.body.resPerPage)
@@ -295,35 +243,7 @@ let expired = async (req, res) => {
   return res.send({data: rows, count: Math.ceil(countRows[0].total / resPerPage)})
 }
 
-let findByLicense = async (req, res) => {
-  let licenseId = req.body.licenseId
-  let base = `select * from vehicles v join `
-
-  let type = `select type 
-  from owner o 
-  join vehicles v 
-  on o.id = v.ownerId
-  where v.licenseId = ?`
-  const [rows, fields] = await pool.query(type, [licenseId])
-
-  if (rows[0].type === 1) {
-    let query = base + `personal p 
-    on v.ownerId = p.id
-    where v.licenseId = ?`
-    const [rows, fields] = await pool.query(query, [licenseId])
-    return res.send(rows)
-  }
-  else {
-    let query = base + `company c 
-    on v.ownerId = c.id
-    where v.licenseId = ?`
-    const [rows, fields] = await pool.query(query, [licenseId])
-    return res.send(rows)
-  }
-
-}
-
 module.exports = {
-  homepage, authenticate,  verifyToken, logout, centreInfo, 
+  homepage, authenticate, verifyToken, logout, centreInfo, 
   vehicles, registed, unregisted, expired, findByLicense
 }
