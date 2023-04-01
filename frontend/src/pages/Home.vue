@@ -11,6 +11,9 @@ const data = ref([]);
 const fetchData = async() => {
     const res = await fetch(`http://localhost:1111/`, {
         credentials: "include",
+        headers: {
+            'Authorization': `${localStorage.getItem('token')}`
+        }
     })
     const dataList = JSON.parse(await res.text())
     data.value = dataList;

@@ -6,7 +6,7 @@ import { useAccountStore } from '../../stores/AccountStore'
 import { useRouter } from 'vue-router';
 import { ref } from 'vue';
 
-localStorage.removeItem('email')
+localStorage.removeItem('token')
 
 const router = useRouter();
 const accountStore = useAccountStore()
@@ -16,7 +16,6 @@ const loginHandler = async() => {
     console.log(`account info: ${JSON.stringify(accountInfo.value)}`);
     const res = await fetch("http://localhost:1111/auth", {
         method: 'POST',
-        credentials: 'include',
         credentials: "include",
         headers: {
             'Content-Type': 'application/json',
@@ -26,10 +25,11 @@ const loginHandler = async() => {
     if(res.error) {
         console.log(res.error);
     }
-    console.log(`res: ${JSON.stringify(res)}`);
-    const data = JSON.parse(await res.text())[0]
-    console.log(`account data login: ${data}`);
-    accountStore.authenticate(data);
+    console.log(`${res}`);
+    const data = JSON.parse(await res.text())
+    console.log(`account data login: ${JSON.stringify(data)}`);
+    console.log(data.token);
+    accountStore.authenticate(data.token);
     if(data !== undefined) {
         router.push('/')
     }

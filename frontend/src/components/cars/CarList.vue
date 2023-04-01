@@ -82,7 +82,9 @@ watch(() => props.carType, async(newCarType, oldCarType) => {
     if(newCarType !== oldCarType) {
         console.log('car type changed');
     }
-})
+});
+
+
 
 </script>
 

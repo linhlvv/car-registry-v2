@@ -13,7 +13,7 @@ const verticalNavClickedHandler = () => {
 };
 
 const isLoggedIn = ref(false)
-if(localStorage.getItem('email') === null) {
+if(localStorage.getItem('token') === null) {
     isLoggedIn.value = false
 } else {
     isLoggedIn.value = true
