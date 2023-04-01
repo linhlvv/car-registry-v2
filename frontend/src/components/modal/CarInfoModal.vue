@@ -48,7 +48,7 @@ findCarInfo()
                 <div class="flex w-full justify-evenly flex-wrap gap-y-4">
                     <CarInformationBlock description="Registration code" icon="fa-solid fa-hashtag" :detail="carDetailedInfo.certId"/>
                     <CarInformationBlock description="Registration date" icon="fa-solid fa-calendar-check" :detail="carDetailedInfo.certDate"/>
-                    <CarInformationBlock description="Registration city" icon="fa-solid fa-city" detail="Ho Chi Minh"/>
+                    <CarInformationBlock description="Registration city" icon="fa-solid fa-city" :detail="carDetailedInfo.r_name"/>
                     <CarInformationBlock description="Car model" icon="fa-solid fa-car" :detail="carDetailedInfo.brand + ' ' + carDetailedInfo.model + ' ' + carDetailedInfo.version"/>
                     <CarInformationBlock description="Manufacture date" icon="fa-solid fa-calendar-days" :detail="carDetailedInfo.manafractureDate"/>
                     <CarInformationBlock description="Purpose" icon="fa-solid fa-gears" :detail="ownerType === 1 ? 'Personal' : 'Business'"/>
