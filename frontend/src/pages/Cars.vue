@@ -66,7 +66,7 @@ const timeSelected = (value) => {
     console.log(`time value: ${time.value.year} ${time.value.quarter} ${time.value.month}`);
 };
 
-const carType = ref('All cars');
+const carType = ref('all');
 const carTypeHandler = (value) => {
     carType.value = value
 };
@@ -94,7 +94,7 @@ const carTypeMatched = (value) => {
             <div class="flex items-center flex-col gap-5 justify-center">
                 <div class="flex custom-shadow w-[70vw] rounded-2xl overflow-hidden bg-white">
                     <div 
-                        @click="carTypeHandler('All cars')"
+                        @click="carTypeHandler('all')"
                         class="w-1/4 text-base font-medium gap-1 flex items-center justify-center text-center duration-200 cursor-pointer p-2 py-4 max-[997px]:text-sm max-[738px]:text-xs"
                         :class="carTypeMatched('All cars') ? 'bg-[#2acc97] text-white' : 'hover:text-[#2acc97]'"
                     >
@@ -102,7 +102,7 @@ const carTypeMatched = (value) => {
                         <div>All cars</div>
                     </div>
                     <div 
-                        @click="carTypeHandler('Registed cars')"
+                        @click="carTypeHandler('registed')"
                         class="w-1/4 text-base font-medium gap-1 flex items-center justify-center text-center duration-200 cursor-pointer p-2 py-4 max-[997px]:text-sm max-[738px]:text-xs"
                         :class="carTypeMatched('Registed cars') ? 'bg-[#2acc97] text-white' : 'hover:text-[#2acc97]'"
                     >
@@ -110,7 +110,7 @@ const carTypeMatched = (value) => {
                         <div>Registed cars</div>
                     </div>
                     <div 
-                        @click="carTypeHandler('Expired cars')"
+                        @click="carTypeHandler('expired')"
                         class="w-1/4 text-base font-medium gap-1 flex items-center justify-center text-center duration-200 cursor-pointer p-2 py-4 max-[997px]:text-sm max-[738px]:text-xs"
                         :class="carTypeMatched('Expired cars') ? 'bg-[#2acc97] text-white' : 'hover:text-[#2acc97]'"
                     >
@@ -118,7 +118,7 @@ const carTypeMatched = (value) => {
                         <div>Expired cars</div>
                     </div>
                     <div 
-                        @click="carTypeHandler('Not registed cars')" 
+                        @click="carTypeHandler('unregisted')" 
                         class="w-1/4 text-base font-medium gap-1 flex items-center justify-center text-center duration-200 cursor-pointer p-2 py-4 max-[997px]:text-sm max-[738px]:text-xs"
                         :class="carTypeMatched('Not registed cars') ? 'bg-[#2acc97] text-white' : 'hover:text-[#2acc97]'"
                     >
