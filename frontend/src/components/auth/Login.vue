@@ -13,7 +13,7 @@ const accountStore = useAccountStore()
 const accountInfo = ref({email: '', password: ''});
 
 const loginHandler = async() => {
-    console.log(`account info: ${JSON.stringify(accountInfo.value)}`);
+    // console.log(`account info: ${JSON.stringify(accountInfo.value)}`);
     const res = await fetch("http://localhost:1111/auth", {
         method: 'POST',
         credentials: "include",
@@ -25,11 +25,11 @@ const loginHandler = async() => {
     if(res.error) {
         console.log(res.error);
     }
-    console.log(`${res}`);
+    // console.log(`${res}`);
     const data = JSON.parse(await res.text())
-    console.log(`account data login: ${JSON.stringify(data)}`);
-    console.log(data.token);
-    accountStore.authenticate(data.token);
+    // console.log(`account data login: ${JSON.stringify(data)}`);
+    console.log(`authToken login: ${data.token}`);
+    accountStore.authenticate(data.token, accountInfo.value.email);
     if(data !== undefined) {
         router.push('/')
     }
