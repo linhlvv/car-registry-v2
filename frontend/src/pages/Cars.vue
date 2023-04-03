@@ -6,22 +6,29 @@ import CarList from '../components/cars/CarList.vue';
 import SearchField from '../components/cars/SearchField.vue';
 import { ref } from 'vue';
 
+//SECTION - car info modal handler
 const carDetailModal = ref(false);
-const openCarInfo = () => {
+const carInfoLicense = ref('')
+const openCarInfo = (license) => {
+    carInfoLicense.value = license
     carDetailModal.value = true
 };
 
+//SECTION - car reg form modal handler
 const registrationModal = ref(false);
 const openCarRegistration = () => {
     registrationModal.value = true
 };
 
+//SECTION - modal turn off
 const turnOffModal = () => {
     carDetailModal.value = false
     registrationModal.value = false
 };
 
+//SECTION - page handler
 const pageNumber = ref(1);
+const totalPageNumber = ref()
 
 const nextPage = () => {
     pageNumber.value += +1
@@ -33,11 +40,13 @@ const specifiedPage = (number) => {
     pageNumber.value = +number
 };
 
+//SECTION - license search
 const licenseSearchContent = ref('');
 const licenseSearchEntered = (content) => {
     licenseSearchContent.value = content
 };
 
+//SECTION - filter handler
 const filter = ref('');
 const city = ref('')
 const brand = ref('')
@@ -66,6 +75,7 @@ const timeSelected = (value) => {
     console.log(`time value: ${time.value.year} ${time.value.quarter} ${time.value.month}`);
 };
 
+//SECTION - car type handler
 const carType = ref('all');
 const carTypeHandler = (value) => {
     carType.value = value
@@ -86,7 +96,7 @@ const carTypeMatched = (value) => {
     <div>
         <!-- <div>{{ pageNumber }}</div> -->
         <div v-if="carDetailModal">
-            <CarInfoModal @exit-modal="turnOffModal"/>
+            <CarInfoModal :license-id="carInfoLicense" @exit-modal="turnOffModal"/>
         </div>
         <div v-if="registrationModal">
             <RegistrationFormModal @exit-modal="turnOffModal"/>

@@ -17,8 +17,8 @@ const props = defineProps([
     'carType'
 ])
 
-const openCarInfo = () => {
-    emit('openCarInfo');
+const openCarInfo = (license) => {
+    emit('openCarInfo', license);
 };
 const openCarRegistration = () => {
     emit('openCarRegistration');
@@ -38,9 +38,9 @@ const fetchCarData = async() => {
     if(res.error) {
         console.log(res.error);
     }
-    const data = JSON.parse(await res.text())
-    console.log(`car list: ${data}`);
-    list.value = data
+    const dataFetched = JSON.parse(await res.text())
+    console.log(`car list: ${dataFetched.data}`);
+    list.value = dataFetched.data
 }
 fetchCarData()
 
