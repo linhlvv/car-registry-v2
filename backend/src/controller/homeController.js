@@ -1,19 +1,19 @@
 require('dotenv').config()
 
-import pool from '../configs/connectDB';
-import  {authenticate} from './auth/authenticate';
-import  {verifyToken} from './auth/verifyToken';
-import  {logout} from './auth/logout';
+import { authenticate } from './authenticate/authenticate';
+import { logout } from './authenticate/logout';
+import { verifyToken } from './authenticate/verifyToken';
 
-import {centreInfo} from './info/centreInfo';
-import {findByLicense} from './info/findByLicense';
+import { centreInfo } from './info/centreInfo';
+import { findByLicense } from './info/findByLicense';
 
-import {vehicles} from './categories/vehicles';
-import {registed} from './categories/registed';
-import {unregisted} from './categories/unregisted';
-import {expired} from './categories/expired';
+import { expired } from './categories/expired';
+import { registed } from './categories/registed';
+import { unregisted } from './categories/unregisted';
+import { vehicles } from './categories/vehicles';
 
-import {ownerRegisted} from './owner/ownerRegisted';
+import { ownerInvalid } from './owner/ownerInvalid';
+import { ownerValid } from './owner/ownerValid';
 
 let homepage = async (req, res) => {
   console.log(req.session.id === undefined ? `Session: ` : `\x1b[4mSession\x1b[0m: `, req.session.id)
@@ -28,5 +28,5 @@ let homepage = async (req, res) => {
 module.exports = {
   homepage, authenticate, verifyToken, logout, centreInfo, 
   vehicles, registed, unregisted, expired, findByLicense,
-  ownerRegisted
+  ownerValid, ownerInvalid
 }
