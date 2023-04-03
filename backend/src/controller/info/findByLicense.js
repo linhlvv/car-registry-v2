@@ -3,7 +3,10 @@ import pool from "../../configs/connectDB"
 let findByLicense = async (req, res) => {
   let licenseId = req.body.licenseId
   let base = `select r.id AS r_id, r.name as r_name, v.*, `
-
+  let regist = `SELECT r.id, r.date, r.expire, c.name FROM vehicles v LEFT JOIN registry r ON r.licenseId = v.licenseId LEFT JOIN centre c ON r.centreId = c.id where r.licenseId = ?`
+  const [rows2, fields2] = await pool.query(regist, [licenseId])
+  let expired = (rows2[0].expired < Date.now())
+  
   let type = `select type 
   from owner o 
   join vehicles v 
@@ -11,15 +14,16 @@ let findByLicense = async (req, res) => {
   where v.licenseId = ?`
   const [rows, fields] = await pool.query(type, [licenseId])
 
+
   if (rows[0].type === 1) {
     let query = base + ` p.* from vehicles v left join region r on v.regionId = r.id JOIN personal p on v.ownerId = p.id WHERE v.licenseId = ?`
     const [rows, fields] = await pool.query(query, [licenseId])
-    return res.send({data: rows, ownerType: 1})
+    return res.send({data: rows, data2: rows2,valid: expired, ownerType: 1})
   }
   else {
     let query = base + ` c.* from vehicles v left join region r on v.regionId = r.id JOIN company c on v.ownerId = c.id WHERE v.licenseId = ?`
     const [rows, fields] = await pool.query(query, [licenseId])
-    return res.send({data: rows, ownerType: 0})
+    return res.send({data: rows, data2: rows2, valid: expired, ownerType: 0})
   }
 }
 
