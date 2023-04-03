@@ -2,6 +2,9 @@
 import { ref } from 'vue';
 import OwnerCarsNav from './OwnerCarsNav.vue';
 import OwnerCarCard from './OwnerCarCard.vue';
+import { useRoute } from "vue-router";
+
+const route = useRoute();
 
 const registedTag = ref(true);
 const changeTagHandler = (value) => {
@@ -17,8 +20,28 @@ const carList = [
     {licensePlate: '29-F1 81589', name: 'Bentley Continental', valid: true},
 ];
 
+
+
 const registedCarList = carList.filter(e => e.valid === true);
 const expiredCarList = carList.filter(e => e.valid === false);
+
+const fetchOwnerCar = async() => {
+    const res = await fetch(`http://localhost:1111/owner/valid`, {
+        method: 'POST',
+        credentials: "include",
+        headers: {
+            'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({id: route.params.id}),
+    })
+    if(res.error) {
+        console.log(res.error);
+    }
+    // console.log(`${res}`);
+    const data = JSON.parse(await res.text())
+    console.log(`owner registed cars: ${JSON.stringify(data)}`);
+};
+fetchOwnerCar()
 
 </script>
 

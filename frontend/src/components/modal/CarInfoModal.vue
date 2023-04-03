@@ -45,13 +45,13 @@ findCarInfo()
                     expired-date="23/2/2022" 
                     center-name="Trung tam dang kiem HP"
                 />
-                <div class="flex w-full justify-evenly flex-wrap gap-y-4">
-                    <CarInformationBlock description="Registration code" icon="fa-solid fa-hashtag" :detail="carDetailedInfo.certId"/>
+                <div class="flex w-full justify-evenly flex-wrap gap-y-4 max-[600px]:flex-col max-[600px]:items-center">
+                    <CarInformationBlock description="Registration code" icon="fa-solid fa-hashtag" :detail="carDetailedInfo.certId" class="max-[600px]:hidden"/>
                     <CarInformationBlock description="Registration date" icon="fa-solid fa-calendar-check" :detail="carDetailedInfo.certDate"/>
-                    <CarInformationBlock description="Registration city" icon="fa-solid fa-city" :detail="carDetailedInfo.r_name"/>
+                    <CarInformationBlock description="Registration city" icon="fa-solid fa-city" :detail="carDetailedInfo.r_name" class="max-[600px]:hidden"/>
                     <CarInformationBlock description="Car model" icon="fa-solid fa-car" :detail="carDetailedInfo.brand + ' ' + carDetailedInfo.model + ' ' + carDetailedInfo.version"/>
-                    <CarInformationBlock description="Manufacture date" icon="fa-solid fa-calendar-days" :detail="carDetailedInfo.manafractureDate"/>
-                    <CarInformationBlock description="Purpose" icon="fa-solid fa-gears" :detail="ownerType === 1 ? 'Personal' : 'Business'"/>
+                    <CarInformationBlock description="Manufacture date" icon="fa-solid fa-calendar-days" :detail="carDetailedInfo.manafractureDate" class="max-[860px]:hidden"/>
+                    <CarInformationBlock description="Purpose" icon="fa-solid fa-gears" :detail="ownerType === 1 ? 'Personal' : 'Business'" class="max-[860px]:hidden"/>
                 </div>
             </div>
         </div>
