@@ -1,6 +1,6 @@
 import express from 'express'
+import { verifyToken } from '../controller/authenticate/verifyToken'
 import homeController from '../controller/homeController'
-import {verifyToken} from '../controller/auth/verifyToken'
 let router = express.Router()
 
 const initWebRoute = (app) => {
@@ -15,9 +15,8 @@ const initWebRoute = (app) => {
   router.post('/vehicles/unregisted', verifyToken, homeController.unregisted)
   router.post('/vehicles/expired', verifyToken, homeController.expired)
 
-  router.post('/owner/registed', verifyToken, homeController.ownerRegisted)
-  // router.post('owner/unregisted', verifyToken, homeController.ownerUnregisted)
-  // router.post('owner/expired', verifyToken, homeController.ownerExpired)
+  router.post('/owner/valid', verifyToken, homeController.ownerValid)
+  router.post('/owner/invalid', verifyToken, homeController.ownerInvalid)
 
   router.post('/vehicles/find', verifyToken, homeController.findByLicense)
 
