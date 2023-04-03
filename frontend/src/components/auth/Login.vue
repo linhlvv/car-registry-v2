@@ -7,6 +7,12 @@ import { useRouter } from 'vue-router';
 import { ref } from 'vue';
 
 localStorage.removeItem('token')
+const logout = fetch("http://localhost:1111/logout", {
+    credentials: "include",
+})
+if(logout.error) {
+    console.log(logout.error);
+}
 
 const router = useRouter();
 const accountStore = useAccountStore()
