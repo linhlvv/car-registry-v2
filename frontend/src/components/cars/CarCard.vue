@@ -3,7 +3,7 @@ const props = defineProps(['car']);
 
 const emit = defineEmits(['openInfo', 'regist']);
 const openInfo = () => {
-    emit('openInfo')
+    emit('openInfo', props.car.licenseId)
 };
 const regist = () => {
     emit('regist')
