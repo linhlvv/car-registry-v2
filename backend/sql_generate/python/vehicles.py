@@ -40,7 +40,7 @@ brands = ['Toyota', 'Ford', 'Honda', 'Chevrolet', 'Nissan', 'BMW', 'Mercedes-Ben
 models = ['Camry', 'F-150', 'Civic', 'Silverado', 'Altima', '3 Series', 'E-Class', 'A4', 'Jetta', 'Elantra', 'Sorento', 'CX-5', 'Outback', 'Grand Cherokee', 'RX', 'Q50', 'ATS', 'Sierra', 'Challenger', '300', 'XC90', 'Outlander', 'Encore',
           '1500', 'Range Rover', '911', 'MDX', 'Continental', 'XF', 'Model S', '500', 'Cooper', 'Fortwo', 'FR-S', 'SX4', 'Trooper', 'GranTurismo', '458 Italia', 'Aventador', 'Continental GT', 'Phantom', 'P1', 'Chiron', 'Huayra', 'Regera']
 
-years = [i for i in range(2000, 2022)]
+years = [i for i in range(2015, 2019)]
 ran_cars = []
 manu_dates = []
 for i in range(3330):
@@ -52,7 +52,7 @@ for i in range(3330):
     ran_car = (str(brand) + "', '" + str(model) + "', '" + str(year))
     ran_cars.append(ran_car)
     start_date = datetime.date(year, 1, 1)
-    end_date = datetime.date.today()
+    end_date = datetime.date(2020,12,31)
     time_between_dates = end_date - start_date
     days_between_dates = time_between_dates.days
     random_number_of_days = random.randrange(days_between_dates)
