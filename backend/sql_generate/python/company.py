@@ -4,7 +4,7 @@ from datetime import datetime
 from datetime import time
 import datetime
 
-# Tạo 1000 tên công ty
+# Tạo 1110 tên công ty
 ran_names = []
 heads = ["Công ty", "Văn Phòng", "Trung tâm",
          "Đại lý", "Trụ sở", "Nhà máy", "Chi nhánh"]
@@ -17,12 +17,12 @@ name_p1 = ["David", "Vodka", "Vladimir", "Viktor", "Hữu", "Văn", "Hữu", "Th
 name_p2 = ["Suy", "Quang", "Tuấn", "Ân", "Linh", "Quân", "Long", "Nam",
            "Phong", "Thắng", "Vũ", "Bình", "Đức", "Hoàng", "Minh", "Phúc", "Tú", "Vi"]
 
-for i in range(1000):
+for i in range(1110):
     name = random.choice(heads) + " " + random.choice(mids) + " " + random.choice(
         acts) + " " + random.choice(name_p1) + " " + random.choice(name_p2)
     ran_names.append(name)
 
-# Tạo 1000 địa chỉ khác nhau
+# Tạo 1110 địa chỉ khác nhau
 ran_adds = []
 
 street = ["Trần Thái Tông", "Đốc Thiết", "Nguyễn Trãi", "Lê Lợi", "Phan Chu Trinh", "Bà Triệu", "Phạm Hùng", "Lê Mao", "Nguyễn Văn Cừ", "Hồ Tùng Mậu", "Trần Quốc Hoàn", "Quang Trung", "Mai Hắc Đế", "Phạm Ngọc Thạch", "Thái Hà", "Lê Nin", "Huỳnh Thúc Kháng",
@@ -34,21 +34,21 @@ district = ["Cầu Giấy", "Đống Đa", "Ba Đình", "Hai Bà Trưng", "Hoàn
 province = ["Hà Nội", "Hồ Chí Minh", "Đà Nẵng", "Hải Phòng", "Cần Thơ", "An Giang", "Bà Rịa - Vũng Tàu", "Bắc Giang", "Bắc Kạn", "Bạc Liêu", "Bắc Ninh", "Bến Tre", "Bình Định", "Bình Dương", "Bình Phước", "Bình Thuận", "Cà Mau", "Cao Bằng", "Đắk Lắk", "Đắk Nông", "Điện Biên", "Đồng Nai", "Đồng Tháp", "Gia Lai", "Hà Giang", "Hà Nam", "Hà Tĩnh", "Hải Dương", "Hậu Giang", "Hòa Bình", "Hưng Yên",
             "Khánh Hòa", "Kiên Giang", "Kon Tum", "Lai Châu", "Lâm Đồng", "Lạng Sơn", "Lào Cai", "Long An", "Nam Định", "Nghệ An", "Ninh Bình", "Ninh Thuận", "Phú Thọ", "Quảng Bình", "Quảng Nam", "Quảng Ngãi", "Quảng Ninh", "Quảng Trị", "Sóc Trăng", "Sơn La", "Tây Ninh", "Thái Bình", "Thái Nguyên", "Thanh Hóa", "Thừa Thiên Huế", "Tiền Giang", "Trà Vinh", "Tuyên Quang", "Vĩnh Long", "Vĩnh Phúc", "Yên Bái"]
 
-for i in range(1000):
+for i in range(1110):
     ran_add = "số " + str(random.randrange(1, 200)) + ", " + random.choice(street) + ", " + \
         random.choice(ward) + ", " + random.choice(district) + \
         ", " + random.choice(province)
     ran_adds.append(ran_add)
 
 phones = []
-for i in range(1000):
+for i in range(1110):
     phone = "09"
     for i in range(10):
         phone += str(random.randrange(0, 9))
     phones.append(phone)
 
 taxes = []
-for i in range(1000):
+for i in range(1110):
     tax = ""
     for i in range(9):
         tax += str(random.randrange(0, 9))
@@ -57,7 +57,7 @@ for i in range(1000):
     taxes.append(tax)
 
 # Tạo file text và ghi danh sách biển số xe vào file
-with io.open('./sql/company.sql', 'w', encoding='utf-8') as f:
+with io.open('./backend/sql_generate/sql/company.sql', 'w', encoding='utf-8') as f:
     f.write("\n".join(["insert into `owner` (`type`) VALUES ('0');\n" +
                        "insert into `company` (`id`, `address`, `phone`, `name`, `taxnum`) values ("
                        + "(SELECT MAX(ID) FROM `owner`), '" + address 
