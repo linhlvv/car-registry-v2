@@ -5,6 +5,7 @@ import { logout } from './authenticate/logout';
 import { verifyToken } from './authenticate/verifyToken';
 
 import { centreInfo } from './info/centreInfo';
+import { getDataForChart } from './info/data4Chart';
 import { findByLicense } from './info/findByLicense';
 
 import { expired } from './categories/expired';
@@ -14,6 +15,7 @@ import { vehicles } from './categories/vehicles';
 
 import { ownerInvalid } from './owner/ownerInvalid';
 import { ownerValid } from './owner/ownerValid';
+
 
 let homepage = async (req, res) => {
   console.log(req.session.id === undefined ? `Session: ` : `\x1b[4mSession\x1b[0m: `, req.session.id)
@@ -28,5 +30,5 @@ let homepage = async (req, res) => {
 module.exports = {
   homepage, authenticate, verifyToken, logout, centreInfo, 
   vehicles, registed, unregisted, expired, findByLicense,
-  ownerValid, ownerInvalid
+  ownerValid, ownerInvalid, getDataForChart
 }
