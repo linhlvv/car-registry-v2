@@ -1,4 +1,4 @@
-SET @Startdate = (SELECT MIN(certDate) FROM vehicles);
+SET @Startdate = '2021-01-01';
 SET @Enddate = CURRENT_DATE();
 
 INSERT INTO registry (centreId, licenseId, date, expire)
@@ -22,5 +22,5 @@ FROM (
   )
   GROUP BY vehicles.licenseId
   ORDER BY vehicles.licenseId
-  LIMIT 10
+  LIMIT 370
 ) t;

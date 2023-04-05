@@ -5,7 +5,8 @@ let findByLicense = async (req, res) => {
   let base = `select r.id AS r_id, r.name as r_name, v.*, `
   let regist = `SELECT r.id, r.date, r.expire, c.name FROM vehicles v LEFT JOIN registry r ON r.licenseId = v.licenseId LEFT JOIN centre c ON r.centreId = c.id where r.licenseId = ?`
   const [rows2, fields2] = await pool.query(regist, [licenseId])
-  let expired = (rows2[0].expired < Date.now())
+  let date = new Date().toISOString().slice(0, 10);
+  let expired = (rows2[0].expire > date)
   
   let type = `select type 
   from owner o 
