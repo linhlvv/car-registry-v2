@@ -1,5 +1,7 @@
 import pool from "../../configs/connectDB"
 
+//TODO - Viết lại hàm này để trả về thông tin của xe theo licenseId
+
 let findByLicense = async (req, res) => {
   let licenseId = req.body.licenseId
   let base = `select r.id AS r_id, r.name as r_name, v.*, `
