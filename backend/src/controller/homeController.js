@@ -12,7 +12,7 @@ import { expired } from './categories/expired';
 import { registed } from './categories/registed';
 import { vehicles } from './categories/vehicles';
 
-
+import { ownerInfo } from './owner/ownerInfo';
 
 let homepage = async (req, res) => {
   console.log(req.session.id === undefined ? `Session: ` : `\x1b[4mSession\x1b[0m: `, req.session.id)
@@ -26,5 +26,6 @@ let homepage = async (req, res) => {
 
 module.exports = {
   homepage, authenticate, verifyToken, logout, centreInfo, 
-  vehicles, registed, expired, findByLicense, getDataForChart
+  vehicles, registed, expired, findByLicense, getDataForChart,
+  ownerInfo
 }

@@ -16,7 +16,7 @@ const initWebRoute = (app) => {
 
   router.post('/vehicles/find', verifyToken, homeController.findByLicense)
 
-  router.get('/centre-info/', homeController.centreInfo)
+  router.post('/owner/info', verifyToken, homeController.ownerInfo)
 
   router.get('/centre-info', homeController.centreInfo)
 
