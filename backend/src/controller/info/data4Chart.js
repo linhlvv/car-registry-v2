@@ -135,7 +135,6 @@ let getDataForChart = async (req, res) => {
     }
     return res.send({
         Year: arr_year,
-        // year: [2012, 2023, 23023],
         Data: data_year
     })
 }
