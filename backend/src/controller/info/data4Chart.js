@@ -1,5 +1,3 @@
-//Viêt hàm trả về arr các năm hoạt động, mỗi năm gồm các arr các tháng gồm số xe đkiem, số xe hết hạn
-
 //import { YEAR } from 'mysql/lib/protocol/constants/types'
 import pool from '../../configs/connectDB'
 
@@ -9,6 +7,7 @@ let getDataForChart = async (req, res) => {
     if (req.session.email === undefined) {
         return res.redirect('/')
     }
+    
     let centreId = `select c.id from account a
     join centre c
     on c.id = a.id
