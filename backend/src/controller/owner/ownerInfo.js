@@ -1,5 +1,5 @@
 import pool from "../../configs/connectDB";
-
+                                                  
 //NOTE - đang làm dở
 let ownerInfo = async (req, res) => {
   let ownerid = req.body.ownerId;
