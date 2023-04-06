@@ -5,11 +5,13 @@ import { logout } from './authenticate/logout';
 import { verifyToken } from './authenticate/verifyToken';
 
 import { centreInfo } from './info/centreInfo';
+import { getDataForChart } from './info/data4Chart';
 import { findByLicense } from './info/findByLicense';
 
 import { expired } from './categories/expired';
 import { registed } from './categories/registed';
 import { vehicles } from './categories/vehicles';
+
 
 
 let homepage = async (req, res) => {
