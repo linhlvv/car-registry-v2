@@ -26,5 +26,5 @@ let homepage = async (req, res) => {
 
 module.exports = {
   homepage, authenticate, verifyToken, logout, centreInfo, 
-  vehicles, registed, expired, findByLicense
+  vehicles, registed, expired, findByLicense, getDataForChart
 }
