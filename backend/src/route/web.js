@@ -20,7 +20,7 @@ const initWebRoute = (app) => {
 
   router.get('/centre-info', homeController.centreInfo)
 
-  router.get('/center', homeController.getDataForChart)
+  router.get('/chart', homeController.getDataForChart)
   return app.use('/', router)
 }
 

@@ -1,6 +1,6 @@
 //Viêt hàm trả về arr các năm hoạt động, mỗi năm gồm các arr các tháng gồm số xe đkiem, số xe hết hạn
 
-import { YEAR } from 'mysql/lib/protocol/constants/types'
+//import { YEAR } from 'mysql/lib/protocol/constants/types'
 import pool from '../../configs/connectDB'
 
 //Functione trả về các năm hoạt động, mỗi năm gồm thông tin các tháng gồm số xe đăng kiểm, số xe hết hạn
@@ -24,7 +24,6 @@ let getDataForChart = async (req, res) => {
     let start_year = start[0].year
     
     let end_year = new Date().getFullYear()
-    console.log(end_year)
 
     let cnt_regist = []
     let cnt_expire = []
@@ -135,7 +134,6 @@ let getDataForChart = async (req, res) => {
     }
     return res.send({
         Year: arr_year,
-        // year: [2012, 2023, 23023],
         Data: data_year
     })
 }
