@@ -53,7 +53,6 @@ let getDataForChart = async (req, res) => {
 
     for (let i = 2021; i <= 2023; i++) {
         cnt_regist[i] = await pool.query(regist_base,[rows[0].id, i + '-__-__']);
-        console.log(cnt_regist[i][0])
         cnt_expire[i] = await pool.query(expire_base,[rows[0].id, i + '-__-__']);
         
         cnt_regist_January[i] = await pool.query(regist_base,[rows[0].id, i + '-01-__']);
@@ -82,38 +81,57 @@ let getDataForChart = async (req, res) => {
         cnt_expire_November[i] = await pool.query(expire_base,[rows[0].id, i + '-11-__']);
         cnt_expire_December[i] = await pool.query(expire_base,[rows[0].id, i + '-12-__']);
 
-        data_regist[i] = 'Registed: ' + cnt_regist[i][0][0].Registed 
-        + '; January: ' + cnt_regist_January[i][0][0].Registed
-        + '; February: ' + cnt_regist_February[i][0][0].Registed
-        + '; March: ' + cnt_regist_March[i][0][0].Registed
-        + '; April: ' + cnt_regist_April[i][0][0].Registed
-        + '; May: ' + cnt_regist_May[i][0][0].Registed
-        + '; June: ' + cnt_regist_June[i][0][0].Registed
-        + '; July: ' + cnt_regist_July[i][0][0].Registed
-        + '; August: ' + cnt_regist_August[i][0][0].Registed
-        + '; September: ' + cnt_regist_September[i][0][0].Registed
-        + '; October: ' + cnt_regist_October[i][0][0].Registed
-        + '; November: ' + cnt_regist_November[i][0][0].Registed
-        + '; December: ' + cnt_regist_December[i][0][0].Registed
+        data_regist[i] = {
+            total: cnt_regist[i][0][0].Registed, 
+            month: {
+                January: cnt_regist_January[i][0][0].Registed,
+                February: cnt_regist_February[i][0][0].Registed,
+                March: cnt_regist_March[i][0][0].Registed,
+                April: cnt_regist_April[i][0][0].Registed,
+                May: cnt_regist_May[i][0][0].Registed,
+                June: cnt_regist_June[i][0][0].Registed,
+                July: cnt_regist_July[i][0][0].Registed,
+                August: cnt_regist_August[i][0][0].Registed,
+                September: cnt_regist_September[i][0][0].Registed,
+                October: cnt_regist_October[i][0][0].Registed,
+                November: cnt_regist_November[i][0][0].Registed,
+                December: cnt_regist_December[i][0][0].Registed
+            }
+        }
 
-        data_expire[i] = '\nExpired: ' + cnt_expire[i][0][0].Expired
-        + '; January: ' + cnt_expire_January[i][0][0].Expired
-        + '; February: ' + cnt_expire_February[i][0][0].Expired
-        + '; March: ' + cnt_expire_March[i][0][0].Expired
-        + '; April: ' + cnt_expire_April[i][0][0].Expired
-        + '; May: ' + cnt_expire_May[i][0][0].Expired
-        + '; June: ' + cnt_expire_June[i][0][0].Expired
-        + '; July: ' + cnt_expire_July[i][0][0].Expired
-        + '; August: ' + cnt_expire_August[i][0][0].Expired
-        + '; September: ' + cnt_expire_September[i][0][0].Expired
-        + '; October: ' + cnt_expire_October[i][0][0].Expired
-        + '; November: ' + cnt_expire_November[i][0][0].Expired
-        + '; December: ' + cnt_expire_December[i][0][0].Expired
+        data_expire[i] = {
+            total: cnt_expire[i][0][0].Expired,
+            month: {
+                January: cnt_expire_January[i][0][0].Expired,
+                February: cnt_expire_February[i][0][0].Expired,
+                March: cnt_expire_March[i][0][0].Expired,
+                April: cnt_expire_April[i][0][0].Expired,
+                May: cnt_expire_May[i][0][0].Expired,
+                June: cnt_expire_June[i][0][0].Expired,
+                July: cnt_expire_July[i][0][0].Expired,
+                August: cnt_expire_August[i][0][0].Expired,
+                September: cnt_expire_September[i][0][0].Expired,
+                October: cnt_expire_October[i][0][0].Expired,
+                November: cnt_expire_November[i][0][0].Expired,
+                December: cnt_expire_December[i][0][0].Expired
+            }
+        }
         
     }
-    return res.send({Year_2021: data_regist[2021] + data_expire[2021] 
-        , Year_2022: data_regist[2022] + data_expire[2022]
-        , Year_2023: data_regist[2023] + data_expire[2023]
+    return res.send({
+        Year_2021: {
+            regist: data_regist[2021],
+            expire: data_expire[2021]
+        },
+        Year_2022: {
+            regist: data_regist[2022],
+            expire: data_expire[2022]
+        },
+        Year_2023: {
+            regist: data_regist[2023],
+            expire: data_expire[2023]
+        }
+
     })
 }
 module.exports = {
