@@ -1,6 +1,9 @@
 //Viêt hàm trả về arr các năm hoạt động, mỗi năm gồm các arr các tháng gồm số xe đkiem, số xe hết hạn
 
+import { YEAR } from 'mysql/lib/protocol/constants/types'
 import pool from '../../configs/connectDB'
+
+//Functione trả về các năm hoạt động, mỗi năm gồm thông tin các tháng gồm số xe đăng kiểm, số xe hết hạn
 
 let getDataForChart = async (req, res) => {
     if (req.session.email === undefined) {
@@ -15,8 +18,13 @@ let getDataForChart = async (req, res) => {
     let regist_base = 'select count(*) as Registed from registry where centreId = ? and date like ?'
     let expire_base = 'select count(*) as Expired from registry where centreId = ? and expire like ?'
     
+
+    let getStart = 'select YEAR(activation) as year from centre where id = ?'
+    let [start, fields2] = await pool.query(getStart, [rows[0].id])
+    let start_year = start[0].year
     
-    
+    let end_year = new Date().getFullYear()
+    console.log(end_year)
 
     let cnt_regist = []
     let cnt_expire = []
@@ -51,7 +59,10 @@ let getDataForChart = async (req, res) => {
     let data_regist = []
     let data_expire = []
 
-    for (let i = 2021; i <= 2023; i++) {
+    let data_year = []
+    let arr_year = []
+    for (let i = start_year; i <= end_year; i++) {
+        arr_year.push(i)
         cnt_regist[i] = await pool.query(regist_base,[rows[0].id, i + '-__-__']);
         cnt_expire[i] = await pool.query(expire_base,[rows[0].id, i + '-__-__']);
         
@@ -116,22 +127,16 @@ let getDataForChart = async (req, res) => {
                 December: cnt_expire_December[i][0][0].Expired
             }
         }
-        
+        data_year[i - start_year] = {
+            year: i,
+            regist: data_regist[i],
+            expire: data_expire[i]
+        }
     }
     return res.send({
-        Year_2021: {
-            regist: data_regist[2021],
-            expire: data_expire[2021]
-        },
-        Year_2022: {
-            regist: data_regist[2022],
-            expire: data_expire[2022]
-        },
-        Year_2023: {
-            regist: data_regist[2023],
-            expire: data_expire[2023]
-        }
-
+        Year: arr_year,
+        // year: [2012, 2023, 23023],
+        Data: data_year
     })
 }
 module.exports = {
