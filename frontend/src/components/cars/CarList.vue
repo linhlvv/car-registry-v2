@@ -107,7 +107,7 @@ watch(() => props.carType, async(newCarType, oldCarType) => {
 
 <template>
     <div class="w-full flex flex-col">
-        <RootRow />
+        <RootRow :carType="props.carType"/>
         <div class="flex flex-col items-center w-full" style="{overflow-wrap: 'anywhere';}">
             <!-- <div>{{ props.pageNumber }}</div> -->
             <div v-for="car in list" :key="car.licensePlate" class="w-full">
@@ -115,6 +115,7 @@ watch(() => props.carType, async(newCarType, oldCarType) => {
                     @openInfo="openCarInfo"
                     @regist="openCarRegistration"
                     :car="car"
+                    :carTypeSelection="props.carType"
                 />
             </div>
         </div>
