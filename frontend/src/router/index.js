@@ -83,6 +83,11 @@ const router = createRouter({
           component: () => import('@/pages/NotRegistCars.vue'),
           meta: { transition: 'scale' },
         },
+        {
+          path: 'registNewCar',
+          name: 'RegistNewCar',
+          component: () => import('@/pages/RegistNewCar.vue'),
+        },
       ]
     },
   ]

@@ -51,6 +51,9 @@ if(localStorage.getItem('token') === null) {
                         <li>
                             <NavbarButton icon="fa-sharp fa-solid fa-house" content="Home" link="/"/>
                         </li>
+                        <li>
+                            <NavbarButton icon="fa-solid fa-circle-plus" content="Regist" link="/registNewCar"/>
+                        </li>
                         <!-- <li>
                             <NavbarButton :current="route.path === '/manageDatabase'" icon="fa-sharp fa-solid fa-database" content="Manage database" link="/manageDatabase"/>
                         </li>
@@ -60,15 +63,6 @@ if(localStorage.getItem('token') === null) {
                         <li> 
                             <NavbarButton :current="route.path === '/cars'" icon="fa-solid fa-car" content="Cars" link="/cars"/>
                         </li>
-                        <!-- <li> 
-                            <NavbarButton :current="route.path === '/registedCars'" icon="fa-sharp fa-solid fa-car-on" content="Registed cars" link="/registedCars"/>
-                        </li>
-                        <li> 
-                            <NavbarButton :current="route.path === '/expiredCars'" icon="fa-sharp fa-solid fa-car-burst" content="Expired cars" link="/expiredCars"/>
-                        </li>
-                        <li> 
-                            <NavbarButton :current="route.path === '/notRegistedCars'" icon="fa-solid fa-car-tunnel" content="Not registed cars" link="/notRegistedCars"/>
-                        </li> -->
                         <li> 
                             <NavbarButton :current="route.path === '/forecast'" icon="fa-solid fa-lightbulb" content="Forecast" link="/forecast"/>
                         </li>

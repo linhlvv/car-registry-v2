@@ -17,7 +17,9 @@ const openCarInfo = (license) => {
 
 //SECTION - car reg form modal handler
 const registrationModal = ref(false);
-const openCarRegistration = () => {
+const carRegistLicense = ref('')
+const openCarRegistration = (license) => {
+    carRegistLicense.value = license
     registrationModal.value = true
 };
 
@@ -105,7 +107,7 @@ const openSelectHandler = () => {
             <CarInfoModal :license-id="carInfoLicense" @exit-modal="turnOffModal"/>
         </div>
         <div v-if="registrationModal">
-            <RegistrationFormModal @exit-modal="turnOffModal"/>
+            <RegistrationFormModal :license="carRegistLicense" @exit-modal="turnOffModal"/>
         </div>
 
         <!-- main -->
@@ -154,6 +156,7 @@ const openSelectHandler = () => {
                         </ul>
                     </div>
                 </div>
+                
                 <div class="flex custom-shadow items-center flex-col w-[80vw] rounded-2xl overflow-hidden">
                     <SearchField
                         @selectedFilterClicked="filterSelected" 

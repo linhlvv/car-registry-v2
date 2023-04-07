@@ -6,7 +6,7 @@ const openInfo = () => {
     emit('openInfo', props.car.license)
 };
 const regist = () => {
-    emit('regist')
+    emit('regist', props.car.license)
 };
 
 </script>
