@@ -11,6 +11,7 @@ const carDetailModal = ref(false);
 const carInfoLicense = ref('')
 const openCarInfo = (license) => {
     carInfoLicense.value = license
+    console.log(`license: ${license}`);
     carDetailModal.value = true
 };
 
@@ -76,7 +77,7 @@ const timeSelected = (value) => {
 };
 
 //SECTION - car type handler
-const carType = ref('all');
+const carType = ref('registed');
 const carTypeHandler = (value) => {
     carType.value = value
     pageNumber.value = 1
@@ -90,6 +91,11 @@ const carTypeMatched = (value) => {
     }
 };
 
+const selectionOpened = ref(false)
+const openSelectHandler = () => {
+    selectionOpened.value = !selectionOpened.value
+};
+
 </script>
 
 <template>
@@ -101,21 +107,17 @@ const carTypeMatched = (value) => {
         <div v-if="registrationModal">
             <RegistrationFormModal @exit-modal="turnOffModal"/>
         </div>
-        <!-- <div>{{ licenseSearchContent }}</div> -->
+
+        <!-- main -->
         <div class="my-6">
             <div class="flex items-center flex-col gap-5 justify-center">
-                <div class="flex custom-shadow w-[70vw] rounded-2xl overflow-hidden bg-white">
-                    <div 
-                        @click="carTypeHandler('all')"
-                        class="w-1/4 text-base font-medium gap-1 flex items-center justify-center text-center duration-200 cursor-pointer p-2 py-4 max-[997px]:text-sm max-[738px]:text-xs"
-                        :class="carTypeMatched('all') ? 'bg-[#2acc97] text-white' : 'hover:text-[#2acc97]'"
-                    >
-                        <i class="fa-solid fa-car"></i>
-                        <div>All cars</div>
-                    </div>
+
+                <!-- default car type filter -->
+                <div class="flex custom-shadow w-[70vw] rounded-2xl overflow-hidden bg-white max-[535px]:hidden">
+                    
                     <div 
                         @click="carTypeHandler('registed')"
-                        class="w-1/4 text-base font-medium gap-1 flex items-center justify-center text-center duration-200 cursor-pointer p-2 py-4 max-[997px]:text-sm max-[738px]:text-xs"
+                        class="w-1/2 text-base font-medium gap-1 flex items-center justify-center text-center duration-200 cursor-pointer p-2 py-4 max-[997px]:text-sm max-[738px]:text-xs max-[625px]:text-[10px]"
                         :class="carTypeMatched('registed') ? 'bg-[#2acc97] text-white' : 'hover:text-[#2acc97]'"
                     >
                         <i class="fa-solid fa-car-on"></i>
@@ -123,19 +125,33 @@ const carTypeMatched = (value) => {
                     </div>
                     <div 
                         @click="carTypeHandler('expired')"
-                        class="w-1/4 text-base font-medium gap-1 flex items-center justify-center text-center duration-200 cursor-pointer p-2 py-4 max-[997px]:text-sm max-[738px]:text-xs"
+                        class="w-1/2 text-base font-medium gap-1 flex items-center justify-center text-center duration-200 cursor-pointer p-2 py-4 max-[997px]:text-sm max-[738px]:text-xs max-[625px]:text-[10px]"
                         :class="carTypeMatched('expired') ? 'bg-[#2acc97] text-white' : 'hover:text-[#2acc97]'"
                     >
                         <i class="fa-solid fa-car-burst"></i>
                         <div>Expired cars</div>
                     </div>
-                    <div 
-                        @click="carTypeHandler('unregisted')" 
-                        class="w-1/4 text-base font-medium gap-1 flex items-center justify-center text-center duration-200 cursor-pointer p-2 py-4 max-[997px]:text-sm max-[738px]:text-xs"
-                        :class="carTypeMatched('unregisted') ? 'bg-[#2acc97] text-white' : 'hover:text-[#2acc97]'"
-                    >
-                        <i class="fa-solid fa-car-tunnel"></i>
-                        <div>Not registed cars</div>
+                    
+                </div>
+                
+                <!-- responsive select dropdown -->
+                <div class="w-4/5 flex flex-col min-[535px]:hidden">
+                    <div @click="openSelectHandler" class="w-full rounded-lg p-2 flex items-center justify-between text-white text-base bg-[#2acc97]">
+                        <div class="font-semibold">Select</div>
+                        <i class="fa-solid fa-caret-down"></i>
+                    </div>
+                    <div :class="!selectionOpened ? 'hidden' : ''" class="w-full z-10 bg-white divide-y divide-gray-100 rounded-lg shadow dark:bg-gray-700 dark:divide-gray-600">
+                        <ul class="p-3 space-y-3 text-sm text-gray-700 dark:text-gray-200"  >
+                            <div class="flex items-center">
+                                <input @click="carTypeHandler('registed')" id="default-radio-2" type="radio" value="registed" v-model="carType" name="registed" class="w-4 h-4">
+                                <label for="default-radio-2" class="ml-2 text-sm font-medium text-gray-900 dark:text-gray-300">Registed cars</label>
+                            </div>
+                        
+                            <div class="flex items-center">
+                                <input @click="carTypeHandler('expired')" id="default-radio-3" type="radio" value="expired" v-model="carType" name="expired" class="w-4 h-4">
+                                <label for="default-radio-3" class="ml-2 text-sm font-medium text-gray-900 dark:text-gray-300">Expired cars</label>
+                            </div>    
+                        </ul>
                     </div>
                 </div>
                 <div class="flex custom-shadow items-center flex-col w-[80vw] rounded-2xl overflow-hidden">
@@ -171,5 +187,9 @@ const carTypeMatched = (value) => {
 <style scoped>
     .custom-shadow {
         box-shadow: -5px 6px 8px #ebecf0;
+    }
+
+    input[type=radio] {
+        accent-color: #2acc97;
     }
 </style>
