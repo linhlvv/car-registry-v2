@@ -3,7 +3,7 @@ import pool from "../../configs/connectDB"
 //TODO - Viết lại hàm này để trả về thông tin của xe theo licenseId
 
 //FIXME - Không trả về expire date
-let findByLicense = async (req, res) => {
+let detailModal = async (req, res) => {
   let licenseId = req.body.licenseId
   let base = `select r.id AS r_id, r.name as r_name, v.*, `
   let regist = `SELECT r.id, r.date, r.expire, c.name FROM vehicles v LEFT JOIN registry r ON r.licenseId = v.licenseId LEFT JOIN centre c ON r.centreId = c.id where r.licenseId = ?`
@@ -32,5 +32,5 @@ let findByLicense = async (req, res) => {
 }
 
 module.exports = {
-  findByLicense
+  detailModal
 }
