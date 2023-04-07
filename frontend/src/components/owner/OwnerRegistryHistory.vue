@@ -1,6 +1,6 @@
 <script setup>
 import { ref } from 'vue';
-import OwnerCarsNav from './OwnerCarsNav.vue';
+import OwnerCarsNav from './OwnerValidNav.vue';
 import OwnerRegistryCard from './OwnerRegistryCard.vue';
 import { useRoute } from "vue-router";
 
