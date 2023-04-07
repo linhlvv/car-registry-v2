@@ -6,7 +6,7 @@ import { verifyToken } from './authenticate/verifyToken';
 
 import { centreInfo } from './info/centreInfo';
 import { getDataForChart } from './info/data4Chart';
-import { findByLicense } from './info/findByLicense';
+import { detailModal } from './info/detailModal';
 
 import { expired } from './categories/expired';
 import { registed } from './categories/registed';
@@ -26,6 +26,6 @@ let homepage = async (req, res) => {
 
 module.exports = {
   homepage, authenticate, verifyToken, logout, centreInfo, 
-  vehicles, registed, expired, findByLicense, getDataForChart,
+  vehicles, registed, expired, detailModal, getDataForChart,
   ownerInfo
 }
