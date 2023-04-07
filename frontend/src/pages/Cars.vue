@@ -11,6 +11,7 @@ const carDetailModal = ref(false);
 const carInfoLicense = ref('')
 const openCarInfo = (license) => {
     carInfoLicense.value = license
+    console.log(`license: ${license}`);
     carDetailModal.value = true
 };
 

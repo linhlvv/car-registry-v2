@@ -3,7 +3,6 @@
     <div class="w-full h-full max-[914px]:w-full max-[500px]:h-[50vh]">
         <Bar :data="data" :options="options" class="w-full max-[914px]:w-full max-[500px]:h-[50vh]" />
     </div>
-    <div>{{ props.year }}</div>
 </template>
 
 <style scoped></style>
@@ -31,6 +30,7 @@ const props = defineProps(['year']);
 const chartData = ref({});
 let registedCarList = []
 let expiredCarList = []
+const dataList = ref([])
 const loaded = ref(false)
 
 const data = ref({
@@ -42,19 +42,19 @@ const options = ref({})
 let chartRegisted, chartExpired;
 
 const fetchData = async () => {
-    const res = await fetch(`http://localhost:1111/center`, {
+    const res = await fetch(`http://localhost:1111/chart`, {
         credentials: "include",
         headers: {
             'Authorization': `${accountStore.getToken}`
         }
     })
-    const dataList = JSON.parse(await res.text())
+    dataList.value = JSON.parse(await res.text())
     console.log(dataList);
-    chartData.value = dataList;
-    // console.log(`chart data: ${chartData.value.value}`);
+    chartData.value = dataList.value.Data[props.year];
+    console.log(`chart data: ${JSON.stringify(chartData.value)}`);
 
-    chartRegisted = chartData.value.year2023.regist.month;
-    chartExpired = chartData.value.year2023.expire.month;
+    chartRegisted = chartData.value.regist.month;
+    chartExpired = chartData.value.expire.month;
 
     registedCarList = [
         chartRegisted.January,
@@ -139,16 +139,10 @@ fetchData();
 watch(() => props.year, (newYear, oldYear) => {
     if(newYear !== oldYear) {
         console.log('change');
-        if(newYear === '2023') {
-            chartRegisted = chartData.value.year2023.regist.month
-            chartExpired = chartData.value.year2023.expire.month
-        } else if (newYear === '2022') {
-            chartRegisted = chartData.value.year2022.regist.month
-            chartExpired = chartData.value.year2022.expire.month
-        } else {
-            chartRegisted = chartData.value.year2021.regist.month
-            chartExpired = chartData.value.year2021.expire.month
-        }
+        chartData.value = dataList.value.Data[newYear];
+        chartRegisted = chartData.value.regist.month
+        chartExpired = chartData.value.expire.month
+
         registedCarList = [
             chartRegisted.January,
             chartRegisted.February,

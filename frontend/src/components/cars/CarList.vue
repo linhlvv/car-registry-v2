@@ -25,8 +25,10 @@ const openCarRegistration = () => {
 }
 
 const list = ref([]);
+const loading = ref(false)
 
 const fetchCarData = async() => {
+    loading.value = true
     const res = await fetch(`http://localhost:1111/vehicles/${props.carType}`, {
         method: 'POST',
         credentials: "include",
@@ -39,8 +41,9 @@ const fetchCarData = async() => {
         console.log(res.error);
     }
     const dataFetched = JSON.parse(await res.text())
-    console.log(`car list: ${dataFetched.data}`);
+    console.log(`car list: ${JSON.stringify(dataFetched.data)}`);
     list.value = dataFetched.data
+    loading.value = false
 }
 fetchCarData()
 
@@ -110,12 +113,16 @@ watch(() => props.carType, async(newCarType, oldCarType) => {
         <RootRow :carType="props.carType"/>
         <div class="flex flex-col items-center w-full" style="{overflow-wrap: 'anywhere';}">
             <!-- <div>{{ props.pageNumber }}</div> -->
-            <div v-for="car in list" :key="car.licensePlate" class="w-full">
+            <div v-if="loading" class="font-bold text-base w-full text-center flex items-center justify-center bg-[#2acc97] text-white py-4">
+                Loading
+            </div>
+            <div v-else v-for="car in list" :key="car.licensePlate" class="w-full">
                 <CarCard
                     @openInfo="openCarInfo"
                     @regist="openCarRegistration"
                     :car="car"
                     :carTypeSelection="props.carType"
+                    :loading="loading"
                 />
             </div>
         </div>

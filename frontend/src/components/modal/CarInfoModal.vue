@@ -14,6 +14,7 @@ const carDetailedInfo = ref({});
 const ownerType = ref()
 const registryCert = ref({info: {}, valid: true})
 const findCarInfo = async() => {
+    console.log(props.licenseId);
     const res = await fetch(`http://localhost:1111/vehicles/find`, {
         method: 'POST',
         credentials: "include",
@@ -30,7 +31,7 @@ const findCarInfo = async() => {
     carDetailedInfo.value = dataFetched.data[0]
     // console.log(dataFetched.ownerType);
     ownerType.value = dataFetched.ownerType
-    registryCert.value.info = dataFetched.data2[0]
+    registryCert.value.info = dataFetched.data2
     registryCert.value.valid = dataFetched.valid
     console.log(`cert: ${JSON.stringify(registryCert.value)}`);
 };
