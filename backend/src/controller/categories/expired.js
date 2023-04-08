@@ -54,7 +54,7 @@ let expired = async (req, res) => {
     where centreId = ` + req.session.userid +
   `  group by re.licenseId)  
   and expire < current_date()
-    order by license
+    order by expire desc
     limit ? offset ?`
 
   const [rows, fields] = await pool.query(query, [resPerPage, 
