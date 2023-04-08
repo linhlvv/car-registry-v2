@@ -14,7 +14,7 @@ import { vehicles } from './categories/vehicles';
 
 import { ownerInfo } from './owner/ownerInfo';
 
-import { changePassword } from './center/changePassword'
+import { changePassword } from './authenticate/changePassword'
 
 let homepage = async (req, res) => {
   console.log(req.session.id === undefined ? `Session: ` : `\x1b[4mSession\x1b[0m: `, req.session.id)
