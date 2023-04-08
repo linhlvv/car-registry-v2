@@ -13,7 +13,7 @@ const carDetailedInfo = ref({});
 const ownerType = ref()
 const registryCert = ref({info: {}, valid: true})
 const findCarInfo = async() => {
-    const res = await fetch(`http://localhost:1111/vehicles/find`, {
+    const res = await fetch(`http://localhost:1111/vehicles/modal`, {
         method: 'POST',
         credentials: "include",
         headers: {

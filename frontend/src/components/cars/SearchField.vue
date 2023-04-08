@@ -2,7 +2,7 @@
 import { ref } from 'vue';
 import SearchBar from '../UI/SearchBar.vue';
 
-const props = defineProps(['pageNum']);
+const props = defineProps(['pageNum', 'totalPage']);
 const emit = defineEmits([
     'nextPage',
     'prevPage',
@@ -25,7 +25,7 @@ const pageHandler = (direction) => {
             emit('prevPage');
         }
     } else {
-        if (pageNumber.value <100) {
+        if (pageNumber.value < props.totalPage) {
             pageNumber.value += +1;
             emit('nextPage');
         }
@@ -33,7 +33,7 @@ const pageHandler = (direction) => {
 };
 
 const enterHandler = (number) => {
-    if(1 <= number && number <= 100) {
+    if(1 <= number && number <= props.totalPage) {
         pageNumber.value = +number;
         emit('specifiedPage', +number);
     }
@@ -142,7 +142,7 @@ const licenseSearch = (content) => {
                 <i class="fa-solid fa-circle-arrow-left text-[#1d1d1d] text-base cursor-pointer hover:text-[#2acc97]" @click="pageHandler('left')"></i>
                 <div class="flex items-center">
                     <input type="number" min="1" :value="props.pageNum" @keyup.enter="enterHandler($event.target.value)" class="border border-[#1d1d1d] border-opacity-10 p-[2px] w-10">
-                    <div>/100</div>
+                    <div>/{{ totalPage }}</div>
                     <!-- <div class="text-green-400">{{ typeof pageNumber }}</div> -->
                 </div>
                 <i class="fa-solid fa-circle-arrow-right text-[#1d1d1d] text-base cursor-pointer hover:text-[#2acc97]" @click="pageHandler('right')"></i>

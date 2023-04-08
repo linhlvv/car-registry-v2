@@ -6,7 +6,7 @@ import CarCard from './CarCard.vue';
 
 const accountStore = useAccountStore();
 
-const emit = defineEmits(['openCarInfo', 'openCarRegistration']);
+const emit = defineEmits(['openCarInfo', 'openCarRegistration', 'totalPageNum']);
 const props = defineProps([
     'pageNumber',
     'filter',
@@ -23,8 +23,12 @@ const openCarInfo = (license) => {
 const openCarRegistration = (license) => {
     emit('openCarRegistration', license);
 }
+const postTotalPage = () => {
+    emit('totalPageNum', totalPage.value)
+}
 
 const list = ref([]);
+const totalPage = ref()
 const loading = ref(false)
 
 const fetchCarData = async() => {
@@ -41,9 +45,11 @@ const fetchCarData = async() => {
         console.log(res.error);
     }
     const dataFetched = JSON.parse(await res.text())
-    // console.log(`car list: ${JSON.stringify(dataFetched.data)}`);
+    console.log(`car list: ${JSON.stringify(dataFetched.count)}`);
     list.value = dataFetched.data
+    totalPage.value = dataFetched.count
     loading.value = false
+    postTotalPage()
 }
 fetchCarData()
 
