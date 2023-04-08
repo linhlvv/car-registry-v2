@@ -34,8 +34,8 @@ const loginHandler = async() => {
     // console.log(`${res}`);
     const data = JSON.parse(await res.text())
     // console.log(`account data login: ${JSON.stringify(data)}`);
-    console.log(`authToken login: ${data.token}`);
-    accountStore.authenticate(data.token, accountInfo.value.email);
+    console.log(`authToken login: ${JSON.stringify(data)}`);
+    accountStore.authenticate(data.token, accountInfo.value.email, data.id, data.type);
     if(data !== undefined) {
         router.push('/')
     }

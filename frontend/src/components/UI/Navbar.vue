@@ -2,8 +2,10 @@
 import ProfileDropdown from './ProfileDropdown.vue';
 import NavbarButton from './NavbarButton.vue';
 import { useRoute } from 'vue-router';
+import { useAccountStore } from '../../stores/AccountStore'
 import { ref } from 'vue';
 
+const accountStore = useAccountStore()
 const route = useRoute();
 
 const emit = defineEmits(['verticalNavClicked']);
@@ -51,15 +53,15 @@ if(localStorage.getItem('token') === null) {
                         <li>
                             <NavbarButton icon="fa-sharp fa-solid fa-house" content="Home" link="/"/>
                         </li>
-                        <li>
+                        <li v-if="!accountStore.isAdmin">
                             <NavbarButton icon="fa-solid fa-circle-plus" content="Regist" link="/registNewCar"/>
                         </li>
-                        <!-- <li>
+                        <li v-if="accountStore.isAdmin">
                             <NavbarButton :current="route.path === '/manageDatabase'" icon="fa-sharp fa-solid fa-database" content="Manage database" link="/manageDatabase"/>
                         </li>
                         <li> 
                             <NavbarButton :current="route.path === '/accountManagement'" icon="fa-sharp fa-solid fa-users" content="Account management" link="/accountManagement"/>
-                        </li> -->
+                        </li>
                         <li> 
                             <NavbarButton :current="route.path === '/cars'" icon="fa-solid fa-car" content="Cars" link="/cars"/>
                         </li>

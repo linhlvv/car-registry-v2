@@ -6,6 +6,14 @@ import CarList from '../components/cars/CarList.vue';
 import SearchField from '../components/cars/SearchField.vue';
 import { ref } from 'vue';
 
+const totalPage = ref()
+const bindTotalPage = (total) => {
+    console.log(total);
+    totalPage.value = total
+    console.log(totalPage.value);
+}
+bindTotalPage()
+
 //SECTION - car info modal handler
 const carDetailModal = ref(false);
 const carInfoLicense = ref('')
@@ -31,7 +39,6 @@ const turnOffModal = () => {
 
 //SECTION - page handler
 const pageNumber = ref(1);
-const totalPageNumber = ref()
 
 const nextPage = () => {
     pageNumber.value += +1
@@ -169,6 +176,7 @@ const openSelectHandler = () => {
                         @prev-page="prevPage" 
                         @specified-page="specifiedPage"
                         :page-num="pageNumber"
+                        :total-page="totalPage"
                     />
                     <CarList 
                         :filter="filter" 
@@ -180,6 +188,7 @@ const openSelectHandler = () => {
                         :car-type="carType"
                         @openCarInfo="openCarInfo" 
                         @openCarRegistration="openCarRegistration"
+                        @totalPageNum="bindTotalPage"
                     />
                 </div>
             </div>

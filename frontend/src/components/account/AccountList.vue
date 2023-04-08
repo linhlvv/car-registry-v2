@@ -12,11 +12,11 @@ const accountList = [
 </script>
 
 <template>
-    <div class="flex flex-col items-center">
+    <div class="flex flex-col items-center w-3/4">
         <AccountManagementRootRow />
-        <div class="mb-8">
-            <div class=" flex flex-col gap-[6px] items-center">
-                <div v-for="item in accountList" :key="item.id">
+        <div class="mb-8 w-full">
+            <div class=" flex flex-col gap-[6px] items-center w-full">
+                <div v-for="item in accountList" :key="item.id" class="w-full">
                     <AccountCard :item="item"/>
                 </div>
             </div>
