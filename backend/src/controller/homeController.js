@@ -14,6 +14,8 @@ import { vehicles } from './categories/vehicles';
 
 import { ownerInfo } from './owner/ownerInfo';
 
+import { changePassword } from './center/changePassword'
+
 let homepage = async (req, res) => {
   console.log(req.session.id === undefined ? `Session: ` : `\x1b[4mSession\x1b[0m: `, req.session.id)
   console.log(req.session.userid === undefined ? `Userid: ` : `\x1b[4mUserid\x1b[0m: `, req.session.userid)
@@ -27,5 +29,5 @@ let homepage = async (req, res) => {
 module.exports = {
   homepage, authenticate, verifyToken, logout, centreInfo, 
   vehicles, registed, expired, detailModal, getDataForChart,
-  ownerInfo
+  ownerInfo, changePassword
 }

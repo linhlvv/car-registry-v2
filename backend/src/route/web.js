@@ -21,6 +21,9 @@ const initWebRoute = (app) => {
   router.get('/centre-info', homeController.centreInfo)
 
   router.get('/chart', homeController.getDataForChart)
+
+  router.post('/change-password',verifyToken ,homeController.changePassword)
+
   return app.use('/', router)
 }
 
