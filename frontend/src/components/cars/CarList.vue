@@ -45,7 +45,7 @@ const fetchCarData = async() => {
         console.log(res.error);
     }
     const dataFetched = JSON.parse(await res.text())
-    console.log(`car list: ${JSON.stringify(dataFetched.count)}`);
+    // console.log(`car list: ${JSON.stringify(dataFetched.count)}`);
     list.value = dataFetched.data
     totalPage.value = dataFetched.count
     loading.value = false

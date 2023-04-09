@@ -18,7 +18,6 @@ const passwordManagementModalHandler = () => {
     } else {
         passwordManagementModalIsOn.value = true
     }
-    console.log(passwordManagementModalIsOn.value);
 };
 
 </script>

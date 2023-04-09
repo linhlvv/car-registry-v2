@@ -1,16 +1,13 @@
 <script setup>
 import CarInfoModal from '../components/modal/CarInfoModal.vue';
 import RegistrationFormModal from '../components/modal/RegistrationFormModal.vue';
-import RootRow from '../components/cars/RootRow.vue';
 import CarList from '../components/cars/CarList.vue';
 import SearchField from '../components/cars/SearchField.vue';
 import { ref } from 'vue';
 
 const totalPage = ref()
 const bindTotalPage = (total) => {
-    console.log(total);
     totalPage.value = total
-    console.log(totalPage.value);
 }
 bindTotalPage()
 
