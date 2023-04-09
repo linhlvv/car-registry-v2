@@ -17,12 +17,17 @@ const props = defineProps([
     'carType'
 ])
 
+//SECTION - open car information modal
 const openCarInfo = (license) => {
     emit('openCarInfo', license);
 };
+
+//SECTION - open car registration modal
 const openCarRegistration = (license) => {
     emit('openCarRegistration', license);
 }
+
+//SECTION - send total page number to cars.vue
 const postTotalPage = () => {
     emit('totalPageNum', totalPage.value)
 }
@@ -31,6 +36,7 @@ const list = ref([]);
 const totalPage = ref()
 const loading = ref(false)
 
+//SECTION - fetch default car data
 const fetchCarData = async() => {
     loading.value = true
     const res = await fetch(`http://localhost:1111/vehicles/${props.carType}`, {
@@ -54,6 +60,27 @@ const fetchCarData = async() => {
 }
 fetchCarData()
 
+//SECTION - fetch data of all cars by corresponding owner code
+const fetchCarByOwnerCode = async () => {
+    loading.value = true
+    const res = await fetch(`http://localhost:1111/filter/owner`, {
+        method: 'POST',
+        credentials: "include",
+        headers: {
+            'Content-Type': 'application/json',
+            'Authorization': `${accountStore.getToken}`
+        },
+        body: JSON.stringify({carType: props.carType, code: props.owner}),
+    })
+    if(res.error) {
+        console.log(res.error);
+    }
+    const dataFetched = JSON.parse(await res.text())
+    console.log(`owner cars: ${JSON.stringify(dataFetched)}`);
+    list.value = dataFetched.data
+    loading.value = false
+}
+
 // page number watcher
 watch(() => props.pageNumber, async(newPageNumber, oldPageNumber) => {
     // console.log(props.pageNumber, newPageNumber, oldPageNumber);
@@ -68,6 +95,9 @@ watch(() => props.filter, async(newFilter, oldFilter) => {
     // console.log(props.pageNumber, newPageNumber, oldPageNumber);
     if(newFilter !== oldFilter) {
         console.log(`filter has changed to: ${props.filter}`);
+    }
+    if(newFilter === 'No filter') {
+        fetchCarData()
     }
 });
 
@@ -93,6 +123,7 @@ watch(() => props.owner, async(newOwner, oldOwner) => {
     if(newOwner !== oldOwner) {
         console.log(`owner has changed to: ${props.owner}`);
     }
+    fetchCarByOwnerCode()
 });
 
 // time

@@ -2,7 +2,7 @@
 import { ref } from 'vue';
 import SearchBar from '../UI/SearchBar.vue';
 
-const props = defineProps(['pageNum', 'totalPage']);
+const props = defineProps(['pageNum', 'totalPage', 'carType']);
 const emit = defineEmits([
     'nextPage',
     'prevPage',
@@ -18,6 +18,8 @@ const selected = ref('No filter');
 const pageNumber = ref(props.pageNum);
 console.log(pageNumber.value);
 
+
+//SECTION - handle pagination
 const pageHandler = (direction) => {
     if(direction === 'left') {
         if (pageNumber.value > 1) {
@@ -39,6 +41,8 @@ const enterHandler = (number) => {
     }
 };
 
+
+//SECTION - Filter handler
 const city = ref('All');
 const owner = ref('All');
 const brand = ref('All');
@@ -81,6 +85,7 @@ const timeClicked = (value, type) => {
     emit('selectedTimeClicked', time.value)
 }
 
+//SECTION - Filter list
 const filterList = ['No filter', 'City', 'Owner', 'Brand', 'Time']
 const cityList = ['All', 'Ho Chi Minh', 'Ha Noi', 'Bac Ninh', 'Hue']
 const brandList = ['All', 'Mercedes', 'RollRoyce', 'Toyota', 'Kia', 'Ferrari', 'Vinfast']
@@ -108,6 +113,7 @@ const monthList = [
     {content: 'December', value: '12'}, 
 ]
 
+//SECTION - filter sorting
 const fromAtoZ = ref(true);
 const fromAtoZClicked = () => {
     fromAtoZ.value = true
@@ -127,6 +133,10 @@ const timeDescendingClicked = () => {
 const licenseSearch = (content) => {
     emit('licenseSearch', content)
 };
+
+const fetchAllAvailableBrands = async () => {
+    
+}
 
 </script>
 

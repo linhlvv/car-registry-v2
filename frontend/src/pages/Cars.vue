@@ -174,6 +174,7 @@ const openSelectHandler = () => {
                         @specified-page="specifiedPage"
                         :page-num="pageNumber"
                         :total-page="totalPage"
+                        :car-type="carType"
                     />
                     <CarList 
                         :filter="filter" 
