@@ -37,6 +37,6 @@ let homepage = async (req, res) => {
 module.exports = {
   homepage, authenticate, verifyToken, logout, centreInfo, 
   vehicles, registed, expired, detailModal, getDataForChart,
-  ownerInfo, owner, brand
-  ownerInfo, changePassword, viewAllCentres, viewAllCars, insertCentre, removeCentre, owner
+  ownerInfo, owner, brand,
+  changePassword, viewAllCentres, viewAllCars, insertCentre, removeCentre
 }

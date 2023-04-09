@@ -62,7 +62,6 @@ let brand = async (req, res) => {
   and expire` + type + `current_date()
     order by brand ` + order + `, model ` + order + `, version ` + order +
   ` limit ? offset ?`
-    console.log(query)
   
   // bug - đã gọi được api kết quả trả về chính xác
   const [rows, fields] = await pool.query(query, [resPerPage, 
