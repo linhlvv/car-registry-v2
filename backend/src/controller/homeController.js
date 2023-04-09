@@ -17,6 +17,13 @@ import { brand } from './filter/brand'
 
 import { ownerInfo } from './owner/ownerInfo';
 
+import { changePassword } from './authenticate/changePassword';
+
+import { viewAllCentres } from './admin/viewAllCentres';
+import { viewAllCars } from './admin/viewAllCars';
+import { insertCentre } from './admin/insertCentre';
+import { removeCentre } from './admin/removeCentre'
+
 let homepage = async (req, res) => {
   console.log(req.session.id === undefined ? `Session: ` : `\x1b[4mSession\x1b[0m: `, req.session.id)
   console.log(req.session.userid === undefined ? `Userid: ` : `\x1b[4mUserid\x1b[0m: `, req.session.userid)
@@ -31,4 +38,5 @@ module.exports = {
   homepage, authenticate, verifyToken, logout, centreInfo, 
   vehicles, registed, expired, detailModal, getDataForChart,
   ownerInfo, owner, brand
+  ownerInfo, changePassword, viewAllCentres, viewAllCars, insertCentre, removeCentre, owner
 }

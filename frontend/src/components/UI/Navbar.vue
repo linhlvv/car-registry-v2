@@ -1,6 +1,7 @@
 <script setup>
 import ProfileDropdown from './ProfileDropdown.vue';
 import NavbarButton from './NavbarButton.vue';
+
 import { useRoute } from 'vue-router';
 import { useAccountStore } from '../../stores/AccountStore'
 import { ref } from 'vue';
@@ -54,7 +55,7 @@ if(localStorage.getItem('token') === null) {
                             <NavbarButton icon="fa-sharp fa-solid fa-house" content="Home" link="/"/>
                         </li>
                         <li v-if="!accountStore.isAdmin">
-                            <NavbarButton icon="fa-solid fa-circle-plus" content="Regist" link="/registNewCar"/>
+                            <NavbarButton :current="route.path === '/registNewCar'" icon="fa-solid fa-circle-plus" content="Regist" link="/registNewCar"/>
                         </li>
                         <li v-if="accountStore.isAdmin">
                             <NavbarButton :current="route.path === '/manageDatabase'" icon="fa-sharp fa-solid fa-database" content="Manage database" link="/manageDatabase"/>

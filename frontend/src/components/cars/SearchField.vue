@@ -141,7 +141,7 @@ const licenseSearch = (content) => {
             <div class="flex items-center gap-2 w-[20%] justify-end">
                 <i class="fa-solid fa-circle-arrow-left text-[#1d1d1d] text-base cursor-pointer hover:text-[#2acc97]" @click="pageHandler('left')"></i>
                 <div class="flex items-center">
-                    <input type="number" min="1" :value="props.pageNum" @keyup.enter="enterHandler($event.target.value)" class="border border-[#1d1d1d] border-opacity-10 p-[2px] w-10">
+                    <input type="number" min="1" :max="totalPage" :value="props.pageNum" @keyup.enter="enterHandler($event.target.value)" class="border border-[#1d1d1d] border-opacity-10 p-[2px] w-10">
                     <div>/{{ totalPage }}</div>
                     <!-- <div class="text-green-400">{{ typeof pageNumber }}</div> -->
                 </div>

@@ -5,7 +5,7 @@ import { ref } from 'vue';
 
 const info = ref({
     licenseId: '', r_name: '', manafractureDate: '', brand: '', model: '', version: '',
-    certId: '', certDate: '',
+    certId: '', certDate: '', modifyDate: '',
     name: '', ssn: '', dob: '', address: '', phone: '', taxnum:''
 });
 </script>

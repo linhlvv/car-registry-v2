@@ -1,8 +1,10 @@
 import pool from "../../configs/connectDB"
 
-//TODO - Viết lại hàm này để trả về thông tin của xe theo licenseId
+// task - Viết preview thông tin xe và thông tin đăng kiểm
+// input - licenseId
+// output - thông tin xe và thông tin đăng kiểm
 
-let detailModal = async (req, res) => {
+let previewRegist = async (req, res) => {
   let licenseId = req.body.licenseId
   let base = `select r.id AS r_id, r.name as r_name, v.*, `
   let regist = `SELECT r.id, r.date, r.expire, c.name FROM vehicles v LEFT JOIN registry r ON r.licenseId = v.licenseId LEFT JOIN centre c ON r.centreId = c.id where r.licenseId = ?`
@@ -31,5 +33,5 @@ let detailModal = async (req, res) => {
 }
 
 module.exports = {
-  detailModal
+  previewRegist
 }
