@@ -2,10 +2,21 @@
 import { ref } from 'vue';
 import SearchBar from '../UI/SearchBar.vue';
 
-// const props = defineProps(['pageNumber']);
-const emit = defineEmits(['nextPage', 'prevPage', 'specifiedPage', 'licenseSearch']);
+const props = defineProps(['pageNum', 'totalPage']);
+const emit = defineEmits([
+    'nextPage',
+    'prevPage',
+    'specifiedPage',
+    'licenseSearch',
+    'selectedFilterClicked',
+    'selectedCityClicked',
+    'selectedOwnerClicked',
+    'selectedBrandClicked',
+    'selectedTimeClicked',
+]);
 const selected = ref('No filter');
-const pageNumber = ref(1);
+const pageNumber = ref(props.pageNum);
+console.log(pageNumber.value);
 
 const pageHandler = (direction) => {
     if(direction === 'left') {
@@ -14,7 +25,7 @@ const pageHandler = (direction) => {
             emit('prevPage');
         }
     } else {
-        if (pageNumber.value <100) {
+        if (pageNumber.value < props.totalPage) {
             pageNumber.value += +1;
             emit('nextPage');
         }
@@ -22,7 +33,7 @@ const pageHandler = (direction) => {
 };
 
 const enterHandler = (number) => {
-    if(1 <= number && number <= 100) {
+    if(1 <= number && number <= props.totalPage) {
         pageNumber.value = +number;
         emit('specifiedPage', +number);
     }
@@ -34,6 +45,68 @@ const brand = ref('All');
 const time = ref({
     year: 'All', quarter: 'All', month: 'All',
 });
+
+const filterClickedHandler = (value) => {
+    console.log(`filter ${selected.value}`);
+    emit('selectedFilterClicked', value)
+}
+
+const cityClicked = (value) => {
+    console.log(`city ${city.value}`);
+    emit('selectedCityClicked', value)
+}
+
+const ownerClicked = (value) => {
+    owner.value = value
+    console.log(`owner ${owner.value}`);
+    emit('selectedOwnerClicked', value)
+}
+
+const brandClicked = (value) => {
+    console.log(`brand changes to ${brand.value}`);
+    emit('selectedBrandClicked', value)
+}
+
+const timeClicked = (value, type) => {
+    if(type === 'year') {
+        time.value.year = value;
+    } else if (type === 'quarter') {
+        time.value.quarter = value
+        time.value.month = 'All'
+    } else {
+        time.value.month = value
+        time.value.quarter = 'All'
+    }
+    // console.log(`time changes to ${{year: time.value.year, quarter: time.value.quarter, month: time.value.month}}`);
+    emit('selectedTimeClicked', time.value)
+}
+
+const filterList = ['No filter', 'City', 'Owner', 'Brand', 'Time']
+const cityList = ['All', 'Ho Chi Minh', 'Ha Noi', 'Bac Ninh', 'Hue']
+const brandList = ['All', 'Mercedes', 'RollRoyce', 'Toyota', 'Kia', 'Ferrari', 'Vinfast']
+const yearList = ['All', '2019', '2020', '2021', '2022', '2023']
+const quarterList = [
+    {content: 'All', value: 'All'},
+    {content: 'Q1', value: '1'},
+    {content: 'Q2', value: '2'},
+    {content: 'Q3', value: '3'},
+    {content: 'Q4', value: '4'},
+]
+const monthList = [
+    {content: 'All', value: 'All'}, 
+    {content: 'January', value: '1'},
+    {content: 'Febuary', value: '2'}, 
+    {content: 'March', value: '3'}, 
+    {content: 'April', value: '4'}, 
+    {content: 'May', value: '5'}, 
+    {content: 'June', value: '6'}, 
+    {content: 'July', value: '7'}, 
+    {content: 'August', value: '8'}, 
+    {content: 'September', value: '9'}, 
+    {content: 'October', value: '10'}, 
+    {content: 'November', value: '11'}, 
+    {content: 'December', value: '12'}, 
+]
 
 const fromAtoZ = ref(true);
 const fromAtoZClicked = () => {
@@ -58,121 +131,96 @@ const licenseSearch = (content) => {
 </script>
 
 <template>
-    <div class="bg-white w-full p-6 px-7 flex items-center justify-between">
-        <div class="flex items-center w-[80%] gap-3">
-            <SearchBar @search-entered="licenseSearch" width="w-[25%]" placeholder="Enter a license plate..."/>
+    <div class="bg-white w-full p-6 px-7 flex flex-col gap-3 justify-center">
+        <div class="w-full flex items-center">
+            <div class="flex items-center w-[77.5%] gap-3">
+                <SearchBar @search-entered="licenseSearch" width="w-[30%]" placeholder="Enter a license plate..."/>
+            </div>
 
-            <!-- Default filter -->
-            <div class="w-[75%] flex items-center gap-4">
-                <div class="flex flex-col">
-                    <div class="w-fit flex items-center gap-2">
-                        <div class="flex items-center">
-                            <h1 class="text-[#9196a4] font-semibold">Filter</h1>
-                        </div>
-                        <select v-model="selected" id="countries" class=" bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-[4px] focus:ring-[#2acc97] focus:border-[#2acc97] block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500">
-                            <option selected>No filter</option>
-                            <option value="city">City</option>
-                            <option value="owner">Owner</option>
-                            <option value="brand">Brand</option>
-                            <option value="time">Time</option>
-                        </select>
-
-                        <!-- Ordering -->
-                        <div v-if="selected !== 'No filter' && selected !== 'time' && city === 'All' && owner === 'All' && brand === 'All'" class="flex flex-col gap-1">
-                            <i @click="fromAtoZClicked" class="fa-solid fa-arrow-up-z-a text-[#1d1d1d] cursor-pointer duration-100" :class="fromAtoZ ? 'text-[#2acc97]' : ''"></i>
-                            <i @click="fromZtoAClicked" class="fa-solid fa-arrow-up-a-z text-[#1d1d1d] cursor-pointer duration-100" :class="!fromAtoZ ? 'text-[#2acc97]' : ''"></i>
-                        </div>
-                        <div v-else-if="selected === 'time'" class="flex flex-col gap-1">
-                            <i @click="timeAscendingClicked" class="fa-solid fa-arrow-up text-[#1d1d1d] cursor-pointer duration-100" :class="timeAscending ? 'text-[#2acc97]' : ''"></i>
-                            <i @click="timeDescendingClicked" class="fa-solid fa-arrow-down text-[#1d1d1d] cursor-pointer duration-100" :class="!timeAscending ? 'text-[#2acc97]' : ''"></i>
-                        </div>
-                    </div>
+            <!-- Pagination -->
+            <div class="flex items-center gap-2 w-[20%] justify-end">
+                <i class="fa-solid fa-circle-arrow-left text-[#1d1d1d] text-base cursor-pointer hover:text-[#2acc97]" @click="pageHandler('left')"></i>
+                <div class="flex items-center">
+                    <input type="number" min="1" :max="totalPage" :value="props.pageNum" @keyup.enter="enterHandler($event.target.value)" class="border border-[#1d1d1d] border-opacity-10 p-[2px] w-10">
+                    <div>/{{ totalPage }}</div>
+                    <!-- <div class="text-green-400">{{ typeof pageNumber }}</div> -->
                 </div>
+                <i class="fa-solid fa-circle-arrow-right text-[#1d1d1d] text-base cursor-pointer hover:text-[#2acc97]" @click="pageHandler('right')"></i>
+            </div>
+        </div>
+        <div class="w-full flex items-center">
+            <div class="w-[30%] flex items-center gap-2">
+                <div class="flex items-center">
+                    <h1 class="text-[#9196a4] font-semibold">Filter</h1>
+                </div>
+                <select @change="filterClickedHandler(selected)" v-model="selected" id="countries" class=" bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-[4px] focus:ring-[#2acc97] focus:border-[#2acc97] block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500">
+                    <option :value="item" v-for="item in filterList" :key="item">
+                        {{ item }}
+                    </option>
+                </select>
 
+                <!-- Ordering -->
+                <div v-if="selected !== 'No filter' && selected !== 'Time' && city === 'All' && owner === 'All' && brand === 'All'" class="flex flex-col gap-1">
+                    <i @click="fromAtoZClicked" class="fa-solid fa-arrow-up-z-a text-[#1d1d1d] cursor-pointer duration-100" :class="fromAtoZ ? 'text-[#2acc97]' : ''"></i>
+                    <i @click="fromZtoAClicked" class="fa-solid fa-arrow-up-a-z text-[#1d1d1d] cursor-pointer duration-100" :class="!fromAtoZ ? 'text-[#2acc97]' : ''"></i>
+                </div>
+                <div v-else-if="selected === 'Time'" class="flex flex-col gap-1">
+                    <i @click="timeAscendingClicked" class="fa-solid fa-arrow-up text-[#1d1d1d] cursor-pointer duration-100" :class="timeAscending ? 'text-[#2acc97]' : ''"></i>
+                    <i @click="timeDescendingClicked" class="fa-solid fa-arrow-down text-[#1d1d1d] cursor-pointer duration-100" :class="!timeAscending ? 'text-[#2acc97]' : ''"></i>
+                </div>
+            </div>
+            <div class="w-[70%] flex items-center ml-3">
                 <!-- City filter -->
-                <div id="sub-filter" v-show="selected === 'city'" class="flex items-center gap-2">
+                <div id="sub-filter" v-show="selected === 'City'" class="flex items-center gap-2">
                     <div class="flex items-center">
                         <h1 class="text-[#9196a4] font-semibold">City</h1>
                     </div>
-                    <select v-model="city" id="countries" class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-[4px] focus:ring-[#2acc97] focus:border-[#2acc97] block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500">
-                        <option selected>All</option>
-                        <option value="Ho Chi Minh">Ho Chi Minh</option>
-                        <option value="Ha Noi">Ha Noi</option>
-                        <option value="Bac Ninh">Bac Ninh</option>
-                        <option value="Hue">Hue</option>
+                    <select v-model="city" @change="cityClicked(city)" id="countries" class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-[4px] focus:ring-[#2acc97] focus:border-[#2acc97] block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500">
+                        <option v-for="singleCity in cityList" :key="singleCity">
+                            {{ singleCity }}
+                        </option>
                     </select>
                 </div>
 
                 <!-- Owner filter -->
-                <div id="sub-filter" v-show="selected === 'owner'" class="flex items-center gap-2">
+                <div id="sub-filter" v-show="selected === 'Owner'" class="flex items-center gap-2">
                     <div class="flex items-center">
                         <h1 class="text-[#9196a4] font-semibold">Owner</h1>
                     </div>
-                    <SearchBar width="w-[70%]" placeholder="Enter the SSN..."/>
+                    <SearchBar @search-entered="ownerClicked" width="w-[70%]" placeholder="Enter the SSN..."/>
                 </div>
 
                 <!-- Brand filter -->
-                <div id="sub-filter" v-show="selected === 'brand'" class="flex items-center gap-2">
+                <div id="sub-filter" v-show="selected === 'Brand'" class="flex items-center gap-2">
                     <div class="flex items-center">
                         <h1 class="text-[#9196a4] font-semibold">Brand</h1>
                     </div>
-                    <select v-model="brand" id="countries" class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-[4px] focus:ring-[#2acc97] focus:border-[#2acc97] block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500">
-                        <option selected>All</option>
-                        <option value="Mercedes">Mercedes</option>
-                        <option value="RollRoyce">RollRoyce</option>
-                        <option value="Bentley">Bentley</option>
-                        <option value="Toyota">Toyota</option>
-                        <option value="Kia">Kia</option>
-                        <option value="Vinfast">Vinfast</option>
+                    <select v-model="brand" @change="brandClicked(brand)" id="countries" class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-[4px] focus:ring-[#2acc97] focus:border-[#2acc97] block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500">
+                        <option v-for="singleBrand in brandList" :key="singleBrand">
+                            {{ singleBrand }}
+                        </option>
                     </select>
                 </div>
 
                 <!-- Time filter -->
-                <div id="sub-filter" v-show="selected === 'time'" class="flex items-center gap-2">
-                    <select v-model="time.year" class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-[4px] focus:ring-[#2acc97] focus:border-[#2acc97] block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500">
-                        <option selected>All</option>
-                        <option value="2018">2018</option>
-                        <option value="2019">2019</option>
-                        <option value="2020">2020</option>
-                        <option value="2021">2021</option>
-                        <option value="2022">2022</option>
-                        <option value="2023">2023</option>
+                <div id="sub-filter" v-show="selected === 'Time'" class="flex items-center gap-2 w-full">
+                    <select v-model="time.year" @change="timeClicked(time.year, 'year')" class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-[4px] focus:ring-[#2acc97] focus:border-[#2acc97] block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500">
+                        <option v-for="singleYear in yearList" :key="singleYear" :value="singleYear">
+                            {{ singleYear }}
+                        </option>
                     </select>
-                    <select v-model="time.quarter" class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-[4px] focus:ring-[#2acc97] focus:border-[#2acc97] block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500">
-                        <option selected>All</option>
-                        <option value="q1">Q1</option>
-                        <option value="q2">Q2</option>
-                        <option value="q3">Q3</option>
-                        <option value="q4">Q4</option>
+                    <select :disabled="time.year === 'All'" v-model="time.quarter" @change="timeClicked(time.quarter, 'quarter')" class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-[4px] focus:ring-[#2acc97] focus:border-[#2acc97] block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500 disabled:opacity-60">
+                        <option v-for="singleQ in quarterList" :key="singleQ.value" :value="singleQ.value">
+                            {{ singleQ.content }}
+                        </option>
                     </select>
-                    <select v-model="time.month" class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-[4px] focus:ring-[#2acc97] focus:border-[#2acc97] block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500">
-                        <option selected>All</option>
-                        <option value="January">Jan</option>
-                        <option value="Febuary">Feb</option>
-                        <option value="March">Mar</option>
-                        <option value="April">Apr</option>
-                        <option value="May">May</option>
-                        <option value="June">Jun</option>
-                        <option value="July">Jul</option>
-                        <option value="August">Aug</option>
-                        <option value="September">Sep</option>
-                        <option value="October">Oct</option>
-                        <option value="November">Nov</option>
-                        <option value="December">Dec</option>
+                    <select :disabled="time.year === 'All'" v-model="time.month" @change="timeClicked(time.month, 'month')" class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-[4px] focus:ring-[#2acc97] focus:border-[#2acc97] block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500 disabled:opacity-60">
+                        <option v-for="singleMonth in monthList" :key="singleMonth.value" :value="singleMonth.value">
+                            {{ singleMonth.content }}
+                        </option>
                     </select>
                 </div>
             </div>
-        </div>
-
-        <!-- Pagination -->
-        <div class="flex items-center gap-2 w-[17%] justify-end">
-            <i class="fa-solid fa-circle-arrow-left text-[#1d1d1d] text-base cursor-pointer hover:text-[#2acc97]" @click="pageHandler('left')"></i>
-            <div class="flex items-center">
-                <input type="number" min="1" :value="pageNumber" @keyup.enter="enterHandler($event.target.value)" class="border border-[#1d1d1d] border-opacity-10 p-[2px] w-10">
-                <div>/100</div>
-                <!-- <div class="text-green-400">{{ typeof pageNumber }}</div> -->
-            </div>
-            <i class="fa-solid fa-circle-arrow-right text-[#1d1d1d] text-base cursor-pointer hover:text-[#2acc97]" @click="pageHandler('right')"></i>
         </div>
     </div>
 </template>

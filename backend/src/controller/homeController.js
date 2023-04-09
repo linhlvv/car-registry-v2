@@ -1,53 +1,45 @@
-import pool from '../configs/connectDB';
+require('dotenv').config()
 
-let test = async (req, res) => {
-  let ans = req.body;
-  return res.send(ans)
-}
+import { authenticate } from './authenticate/authenticate';
+import { logout } from './authenticate/logout';
+import { verifyToken } from './authenticate/verifyToken';
 
-let homePage = async (req, res) => {
-  if (req.session.email === undefined) {
-    return res.send(`<form action="/test" method="POST">
-    <label for="fname">First name:</label>
-    <input type="text" id="fname" name="fname"><br><br>
-    <label for="lname">Last name:</label>
-    <input type="text" id="lname" name="lname"><br><br>
-    <input type="submit" value="Submit">
-  </form>`
-    )
-  }
-  else{
-    const [rows, fields] = await pool.query('select * from vehicles')
-    return res.send(rows)
-  }
-  
-}
+import { centreInfo } from './info/centreInfo';
+import { getDataForChart } from './info/data4Chart';
+import { detailModal } from './info/detailModal';
 
-let authenticate = async (req, res) => {
+import { expired } from './categories/expired';
+import { registed } from './categories/registed';
+import { vehicles } from './categories/vehicles';
 
-  let email = req.body.email;
-  let password = req.body.password;
-  if (email && password) {
-    let query = `select * from account where email = ? and password = ?`;
-    let [result] = await pool.execute(query, [email, password]);
-      console.log(result);
-      if (result.length > 0) {
-        req.session.loggedin = true;
-        req.session.email = email;
-        res.send(result)
-      } else {
-        res.send({ loginErr: 'Incorrect email or Password!' });
-      }
-      res.end();
-    }
-}
+import { owner } from './filter/owner'
+import { brand } from './filter/brand'
+import { allBrand } from './filter/allBrand'
+import { exactBrand } from './filter/exactBrand'
+import { time } from './filter/time'
 
-let logout = async (req, res) => {
-  req.session.email = undefined;
-  req.session.loggedin = false;
-  return res.redirect('/');
+import { ownerInfo } from './owner/ownerInfo';
+
+import { changePassword } from './authenticate/changePassword';
+
+import { viewAllCentres } from './admin/viewAllCentres';
+import { viewAllCars } from './admin/viewAllCars';
+import { insertCentre } from './admin/insertCentre';
+import { removeCentre } from './admin/removeCentre'
+
+let homepage = async (req, res) => {
+  console.log(req.session.id === undefined ? `Session: ` : `\x1b[4mSession\x1b[0m: `, req.session.id)
+  console.log(req.session.userid === undefined ? `Userid: ` : `\x1b[4mUserid\x1b[0m: `, req.session.userid)
+  console.log(req.session.token === undefined ? `Token: ` : `\x1b[4mToken\x1b[0m: `, req.session.token)
+
+  return res.send([{session: req.session.id,
+                    userid: req.session.userid, 
+                    token: req.session.token}])
 }
 
 module.exports = {
-  homePage, authenticate, logout, test 
+  homepage, authenticate, verifyToken, logout, centreInfo, 
+  vehicles, registed, expired, detailModal, getDataForChart,
+  ownerInfo, owner, brand, allBrand, exactBrand, time,
+  changePassword, viewAllCentres, viewAllCars, insertCentre, removeCentre
 }

@@ -14,7 +14,7 @@ const registryInfo = ref({
                 <RegistrationFormInput title="ID" input-width="w-full" v-model="registryInfo.id" :disabled="true"/>
                 <RegistrationFormInput title="Registry date" input-width="w-full" v-model="registryInfo.registryDate" :disabled="true"/>
                 <RegistrationFormInput title="Expired date" input-width="w-full" v-model="registryInfo.expiredDate" :disabled="true"/>
-                <RegistrationFormInput title="Center" input-width="w-full" v-model="registryInfo.center"/>
+                <RegistrationFormInput title="Center" input-width="w-full" v-model="registryInfo.center" :disabled="true"/>
             </div>
     </div>
 </template>

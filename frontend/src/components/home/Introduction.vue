@@ -39,7 +39,7 @@ import carImg from '../../assets/car.png';
                     <div>
                         <p class="text-md font-bold text-[#1d1d1d] text-opacity-70">Registration</p>
                         <div class="flex items-center justify-between">
-                            <p class="text-xs font-medium text-[#1d1d1d] text-opacity-50">1 button <br> in 1 second</p>
+                            <p class="text-xs font-medium text-[#1d1d1d] text-opacity-50">In a blink <br> of an eye</p>
                             <i class="fa-solid fa-star text-xl text-[#eded4a]"></i>
                         </div>
                     </div>

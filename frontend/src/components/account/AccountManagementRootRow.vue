@@ -1,5 +1,5 @@
 <template>
-    <div class="bg-[#f5f7fb] flex w-[65vw] py-1">
+    <div class="bg-[#f5f7fb] flex w-full py-1">
         <div class="font-semibold text-[11px] text-[#4f555a] flex items-center gap-1 ml-5 w-[25%] text-opacity-70">
             Name
         </div>

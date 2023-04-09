@@ -7,7 +7,7 @@ import datetime
 
 # Tạo danh sách mã đăng kiểm
 cerIDs = []
-for i in range(1000):
+for i in range(1110):
     cerID = str(random.randrange(0, 9)) + str(random.randrange(0, 9)) + str(random.randrange(0, 9)) + str(random.randrange(0, 9)) + "-" + str(random.randrange(0, 9)) + str(random.randrange(0, 9)) + \
         str(random.randrange(0, 9))+str(random.randrange(0, 9)) + "-" + str(random.randrange(0, 9)) + \
         str(random.randrange(0, 9)) + \
@@ -40,10 +40,10 @@ brands = ['Toyota', 'Ford', 'Honda', 'Chevrolet', 'Nissan', 'BMW', 'Mercedes-Ben
 models = ['Camry', 'F-150', 'Civic', 'Silverado', 'Altima', '3 Series', 'E-Class', 'A4', 'Jetta', 'Elantra', 'Sorento', 'CX-5', 'Outback', 'Grand Cherokee', 'RX', 'Q50', 'ATS', 'Sierra', 'Challenger', '300', 'XC90', 'Outlander', 'Encore',
           '1500', 'Range Rover', '911', 'MDX', 'Continental', 'XF', 'Model S', '500', 'Cooper', 'Fortwo', 'FR-S', 'SX4', 'Trooper', 'GranTurismo', '458 Italia', 'Aventador', 'Continental GT', 'Phantom', 'P1', 'Chiron', 'Huayra', 'Regera']
 
-years = [i for i in range(2000, 2022)]
+years = [i for i in range(2015, 2019)]
 ran_cars = []
 manu_dates = []
-for i in range(1000):
+for i in range(1110):
     modified = random.random() >= 0.5
     modifieds.append(modified)
     brand = random.choice(brands)
@@ -52,7 +52,7 @@ for i in range(1000):
     ran_car = (str(brand) + "', '" + str(model) + "', '" + str(year))
     ran_cars.append(ran_car)
     start_date = datetime.date(year, 1, 1)
-    end_date = datetime.date.today()
+    end_date = datetime.date(2020,12,31)
     time_between_dates = end_date - start_date
     days_between_dates = time_between_dates.days
     random_number_of_days = random.randrange(days_between_dates)
@@ -77,10 +77,10 @@ for i in range(1000):
         random_date = "NULL"
         modify_dates.append(random_date)
 
-# Tạo danh sách 1000 biển số xe
+# Tạo danh sách 1110 biển số xe
 license_plates = []
 acodes = []
-for i in range(1000):
+for i in range(1110):
     # Chọn một mã vùng ngẫu nhiên
     area_code = random.choice(area_codes)
     acodes.append(area_code)
@@ -98,13 +98,13 @@ for i in range(1000):
 
 
 # Tạo file text và ghi danh sách biển số xe vào file
-with io.open('./sql/vehicles.sql', 'w', encoding='utf-8') as f:
+with io.open('./backend/sql_generate/sql/vehicles.sql', 'w', encoding='utf-8') as f:
     f.write("\n".join(["insert into `vehicles` (`certId`, `certDate`, `licenseId`, `regionId`, `ownerId`, `brand`, `model`, `version`, `manafractureDate`, `modified`, `modifyDate`) select '"
                        + str(id) + "', '" + str(manuDate) + "', '"
                        + plate + "', '" + acode + "', "
                           + "max(id), '"
                        + info + "', '" + str(time) + "', '"
                        + str(int(modify)) + "', " + (str(modifyDate) if str(modifyDate)=='NULL' else "'"+str(modifyDate)+"'") + " "
-                       + "from owner where type = 1 and id not in (select owner.id from owner right join vehicles on owner.id=vehicles.ownerId);"
+                       + "from owner where type = 0 and id not in (select owner.id from owner right join vehicles on owner.id=vehicles.ownerId);"
             for acode, plate, id, info, time, manuDate, modify, modifyDate in zip(acodes, license_plates, cerIDs, ran_cars, random_dates, manu_dates, modifieds, modify_dates)]))
     f.close()

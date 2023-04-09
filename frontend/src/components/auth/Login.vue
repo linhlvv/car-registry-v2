@@ -3,24 +3,42 @@ import Input from '@/components/UI/Input.vue';
 import Intro from './Intro.vue'
 import Button from '../UI/Button.vue';
 import { useAccountStore } from '../../stores/AccountStore'
+import { useRouter } from 'vue-router';
 import { ref } from 'vue';
 
+localStorage.removeItem('token')
+const logout = fetch("http://localhost:1111/logout", {
+    credentials: "include",
+})
+if(logout.error) {
+    console.log(logout.error);
+}
+
+const router = useRouter();
 const accountStore = useAccountStore()
 const accountInfo = ref({email: '', password: ''});
 
 const loginHandler = async() => {
-    console.log(`account info: ${JSON.stringify(accountInfo.value)}`);
+    // console.log(`account info: ${JSON.stringify(accountInfo.value)}`);
     const res = await fetch("http://localhost:1111/auth", {
         method: 'POST',
+        credentials: "include",
+        headers: {
+            'Content-Type': 'application/json',
+        },
         body: JSON.stringify(accountInfo.value),
-        headers: {'Content-Type': 'application/json'},
     })
     if(res.error) {
         console.log(res.error);
     }
-    const data = JSON.parse(await res.text())[0]
-    console.log(data);
-    
+    // console.log(`${res}`);
+    const data = JSON.parse(await res.text())
+    // console.log(`account data login: ${JSON.stringify(data)}`);
+    console.log(`authToken login: ${JSON.stringify(data)}`);
+    accountStore.authenticate(data.token, accountInfo.value.email, data.id, data.type);
+    if(data !== undefined) {
+        router.push('/')
+    }
 };
 
 </script>
