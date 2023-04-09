@@ -13,6 +13,9 @@ import { registed } from './categories/registed';
 import { vehicles } from './categories/vehicles';
 
 import { owner } from './filter/owner'
+import { brand } from './filter/brand'
+import { allBrand } from './filter/allBrand'
+import { exactBrand } from './filter/exactBrand'
 
 import { ownerInfo } from './owner/ownerInfo';
 
@@ -36,5 +39,6 @@ let homepage = async (req, res) => {
 module.exports = {
   homepage, authenticate, verifyToken, logout, centreInfo, 
   vehicles, registed, expired, detailModal, getDataForChart,
-  ownerInfo, changePassword, viewAllCentres, viewAllCars, insertCentre, removeCentre, owner
+  ownerInfo, owner, brand, allBrand, exactBrand,
+  changePassword, viewAllCentres, viewAllCars, insertCentre, removeCentre
 }

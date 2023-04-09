@@ -15,6 +15,9 @@ const initWebRoute = (app) => {
   router.post('/vehicles/expired', verifyToken, homeController.expired)
 
   router.post('/filter/owner', verifyToken, homeController.owner)
+  router.post('/filter/brand', verifyToken, homeController.brand)
+  router.post('/filter/allBrand', verifyToken, homeController.allBrand)
+  router.post('/filter/exactBrand', verifyToken, homeController.exactBrand)
 
   router.post('/vehicles/modal', verifyToken, homeController.detailModal)
 
