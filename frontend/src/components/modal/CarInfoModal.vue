@@ -2,10 +2,12 @@
 import CarInformationBlock from './CarInformationBlock.vue'
 import CarRegistryInformationBlock from './CarRegistryInformationBlock.vue';
 import OwnerBrief from './OwnerBrief.vue';
+import { useAccountStore } from '../../stores/AccountStore';
 import { ref } from 'vue';
 
 const props = defineProps(['licenseId']);
 const emit = defineEmits(['exitModal']);
+const accountStore = useAccountStore();
 const exitModal = () => {
     emit('exitModal');
 };
@@ -20,6 +22,7 @@ const findCarInfo = async() => {
         credentials: "include",
         headers: {
             'Content-Type': 'application/json',
+            'Authorization': `${accountStore.getToken}`
         },
         body: JSON.stringify({licenseId: props.licenseId}),
     })

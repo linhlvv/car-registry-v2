@@ -38,6 +38,7 @@ const fetchCarData = async() => {
         credentials: "include",
         headers: {
             'Content-Type': 'application/json',
+            'Authorization': `${accountStore.getToken}`
         },
         body: JSON.stringify({page: props.pageNumber, resPerPage: 7}),
     })
@@ -48,8 +49,8 @@ const fetchCarData = async() => {
     // console.log(`car list: ${JSON.stringify(dataFetched.count)}`);
     list.value = dataFetched.data
     totalPage.value = dataFetched.count
-    loading.value = false
     postTotalPage()
+    loading.value = false
 }
 fetchCarData()
 

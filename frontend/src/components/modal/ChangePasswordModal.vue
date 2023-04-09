@@ -14,8 +14,6 @@ const password = ref({
     newPassConfirmation: '',
 });
 
-
-
 let loadingInterval;
 const second = ref(0)
 const posted = ref(false)
@@ -34,6 +32,7 @@ const confirmChange = async() => {
             credentials: "include",
             headers: {
                 'Content-Type': 'application/json',
+                'Authorization': `${accountStore.getToken}`
             },
             body: JSON.stringify(
                 {
