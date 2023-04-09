@@ -1,6 +1,9 @@
 <script setup>
 import { ref } from 'vue';
 import SearchBar from '../UI/SearchBar.vue';
+import { useAccountStore } from '../../stores/AccountStore';
+
+const accountStore = useAccountStore()
 
 const props = defineProps(['pageNum', 'totalPage', 'carType']);
 const emit = defineEmits([
@@ -14,81 +17,11 @@ const emit = defineEmits([
     'selectedBrandClicked',
     'selectedTimeClicked',
 ]);
-const selected = ref('No filter');
-const pageNumber = ref(props.pageNum);
-console.log(pageNumber.value);
-
-
-//SECTION - handle pagination
-const pageHandler = (direction) => {
-    if(direction === 'left') {
-        if (pageNumber.value > 1) {
-            pageNumber.value -= +1;
-            emit('prevPage');
-        }
-    } else {
-        if (pageNumber.value < props.totalPage) {
-            pageNumber.value += +1;
-            emit('nextPage');
-        }
-    }
-};
-
-const enterHandler = (number) => {
-    if(1 <= number && number <= props.totalPage) {
-        pageNumber.value = +number;
-        emit('specifiedPage', +number);
-    }
-};
-
-
-//SECTION - Filter handler
-const city = ref('All');
-const owner = ref('All');
-const brand = ref('All');
-const time = ref({
-    year: 'All', quarter: 'All', month: 'All',
-});
-
-const filterClickedHandler = (value) => {
-    console.log(`filter ${selected.value}`);
-    emit('selectedFilterClicked', value)
-}
-
-const cityClicked = (value) => {
-    console.log(`city ${city.value}`);
-    emit('selectedCityClicked', value)
-}
-
-const ownerClicked = (value) => {
-    owner.value = value
-    console.log(`owner ${owner.value}`);
-    emit('selectedOwnerClicked', value)
-}
-
-const brandClicked = (value) => {
-    console.log(`brand changes to ${brand.value}`);
-    emit('selectedBrandClicked', value)
-}
-
-const timeClicked = (value, type) => {
-    if(type === 'year') {
-        time.value.year = value;
-    } else if (type === 'quarter') {
-        time.value.quarter = value
-        time.value.month = 'All'
-    } else {
-        time.value.month = value
-        time.value.quarter = 'All'
-    }
-    // console.log(`time changes to ${{year: time.value.year, quarter: time.value.quarter, month: time.value.month}}`);
-    emit('selectedTimeClicked', time.value)
-}
 
 //SECTION - Filter list
 const filterList = ['No filter', 'City', 'Owner', 'Brand', 'Time']
 const cityList = ['All', 'Ho Chi Minh', 'Ha Noi', 'Bac Ninh', 'Hue']
-const brandList = ['All', 'Mercedes', 'RollRoyce', 'Toyota', 'Kia', 'Ferrari', 'Vinfast']
+const brandList = ref(['All'])
 const yearList = ['All', '2019', '2020', '2021', '2022', '2023']
 const quarterList = [
     {content: 'All', value: 'All'},
@@ -134,9 +67,97 @@ const licenseSearch = (content) => {
     emit('licenseSearch', content)
 };
 
+//SECTION - fetch all available brands
 const fetchAllAvailableBrands = async () => {
-    
+    const res = await fetch(`http://localhost:1111/filter/allBrand`, {
+        method: 'POST',
+        credentials: "include",
+        headers: {
+            'Content-Type': 'application/json',
+            'Authorization': `${accountStore.getToken}`
+        },
+        body: JSON.stringify({carType: props.carType}),
+    })
+    if(res.error) {
+        console.log(res.error);
+    }
+    const dataFetched = JSON.parse(await res.text())
+    brandList.value = [...brandList.value, ...dataFetched.data]
+    console.log(`all available brands: ${JSON.stringify(brandList.value)}`);
+};
+
+const selected = ref('No filter');
+const pageNumber = ref(props.pageNum);
+
+//SECTION - handle pagination
+const pageHandler = (direction) => {
+    if(direction === 'left') {
+        if (pageNumber.value > 1) {
+            pageNumber.value -= +1;
+            emit('prevPage');
+        }
+    } else {
+        if (pageNumber.value < props.totalPage) {
+            pageNumber.value += +1;
+            emit('nextPage');
+        }
+    }
+};
+
+const enterHandler = (number) => {
+    if(1 <= number && number <= props.totalPage) {
+        pageNumber.value = +number;
+        emit('specifiedPage', +number);
+    }
+};
+
+
+//SECTION - Filter handler
+const city = ref('All');
+const owner = ref('All');
+const brand = ref('All');
+const time = ref({
+    year: 'All', quarter: 'All', month: 'All',
+});
+
+// logic - general filter
+const filterClickedHandler = (value) => {
+    console.log(`filter ${selected.value}`);
+    if(selected.value === 'Brand') {
+        fetchAllAvailableBrands()
+    }
+    emit('selectedFilterClicked', value)
 }
+
+const cityClicked = (value) => {
+    console.log(`city ${city.value}`);
+    emit('selectedCityClicked', value)
+}
+
+const ownerClicked = (value) => {
+    owner.value = value
+    console.log(`owner ${owner.value}`);
+    emit('selectedOwnerClicked', value)
+}
+
+const brandClicked = (value) => {
+    console.log(`brand changes to ${brand.value}`);
+    emit('selectedBrandClicked', value)
+}
+
+const timeClicked = (value, type) => {
+    if(type === 'year') {
+        time.value.year = value;
+    } else if (type === 'quarter') {
+        time.value.quarter = value
+        time.value.month = 'All'
+    } else {
+        time.value.month = value
+        time.value.quarter = 'All'
+    }
+    // console.log(`time changes to ${{year: time.value.year, quarter: time.value.quarter, month: time.value.month}}`);
+    emit('selectedTimeClicked', time.value)
+};
 
 </script>
 
