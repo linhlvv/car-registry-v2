@@ -18,9 +18,17 @@ const initWebRoute = (app) => {
 
   router.post('/owner/info', verifyToken, homeController.ownerInfo)
 
-  router.get('/centre-info', homeController.centreInfo)
+  router.get('/centre-info', verifyToken, homeController.centreInfo)
 
-  router.get('/chart', homeController.getDataForChart)
+  router.get('/chart', verifyToken, homeController.getDataForChart)
+
+  router.post('/change-password',verifyToken ,homeController.changePassword)
+
+  router.get('/view-all-centres', verifyToken, homeController.viewAllCentres)
+  router.get('/view-all-cars', verifyToken, homeController.viewAllCars)
+  router.post('/insert-centre', verifyToken, homeController.insertCentre)
+  router.post('/remove-centre', verifyToken, homeController.removeCentre)
+
   return app.use('/', router)
 }
 
