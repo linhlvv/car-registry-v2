@@ -33,5 +33,5 @@ let previewRegist = async (req, res) => {
 }
 
 module.exports = {
-  detailModal
+  previewRegist
 }
