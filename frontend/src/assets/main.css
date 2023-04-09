@@ -11,3 +11,17 @@ body {
     background-color: #f5f7fb;
     font-family: montserrat;
 }
+
+body::-webkit-scrollbar {
+    width: 6px;
+}
+   
+  body::-webkit-scrollbar-track {
+    border-radius: 16px;
+  }
+   
+  body::-webkit-scrollbar-thumb {
+    background-color: rgb(151, 151, 151);
+    outline: none;
+    border-radius: 16px;
+  }

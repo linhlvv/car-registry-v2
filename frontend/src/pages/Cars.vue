@@ -6,6 +6,14 @@ import CarList from '../components/cars/CarList.vue';
 import SearchField from '../components/cars/SearchField.vue';
 import { ref } from 'vue';
 
+const totalPage = ref()
+const bindTotalPage = (total) => {
+    console.log(total);
+    totalPage.value = total
+    console.log(totalPage.value);
+}
+bindTotalPage()
+
 //SECTION - car info modal handler
 const carDetailModal = ref(false);
 const carInfoLicense = ref('')
@@ -17,7 +25,9 @@ const openCarInfo = (license) => {
 
 //SECTION - car reg form modal handler
 const registrationModal = ref(false);
-const openCarRegistration = () => {
+const carRegistLicense = ref('')
+const openCarRegistration = (license) => {
+    carRegistLicense.value = license
     registrationModal.value = true
 };
 
@@ -29,7 +39,6 @@ const turnOffModal = () => {
 
 //SECTION - page handler
 const pageNumber = ref(1);
-const totalPageNumber = ref()
 
 const nextPage = () => {
     pageNumber.value += +1
@@ -105,7 +114,7 @@ const openSelectHandler = () => {
             <CarInfoModal :license-id="carInfoLicense" @exit-modal="turnOffModal"/>
         </div>
         <div v-if="registrationModal">
-            <RegistrationFormModal @exit-modal="turnOffModal"/>
+            <RegistrationFormModal :license="carRegistLicense" @exit-modal="turnOffModal"/>
         </div>
 
         <!-- main -->
@@ -154,6 +163,7 @@ const openSelectHandler = () => {
                         </ul>
                     </div>
                 </div>
+                
                 <div class="flex custom-shadow items-center flex-col w-[80vw] rounded-2xl overflow-hidden">
                     <SearchField
                         @selectedFilterClicked="filterSelected" 
@@ -166,6 +176,7 @@ const openSelectHandler = () => {
                         @prev-page="prevPage" 
                         @specified-page="specifiedPage"
                         :page-num="pageNumber"
+                        :total-page="totalPage"
                     />
                     <CarList 
                         :filter="filter" 
@@ -177,6 +188,7 @@ const openSelectHandler = () => {
                         :car-type="carType"
                         @openCarInfo="openCarInfo" 
                         @openCarRegistration="openCarRegistration"
+                        @totalPageNum="bindTotalPage"
                     />
                 </div>
             </div>

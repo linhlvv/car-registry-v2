@@ -3,7 +3,7 @@ const props = defineProps(['item']);
 </script>
 
 <template>
-    <div class="bg-white rounded-lg py-3 flex w-[65vw]">
+    <div class="bg-white rounded-lg py-3 flex w-full">
         <!-- <div class="flex flex-col text-black">
             <div>Email: {{ item.email }}</div>
             <div>Password: {{ item.password }}</div>

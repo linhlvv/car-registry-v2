@@ -10,7 +10,7 @@ defineEmits(['update:modelValue']);
             :value="modelValue"
             @input="$emit('update:modelValue', $event.target.value)"
             :type="type"
-            class="p-2 font-medium border-b border-b-[#1d1d1d] border-opacity-50 text-[#1d1d1d] disabled:text-opacity-60 text-xs w-full"
+            class="p-2 font-medium border-b border-b-[#1d1d1d] border-opacity-50 text-[#1d1d1d] disabled:bg-opacity-60 text-xs w-full"
             :disabled="disabled === true"
         />
     </div>

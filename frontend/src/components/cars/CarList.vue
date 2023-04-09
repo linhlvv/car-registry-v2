@@ -6,7 +6,7 @@ import CarCard from './CarCard.vue';
 
 const accountStore = useAccountStore();
 
-const emit = defineEmits(['openCarInfo', 'openCarRegistration']);
+const emit = defineEmits(['openCarInfo', 'openCarRegistration', 'totalPageNum']);
 const props = defineProps([
     'pageNumber',
     'filter',
@@ -20,11 +20,15 @@ const props = defineProps([
 const openCarInfo = (license) => {
     emit('openCarInfo', license);
 };
-const openCarRegistration = () => {
-    emit('openCarRegistration');
+const openCarRegistration = (license) => {
+    emit('openCarRegistration', license);
+}
+const postTotalPage = () => {
+    emit('totalPageNum', totalPage.value)
 }
 
 const list = ref([]);
+const totalPage = ref()
 const loading = ref(false)
 
 const fetchCarData = async() => {
@@ -41,9 +45,11 @@ const fetchCarData = async() => {
         console.log(res.error);
     }
     const dataFetched = JSON.parse(await res.text())
-    console.log(`car list: ${JSON.stringify(dataFetched.data)}`);
+    console.log(`car list: ${JSON.stringify(dataFetched.count)}`);
     list.value = dataFetched.data
+    totalPage.value = dataFetched.count
     loading.value = false
+    postTotalPage()
 }
 fetchCarData()
 
@@ -113,8 +119,12 @@ watch(() => props.carType, async(newCarType, oldCarType) => {
         <RootRow :carType="props.carType"/>
         <div class="flex flex-col items-center w-full" style="{overflow-wrap: 'anywhere';}">
             <!-- <div>{{ props.pageNumber }}</div> -->
-            <div v-if="loading" class="font-bold text-base w-full text-center flex items-center justify-center bg-[#2acc97] text-white py-4">
-                Loading
+            <div v-if="loading" class="font-bold text-base w-full text-center flex items-center justify-center h-[300px] bg-white text-[#2acc97] py-4">
+                <button type="button" class="py-4 rounded-md flex items-center text-white text-xl font-semibold" disabled>
+                    <svg class="animate-spin h-24 w-24" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 4335 4335" version="1.1">
+                        <path fill="#2acc97" d="M3346 1077c41,0 75,34 75,75 0,41 -34,75 -75,75 -41,0 -75,-34 -75,-75 0,-41 34,-75 75,-75zm-1198 -824c193,0 349,156 349,349 0,193 -156,349 -349,349 -193,0 -349,-156 -349,-349 0,-193 156,-349 349,-349zm-1116 546c151,0 274,123 274,274 0,151 -123,274 -274,274 -151,0 -274,-123 -274,-274 0,-151 123,-274 274,-274zm-500 1189c134,0 243,109 243,243 0,134 -109,243 -243,243 -134,0 -243,-109 -243,-243 0,-134 109,-243 243,-243zm500 1223c121,0 218,98 218,218 0,121 -98,218 -218,218 -121,0 -218,-98 -218,-218 0,-121 98,-218 218,-218zm1116 434c110,0 200,89 200,200 0,110 -89,200 -200,200 -110,0 -200,-89 -200,-200 0,-110 89,-200 200,-200zm1145 -434c81,0 147,66 147,147 0,81 -66,147 -147,147 -81,0 -147,-66 -147,-147 0,-81 66,-147 147,-147zm459 -1098c65,0 119,53 119,119 0,65 -53,119 -119,119 -65,0 -119,-53 -119,-119 0,-65 53,-119 119,-119z" />
+                    </svg>
+                </button>
             </div>
             <div v-else v-for="car in list" :key="car.licensePlate" class="w-full">
                 <CarCard
