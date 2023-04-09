@@ -39,16 +39,16 @@ const passwordManagementModalHandler = () => {
                         </router-link>
                     </div>
                     <div @click="dropdownHandler">
-                        <router-link to="/logAndReg/login" class="flex gap-2 items-center px-4 py-2 text-[#1d1d1d] font-medium hover:bg-gray-100 dark:hover:bg-gray-600 dark:hover:text-white">
-                            <i class="fa-sharp fa-solid fa-right-from-bracket"></i>
-                            Sign out
-                        </router-link>
-                    </div>
-                    <div @click="dropdownHandler">
                         <div @click="passwordManagementModalHandler" class="cursor-pointer flex gap-2 items-center px-4 py-2 text-[#1d1d1d] font-medium hover:bg-gray-100 dark:hover:bg-gray-600 dark:hover:text-white">
                             <i class="fa-solid fa-key"></i>
                             Password management
                         </div>
+                    </div>
+                    <div @click="dropdownHandler">
+                        <router-link to="/logAndReg/login" class="flex gap-2 items-center px-4 py-2 text-[#1d1d1d] font-medium hover:bg-gray-100 dark:hover:bg-gray-600 dark:hover:text-white">
+                            <i class="fa-sharp fa-solid fa-right-from-bracket"></i>
+                            Sign out
+                        </router-link>
                     </div>
                 </div>
             </div>

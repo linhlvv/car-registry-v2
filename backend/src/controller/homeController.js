@@ -12,6 +12,8 @@ import { expired } from './categories/expired';
 import { registed } from './categories/registed';
 import { vehicles } from './categories/vehicles';
 
+import { owner } from './filter/owner'
+
 import { ownerInfo } from './owner/ownerInfo';
 
 import { changePassword } from './authenticate/changePassword';
@@ -34,5 +36,5 @@ let homepage = async (req, res) => {
 module.exports = {
   homepage, authenticate, verifyToken, logout, centreInfo, 
   vehicles, registed, expired, detailModal, getDataForChart,
-  ownerInfo, changePassword, viewAllCentres, viewAllCars, insertCentre, removeCentre
+  ownerInfo, changePassword, viewAllCentres, viewAllCars, insertCentre, removeCentre, owner
 }

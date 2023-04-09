@@ -1,20 +1,43 @@
 <script setup>
 import ChangePasswordInput from './ChangePasswordInput.vue';
+import { useAccountStore } from '../../stores/AccountStore'
 import { ref, watch } from 'vue';
 
 const emits = defineEmits(['closeModal'])
 
+const accountStore = useAccountStore()
 const password = ref({
     curPass: '',
     newPass: '',
     newPassConfirmation: '',
 });
 
-const confirmChange = () => {
+const confirmChange = async() => {
     if(password.value.newPass !== password.value.newPassConfirmation) {
         document.getElementById('error').innerHTML = '<i class="fa-solid fa-xmark"></i> Wrong new password confirmation'
     } else {
         document.getElementById('error').innerHTML = null
+
+        const res = await fetch("http://localhost:1111/change-password", {
+            method: 'POST',
+            credentials: "include",
+            headers: {
+                'Content-Type': 'application/json',
+            },
+            body: JSON.stringify(
+                {
+                    id: accountStore.ID,
+                    password: password.value.curPass,
+                    newPass: password.value.newPass,
+                    reNewPass: password.value.newPassConfirmation
+                }
+            )
+        })
+        if(res.error) {
+            console.log(res.error);
+        }
+        const resData = JSON.parse(await res.text())
+        console.log(`password management message: ${JSON.stringify(resData)}`);
     }
 };
 
