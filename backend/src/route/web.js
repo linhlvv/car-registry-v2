@@ -25,6 +25,8 @@ const initWebRoute = (app) => {
   // logic - filter theo thời gian regist hoặc expire
   router.post('/filter/time', verifyToken, homeController.time)
 
+  router.post('/owner/registHistory', verifyToken, homeController.registHistory)
+
   router.post('/vehicles/modal', verifyToken, homeController.detailModal)
 
   router.post('/owner/info', verifyToken, homeController.ownerInfo)

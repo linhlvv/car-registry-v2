@@ -25,9 +25,12 @@ let brand = async (req, res) => {
   and expire` + type + `current_date()`
   const [countRows, countFields] = await pool.query(count, [req.session.userid])
   
+  let queryType = carType === 'registed' 
+                              ? 're.date as registryDate'
+                              : 'timestampdiff(month, re.date, re.expire) as duration'
 
   let query = `
-  select re.licenseId as license, v.brand, v.model, v.version, re.date as registryDate, re.expire, p.name
+  select re.licenseId as license, v.brand, v.model, v.version, ` + queryType + `, re.expire, p.name
     from registry re
   join vehicles v 
     on v.licenseId = re.licenseId
@@ -44,7 +47,7 @@ let brand = async (req, res) => {
   `  group by re.licenseId)  
   and expire` + type + `current_date()
           union all 
-  select re.licenseId as license, v.brand, v.model, v.version, re.date as registryDate, re.expire, c.name
+  select re.licenseId as license, v.brand, v.model, v.version, ` + queryType + `, re.expire, c.name
     from registry re
   join vehicles v 
     on v.licenseId = re.licenseId
