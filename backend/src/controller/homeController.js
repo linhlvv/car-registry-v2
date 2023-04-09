@@ -16,6 +16,7 @@ import { owner } from './filter/owner'
 import { brand } from './filter/brand'
 import { allBrand } from './filter/allBrand'
 import { exactBrand } from './filter/exactBrand'
+import { time } from './filter/time'
 
 import { ownerInfo } from './owner/ownerInfo';
 
@@ -39,6 +40,6 @@ let homepage = async (req, res) => {
 module.exports = {
   homepage, authenticate, verifyToken, logout, centreInfo, 
   vehicles, registed, expired, detailModal, getDataForChart,
-  ownerInfo, owner, brand, allBrand, exactBrand,
+  ownerInfo, owner, brand, allBrand, exactBrand, time,
   changePassword, viewAllCentres, viewAllCars, insertCentre, removeCentre
 }

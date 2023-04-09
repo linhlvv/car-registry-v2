@@ -14,10 +14,16 @@ const initWebRoute = (app) => {
   router.post('/vehicles/registed', verifyToken, homeController.registed)
   router.post('/vehicles/expired', verifyToken, homeController.expired)
 
+  // logic - gửi code có thể là ssn hoặc taxnum 
   router.post('/filter/owner', verifyToken, homeController.owner)
+  // logic - gửi order là asc hay desc để sort result theo brand
   router.post('/filter/brand', verifyToken, homeController.brand)
+  // logic - trả về tất cả các brand của centre này
   router.post('/filter/allBrand', verifyToken, homeController.allBrand)
+  // logic - trả về tất cả xe có brand khớp với brand gửi lên
   router.post('/filter/exactBrand', verifyToken, homeController.exactBrand)
+  // logic - filter theo thời gian regist hoặc expire
+  router.post('/filter/time', verifyToken, homeController.time)
 
   router.post('/vehicles/modal', verifyToken, homeController.detailModal)
 
