@@ -12,11 +12,15 @@ let allBrand = async (req, res) => {
   on re.licenseId = v.licenseId
   where centreId = ?
   and expire` + type + `current_date()
-  group by brand`
+  group by brand`;
   
   // bug - đã gọi được api kết quả trả về chính xác
   const [rows, fields] = await pool.query(query, [req.session.userid])
-  return res.send({data: rows})
+  let brands = []
+  for(let i = 0; i < rows.length; i++) {
+    brands.push(rows[i].brand)
+  }
+  return res.send({data: brands})
 
 }
 

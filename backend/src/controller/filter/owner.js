@@ -5,9 +5,13 @@ let owner = async (req, res) => {
   let code = req.body.code
   // logic - dùng code thay cho ssn vì có cả taxnum nữa
   let type = carType === 'registed' ? ' >= ' : ' < '
+
+  let queryType = carType === 'registed' 
+                              ? 're.date as registryDate'
+                              : 'timestampdiff(month, re.date, re.expire) as duration'
   
   let query = `
-  select re.licenseId as license, v.brand, v.model, v.version, re.date as registryDate, re.expire, p.name
+  select re.licenseId as license, v.brand, v.model, v.version, ` + queryType + `, re.expire, p.name
     from registry re
   join vehicles v 
     on v.licenseId = re.licenseId
@@ -25,7 +29,7 @@ let owner = async (req, res) => {
   and expire` + type + `current_date()
   and ssn = ?
           union all 
-  select re.licenseId as license, v.brand, v.model, v.version, re.date as registryDate, re.expire, c.name
+  select re.licenseId as license, v.brand, v.model, v.version, ` + queryType + `, re.expire, c.name
     from registry re
   join vehicles v 
     on v.licenseId = re.licenseId

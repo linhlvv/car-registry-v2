@@ -13,6 +13,7 @@ const initWebRoute = (app) => {
   router.post('/vehicles/all', verifyToken, homeController.vehicles)
   router.post('/vehicles/registed', verifyToken, homeController.registed)
   router.post('/vehicles/expired', verifyToken, homeController.expired)
+  router.post('/vehicles/find', verifyToken, homeController.findByLicense)
 
   // logic - gửi code có thể là ssn hoặc taxnum 
   router.post('/filter/owner', verifyToken, homeController.owner)
@@ -24,6 +25,8 @@ const initWebRoute = (app) => {
   router.post('/filter/exactBrand', verifyToken, homeController.exactBrand)
   // logic - filter theo thời gian regist hoặc expire
   router.post('/filter/time', verifyToken, homeController.time)
+
+  router.post('/owner/history', verifyToken, homeController.registHistory)
 
   router.post('/vehicles/modal', verifyToken, homeController.detailModal)
 

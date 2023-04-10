@@ -21,7 +21,7 @@ let expired = async (req, res) => {
   const [countRows, countFields] = await pool.query(count, [req.session.userid])
   
   let query = `
-  select re.licenseId as license, v.brand, v.model, v.version, re.date as registryDate, re.expire, p.name
+  select re.licenseId as license, v.brand, v.model, v.version, timestampdiff(month, re.date, re.expire) as duration, re.expire, p.name
     from registry re
   join vehicles v 
     on v.licenseId = re.licenseId
@@ -38,7 +38,7 @@ let expired = async (req, res) => {
   `  group by re.licenseId)  
   and expire < current_date()
           union all 
-  select re.licenseId as license, v.brand, v.model, v.version, re.date as registryDate, re.expire, c.name
+  select re.licenseId as license, v.brand, v.model, v.version, timestampdiff(month, re.date, re.expire) as duration, re.expire, c.name
     from registry re
   join vehicles v 
     on v.licenseId = re.licenseId

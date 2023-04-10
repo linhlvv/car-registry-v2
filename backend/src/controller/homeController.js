@@ -11,6 +11,7 @@ import { detailModal } from './info/detailModal';
 import { expired } from './categories/expired';
 import { registed } from './categories/registed';
 import { vehicles } from './categories/vehicles';
+import { findByLicense} from './categories/findByLicense';
 
 import { owner } from './filter/owner'
 import { brand } from './filter/brand'
@@ -19,6 +20,7 @@ import { exactBrand } from './filter/exactBrand'
 import { time } from './filter/time'
 
 import { ownerInfo } from './owner/ownerInfo';
+import { registHistory } from './owner/registHistory';
 
 import { changePassword } from './authenticate/changePassword';
 
@@ -39,7 +41,7 @@ let homepage = async (req, res) => {
 
 module.exports = {
   homepage, authenticate, verifyToken, logout, centreInfo, 
-  vehicles, registed, expired, detailModal, getDataForChart,
-  ownerInfo, owner, brand, allBrand, exactBrand, time,
+  vehicles, registed, expired, findByLicense, detailModal, getDataForChart,
+  ownerInfo, registHistory, owner, brand, allBrand, exactBrand, time,
   changePassword, viewAllCentres, viewAllCars, insertCentre, removeCentre
 }
