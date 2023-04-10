@@ -14,7 +14,7 @@ let exactBrand = async (req, res) => {
   let type = carType === 'registed' ? ' >= ' : ' < '
   
   let count = `
-  select count(*) from registry re
+  select count(*) as total from registry re
 join vehicles v
 on re.licenseId = v.licenseId
   where (brand, re.licenseId, expire) in
