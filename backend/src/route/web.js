@@ -13,6 +13,7 @@ const initWebRoute = (app) => {
   router.post('/vehicles/all', verifyToken, homeController.vehicles)
   router.post('/vehicles/registed', verifyToken, homeController.registed)
   router.post('/vehicles/expired', verifyToken, homeController.expired)
+  router.post('/vehicles/find', verifyToken, homeController.findByLicense)
 
   // logic - gửi code có thể là ssn hoặc taxnum 
   router.post('/filter/owner', verifyToken, homeController.owner)
