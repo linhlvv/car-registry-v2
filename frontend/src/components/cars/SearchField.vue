@@ -47,12 +47,12 @@ const monthList = [
 ]
 
 //SECTION - filter sorting
-const fromAtoZ = ref(true);
+const fromAtoZ = ref('asc');
 const fromAtoZClicked = () => {
-    fromAtoZ.value = true
+    fromAtoZ.value = 'asd'
 };
 const fromZtoAClicked = () => {
-    fromAtoZ.value = false
+    fromAtoZ.value = 'desc'
 };
 
 const timeAscending = ref(true)
@@ -191,7 +191,7 @@ const timeClicked = (value, type) => {
                 </select>
 
                 <!-- Ordering -->
-                <div v-if="selected !== 'No filter' && selected !== 'Time' && city === 'All' && owner === 'All' && brand === 'All'" class="flex flex-col gap-1">
+                <div v-if="selected !== 'No filter' && selected !== 'Time' && city === 'All' && brand === 'All'" class="flex flex-col gap-1">
                     <i @click="fromAtoZClicked" class="fa-solid fa-arrow-up-z-a text-[#1d1d1d] cursor-pointer duration-100" :class="fromAtoZ ? 'text-[#2acc97]' : ''"></i>
                     <i @click="fromZtoAClicked" class="fa-solid fa-arrow-up-a-z text-[#1d1d1d] cursor-pointer duration-100" :class="!fromAtoZ ? 'text-[#2acc97]' : ''"></i>
                 </div>
@@ -218,7 +218,7 @@ const timeClicked = (value, type) => {
                     <div class="flex items-center">
                         <h1 class="text-[#9196a4] font-semibold">Owner</h1>
                     </div>
-                    <SearchBar @search-entered="ownerClicked" width="w-[70%]" placeholder="Enter the SSN..."/>
+                    <SearchBar @search-entered="ownerClicked" width="w-[70%]" placeholder="Enter the SSN or tax..."/>
                 </div>
 
                 <!-- Brand filter -->
@@ -227,12 +227,12 @@ const timeClicked = (value, type) => {
                         <h1 class="text-[#9196a4] font-semibold">Brand</h1>
                     </div>
                     <select v-model="brand" @change="brandClicked(brand)" id="countries" class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-[4px] focus:ring-[#2acc97] focus:border-[#2acc97] block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500">
-                        <option v-for="singleBrand in brandList" :key="singleBrand">
+                        <option v-for="singleBrand in brandList" :key="singleBrand" :value="singleBrand">
                             {{ singleBrand }}
                         </option>
                     </select>
                 </div>
-
+                
                 <!-- Time filter -->
                 <div id="sub-filter" v-show="selected === 'Time'" class="flex items-center gap-2 w-full">
                     <select v-model="time.year" @change="timeClicked(time.year, 'year')" class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-[4px] focus:ring-[#2acc97] focus:border-[#2acc97] block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500">

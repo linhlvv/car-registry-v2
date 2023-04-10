@@ -7,6 +7,8 @@ import { useRouter } from 'vue-router';
 import { ref } from 'vue';
 
 localStorage.removeItem('token')
+localStorage.removeItem('id')
+localStorage.removeItem('userType')
 const logout = fetch("http://localhost:1111/logout", {
     credentials: "include",
 })

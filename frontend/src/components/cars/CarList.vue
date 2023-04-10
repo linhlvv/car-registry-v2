@@ -78,6 +78,8 @@ const fetchCarByOwnerCode = async () => {
     const dataFetched = JSON.parse(await res.text())
     console.log(`owner cars: ${JSON.stringify(dataFetched)}`);
     list.value = dataFetched.data
+    totalPage.value = 1
+    postTotalPage()
     loading.value = false
 }
 
