@@ -14,7 +14,8 @@ const props = defineProps([
     'brand',
     'owner',
     'time',
-    'carType'
+    'carType',
+    'sortOrder'
 ])
 
 //SECTION - open car information modal
@@ -83,27 +84,100 @@ const fetchCarByOwnerCode = async () => {
     loading.value = false
 }
 
-// page number watcher
+//SECTION - sort cars by brand
+// logic - all brands
+const fetchDataSortedByBrand = async () => {
+    loading.value = true
+    const res = await fetch(`http://localhost:1111/filter/brand`, {
+        method: 'POST',
+        credentials: "include",
+        headers: {
+            'Content-Type': 'application/json',
+            'Authorization': `${accountStore.getToken}`
+        },
+        body: JSON.stringify(
+            {
+                resPerPage: 7,
+                page: props.pageNumber,
+                carType: props.carType,
+                order: props.sortOrder,
+            }
+        ),
+    })
+    if(res.error) {
+        console.log(res.error);
+    }
+    const dataFetched = JSON.parse(await res.text())
+    // console.log(`cars by brands: ${JSON.stringify(dataFetched)}`);
+    list.value = dataFetched.data
+    totalPage.value = dataFetched.count
+    postTotalPage()
+    loading.value = false
+}
+
+// logic - specific brand
+const fetchCarDataWithSpecificBrand = async () => {
+    loading.value = true
+    const res = await fetch(`http://localhost:1111/filter/exactBrand`, {
+        method: 'POST',
+        credentials: "include",
+        headers: {
+            'Content-Type': 'application/json',
+            'Authorization': `${accountStore.getToken}`
+        },
+        body: JSON.stringify(
+            {
+                resPerPage: 7,
+                page: props.pageNumber,
+                carType: props.carType,
+                brand: props.brand,
+            }
+        ),
+    })
+    if(res.error) {
+        console.log(res.error);
+    }
+    const dataFetched = JSON.parse(await res.text())
+    console.log(`car brand: ${JSON.stringify(dataFetched)}`);
+    list.value = dataFetched.data
+    totalPage.value = dataFetched.count
+    postTotalPage()
+    loading.value = false
+}
+
+//SECTION - watchers
+// logic - page number watcher
 watch(() => props.pageNumber, async(newPageNumber, oldPageNumber) => {
     // console.log(props.pageNumber, newPageNumber, oldPageNumber);
     if(newPageNumber !== oldPageNumber) {
         console.log(`page number of carlist has changed to: ${props.pageNumber}`);
+
+        if(props.filter === 'No filter') {
+            fetchCarData()
+        }
+        if(props.filter === 'Brand') {
+            fetchDataSortedByBrand()
+        }
     }
-    fetchCarData()
 });
 
-// filter watcher
+// logic - general filter watcher
 watch(() => props.filter, async(newFilter, oldFilter) => {
     // console.log(props.pageNumber, newPageNumber, oldPageNumber);
     if(newFilter !== oldFilter) {
         console.log(`filter has changed to: ${props.filter}`);
+
+        if(newFilter === 'No filter') {
+            fetchCarData()
+        }
+        if(newFilter === 'Brand') {
+            fetchDataSortedByBrand()
+        }
     }
-    if(newFilter === 'No filter') {
-        fetchCarData()
-    }
+    
 });
 
-// city watcher
+// logic - city watcher
 watch(() => props.city, async(newCity, oldCity) => {
     // console.log(props.pageNumber, newPageNumber, oldPageNumber);
     if(newCity !== oldCity) {
@@ -111,15 +185,30 @@ watch(() => props.city, async(newCity, oldCity) => {
     }
 });
 
-// brand watcher
+
+// logic - sort order watcher
+watch(() => props.sortOrder, async(newOrder, oldOrder) => {
+    if(newOrder !== oldOrder) {
+        if(props.filter === 'Brand') {
+            fetchDataSortedByBrand()
+        }
+    }
+})
+
+// logic - brand watcher
 watch(() => props.brand, async(newBrand, oldBrand) => {
     // console.log(props.pageNumber, newPageNumber, oldPageNumber);
     if(newBrand !== oldBrand) {
         console.log(`brand has changed to: ${props.brand}`);
+        if(newBrand === 'All') {
+            fetchDataSortedByBrand()
+        } else {
+            fetchCarDataWithSpecificBrand()
+        }
     }
 });
 
-// owner watcher
+// logic - owner watcher
 watch(() => props.owner, async(newOwner, oldOwner) => {
     // console.log(props.pageNumber, newPageNumber, oldPageNumber);
     if(newOwner !== oldOwner) {
@@ -128,7 +217,7 @@ watch(() => props.owner, async(newOwner, oldOwner) => {
     fetchCarByOwnerCode()
 });
 
-// time
+// logic - time watcher
 watch(() => props.time, async(newTime, oldTime) => {
     // console.log(props.pageNumber, newPageNumber, oldPageNumber);
     if(newTime !== oldTime) {
@@ -136,7 +225,7 @@ watch(() => props.time, async(newTime, oldTime) => {
     }
 });
 
-// car type
+// logic - car type watcher
 watch(() => props.carType, async(newCarType, oldCarType) => {
     if(newCarType !== oldCarType) {
         console.log('car type changed');
@@ -144,15 +233,12 @@ watch(() => props.carType, async(newCarType, oldCarType) => {
     fetchCarData()
 });
 
-
-
 </script>
 
 <template>
     <div class="w-full flex flex-col">
         <RootRow :carType="props.carType"/>
         <div class="flex flex-col items-center w-full" style="{overflow-wrap: 'anywhere';}">
-            <!-- <div>{{ props.pageNumber }}</div> -->
             <div v-if="loading" class="font-bold text-base w-full text-center flex items-center justify-center h-[300px] bg-white text-[#2acc97] py-4">
                 <button type="button" class="py-4 rounded-md flex items-center text-white text-xl font-semibold" disabled>
                     <svg class="animate-spin h-24 w-24" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 4335 4335" version="1.1">
@@ -160,7 +246,7 @@ watch(() => props.carType, async(newCarType, oldCarType) => {
                     </svg>
                 </button>
             </div>
-            <div v-else v-for="car in list" :key="car.licensePlate" class="w-full">
+            <div v-else-if="!loading && list.length !== 0" v-for="car in list" :key="car.licensePlate" class="w-full">
                 <CarCard
                     @openInfo="openCarInfo"
                     @regist="openCarRegistration"
@@ -168,6 +254,9 @@ watch(() => props.carType, async(newCarType, oldCarType) => {
                     :carTypeSelection="props.carType"
                     :loading="loading"
                 />
+            </div>
+            <div v-else-if="!loading && list.length === 0" class="w-full bg-white flex items-center justify-center text-center text-xl font-semibold py-4 text-[#f5604c]">
+                No results found!
             </div>
         </div>
     </div>

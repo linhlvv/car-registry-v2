@@ -5,35 +5,6 @@ import CarList from '../components/cars/CarList.vue';
 import SearchField from '../components/cars/SearchField.vue';
 import { ref } from 'vue';
 
-const totalPage = ref()
-const bindTotalPage = (total) => {
-    totalPage.value = total
-}
-bindTotalPage()
-
-//SECTION - car info modal handler
-const carDetailModal = ref(false);
-const carInfoLicense = ref('')
-const openCarInfo = (license) => {
-    carInfoLicense.value = license
-    console.log(`license: ${license}`);
-    carDetailModal.value = true
-};
-
-//SECTION - car reg form modal handler
-const registrationModal = ref(false);
-const carRegistLicense = ref('')
-const openCarRegistration = (license) => {
-    carRegistLicense.value = license
-    registrationModal.value = true
-};
-
-//SECTION - modal turn off
-const turnOffModal = () => {
-    carDetailModal.value = false
-    registrationModal.value = false
-};
-
 //SECTION - page handler
 const pageNumber = ref(1);
 
@@ -45,6 +16,45 @@ const prevPage = () => {
 }
 const specifiedPage = (number) => {
     pageNumber.value = +number
+};
+
+//SECTION - bind total page number
+const totalPage = ref()
+const bindTotalPage = (total) => {
+    totalPage.value = total
+}
+bindTotalPage()
+
+//SECTION - bind sort order
+const order = ref('asc')
+const bindOrder = (givenOrder) => {
+    if(order.value !== givenOrder) {
+        order.value = givenOrder
+        pageNumber.value = 1
+    }
+}
+
+//SECTION - car info modal handler
+const carDetailModal = ref(false);
+const carInfoLicense = ref('')
+const openCarInfo = (license) => {
+    carInfoLicense.value = license
+    console.log(`license: ${license}`);
+    carDetailModal.value = true
+};
+
+//SECTION - car regist form modal handler
+const registrationModal = ref(false);
+const carRegistLicense = ref('')
+const openCarRegistration = (license) => {
+    carRegistLicense.value = license
+    registrationModal.value = true
+};
+
+//SECTION - modal turn off
+const turnOffModal = () => {
+    carDetailModal.value = false
+    registrationModal.value = false
 };
 
 //SECTION - license search
@@ -61,34 +71,51 @@ const owner = ref('')
 const time = ref ({
     year: '', quarter: '', month: ''
 })
+
+// logic - general filter handler
 const filterSelected = (value) => {
     filter.value = value
+    pageNumber.value = 1
     console.log(`filter value: ${filter.value}`);
 };
+
+// logic - city filter handler
 const citySelected = (value) => {
     city.value = value
     console.log(`city value: ${city.value}`);
 }
+
+// logic - owner filter handler
 const ownerEntered = (value) => {
     owner.value = value
+    pageNumber.value = 1
     console.log(`owner value: ${owner.value}`);
 }
+
+// logic - brand filter handler
 const brandSelected = (value) => {
     brand.value = value
+    pageNumber.value = 1
     console.log(`brand value: ${brand.value}`);
 }
+
+// logic - time filter handler
 const timeSelected = (value) => {
     time.value = value
+    pageNumber.value = 1
     console.log(`time value: ${time.value.year} ${time.value.quarter} ${time.value.month}`);
 };
 
 //SECTION - car type handler
 const carType = ref('registed');
+
+// logic - bind car type (registed/expired)
 const carTypeHandler = (value) => {
     carType.value = value
     pageNumber.value = 1
 };
 
+// logic - check whether the car type value matches the button value or not
 const carTypeMatched = (value) => {
     if(carType.value === value) {
         return true
@@ -97,6 +124,7 @@ const carTypeMatched = (value) => {
     }
 };
 
+//SECTION - small selection handler with small screen with
 const selectionOpened = ref(false)
 const openSelectHandler = () => {
     selectionOpened.value = !selectionOpened.value
@@ -172,6 +200,7 @@ const openSelectHandler = () => {
                         @next-page="nextPage" 
                         @prev-page="prevPage" 
                         @specified-page="specifiedPage"
+                        @sendSortOrder="bindOrder"
                         :page-num="pageNumber"
                         :total-page="totalPage"
                         :car-type="carType"
@@ -184,6 +213,7 @@ const openSelectHandler = () => {
                         :time="time"
                         :page-number="pageNumber" 
                         :car-type="carType"
+                        :sort-order="order"
                         @openCarInfo="openCarInfo" 
                         @openCarRegistration="openCarRegistration"
                         @totalPageNum="bindTotalPage"

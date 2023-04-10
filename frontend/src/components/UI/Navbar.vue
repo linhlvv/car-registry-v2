@@ -60,7 +60,7 @@ if(localStorage.getItem('token') === null) {
                         <li v-if="accountStore.isAdmin">
                             <NavbarButton :current="route.path === '/manageDatabase'" icon="fa-sharp fa-solid fa-database" content="Manage database" link="/manageDatabase"/>
                         </li>
-                        <li> 
+                        <li v-if="accountStore.isAdmin"> 
                             <NavbarButton :current="route.path === '/accountManagement'" icon="fa-sharp fa-solid fa-users" content="Account management" link="/accountManagement"/>
                         </li>
                         <li> 
@@ -68,6 +68,9 @@ if(localStorage.getItem('token') === null) {
                         </li>
                         <li> 
                             <NavbarButton :current="route.path === '/forecast'" icon="fa-solid fa-lightbulb" content="Forecast" link="/forecast"/>
+                        </li>
+                        <li> 
+                            <NavbarButton :current="route.path === '/statistics'" icon="fa-solid fa-chart-simple" content="Statistics" link="/statistics"/>
                         </li>
                     </ul>
                 </div>

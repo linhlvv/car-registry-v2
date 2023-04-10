@@ -1,5 +1,5 @@
 <script setup>
-import { ref } from 'vue';
+import { ref, watch } from 'vue';
 import SearchBar from '../UI/SearchBar.vue';
 import { useAccountStore } from '../../stores/AccountStore';
 
@@ -9,6 +9,7 @@ const props = defineProps(['pageNum', 'totalPage', 'carType']);
 const emit = defineEmits([
     'nextPage',
     'prevPage',
+    'sendSortOrder',
     'specifiedPage',
     'licenseSearch',
     'selectedFilterClicked',
@@ -48,13 +49,18 @@ const monthList = [
 
 //SECTION - filter sorting
 const fromAtoZ = ref('asc');
+
+// logic - alphabetical order asc or desc
 const fromAtoZClicked = () => {
-    fromAtoZ.value = 'asd'
+    fromAtoZ.value = 'asc'
+    emit('sendSortOrder', fromAtoZ.value)
 };
 const fromZtoAClicked = () => {
     fromAtoZ.value = 'desc'
+    emit('sendSortOrder', fromAtoZ.value)
 };
 
+// logic - time order
 const timeAscending = ref(true)
 const timeAscendingClicked = () => {
     timeAscending.value = true
@@ -86,10 +92,9 @@ const fetchAllAvailableBrands = async () => {
     console.log(`all available brands: ${JSON.stringify(brandList.value)}`);
 };
 
-const selected = ref('No filter');
-const pageNumber = ref(props.pageNum);
-
 //SECTION - handle pagination
+// logic - pagination with previous and next button
+const pageNumber = ref(props.pageNum);
 const pageHandler = (direction) => {
     if(direction === 'left') {
         if (pageNumber.value > 1) {
@@ -104,6 +109,7 @@ const pageHandler = (direction) => {
     }
 };
 
+// logic - navigate to exact page when enter is pressed
 const enterHandler = (number) => {
     if(1 <= number && number <= props.totalPage) {
         pageNumber.value = +number;
@@ -111,8 +117,8 @@ const enterHandler = (number) => {
     }
 };
 
-
 //SECTION - Filter handler
+const selected = ref('No filter');
 const city = ref('All');
 const owner = ref('All');
 const brand = ref('All');
@@ -122,6 +128,7 @@ const time = ref({
 
 // logic - general filter
 const filterClickedHandler = (value) => {
+    brand.value = 'All'
     console.log(`filter ${selected.value}`);
     if(selected.value === 'Brand') {
         fetchAllAvailableBrands()
@@ -129,22 +136,26 @@ const filterClickedHandler = (value) => {
     emit('selectedFilterClicked', value)
 }
 
+// logic - city filter
 const cityClicked = (value) => {
     console.log(`city ${city.value}`);
     emit('selectedCityClicked', value)
 }
 
+// logic - owner filter
 const ownerClicked = (value) => {
     owner.value = value
     console.log(`owner ${owner.value}`);
     emit('selectedOwnerClicked', value)
 }
 
+// logic - brand filter
 const brandClicked = (value) => {
     console.log(`brand changes to ${brand.value}`);
     emit('selectedBrandClicked', value)
 }
 
+// logic - time filter with year + quarter or year + month
 const timeClicked = (value, type) => {
     if(type === 'year') {
         time.value.year = value;
@@ -158,6 +169,14 @@ const timeClicked = (value, type) => {
     // console.log(`time changes to ${{year: time.value.year, quarter: time.value.quarter, month: time.value.month}}`);
     emit('selectedTimeClicked', time.value)
 };
+
+//SECTION - watcher
+// logic - reset filter after car type change event
+watch(() => props.carType, (newCarType, oldCarType) => {
+    if(newCarType !== oldCarType) {
+        selected.value = 'No filter'
+    }
+});
 
 </script>
 
@@ -192,8 +211,8 @@ const timeClicked = (value, type) => {
 
                 <!-- Ordering -->
                 <div v-if="selected !== 'No filter' && selected !== 'Time' && city === 'All' && brand === 'All'" class="flex flex-col gap-1">
-                    <i @click="fromAtoZClicked" class="fa-solid fa-arrow-up-z-a text-[#1d1d1d] cursor-pointer duration-100" :class="fromAtoZ ? 'text-[#2acc97]' : ''"></i>
-                    <i @click="fromZtoAClicked" class="fa-solid fa-arrow-up-a-z text-[#1d1d1d] cursor-pointer duration-100" :class="!fromAtoZ ? 'text-[#2acc97]' : ''"></i>
+                    <i @click="fromAtoZClicked" class="fa-solid fa-arrow-up-z-a text-[#1d1d1d] cursor-pointer" :class="fromAtoZ === 'asc' ? 'text-[#2acc97]' : ''"></i>
+                    <i @click="fromZtoAClicked" class="fa-solid fa-arrow-up-a-z text-[#1d1d1d] cursor-pointer" :class="fromAtoZ === 'desc' ? 'text-[#2acc97]' : ''"></i>
                 </div>
                 <div v-else-if="selected === 'Time'" class="flex flex-col gap-1">
                     <i @click="timeAscendingClicked" class="fa-solid fa-arrow-up text-[#1d1d1d] cursor-pointer duration-100" :class="timeAscending ? 'text-[#2acc97]' : ''"></i>
