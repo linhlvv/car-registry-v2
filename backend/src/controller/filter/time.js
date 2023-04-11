@@ -19,13 +19,14 @@ let time = async (req, res) => {
 
   let match = ''
   if(req.body.month !== "All") {
-    match = `\nand month(re.date) = ` + month + 
-                `\nand year(re.date) = ` + year
+    match = `\nand month(re.date) = ` + month
   }
   else if(req.body.quarter !== "All") {
     match = `\nand month(re.date) > ` + (quarter - 1) * 3 +
-            `\nand month(re.date) <= ` + quarter * 3 +
-                `\nand year(re.date) = ` + year
+            `\nand month(re.date) <= ` + quarter * 3 
+  }
+  if(req.body.year !== "All") {
+    match += `\nand year(re.date) = ` + year
   }
 
   let count = `

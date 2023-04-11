@@ -43,6 +43,10 @@ const initWebRoute = (app) => {
   router.post('/insert-centre', verifyToken, homeController.insertCentre)
   router.post('/remove-centre', verifyToken, homeController.removeCentre)
 
+  router.post('/new-regist', verifyToken, homeController.newRegist)
+  router.post('/preview-regist', verifyToken, homeController.previewRegist)
+
+  router.post('/update-modify', verifyToken, homeController.updateModify)
   return app.use('/', router)
 }
 
