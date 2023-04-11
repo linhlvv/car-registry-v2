@@ -14,7 +14,7 @@ let time = async (req, res) => {
   let quarter = parseInt(req.body.quarter)
   
   let type = carType === 'registed' ? ' >= ' : ' < '
-  let sort = carType === 'registed' ? 'registryDate' : 're.expire'
+  let sort = carType === 'registed' ? 'registryDate' : 'expire'
 
 
   let match = ''
