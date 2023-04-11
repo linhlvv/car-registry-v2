@@ -21,10 +21,10 @@ let authenticate = async (req, res) => {
         req.session.token = authToken
         console.log('\t\t\x1b[4mLogin succeeded\x1b[0m')
 
-        res.send({token: authToken, type: result[0].type, id: result[0].id})
+        res.status(200).send({token: authToken, type: result[0].type, id: result[0].id})
       } else {
         console.log('Login failed')
-        res.end();
+        res.status(400).send('Login failed');
       }
     }
 }
