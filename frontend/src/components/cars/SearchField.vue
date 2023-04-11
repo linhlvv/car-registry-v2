@@ -23,7 +23,7 @@ const emit = defineEmits([
 const filterList = ['No filter', 'City', 'Owner', 'Brand', 'Time']
 const cityList = ['All', 'Ho Chi Minh', 'Ha Noi', 'Bac Ninh', 'Hue']
 const brandList = ref(['All'])
-const yearList = ['All', '2019', '2020', '2021', '2022', '2023']
+const yearList = ['All', '2021', '2022', '2023']
 const quarterList = [
     {content: 'All', value: 'All'},
     {content: 'Q1', value: '1'},
@@ -75,6 +75,7 @@ const licenseSearch = (content) => {
 
 //SECTION - fetch all available brands
 const fetchAllAvailableBrands = async () => {
+    // console.log(`cartype: ${props.carType}`);
     const res = await fetch(`http://localhost:1111/filter/allBrand`, {
         method: 'POST',
         credentials: "include",
@@ -88,8 +89,8 @@ const fetchAllAvailableBrands = async () => {
         console.log(res.error);
     }
     const dataFetched = JSON.parse(await res.text())
-    brandList.value = [...brandList.value, ...dataFetched.data]
-    console.log(`all available brands: ${JSON.stringify(brandList.value)}`);
+    brandList.value = ['All', ...dataFetched.data]
+    // console.log(`all available brands: ${JSON.stringify(brandList.value)}`);
 };
 
 //SECTION - handle pagination
@@ -120,7 +121,7 @@ const enterHandler = (number) => {
 //SECTION - Filter handler
 const selected = ref('No filter');
 const city = ref('All');
-const owner = ref('All');
+const owner = ref('');
 const brand = ref('All');
 const time = ref({
     year: 'All', quarter: 'All', month: 'All',
@@ -159,6 +160,8 @@ const brandClicked = (value) => {
 const timeClicked = (value, type) => {
     if(type === 'year') {
         time.value.year = value;
+        time.value.month = 'All'
+        time.value.quarter = 'All'
     } else if (type === 'quarter') {
         time.value.quarter = value
         time.value.month = 'All'
@@ -167,7 +170,7 @@ const timeClicked = (value, type) => {
         time.value.quarter = 'All'
     }
     // console.log(`time changes to ${{year: time.value.year, quarter: time.value.quarter, month: time.value.month}}`);
-    emit('selectedTimeClicked', time.value)
+    emit('selectedTimeClicked', {year: time.value.year, quarter: time.value.quarter, month: time.value.month})
 };
 
 //SECTION - watcher

@@ -3,7 +3,7 @@ import CarInfoModal from '../components/modal/CarInfoModal.vue';
 import RegistrationFormModal from '../components/modal/RegistrationFormModal.vue';
 import CarList from '../components/cars/CarList.vue';
 import SearchField from '../components/cars/SearchField.vue';
-import { ref } from 'vue';
+import { reactive, ref } from 'vue';
 
 //SECTION - page handler
 const pageNumber = ref(1);
@@ -64,18 +64,20 @@ const licenseSearchEntered = (content) => {
 };
 
 //SECTION - filter handler
-const filter = ref('');
-const city = ref('')
-const brand = ref('')
+const filter = ref('No filter');
+const city = ref('All')
+const brand = ref('All')
 const owner = ref('')
-const time = ref ({
-    year: '', quarter: '', month: ''
+const time = ref({
+    year: 'All', quarter: 'All', month: 'All'
 })
 
 // logic - general filter handler
 const filterSelected = (value) => {
     filter.value = value
-    pageNumber.value = 1
+    if(filter.value !== 'Owner') {
+        pageNumber.value = 1
+    }
     console.log(`filter value: ${filter.value}`);
 };
 
@@ -103,7 +105,7 @@ const brandSelected = (value) => {
 const timeSelected = (value) => {
     time.value = value
     pageNumber.value = 1
-    console.log(`time value: ${time.value.year} ${time.value.quarter} ${time.value.month}`);
+    console.log(`time value: ${JSON.stringify(time.value)}`);
 };
 
 //SECTION - car type handler
@@ -145,6 +147,10 @@ const openSelectHandler = () => {
         <!-- main -->
         <div class="my-6">
             <div class="flex items-center flex-col gap-5 justify-center">
+
+                <div class="">
+
+                </div>
 
                 <!-- default car type filter -->
                 <div class="flex custom-shadow w-[70vw] rounded-2xl overflow-hidden bg-white max-[535px]:hidden">

@@ -53,7 +53,7 @@ const fetchCarData = async() => {
         console.log(res.error);
     }
     const dataFetched = JSON.parse(await res.text())
-    // console.log(`car list: ${JSON.stringify(dataFetched.count)}`);
+    console.log(`car list: ${JSON.stringify(dataFetched)}`);
     list.value = dataFetched.data
     totalPage.value = dataFetched.count
     postTotalPage()
@@ -145,13 +145,44 @@ const fetchCarDataWithSpecificBrand = async () => {
     loading.value = false
 }
 
+// logic - specific time
+const fetchCarDataWithSpecificTime = async () => {
+    loading.value = true
+    const res = await fetch(`http://localhost:1111/filter/time`, {
+        method: 'POST',
+        credentials: "include",
+        headers: {
+            'Content-Type': 'application/json',
+            'Authorization': `${accountStore.getToken}`
+        },
+        body: JSON.stringify(
+            {
+                resPerPage: 7,
+                page: props.pageNumber,
+                carType: props.carType,
+                year: props.time.year,
+                quarter: props.time.quarter,
+                month: props.time.month,
+            }
+        ),
+    })
+    if(res.error) {
+        console.log(res.error);
+    }
+    const dataFetched = JSON.parse(await res.text())
+    console.log(`car brand: ${JSON.stringify(dataFetched)}`);
+    list.value = dataFetched.data
+    totalPage.value = dataFetched.count
+    postTotalPage()
+    loading.value = false
+}
+
 //SECTION - watchers
 // logic - page number watcher
 watch(() => props.pageNumber, async(newPageNumber, oldPageNumber) => {
-    // console.log(props.pageNumber, newPageNumber, oldPageNumber);
     if(newPageNumber !== oldPageNumber) {
         console.log(`page number of carlist has changed to: ${props.pageNumber}`);
-
+        
         if(props.filter === 'No filter') {
             fetchCarData()
         }
@@ -166,7 +197,6 @@ watch(() => props.filter, async(newFilter, oldFilter) => {
     // console.log(props.pageNumber, newPageNumber, oldPageNumber);
     if(newFilter !== oldFilter) {
         console.log(`filter has changed to: ${props.filter}`);
-
         if(newFilter === 'No filter') {
             fetchCarData()
         }
@@ -219,9 +249,8 @@ watch(() => props.owner, async(newOwner, oldOwner) => {
 
 // logic - time watcher
 watch(() => props.time, async(newTime, oldTime) => {
-    // console.log(props.pageNumber, newPageNumber, oldPageNumber);
-    if(newTime !== oldTime) {
-        console.log(`time has changed to: ${props.time}`);
+    if(newTime.year !== oldTime.year || newTime.month !== oldTime.month || newTime.quarter !== oldTime.quarter) {
+        console.log(`time has changed to: ${JSON.stringify(props.time)}`);
     }
 });
 
