@@ -189,6 +189,9 @@ watch(() => props.pageNumber, async(newPageNumber, oldPageNumber) => {
         if(props.filter === 'Brand') {
             fetchDataSortedByBrand()
         }
+        if(props.filter === 'Time') {
+            fetchCarDataWithSpecificTime()
+        }
     }
 });
 
@@ -202,6 +205,9 @@ watch(() => props.filter, async(newFilter, oldFilter) => {
         }
         if(newFilter === 'Brand') {
             fetchDataSortedByBrand()
+        }
+        if(newFilter === 'Time') {
+            fetchCarDataWithSpecificTime()
         }
     }
     
@@ -251,6 +257,7 @@ watch(() => props.owner, async(newOwner, oldOwner) => {
 watch(() => props.time, async(newTime, oldTime) => {
     if(newTime.year !== oldTime.year || newTime.month !== oldTime.month || newTime.quarter !== oldTime.quarter) {
         console.log(`time has changed to: ${JSON.stringify(props.time)}`);
+        fetchCarDataWithSpecificTime()
     }
 });
 

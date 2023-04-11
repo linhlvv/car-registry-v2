@@ -130,6 +130,9 @@ const time = ref({
 // logic - general filter
 const filterClickedHandler = (value) => {
     brand.value = 'All'
+    time.value = {
+        year: 'All', quarter: 'All', month: 'All',
+    }
     console.log(`filter ${selected.value}`);
     if(selected.value === 'Brand') {
         fetchAllAvailableBrands()
