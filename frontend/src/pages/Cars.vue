@@ -3,6 +3,7 @@ import CarInfoModal from '../components/modal/CarInfoModal.vue';
 import RegistrationFormModal from '../components/modal/RegistrationFormModal.vue';
 import CarList from '../components/cars/CarList.vue';
 import SearchField from '../components/cars/SearchField.vue';
+import BarChart from '../components/cars/BarChart.vue'
 import { reactive, ref } from 'vue';
 
 //SECTION - page handler
@@ -114,6 +115,12 @@ const carType = ref('registed');
 // logic - bind car type (registed/expired)
 const carTypeHandler = (value) => {
     carType.value = value
+    brand.value = 'All'
+    city.value = 'All'
+    owner.value = ''
+    time.value = {
+        year: 'All', quarter: 'All', month: 'All'
+    }
     pageNumber.value = 1
 };
 
@@ -166,7 +173,7 @@ const openSelectHandler = () => {
                     <div 
                         @click="carTypeHandler('expired')"
                         class="w-1/2 text-base font-medium gap-1 flex items-center justify-center text-center duration-200 cursor-pointer p-2 py-4 max-[997px]:text-sm max-[738px]:text-xs max-[625px]:text-[10px]"
-                        :class="carTypeMatched('expired') ? 'bg-[#2acc97] text-white' : 'hover:text-[#2acc97]'"
+                        :class="carTypeMatched('expired') ? 'bg-[#93a3e6] text-white' : 'hover:text-[#93a3e6]'"
                     >
                         <i class="fa-solid fa-car-burst"></i>
                         <div>Expired cars</div>
@@ -225,9 +232,9 @@ const openSelectHandler = () => {
                         @totalPageNum="bindTotalPage"
                     />
                 </div>
-
-                <div>
-                    
+                <div v-if="time.year !== 'All'" class="w-[80vw] flex flex-col items-center bg-white rounded-xl custom-shadow">
+                    <div class="py-2 font-semibold text-xl text-[#1f1f1f] text-opacity-70">Statistical Chart</div>
+                    <BarChart :car-type="carType" :year="parseInt(time.year)"/>
                 </div>
             </div>
         </div>

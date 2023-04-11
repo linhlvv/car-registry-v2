@@ -181,6 +181,12 @@ const timeClicked = (value, type) => {
 watch(() => props.carType, (newCarType, oldCarType) => {
     if(newCarType !== oldCarType) {
         selected.value = 'No filter'
+        time.value = {
+            year: 'All', quarter: 'All', month: 'All',
+        }
+        owner.value = ''
+        brand.value = 'All'
+        city.value = 'All'
     }
 });
 

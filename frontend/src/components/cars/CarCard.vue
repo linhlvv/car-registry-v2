@@ -12,7 +12,7 @@ const regist = () => {
 </script>
 
 <template>
-    <div class="bg-white p-2 flex w-full mt-[2px]">
+    <div class="bg-white p-2 flex w-full mt-[2px] min-h-[50px]">
         <div class="max-[736px]:w-[28%] font-semibold text-[#616367] text-[11px] max-[900px]:text-[10px] flex justify-center items-center w-[14%]">
             {{ car.license }}
         </div>
