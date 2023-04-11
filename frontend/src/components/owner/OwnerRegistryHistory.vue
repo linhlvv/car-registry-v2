@@ -2,15 +2,34 @@
 import { ref } from 'vue';
 import OwnerCarsNav from './OwnerValidNav.vue';
 import OwnerRegistryCard from './OwnerRegistryCard.vue';
+import { useAccountStore } from '../../stores/AccountStore';
 import { useRoute } from "vue-router";
 
-const route = useRoute();
+const props = defineProps(['id']);
+const accountStore = useAccountStore()
 
 const registedTag = ref(true);
 const changeTagHandler = (value) => {
     registedTag.value = value
 };
 
+// const fetchOwnerRegistryHistory = async () => {
+//     const res = await fetch(`http://localhost:1111/owner/history`, {
+//         method: 'POST',
+//         credentials: "include",
+//         headers: {
+//             'Content-Type': 'application/json',
+//             'Authorization': `${accountStore.getToken}`
+//         },
+//         body: JSON.stringify({ ownerId: props.id }),
+//     })
+//     if(res.error) {
+//         console.log(res.error);
+//     }
+//     const dataFetched = JSON.parse(await res.text())
+//     console.log(JSON.stringify(dataFetched));
+// };
+// fetchOwnerRegistryHistory()
 const carList = [
     {licensePlate: '29-F1 11583', name: 'RollRoyce Phantom', valid: true},
     {licensePlate: '29-F1 21529', name: 'Lamborghini Aventador', valid: true},

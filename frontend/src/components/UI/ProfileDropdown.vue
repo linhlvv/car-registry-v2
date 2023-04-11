@@ -18,7 +18,6 @@ const passwordManagementModalHandler = () => {
     } else {
         passwordManagementModalIsOn.value = true
     }
-    console.log(passwordManagementModalIsOn.value);
 };
 
 </script>
@@ -35,7 +34,7 @@ const passwordManagementModalHandler = () => {
                     <div @click="dropdownHandler"> 
                         <router-link :to="`/center/${accountStore.ID}`" class="flex gap-2 items-center px-4 py-2 text-[#1d1d1d] font-medium hover:bg-gray-100 dark:hover:bg-gray-600 dark:hover:text-white">
                             <i class="fa-sharp fa-solid fa-user"></i>
-                            Profile
+                            Profile 
                         </router-link>
                     </div>
                     <div @click="dropdownHandler">
