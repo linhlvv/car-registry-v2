@@ -88,6 +88,11 @@ const router = createRouter({
           name: 'RegistNewCar',
           component: () => import('@/pages/RegistNewCar.vue'),
         },
+        {
+          path: 'statistics',
+          name: 'Statistics',
+          component: () => import('@/pages/Statistics.vue'),
+        },
       ]
     },
   ]

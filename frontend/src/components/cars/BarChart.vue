@@ -1,6 +1,15 @@
 <template>
-    <!-- {{ data }} -->
-    <div class="w-full h-full max-[914px]:w-full max-[500px]:h-[50vh]">
+    <div class="w-full flex items-center justify-end pr-4 gap-4">
+        <div class="flex items-center gap-1">
+            <div class="font-medium text-[#1d1d1d]">Year:</div>
+            <div class="font-medium" :class="carType === 'registed' ? 'text-[#2acc97]' : 'text-[#93a3e6]'">{{ year }}</div>
+        </div>
+        <div class="flex items-center gap-1">
+            <div class="font-medium text-[#1d1d1d]">Total:</div>
+            <div class="font-medium" :class="carType === 'registed' ? 'text-[#2acc97]' : 'text-[#93a3e6]'">{{ total }}</div>
+        </div>
+    </div>
+    <div class="w-full h-full max-[914px]:w-full max-[500px]:h-[50vh] p-4">
         <Bar :data="data" :options="options" class="w-full max-[914px]:w-full max-[500px]:h-[50vh]" />
     </div>
 </template>
@@ -22,14 +31,18 @@ import { Bar } from 'vue-chartjs';
 import { useAccountStore } from "../../stores/AccountStore";
 
 ChartJS.register(CategoryScale, LinearScale, BarElement, Title, Tooltip, Legend)
+ChartJS.defaults.font.size = 10
+ChartJS.defaults.font.weight = 700
 
 const accountStore = useAccountStore();
-const props = defineProps(['year']);
+const props = defineProps(['year', 'carType']);
 
 const chartData = ref({});
 let registedCarList = []
 let expiredCarList = []
 const dataList = ref([])
+const total = ref()
+const yearList = ref([])
 const loaded = ref(false)
 
 const data = ref({
@@ -48,8 +61,14 @@ const fetchData = async () => {
         }
     })
     dataList.value = JSON.parse(await res.text())
-    chartData.value = dataList.value.Data[props.year];
-    console.log(`chart data: ${JSON.stringify(chartData.value)}`);
+    yearList.value = dataList.value.Year
+    chartData.value = dataList.value.Data[props.year - yearList.value[0]];
+    console.log(`chart data: ${JSON.stringify(dataList.value)}`);
+    if(props.carType === 'registed') {
+        total.value = dataList.value.Data[props.year - yearList.value[0]].regist.total
+    } else {
+        total.value = dataList.value.Data[props.year - yearList.value[0]].expire.total
+    }
 
     chartRegisted = chartData.value.regist.month;
     chartExpired = chartData.value.expire.month;
@@ -83,23 +102,32 @@ const fetchData = async () => {
         chartExpired.November,
         chartExpired.December,
     ]
-    data.value = {
-        labels: ['January', 'February', 'March', 'April', 'May', 'June', 'July', 'August', 'September', 'October', 'November', 'December'],
-        datasets: [
-            {
-                label: 'Registed cars',
-                color: '#36A2EB',
-                backgroundColor: ['#2acc97'],
-                data: registedCarList
-            },
-            {
-                label: 'Expired cars',
-                color: '#36A2EB',
-                backgroundColor: ['#93a3e6'],
-                data: expiredCarList
-            },
-        ]
+    if(props.carType === 'registed') {
+        data.value = {
+            labels: ['January', 'February', 'March', 'April', 'May', 'June', 'July', 'August', 'September', 'October', 'November', 'December'],
+            datasets: [
+                {
+                    label: 'Registed cars',
+                    color: '#36A2EB',
+                    backgroundColor: ['#2acc97'],
+                    data: registedCarList
+                },
+            ]
+        }
+    } else {
+        data.value = {
+            labels: ['January', 'February', 'March', 'April', 'May', 'June', 'July', 'August', 'September', 'October', 'November', 'December'],
+            datasets: [
+                {
+                    label: 'Expired cars',
+                    color: '#36A2EB',
+                    backgroundColor: ['#93a3e6'],
+                    data: expiredCarList
+                },
+            ]
+        }
     }
+    
 
     options.value = {
         responsive: true,
@@ -137,7 +165,12 @@ fetchData();
 watch(() => props.year, (newYear, oldYear) => {
     if(newYear !== oldYear) {
         console.log('change');
-        chartData.value = dataList.value.Data[newYear];
+        chartData.value = dataList.value.Data[newYear - yearList.value[0]];
+        if(props.carType === 'registed') {
+            total.value = dataList.value.Data[props.year - yearList.value[0]].regist.total
+        } else {
+            total.value = dataList.value.Data[props.year - yearList.value[0]].expire.total
+        }
         chartRegisted = chartData.value.regist.month
         chartExpired = chartData.value.expire.month
 
@@ -171,28 +204,34 @@ watch(() => props.year, (newYear, oldYear) => {
             chartExpired.December,
         ]
 
-        data.value = {
-            labels: ['January', 'February', 'March', 'April', 'May', 'June', 'July', 'August', 'September', 'October', 'November', 'December'],
-            datasets: [
-                {
-                    label: 'Registed cars',
-                    color: '#36A2EB',
-                    backgroundColor: ['#2acc97'],
-                    data: registedCarList
-                },
-                {
-                    label: 'Expired cars',
-                    color: '#36A2EB',
-                    backgroundColor: ['#93a3e6'],
-                    data: expiredCarList
-                },
-            ]
+        if(props.carType === 'registed') {
+            data.value = {
+                labels: ['January', 'February', 'March', 'April', 'May', 'June', 'July', 'August', 'September', 'October', 'November', 'December'],
+                datasets: [
+                    {
+                        label: 'Registed cars',
+                        color: '#36A2EB',
+                        backgroundColor: ['#2acc97'],
+                        data: registedCarList
+                    },
+                ]
+            }
+        } else {
+            data.value = {
+                labels: ['January', 'February', 'March', 'April', 'May', 'June', 'July', 'August', 'September', 'October', 'November', 'December'],
+                datasets: [
+                    {
+                        label: 'Expired cars',
+                        color: '#36A2EB',
+                        backgroundColor: ['#93a3e6'],
+                        data: expiredCarList
+                    },
+                ]
+            }
         }
 
     }
-})
-
-// ChartJS.defaults.font.size = 10
+});
 
 </script>
   

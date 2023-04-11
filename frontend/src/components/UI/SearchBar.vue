@@ -8,6 +8,7 @@ const searchInput = ref('');
 const searchHandler = () => {
     console.log(`search bar entered ${searchInput.value}`);
     emit('searchEntered', searchInput.value)
+    searchInput.value = ''
 };
 
 </script>
