@@ -6,13 +6,15 @@ let allBrand = async (req, res) => {
   let type = carType === 'registed' ? ' >= ' : ' < '
 
   let query = `
-  select brand
-  from registry re 
-  join vehicles v
-  on re.licenseId = v.licenseId
-  where centreId = ?
-  and expire` + type + `current_date()
-  group by brand`;
+  select brand 
+  from vehicles v join
+  (select re.licenseId as license, max(expire) as expire
+  from registry re
+  where centreId = 453
+  group by re.licenseId) ok
+  on v.licenseId = ok.license
+  and expire ` + type + ` current_date()
+  group by brand;`
   
   // bug - đã gọi được api kết quả trả về chính xác
   const [rows, fields] = await pool.query(query, [req.session.userid])
