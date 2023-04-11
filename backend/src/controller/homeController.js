@@ -7,6 +7,9 @@ import { verifyToken } from './authenticate/verifyToken';
 import { centreInfo } from './info/centreInfo';
 import { getDataForChart } from './info/data4Chart';
 import { detailModal } from './info/detailModal';
+import { previewRegist } from './info/previewRegist';
+import { newRegist } from './info/newRegist';
+import { updateModify } from './info/updateModify';
 
 import { expired } from './categories/expired';
 import { registed } from './categories/registed';
@@ -21,6 +24,7 @@ import { time } from './filter/time'
 
 import { ownerInfo } from './owner/ownerInfo';
 import { registHistory } from './owner/registHistory';
+
 
 import { changePassword } from './authenticate/changePassword';
 
@@ -43,5 +47,5 @@ module.exports = {
   homepage, authenticate, verifyToken, logout, centreInfo, 
   vehicles, registed, expired, findByLicense, detailModal, getDataForChart,
   ownerInfo, registHistory, owner, brand, allBrand, exactBrand, time,
-  changePassword, viewAllCentres, viewAllCars, insertCentre, removeCentre
+  changePassword, viewAllCentres, viewAllCars, insertCentre, removeCentre, newRegist, previewRegist, updateModify
 }
