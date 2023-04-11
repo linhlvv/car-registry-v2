@@ -33,8 +33,8 @@ import carImg from '../../assets/car.png';
                 </button>
             </div>
         </div>
-        <div class="w-1/2 flex items-start max-[924px]:hidden max-[924px]:w[0px]">
-            <div class="absolute z-10 ml-12 mt-5">
+        <div class="w-1/2 relative flex items-start max-[924px]:hidden max-[924px]:w[0px]">
+            <div class="absolute z-10 w-full flex justify-end mt-5 pr-[320px]">
                 <div class=" w-[150px] flex flex-col gap-2 bg-white p-4 rounded-xl shadow-lg max-[1030px]:hidden">
                     <div>
                         <p class="text-md font-bold text-[#1d1d1d] text-opacity-70">Registration</p>

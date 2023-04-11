@@ -115,6 +115,7 @@ const carType = ref('registed');
 // logic - bind car type (registed/expired)
 const carTypeHandler = (value) => {
     carType.value = value
+    filter.value = 'No filter'
     brand.value = 'All'
     city.value = 'All'
     owner.value = ''
