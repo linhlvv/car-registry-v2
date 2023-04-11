@@ -33,7 +33,7 @@ const loginHandler = async() => {
     if(res.error) {
         console.log(res.error);
     }
-    // console.log(`${res}`);
+    console.log(`${JSON.stringify(res)}`);
     const data = JSON.parse(await res.text())
     // console.log(`account data login: ${JSON.stringify(data)}`);
     console.log(`authToken login: ${JSON.stringify(data)}`);

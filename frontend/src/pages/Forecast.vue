@@ -33,8 +33,8 @@ const turnOffModal = () => {
         <div class="my-6">
             <div class="flex justify-center">
                 <div class="flex items-center flex-col w-[80vw] custom-shadow rounded-2xl overflow-hidden">
-                    <SearchField />
-                    <CarList @openCarInfo="openCarInfo" @openCarRegistration="openCarRegistration"/>
+                    <!-- <SearchField />
+                    <CarList @openCarInfo="openCarInfo" @openCarRegistration="openCarRegistration"/> -->
                 </div>
             </div>
         </div>

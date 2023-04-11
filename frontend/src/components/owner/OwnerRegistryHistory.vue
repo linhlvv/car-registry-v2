@@ -13,55 +13,29 @@ const changeTagHandler = (value) => {
     registedTag.value = value
 };
 
-// const fetchOwnerRegistryHistory = async () => {
-//     const res = await fetch(`http://localhost:1111/owner/history`, {
-//         method: 'POST',
-//         credentials: "include",
-//         headers: {
-//             'Content-Type': 'application/json',
-//             'Authorization': `${accountStore.getToken}`
-//         },
-//         body: JSON.stringify({ ownerId: props.id }),
-//     })
-//     if(res.error) {
-//         console.log(res.error);
-//     }
-//     const dataFetched = JSON.parse(await res.text())
-//     console.log(JSON.stringify(dataFetched));
-// };
-// fetchOwnerRegistryHistory()
-const carList = [
-    {licensePlate: '29-F1 11583', name: 'RollRoyce Phantom', valid: true},
-    {licensePlate: '29-F1 21529', name: 'Lamborghini Aventador', valid: true},
-    {licensePlate: '29-F1 61516', name: 'Mercedes G63', valid: false},
-    {licensePlate: '29-F1 61289', name: 'Kia Morning', valid: true},
-    {licensePlate: '29-F1 31588', name: 'Mercedes Maybach S600', valid: false},
-    {licensePlate: '29-F1 81589', name: 'Bentley Continental', valid: true},
-];
-
-const registryList = ref([])
-
-// const fetchRegistryList = async() => {
-//     const res = await fetch(`http://localhost:1111/owner/valid`, {
-//         method: 'POST',
-//         credentials: "include",
-//         headers: {
-//             'Content-Type': 'application/json',
-//         },
-//         body: JSON.stringify({id: route.params.id}),
-//     })
-//     if(res.error) {
-//         console.log(res.error);
-//     }
-//     // console.log(`${res}`);
-//     const data = JSON.parse(await res.text())
-//     console.log(`owner registed cars: ${JSON.stringify(data)}`);
-// 
-// };
-// fetchRegistryList()
-
 const registedList = ref([]);
 const expiredList = ref([]);
+
+const fetchOwnerRegistryHistory = async () => {
+    const res = await fetch(`http://localhost:1111/owner/history`, {
+        method: 'POST',
+        credentials: "include",
+        headers: {
+            'Content-Type': 'application/json',
+            'Authorization': `${accountStore.getToken}`
+        },
+        body: JSON.stringify({ ownerid: props.id }),
+    })
+    if(res.error) {
+        console.log(res.error);
+    }
+    const dataFetched = JSON.parse(await res.text())
+    console.log(JSON.stringify(dataFetched));
+    registedList.value = dataFetched.registed
+    expiredList.value = dataFetched.expired
+};
+fetchOwnerRegistryHistory()
+
 
 </script>
 
@@ -77,16 +51,35 @@ const expiredList = ref([]);
         <!-- <div>{{ registedTag }}</div> -->
         <div class="flex flex-col w-full gap-[2px]">
             <OwnerRegistryCard :is-root-row="true" license-plate="License plate" name="Name"/>
-            <div v-if="registedTag" v-for="card in registedList" :key="card.licensePlate" class="w-full">
-                
+            <div v-if="registedTag && registedList.length > 0" v-for="card in registedList" :key="card.licensePlate" class="w-full">
+                <OwnerRegistryCard :is-root-row="false" :license-plate="card.license" :name="`${card.brand} ${card.model} ${card.version}`" :regist-date="card.registryDate" :expired-date="card.expire"/>
             </div>
-            <div v-if="!registedTag" v-for="card in expiredList" :key="card.licensePlate" class="w-full">
-                
+            <div v-else-if="registedTag && registedList.length === 0" class="slide-fade p-2 text-[#f5604c] text-base font-semibold w-full items-center justify-center text-center">
+                No valid car available
+            </div>
+            <div v-if="!registedTag && expiredList.length > 0" v-for="card in expiredList" :key="card.licensePlate" class="w-full">
+                <OwnerRegistryCard :is-root-row="false" :license-plate="card.license" :name="`${card.brand} ${card.model} ${card.version}`" :regist-date="card.registryDate" :expired-date="card.expire"/>
+            </div>
+            <div v-else-if="!registedTag && expiredList.length === 0" class="slide-fade p-2 text-[#f5604c] text-base font-semibold w-full items-center justify-center text-center">
+                No invalid car available
             </div>
         </div>
     </div>
 </template>
 
 <style scoped>
-    
+    .slide-fade {
+        animation: slide-fade 0.5s;
+    }
+
+    @keyframes slide-fade {
+        from {
+            opacity: 0;
+            transform: translateX(1rem);
+        }
+        to {
+            opacity: 1;
+            transform: translateX(0rem);
+        }
+    }
 </style>
