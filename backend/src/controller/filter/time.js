@@ -9,18 +9,20 @@ let time = async (req, res) => {
     page = 1
 
   let carType = req.body.carType
-  let year = req.body.year
-  let month = req.body.month
-  let quarter = req.body.quarter
+  let year = parseInt(req.body.year)
+  let month = parseInt(req.body.month)
+  let quarter = parseInt(req.body.quarter)
   
   let type = carType === 'registed' ? ' >= ' : ' < '
-  
+  let sort = carType === 'registed' ? 'registryDate' : 'expire'
+
+
   let match = ''
-  if(month !== undefined) {
+  if(req.body.month !== "All") {
     match = `\nand month(re.date) = ` + month + 
                 `\nand year(re.date) = ` + year
   }
-  else if(quarter !== undefined) {
+  else if(req.body.quarter !== "All") {
     match = `\nand month(re.date) > ` + (quarter - 1) * 3 +
             `\nand month(re.date) <= ` + quarter * 3 +
                 `\nand year(re.date) = ` + year
@@ -82,7 +84,7 @@ let time = async (req, res) => {
   `  group by re.licenseId)  
   and expire` + type + `current_date()`
     + match +
-    `\norder by registryDate
+    `\norder by ` + sort + ` 
     limit ? offset ?`
   
   // bug - đã gọi được api kết quả trả về chính xác
