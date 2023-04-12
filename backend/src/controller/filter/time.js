@@ -15,18 +15,18 @@ let time = async (req, res) => {
   
   let type = carType === 'registed' ? ' >= ' : ' < '
   let sort = carType === 'registed' ? 'registryDate' : 'expire'
-
+  let filterType = carType === 'registed' ? 're.date' : 're.expire'
 
   let match = ''
   if(req.body.month !== "All") {
-    match = `\nand month(re.date) = ` + month
+    match = `\nand month(` + filterType + `) = ` + month
   }
   else if(req.body.quarter !== "All") {
-    match = `\nand month(re.date) > ` + (quarter - 1) * 3 +
-            `\nand month(re.date) <= ` + quarter * 3 
+    match = `\nand month(` + filterType + `) > ` + (quarter - 1) * 3 +
+            `\nand month(` + filterType + `) <= ` + quarter * 3 
   }
   if(req.body.year !== "All") {
-    match += `\nand year(re.date) = ` + year
+    match += `\nand year(` + filterType + `) = ` + year
   }
 
   let count = `

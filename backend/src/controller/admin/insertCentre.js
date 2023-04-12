@@ -21,12 +21,12 @@ let insertCentre = async (req, res) => {
     let check = 'select * from account where email = ?'
     const [rows, fields] = await pool.query(check, [email])
     if (rows.length > 0) {
-        return res.send({message: 'Email already exists'})
+        return res.status(400).send({message: 'Email already exists'})
     }
 
     //Kiểm tra mật khẩu và mật khẩu được nhập lại
     if (password !== repassword) {
-        return res.send({message: 'Password does not match'})
+        return res.status(400).send({message: 'Password does not match'})
     }
     else {
         let insertAcc = 'insert into account (email, password, type) values (?, ?, ?)'
@@ -34,7 +34,7 @@ let insertCentre = async (req, res) => {
         
         await pool.query(insertCen, [name, city, district])
         await pool.query(insertAcc, [email, password, type])
-        return res.send({message: 'Account created'})
+        return res.status(200).send({message: 'Account created'})
     }
 
 }

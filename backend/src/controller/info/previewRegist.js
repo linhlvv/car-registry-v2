@@ -1,7 +1,7 @@
 import pool from "../../configs/connectDB";
 // task - Preview Regist 
 // input - license Id
-//output - regist Id, Regist Date, Expire Date
+// output - regist Id, Regist Date, Expire Date
 
 let previewRegist = async (req, res) => {
     let licenseId = req.body.licenseId
