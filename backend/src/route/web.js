@@ -30,6 +30,8 @@ const initWebRoute = (app) => {
   router.post('/filter/time', verifyToken, homeController.time)
   // logic - trả về tất cả các city của centre này
   router.post('/filter/allCity', verifyToken, homeController.allCity)
+  // logic - trả về tất cả xe có city khớp với city gửi lên
+  router.post('/filter/exactCity', verifyToken, homeController.exactCity)
                                                                                     
                                                                                     
   // logic - trả về lịch sử đăng kiểm của owner
