@@ -54,12 +54,16 @@ const initWebRoute = (app) => {
   router.post('/insert-centre', verifyToken, homeController.insertCentre)
   // logic - deactivate 1 centre
   router.post('/remove-centre', verifyToken, homeController.removeCentre)
+
   // logic - tạo đăng kiểm mới
   router.post('/new-regist', verifyToken, homeController.newRegist)
   // logic - trả về thông tin của đăng kiểm để preview
   router.post('/preview-regist', verifyToken, homeController.previewRegist)
   // logic - check và update modification date của đăng kiểm
   router.post('/update-modify', verifyToken, homeController.updateModify)
+  // logic - trả về info xe đăng kiểm
+  router.post('/preview-info', verifyToken, homeController.previewInfo)
+
   // logic - trả về tất cả đăng kiểm của centre này
   router.get('/allRegist', verifyToken, homeController.allRegist)
 

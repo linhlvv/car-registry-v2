@@ -10,6 +10,7 @@ import { detailModal } from './info/detailModal';
 import { previewRegist } from './info/previewRegist';
 import { newRegist } from './info/newRegist';
 import { updateModify } from './info/updateModify';
+import { previewInfo } from './info/previewInfo'
 
 import { expired } from './categories/expired';
 import { registed } from './categories/registed';
@@ -50,5 +51,5 @@ module.exports = {
   homepage, authenticate, verifyToken, logout, centreInfo, 
   vehicles, registed, expired, findByLicense, detailModal, getDataForChart,
   ownerInfo, registHistory, owner, brand, allBrand, exactBrand, time, allCity,
-  changePassword, viewAllCentres, viewAllCars, insertCentre, removeCentre, newRegist, previewRegist, updateModify, allRegist
+  changePassword, viewAllCentres, viewAllCars, insertCentre, removeCentre, newRegist, previewRegist, updateModify, allRegist, previewInfo
 }
