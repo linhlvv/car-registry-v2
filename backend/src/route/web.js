@@ -47,6 +47,9 @@ const initWebRoute = (app) => {
   router.post('/preview-regist', verifyToken, homeController.previewRegist)
 
   router.post('/update-modify', verifyToken, homeController.updateModify)
+
+  router.get('/allRegist', verifyToken, homeController.allRegist)
+
   return app.use('/', router)
 }
 
