@@ -6,23 +6,25 @@ let allCity = async (req, res) => {
   let type = carType === 'registed' ? ' >= ' : ' < '
 
   let query = `
-  select brand 
+  select name
   from vehicles v join
   (select re.licenseId as license, max(expire) as expire
   from registry re
   where centreId = ` + req.session.userid + `
   group by re.licenseId) ok
   on v.licenseId = ok.license
-  and expire ` + type + ` current_date()
-  group by brand;`
+  join region r 
+  on r.id = v.regionId
+  and expire` + type + `current_date()
+  group by name`
   
   // bug - đã gọi được api kết quả trả về chính xác
   const [rows, fields] = await pool.query(query, [req.session.userid])
-  let brands = []
+  let cities = []
   for(let i = 0; i < rows.length; i++) {
-    brands.push(rows[i].brand)
+    cities.push(rows[i].name)
   }
-  return res.send({data: brands})
+  return res.send({data: cities})
 
 }
 
