@@ -18,7 +18,7 @@ let previewRegist = async (req, res) => {
     let modifyDate = await pool.query(query,[licenseId])
     modifyDate = modifyDate[0][0].modifyDate
     let expireDate = new Date();
-    if (modifyDate == null || modifyDate == "") {
+    if (modifyDate == null || modifyDate == '') {
         expireDate.setMonth(date.getMonth() + 18)
 
     }
