@@ -16,7 +16,7 @@ let registHistory = async (req, res) => {
   
   convert()
   let query = `
-  select re.licenseId as license, v.brand, v.model, v.version, ` + queryType + `, re.expire, p.name
+  select re.licenseId as license, v.brand, v.model, v.version, ` + queryType + `, re.expire, p.name, ce.name
     from registry re
   join vehicles v 
     on v.licenseId = re.licenseId
@@ -24,6 +24,8 @@ let registHistory = async (req, res) => {
     on v.ownerId = o.id
   join personal p
     on p.id = o.id
+  join centre ce
+    on ce.id = re.centreId
   where (re.licenseId, expire) in
     (select v.licenseId as license, max(expire) as expire
       from vehicles v
@@ -34,7 +36,7 @@ let registHistory = async (req, res) => {
   `  group by re.licenseId)  
   and expire` + type + `current_date()
           union all 
-  select re.licenseId as license, v.brand, v.model, v.version, ` + queryType + `, re.expire, c.name
+  select re.licenseId as license, v.brand, v.model, v.version, ` + queryType + `, re.expire, c.name, ce.name
     from registry re
   join vehicles v 
     on v.licenseId = re.licenseId
@@ -42,6 +44,8 @@ let registHistory = async (req, res) => {
     on v.ownerId = o.id
   join company c 
     on c.id = o.id
+  join centre ce
+    on ce.id = re.centreId
   where (re.licenseId, expire) in
     (select v.licenseId as license, max(expire) as expire
       from vehicles v
@@ -57,7 +61,7 @@ let registHistory = async (req, res) => {
   carType = 'expired'
   convert()
   query = `
-  select re.licenseId as license, v.brand, v.model, v.version, ` + queryType + `, re.expire, p.name
+  select re.licenseId as license, v.brand, v.model, v.version, ` + queryType + `, re.expire, p.name, ce.name
     from registry re
   join vehicles v 
     on v.licenseId = re.licenseId
@@ -65,11 +69,13 @@ let registHistory = async (req, res) => {
     on v.ownerId = o.id
   join personal p
     on p.id = o.id
+  join centre ce
+    on ce.id = re.centreId
     where centreId = ` + req.session.userid +
     ` and ownerId = ` + ownerid +
   ` and expire` + type + `current_date()
           union all 
-  select re.licenseId as license, v.brand, v.model, v.version, ` + queryType + `, re.expire, c.name
+  select re.licenseId as license, v.brand, v.model, v.version, ` + queryType + `, re.expire, c.name, ce.name
     from registry re
   join vehicles v 
     on v.licenseId = re.licenseId
@@ -77,6 +83,8 @@ let registHistory = async (req, res) => {
     on v.ownerId = o.id
   join company c 
     on c.id = o.id
+  join centre ce
+    on ce.id = re.centreId
     where centreId = ` + req.session.userid +
     ` and ownerId = ` + ownerid +
   ` and expire` + type + `current_date()`
