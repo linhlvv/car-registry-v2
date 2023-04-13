@@ -5,7 +5,7 @@ import pool from "../../configs/connectDB";
 
 let previewRegist = async (req, res) => {
     let licenseId = req.body.licenseId
-    let modDate = req.body.modifyDate
+    let centreId = req.session.userid
     
     //Kiểm tra ngày sửa chữa
     let currentDate = new Date();
@@ -33,7 +33,13 @@ let previewRegist = async (req, res) => {
     let id = await pool.query(findId)
     id = id[0][0].AUTO_INCREMENT
     
-    return res.send({id, registDate, expireDate})
+    // logic - lấy tên trung tâm đăng kiểm hiện tại
+    let getCentreName = 'select name from centre where id = ?'
+    let centreName = await pool.query(getCentreName, [centreId])
+    centreName = centreName[0][0].name
+
+
+    return res.send({id, registDate, expireDate, centreName})
     
 }
 
