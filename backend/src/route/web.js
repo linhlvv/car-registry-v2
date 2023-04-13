@@ -6,15 +6,18 @@ let router = express.Router()
 const initWebRoute = (app) => {
 
   router.get('/', homeController.homepage)
-
+                                                                                    
+                                                                                    
   router.post('/auth', homeController.authenticate);
   router.get('/logout', homeController.logout);
-
+                                                                                    
+                                                                                    
   router.post('/vehicles/all', verifyToken, homeController.vehicles)
   router.post('/vehicles/registed', verifyToken, homeController.registed)
   router.post('/vehicles/expired', verifyToken, homeController.expired)
   router.post('/vehicles/find', verifyToken, homeController.findByLicense)
-
+                                                                                    
+                                                                                    
   // logic - gửi code có thể là ssn hoặc taxnum 
   router.post('/filter/owner', verifyToken, homeController.owner)
   // logic - gửi order là asc hay desc để sort result theo brand
@@ -25,12 +28,18 @@ const initWebRoute = (app) => {
   router.post('/filter/exactBrand', verifyToken, homeController.exactBrand)
   // logic - filter theo thời gian regist hoặc expire
   router.post('/filter/time', verifyToken, homeController.time)
+  // logic - trả về tất cả các city của centre này
+  router.post('/filter/allCity', verifyToken, homeController.allCity)
+                                                                                    
+                                                                                    
   // logic - trả về lịch sử đăng kiểm của owner
   router.post('/owner/history', verifyToken, homeController.registHistory)
   // logic - trả về thông tin xe thông qua licenseId
   router.post('/vehicles/modal', verifyToken, homeController.detailModal)
   // logic - trả về thông tin chủ xe thông qua id nhận vào
   router.post('/owner/info', verifyToken, homeController.ownerInfo)
+                                                                                    
+                                                                                    
   // logic - trả về thông tin của trung tâm người dùng đang đăng nhập
   router.get('/centre-info', verifyToken, homeController.centreInfo)
   // logic - trả về data bao gồm số lượng đăng kiểm, hết hạn qua các năm các tháng
