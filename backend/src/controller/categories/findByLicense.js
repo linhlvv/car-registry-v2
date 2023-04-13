@@ -37,7 +37,7 @@ let findByLicense = async (req, res) => {
   `' group by license`
 
   const [result, fields] = await pool.query(query)
-  return res.send({Car: result})
+  return res.send({car: result})
 
 }
 
