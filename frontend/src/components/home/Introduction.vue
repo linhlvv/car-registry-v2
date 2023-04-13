@@ -1,6 +1,17 @@
 <script setup>
+import { computed } from '@vue/reactivity';
 import carImg from '../../assets/car.png';
 // #93a3e6
+
+let scrollTop = window.pageYOffset || document.documentElement.scrollTop
+
+const a = computed(() => {
+    return document.documentElement.scrollTop
+})
+
+const scrollDown = () => {
+    document.documentElement.scrollTop = 1000
+};
 </script>
 
 <template>
@@ -27,7 +38,7 @@ import carImg from '../../assets/car.png';
                 </div>
             </div>
             <div class="mt-7">
-                <button class="flex items-center gap-1 p-3 px-4 bg-[#93a3e6] rounded-md text-[#1d1d1d] font-bold text-xs">
+                <button @click="scrollDown" class="flex items-center gap-1 p-3 px-4 bg-[#93a3e6] hover:bg-[#8e9fdf] active:bg-[#97aaf7] rounded-md text-[#1d1d1d] font-bold text-xs">
                     Get started
                     <i class="fa-solid fa-arrow-right"></i>
                 </button>

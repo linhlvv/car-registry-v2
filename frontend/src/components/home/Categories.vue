@@ -3,8 +3,8 @@ import CategoryCard from './CategoryCard.vue';
 </script>
 
 <template>
-    <div class="flex items-end w-full p-5 bg-[#2acc97]/[0.08] py-20">
-        <div class="w-[45%] flex flex-col pl-32 mt-10 gap-5 max-[1000px]:pl-5 max-[539px]:hidden">
+    <div class="flex w-full p-5 bg-[#2acc97]/[0.08] py-20">
+        <div class="w-[45%] flex flex-col pl-32 mt-5 gap-5 max-[1000px]:pl-5 max-[539px]:hidden">
             <div class="text-4xl font-bold text-[#1d1d1d] text-opacity-70 w-full">
                 Categories
                 <i class="fa-solid fa-wand-magic-sparkles"></i>
@@ -18,6 +18,7 @@ import CategoryCard from './CategoryCard.vue';
                 <CategoryCard icon="fa-solid fa-car" category="Cars" link="/cars"/>
                 <CategoryCard icon="fa-solid fa-circle-plus" category="Regist" link="/registNewCar"/>
                 <CategoryCard icon="fa-solid fa-lightbulb" category="Forecast" link="/forecast"/> 
+                <CategoryCard icon="fa-solid fa-chart-simple" category="Statistics" link="/statistics"/> 
             </div>
         </div>
     </div>

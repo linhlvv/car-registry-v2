@@ -2,9 +2,7 @@
 import { ref } from 'vue';
 import RegistrationFormInput from './RegistrationFormInput.vue';
 
-const registryInfo = ref({
-    id: 201, registryDate: '28/1/2023', expiredDate: '21/4/2025', center: 'Trung tam dang kiem HP',
-});
+const props = defineProps(['registryInfo']);
 </script>
 
 <template>
@@ -12,9 +10,9 @@ const registryInfo = ref({
             <div class="w-full flex items-center text-2xl font-semibold mb-3 text-[#2acc97]">Registry Certification</div>
             <div class="flex flex-col w-full gap-6">
                 <RegistrationFormInput title="ID" input-width="w-full" v-model="registryInfo.id" :disabled="true"/>
-                <RegistrationFormInput title="Registry date" input-width="w-full" v-model="registryInfo.registryDate" :disabled="true"/>
-                <RegistrationFormInput title="Expired date" input-width="w-full" v-model="registryInfo.expiredDate" :disabled="true"/>
-                <RegistrationFormInput title="Center" input-width="w-full" v-model="registryInfo.center" :disabled="true"/>
+                <RegistrationFormInput title="Registry date" input-width="w-full" v-model="registryInfo.registDate" :disabled="true"/>
+                <RegistrationFormInput title="Expired date" input-width="w-full" v-model="registryInfo.expireDate" :disabled="true"/>
+                <RegistrationFormInput title="Center" input-width="w-full" v-model="registryInfo.centreName" :disabled="true"/>
             </div>
     </div>
 </template>

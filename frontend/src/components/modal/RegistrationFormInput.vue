@@ -1,5 +1,5 @@
 <script setup>
-defineProps(['modelValue', 'title', 'inputWidth', 'type', 'disabled']);
+defineProps(['modelValue', 'title', 'inputWidth', 'type', 'disabled', 'placeholder']);
 defineEmits(['update:modelValue']);
 </script>
 
@@ -12,6 +12,7 @@ defineEmits(['update:modelValue']);
             :type="type"
             class="p-2 font-medium border-b border-b-[#1d1d1d] border-opacity-50 text-[#1d1d1d] disabled:bg-opacity-60 text-xs w-full"
             :disabled="disabled === true"
+            :placeholder="placeholder"
         />
     </div>
 </template>
