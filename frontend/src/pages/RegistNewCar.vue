@@ -27,8 +27,8 @@ const ownerType = ref(0);
                 </div>
             </div>
             <div class="w-full flex gap-2 h-[450px]">
-                <RegistrationCarAndOwner :info="info" :regist-new-car="true"/>
-                <RegistrationCert />
+                <!-- <RegistrationCarAndOwner :info="info" :regist-new-car="true"/>
+                <RegistrationCert /> -->
             </div>
             <div class="w-full flex gap-4 justify-end">
                 <button class="bg-[#2acc97]/60 hover:bg-[#2acc97]/75 active:bg-[#2acc97]/90 text-white font-semibold text-xs p-3 px-5 rounded-[4px]">

@@ -86,6 +86,7 @@ const submitFormHandler = async () => {
     }
     console.log(res.status);
     loadingSubmit.value = false
+    window.location.reload()
 };
 
 </script>
