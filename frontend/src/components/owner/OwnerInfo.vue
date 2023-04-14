@@ -25,6 +25,7 @@ const fetchOwnerInfo = async () => {
     }
     const dataFetched = JSON.parse(await res.text())
     ownerInfo.value = dataFetched.data[0]
+    ownerInfo.value.address = ownerInfo.value.address.charAt(0).toUpperCase() + ownerInfo.value.address.slice(1)
     ownerType.value = dataFetched.type
     console.log(JSON.stringify(dataFetched));
 };

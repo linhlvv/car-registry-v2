@@ -6,8 +6,8 @@ const props = defineProps(['center']);
 </script>
 
 <template>
-    <div class="bg-white w-[30%] rounded-xl flex flex-col items-center text-[#1d1d1d] p-4 grid-1 max-[914px]:w-full">
-        <img :src="avatar" alt=""/>
+    <div class="bg-white w-full rounded-xl flex flex-col items-center text-[#1d1d1d] p-4 grid-1 max-[914px]:w-full">
+        <i class="fa-solid fa-building-user text-6xl border-[3px] border-solid text-[#2acc97] border-[#2acc97] rounded-[50%] p-6 py-7"></i>
         <div class="flex flex-col items-center justify-center gap-1">
             <h1 class="text-2xl font-semibold mt-2 text-center flex items-center justify-center">{{ center.name }}</h1>
             <h4 class="text-[#2acc97] bg-[#cdfcec]/40 text-xs font-medium rounded-xl p-1 px-4 flex items-center justify-center">Id: {{ center.id }}</h4>

@@ -64,6 +64,18 @@ const licenseSearchEntered = (content) => {
     licenseSearchContent.value = content
 };
 
+//SECTION - reload
+const reloaded = ref(false)
+const reload = () => {
+    filter.value = 'No filter'
+    city.value = 'All'
+    brand.value = 'All'
+    owner.value = ''
+    time.value = { year: 'All', quarter: 'All', month: 'All' }
+    reloaded.value = !reloaded.value
+    // console.log(reloaded.value);
+}
+
 //SECTION - filter handler
 const filter = ref('No filter');
 const city = ref('All')
@@ -115,6 +127,7 @@ const carType = ref('registed');
 // logic - bind car type (registed/expired)
 const carTypeHandler = (value) => {
     carType.value = value
+    filter.value = 'No filter'
     brand.value = 'All'
     city.value = 'All'
     owner.value = ''
@@ -214,6 +227,7 @@ const openSelectHandler = () => {
                         @prev-page="prevPage" 
                         @specified-page="specifiedPage"
                         @sendSortOrder="bindOrder"
+                        @reloadData="reload"
                         :page-num="pageNumber"
                         :total-page="totalPage"
                         :car-type="carType"
@@ -227,6 +241,8 @@ const openSelectHandler = () => {
                         :page-number="pageNumber" 
                         :car-type="carType"
                         :sort-order="order"
+                        :specific-license="licenseSearchContent"
+                        :reloaded="reloaded"
                         @openCarInfo="openCarInfo" 
                         @openCarRegistration="openCarRegistration"
                         @totalPageNum="bindTotalPage"

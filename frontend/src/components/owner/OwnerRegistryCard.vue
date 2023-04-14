@@ -1,5 +1,5 @@
 <script setup>
-const props = defineProps(['isRootRow', 'licensePlate', 'name']);
+const props = defineProps(['isRootRow', 'licensePlate', 'name', 'center', 'registDate', 'expiredDate']);
 
 </script>
 
@@ -22,14 +22,15 @@ const props = defineProps(['isRootRow', 'licensePlate', 'name']);
                 Center
             </div>
         </div>
-        <div v-else class="w-[30%] flex items-center justify-center text-center gap-3">
-            <div class="flex items-center justify-start gap-1 rounded-full text-[11px] bg-[#f5f7fb] px-3 py-1 mt-[2px] cursor-pointer duration-200 hover:bg-[#2acc97] text-[#293241] hover:text-white max-[820px]:bg-transparent max-[820px]:px-1">
-                <i class="fa-solid fa-circle-info flex items-center text-[12px]"></i>
-                <div class="max-[820px]:hidden font-bold">Detail</div>
+        <div v-else class="w-3/5 flex">
+            <div class="w-1/3 flex items-center justify-center text-xs font-semibold text-center text-[#1d1d1d]">
+                {{ registDate }}
             </div>
-            <div class="flex items-center justify-center gap-1 rounded-full text-[11px] bg-[#f5f7fb] px-3 py-1 mt-[2px] cursor-pointer duration-200 hover:bg-[#2acc97] text-[#293241] hover:text-white max-[820px]:bg-transparent max-[820px]:px-1">
-                <i class="fa-sharp fa-solid fa-registered flex items-center text-[12px]"></i>
-                <div class="max-[820px]:hidden">Regist</div>
+            <div class="w-1/3 flex items-center justify-center text-xs font-semibold text-center text-[#1d1d1d]">
+                {{ expiredDate }}
+            </div>
+            <div class="w-1/3 flex items-center justify-end text-xs font-semibold text-right text-[#1d1d1d]">
+                {{ center }}
             </div>
         </div>
     </div>

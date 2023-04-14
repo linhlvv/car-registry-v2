@@ -25,7 +25,6 @@ const confirmChange = async() => {
         document.getElementById('error').innerHTML = '<i class="fa-solid fa-xmark"></i> Wrong new password confirmation'
     } else {
         document.getElementById('error').innerHTML = null
-        posted.value = true
         loadingOn.value = true
         const res = await fetch("http://localhost:1111/change-password", {
             method: 'POST',
@@ -50,6 +49,7 @@ const confirmChange = async() => {
         const resData = JSON.parse(await res.text())
         console.log(`password management message: ${JSON.stringify(resData)}`);
         if(resData.message === 'Password changed') {
+            posted.value = true
             trigger()
         } else {
             document.getElementById('error').innerHTML = resData.message
@@ -68,6 +68,7 @@ watch(second, (newSec, oldSec) => {
   if(newSec === 3) {
     second.value = 0
     router.push('/logAndReg/login')
+    posted.value = false
     clearInterval(loadingInterval)
   }
 });

@@ -15,7 +15,9 @@ const props = defineProps([
     'owner',
     'time',
     'carType',
-    'sortOrder'
+    'sortOrder',
+    'specificLicense',
+    'reloaded'
 ])
 
 //SECTION - open car information modal
@@ -177,6 +179,34 @@ const fetchCarDataWithSpecificTime = async () => {
     loading.value = false
 }
 
+// logic - specific license
+const fetchCarByLicense = async () => {
+    loading.value = true
+    const res = await fetch(`http://localhost:1111/vehicles/find`, {
+        method: 'POST',
+        credentials: "include",
+        headers: {
+            'Content-Type': 'application/json',
+            'Authorization': `${accountStore.getToken}`
+        },
+        body: JSON.stringify(
+            {
+                license: props.specificLicense,
+                carType: props.carType,
+            }
+        ),
+    })
+    if(res.error) {
+        console.log(res.error);
+    }
+    const dataFetched = JSON.parse(await res.text())
+    console.log(`car brand: ${JSON.stringify(dataFetched)}`);
+    list.value = dataFetched.Car
+    console.log(`car brand: ${JSON.stringify(list.value)}`);
+    // totalPage.value = 1
+    loading.value = false
+}
+
 //SECTION - watchers
 // logic - page number watcher
 watch(() => props.pageNumber, async(newPageNumber, oldPageNumber) => {
@@ -249,8 +279,8 @@ watch(() => props.owner, async(newOwner, oldOwner) => {
     // console.log(props.pageNumber, newPageNumber, oldPageNumber);
     if(newOwner !== oldOwner) {
         console.log(`owner has changed to: ${props.owner}`);
-    }
-    fetchCarByOwnerCode()
+        fetchCarByOwnerCode()
+    } 
 });
 
 // logic - time watcher
@@ -265,15 +295,33 @@ watch(() => props.time, async(newTime, oldTime) => {
 watch(() => props.carType, async(newCarType, oldCarType) => {
     if(newCarType !== oldCarType) {
         console.log('car type changed');
+        fetchCarData()
     }
-    fetchCarData()
+    
 });
 
+// logic - license id watcher
+watch(() => props.specificLicense, async(newLicense, oldLicense) => {
+    if(newLicense !== oldLicense) {
+        console.log(`license: ${newLicense}`);
+        fetchCarByLicense()
+    }
+});
+
+// logic - reload watcher
+watch(() => props.reloaded, async(newReloaded, oldReloaded) => {
+    console.log(newReloaded, oldReloaded);
+    if(newReloaded !== oldReloaded) {
+        console.log(newReloaded);
+        fetchCarData()
+    }
+});
 </script>
 
 <template>
     <div class="w-full flex flex-col">
         <RootRow :carType="props.carType"/>
+        <!-- <div>{{ reloaded }}</div> -->
         <div class="flex flex-col items-center w-full" style="{overflow-wrap: 'anywhere';}">
             <div v-if="loading" class="font-bold text-base w-full text-center flex items-center justify-center h-[350px] bg-white text-[#2acc97] py-4">
                 <button type="button" class="py-4 rounded-md flex items-center text-white text-xl font-semibold" disabled>

@@ -17,6 +17,7 @@ const emit = defineEmits([
     'selectedOwnerClicked',
     'selectedBrandClicked',
     'selectedTimeClicked',
+    'reloadData',
 ]);
 
 //SECTION - Filter list
@@ -69,6 +70,8 @@ const timeDescendingClicked = () => {
     timeAscending.value = false
 }
 
+
+//SECTION - find car by license
 const licenseSearch = (content) => {
     emit('licenseSearch', content)
 };
@@ -190,6 +193,15 @@ watch(() => props.carType, (newCarType, oldCarType) => {
     }
 });
 
+//SECTION - reload data
+const reload = async () => {
+    selected.value = 'No filter'
+    brand.value = 'All'
+    city.value = 'All'
+    owner.value = ''
+    emit('reloadData')
+};
+
 </script>
 
 <template>
@@ -197,6 +209,7 @@ watch(() => props.carType, (newCarType, oldCarType) => {
         <div class="w-full flex items-center">
             <div class="flex items-center w-[77.5%] gap-3">
                 <SearchBar @search-entered="licenseSearch" width="w-[30%]" placeholder="Enter a license plate..."/>
+                <i @click="reload" class="fa-solid fa-rotate text-[#292929] p-[6px] rounded-[50%] hover:text-[#2acc97] active:bg-[#2acc97]/10 cursor-pointer"></i>
             </div>
 
             <!-- Pagination -->
