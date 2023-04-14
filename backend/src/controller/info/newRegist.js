@@ -11,6 +11,7 @@ let newRegist = async(req, res) => {
 
 
     //regist data
+    let id = req.body.id;
     let registDate = req.body.registDate
     let expireDate = req.body.expireDate
     let centreId = req.session.userid
@@ -21,8 +22,8 @@ let newRegist = async(req, res) => {
     let check = 'select * from vehicles where licenseId = ?'
     const [rows, fields] = await pool.query(check, [licenseId])
     if (rows.length > 0) {
-        let query = 'insert into registry (`id`, `date`, `expire`, `centreId`, `licenseId`) values (NULL, ?, ?, ?, ?)' 
-        await pool.query(query, [registDate, expireDate, centreId, licenseId])
+        let query = 'insert into registry (`id`, `date`, `expire`, `centreId`, `licenseId`) values (?, ?, ?, ?, ?)' 
+        await pool.query(query, [id, registDate, expireDate, centreId, licenseId])
         res.status(200).send('Regist successfully!')
     }
     else {
