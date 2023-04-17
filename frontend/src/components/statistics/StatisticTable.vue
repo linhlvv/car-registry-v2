@@ -1,10 +1,13 @@
 <script setup>
 import StatisticTableCard from './StatisticTableCard.vue';
 import SearchBar from '../UI/SearchBar.vue';
+import { useAccountStore } from '../../stores/AccountStore';
 import { ref, watch } from 'vue';
 
 const emit = defineEmits(['selectedTimeClicked'])
 const props = defineProps(['time'])
+
+const accountStore = useAccountStore()
 
 //SECTION - time handler
 const yearList = ['All', '2021', '2022', '2023']
@@ -71,6 +74,35 @@ const pageEnteredHandler = (number) => {
     }
 };
 
+const loading = ref(false)
+const registCardList = ref([])
+const fetchData = async () => {
+    loading.value = true
+    const res = await fetch(`http://localhost:1111/allRegist`, {
+        method: 'POST',
+        credentials: "include",
+        headers: {
+            'Content-Type': 'application/json',
+            'Authorization': `${accountStore.getToken}`
+        },
+        body: JSON.stringify(
+            {
+                resPerPage: 7,
+                page: pageNumber,
+            }
+        ),
+    })
+    if(res.error) {
+        console.log(res.error);
+    }
+    const dataFetched = JSON.parse(await res.text())
+    console.log(`car brand: ${JSON.stringify(dataFetched)}`);
+    // list.value = dataFetched.data
+    // totalPage.value = dataFetched.count
+    // postTotalPage()
+    loading.value = false
+};
+fetchData()
 
 </script>
 
