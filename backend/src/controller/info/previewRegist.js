@@ -29,11 +29,11 @@ let previewRegist = async (req, res) => {
         expireDate.setMonth(date.getMonth() + 6)
     }
     expireDate = expireDate.toISOString().slice(0, 10);
-    let findId = 'SELECT AUTO_INCREMENT FROM information_schema.TABLES WHERE TABLE_SCHEMA = \'car_regist\' AND TABLE_NAME = \'registry\''
+    let findId = `SELECT (MAX(id) + 1) FROM 'registry'`
     let id = await pool.query(findId)
     id = id[0][0].AUTO_INCREMENT
     
-    // logic - lấy tên trung tâm đăng kiểm hiện tại
+    // logic - lấy tên trung tâm đăng kiểm hiện tạiSELECT (MAX(id) + 1) FROM 'registry'
     let getCentreName = 'select name from centre where id = ?'
     let centreName = await pool.query(getCentreName, [centreId])
     centreName = centreName[0][0].name
