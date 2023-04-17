@@ -86,7 +86,7 @@ const initWebRoute = (app) => {
                                                                                     
                                                                                     
   // logic - trả về tất cả đăng kiểm của centre này
-  router.get('/allRegist', verifyToken, homeController.allRegist)
+  router.post('/allRegist', verifyToken, homeController.allRegist)
 
   return app.use('/', router)
 }
