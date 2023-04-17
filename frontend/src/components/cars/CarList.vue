@@ -179,6 +179,36 @@ const fetchCarDataWithSpecificTime = async () => {
     loading.value = false
 }
 
+// logic - specific city
+const fetchCarDataWithSpecificCity = async () => {
+    loading.value = true
+    const res = await fetch(`http://localhost:1111/filter/exactCity`, {
+        method: 'POST',
+        credentials: "include",
+        headers: {
+            'Content-Type': 'application/json',
+            'Authorization': `${accountStore.getToken}`
+        },
+        body: JSON.stringify(
+            {
+                resPerPage: 7,
+                page: props.pageNumber,
+                carType: props.carType,
+                city: props.city
+            }
+        ),
+    })
+    if(res.error) {
+        console.log(res.error);
+    }
+    const dataFetched = JSON.parse(await res.text())
+    console.log(`car brand: ${JSON.stringify(dataFetched)}`);
+    list.value = dataFetched.data
+    totalPage.value = dataFetched.count
+    postTotalPage()
+    loading.value = false
+}
+
 // logic - specific license
 const fetchCarByLicense = async () => {
     loading.value = true
@@ -222,6 +252,9 @@ watch(() => props.pageNumber, async(newPageNumber, oldPageNumber) => {
         if(props.filter === 'Time') {
             fetchCarDataWithSpecificTime()
         }
+        if(props.filter === 'City') {
+            fetchCarDataWithSpecificCity()
+        }
     }
 });
 
@@ -248,11 +281,16 @@ watch(() => props.city, async(newCity, oldCity) => {
     // console.log(props.pageNumber, newPageNumber, oldPageNumber);
     if(newCity !== oldCity) {
         console.log(`city has changed to: ${props.city}`);
+        if(newCity === 'All') {
+            fetchCarData()
+        } else {
+            fetchCarDataWithSpecificCity()
+        }
     }
 });
 
 
-// logic - sort order watcher
+// logic - brand sort order watcher
 watch(() => props.sortOrder, async(newOrder, oldOrder) => {
     if(newOrder !== oldOrder) {
         if(props.filter === 'Brand') {

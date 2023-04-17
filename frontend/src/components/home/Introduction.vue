@@ -15,7 +15,7 @@ const scrollDown = () => {
 </script>
 
 <template>
-    <div class="flex p-10 px-20">
+    <div class="flex p-10 px-20 mb-40">
         <div class="w-1/2 flex flex-col pr-5 max-[924px]:w-full">
             <div class="text-4xl font-bold mt-5 text-[#3f4f4a]">
                 Let's get started your <br> Car Registration with us

@@ -16,7 +16,7 @@ import CategoryCard from './CategoryCard.vue';
         <div class="w-[55%] flex justify-center items-center max-[539px]:w-full">
             <div class="w-full flex flex-wrap gap-10 pl-5 items-center">
                 <CategoryCard icon="fa-solid fa-car" category="Cars" link="/cars"/>
-                <CategoryCard icon="fa-solid fa-circle-plus" category="Regist" link="/registNewCar"/>
+                <CategoryCard icon="fa-solid fa-circle-plus" category="Regist" link="/regist-new-car"/>
                 <CategoryCard icon="fa-solid fa-lightbulb" category="Forecast" link="/forecast"/> 
                 <CategoryCard icon="fa-solid fa-chart-simple" category="Statistics" link="/statistics"/> 
             </div>

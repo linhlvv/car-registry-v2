@@ -1,7 +1,10 @@
 <script setup>
 import StatisticTableCard from './StatisticTableCard.vue';
 import SearchBar from '../UI/SearchBar.vue';
-import { ref } from 'vue';
+import { ref, watch } from 'vue';
+
+const emit = defineEmits(['selectedTimeClicked'])
+const props = defineProps(['time'])
 
 //SECTION - time handler
 const yearList = ['All', '2021', '2022', '2023']
@@ -28,9 +31,23 @@ const monthList = [
     {content: 'December', value: '12'}, 
 ];
 
-const time = ref({
-    year: 'All', quarter: 'All', month: 'All'
-});
+// logic - time ref and watcher
+
+const timeClicked = (value, type) => {
+    if(type === 'year') {
+        props.time.month = 'All'
+        props.time.quarter = 'All'
+        props.time.year = value;
+    } else if (type === 'quarter') {
+        props.time.month = 'All'
+        props.time.quarter = value
+    } else {
+        props.time.quarter = 'All'
+        props.time.month = value
+    }
+    // console.log(`time changes to ${{year: props.time.year, quarter: props.time.quarter, month: props.time.month}}`);
+    emit('selectedTimeClicked', {year: props.time.year, quarter: props.time.quarter, month: props.time.month})
+};
 
 //SECTION - page number handler
 const pageNumber = ref(1);
@@ -58,36 +75,40 @@ const pageEnteredHandler = (number) => {
 </script>
 
 <template>
-    <div class="w-4/5 flex flex-col bg-white p-4 rounded-md mt-6 gap-3">
-        <div class="w-full flex items-center justify-between">
-            <SearchBar width="w-2/5" placeholder="Enter a license ID or tax number..."/>
-            <div class="flex items-center gap-2">
-                <i class="fa-solid fa-circle-arrow-left text-[#1d1d1d] text-base cursor-pointer hover:text-[#2acc97]" @click="pageHandler('left')"></i>
-                <div class="flex items-center">
-                    <input type="number" min="1" :max="100" @keyup.enter="pageEnteredHandler($event.target.value)" :value="pageNumber" class="w-[30px] border border-solid border-[#1d1d1d]/50"/>
-                    <div>/100</div>
+    <div class="w-4/5 flex flex-col shadow-md rounded-md overflow-hidden">
+        <div class="w-full flex flex-col bg-white p-4 gap-3">
+            <div class="w-full flex items-center justify-between">
+                <SearchBar width="w-2/5" placeholder="Enter a license ID or tax number..."/>
+                <div class="flex items-center gap-2">
+                    <i class="fa-solid fa-circle-arrow-left text-[#1d1d1d] text-base cursor-pointer hover:text-[#2acc97]" @click="pageHandler('left')"></i>
+                    <div class="flex items-center">
+                        <input type="number" min="1" :max="100" @keyup.enter="pageEnteredHandler($event.target.value)" :value="pageNumber" class="w-[30px] border border-solid border-[#1d1d1d]/50"/>
+                        <div>/100</div>
+                    </div>
+                    <i class="fa-solid fa-circle-arrow-right text-[#1d1d1d] text-base cursor-pointer hover:text-[#2acc97]" @click="pageHandler('right')"></i>
                 </div>
-                <i class="fa-solid fa-circle-arrow-right text-[#1d1d1d] text-base cursor-pointer hover:text-[#2acc97]" @click="pageHandler('right')"></i>
+            </div>
+            <div class="flex items-center gap-2 w-full">
+                <select v-model="time.year" @change="timeClicked(time.year, 'year')" class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-[4px] focus:ring-[#2acc97] focus:border-[#2acc97] block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500">
+                    <option v-for="singleYear in yearList" :key="singleYear" :value="singleYear">
+                        {{ singleYear }}
+                    </option>
+                </select>
+                <select :disabled="time.year === 'All'" @change="timeClicked(time.quarter, 'quarter')" v-model="time.quarter" class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-[4px] focus:ring-[#2acc97] focus:border-[#2acc97] block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500 disabled:opacity-60">
+                    <option v-for="singleQ in quarterList" :key="singleQ.value" :value="singleQ.value">
+                        {{ singleQ.content }}
+                    </option>
+                </select>
+                <select :disabled="time.year === 'All'" @change="timeClicked(time.month, 'month')" v-model="time.month" class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-[4px] focus:ring-[#2acc97] focus:border-[#2acc97] block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500 disabled:opacity-60">
+                    <option v-for="singleMonth in monthList" :key="singleMonth.value" :value="singleMonth.value">
+                        {{ singleMonth.content }}
+                    </option>
+                </select>
             </div>
         </div>
-        <div class="flex items-center gap-2 w-full">
-            <select v-model="time.year" class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-[4px] focus:ring-[#2acc97] focus:border-[#2acc97] block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500">
-                <option v-for="singleYear in yearList" :key="singleYear" :value="singleYear">
-                    {{ singleYear }}
-                </option>
-            </select>
-            <select :disabled="time.year === 'All'" v-model="time.quarter" class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-[4px] focus:ring-[#2acc97] focus:border-[#2acc97] block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500 disabled:opacity-60">
-                <option v-for="singleQ in quarterList" :key="singleQ.value" :value="singleQ.value">
-                    {{ singleQ.content }}
-                </option>
-            </select>
-            <select :disabled="time.year === 'All'" v-model="time.month" class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-[4px] focus:ring-[#2acc97] focus:border-[#2acc97] block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500 disabled:opacity-60">
-                <option v-for="singleMonth in monthList" :key="singleMonth.value" :value="singleMonth.value">
-                    {{ singleMonth.content }}
-                </option>
-            </select>
-        </div>
-        <div>
+        <div class="w-full flex flex-col bg-[#f5f7fb]">
+            <StatisticTableCard :is-root-row="true"/>
+            <StatisticTableCard />
             <StatisticTableCard />
         </div>
     </div>

@@ -35,7 +35,7 @@ if(localStorage.getItem('token') === null) {
                 <div v-if="!isLoggedIn">
                     <router-link to="/logAndReg/login" class="text-[16px] text-slate-700 font-medium p-2 px-4 bg-white dark:text-blue-500 hover:text-[#2acc97] rounded-lg">Login</router-link>
                 </div>
-                <div v-else class="max-[732px]:hidden">
+                <div v-else>
                     <ProfileDropdown />
                 </div>
                 <div v-show="route.path !== '/'" class="min-[732px]:hidden flex items-center">
@@ -55,13 +55,13 @@ if(localStorage.getItem('token') === null) {
                             <NavbarButton icon="fa-sharp fa-solid fa-house" content="Home" link="/"/>
                         </li>
                         <li v-if="!accountStore.isAdmin">
-                            <NavbarButton :current="route.path === '/registNewCar'" icon="fa-solid fa-circle-plus" content="Regist" link="/registNewCar"/>
+                            <NavbarButton :current="route.path === '/registNewCar'" icon="fa-solid fa-circle-plus" content="Regist" link="/regist-new-car"/>
                         </li>
                         <li v-if="accountStore.isAdmin">
-                            <NavbarButton :current="route.path === '/manageDatabase'" icon="fa-sharp fa-solid fa-database" content="Manage database" link="/manageDatabase"/>
+                            <NavbarButton :current="route.path === '/manageDatabase'" icon="fa-sharp fa-solid fa-database" content="Manage database" link="/manage-database"/>
                         </li>
                         <li v-if="accountStore.isAdmin"> 
-                            <NavbarButton :current="route.path === '/accountManagement'" icon="fa-sharp fa-solid fa-users" content="Account management" link="/accountManagement"/>
+                            <NavbarButton :current="route.path === '/accountManagement'" icon="fa-sharp fa-solid fa-users" content="Account management" link="/account-management"/>
                         </li>
                         <li> 
                             <NavbarButton :current="route.path === '/cars'" icon="fa-solid fa-car" content="Cars" link="/cars"/>

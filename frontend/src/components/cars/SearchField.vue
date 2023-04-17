@@ -22,7 +22,7 @@ const emit = defineEmits([
 
 //SECTION - Filter list
 const filterList = ['No filter', 'City', 'Owner', 'Brand', 'Time']
-const cityList = ['All', 'Ho Chi Minh', 'Ha Noi', 'Bac Ninh', 'Hue']
+const cityList = ref(['All'])
 const brandList = ref(['All'])
 const yearList = ['All', '2021', '2022', '2023']
 const quarterList = [
@@ -96,6 +96,25 @@ const fetchAllAvailableBrands = async () => {
     // console.log(`all available brands: ${JSON.stringify(brandList.value)}`);
 };
 
+//SECTION - fetch all available cities
+const fetchAllAvailableCities = async () => {
+    const res = await fetch(`http://localhost:1111/filter/allCity`, {
+        method: 'POST',
+        credentials: "include",
+        headers: {
+            'Content-Type': 'application/json',
+            'Authorization': `${accountStore.getToken}`
+        },
+        body: JSON.stringify({carType: props.carType}),
+    })
+    if(res.error) {
+        console.log(res.error);
+    }
+    const dataFetched = JSON.parse(await res.text())
+    cityList.value = ['All', ...dataFetched.data]
+    // console.log(`all available citites: ${JSON.stringify(dataFetched.data)}`);
+}
+
 //SECTION - handle pagination
 // logic - pagination with previous and next button
 const pageNumber = ref(props.pageNum);
@@ -139,6 +158,9 @@ const filterClickedHandler = (value) => {
     console.log(`filter ${selected.value}`);
     if(selected.value === 'Brand') {
         fetchAllAvailableBrands()
+    }
+    if(selected.value === 'City') {
+        fetchAllAvailableCities()
     }
     emit('selectedFilterClicked', value)
 }

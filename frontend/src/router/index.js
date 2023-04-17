@@ -32,7 +32,7 @@ const router = createRouter({
           component: () => import('@/pages/Home.vue'),
         },
         {
-          path: 'accountManagement',
+          path: 'account-management',
           name: 'AccountManagement',
           component: () => import('@/pages/AccountManagement.vue'),
           meta: { transition: 'slide-fade' },
@@ -44,24 +44,13 @@ const router = createRouter({
           meta: { transition: 'scale' },
         },
         {
-          path: 'registedCars',
-          name: 'RegistedCars',
-          component: () => import('@/pages/RegistedCars.vue'),
-          meta: { transition: 'slide-fade' },
-        },
-        {
           path: 'forecast',
           name: 'Forecast',
           component: () => import('@/pages/Forecast.vue'),
           meta: { transition: 'scale' },
         },
         {
-          path: 'expiredCars',
-          name: 'ExpiredCars',
-          component: () => import('@/pages/ExpiredCars.vue'),
-        },
-        {
-          path: 'manageDatabase',
+          path: 'manage-database',
           name: 'ManageDatabase',
           component: () => import('@/pages/ManageDatabase.vue'),
         },
@@ -78,13 +67,7 @@ const router = createRouter({
           meta: { transition: 'scale' },
         },
         {
-          path: 'notRegistedCars',
-          name: 'NotRegistedCars',
-          component: () => import('@/pages/NotRegistCars.vue'),
-          meta: { transition: 'scale' },
-        },
-        {
-          path: 'registNewCar',
+          path: 'regist-new-car',
           name: 'RegistNewCar',
           component: () => import('@/pages/RegistNewCar.vue'),
         },
