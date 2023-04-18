@@ -53,6 +53,7 @@ const timeClicked = (value, type) => {
 };
 
 //SECTION - page number handler
+const totalPage = ref();
 const pageNumber = ref(1);
 const pageHandler = (direction) => {
     if(direction === 'left') {
@@ -88,7 +89,7 @@ const fetchData = async () => {
         body: JSON.stringify(
             {
                 resPerPage: 7,
-                page: pageNumber,
+                page: pageNumber.value,
             }
         ),
     })
@@ -96,13 +97,17 @@ const fetchData = async () => {
         console.log(res.error);
     }
     const dataFetched = JSON.parse(await res.text())
-    console.log(`car brand: ${JSON.stringify(dataFetched)}`);
-    // list.value = dataFetched.data
-    // totalPage.value = dataFetched.count
-    // postTotalPage()
+    // console.log(`registries: ${JSON.stringify(dataFetched)}`);
+    totalPage.value = dataFetched.count
+    registCardList.value = dataFetched.data
     loading.value = false
 };
 fetchData()
+
+//SECTION - watcher
+watch(pageNumber, (newPage, oldPage) => {
+    fetchData()
+});
 
 </script>
 
@@ -115,7 +120,7 @@ fetchData()
                     <i class="fa-solid fa-circle-arrow-left text-[#1d1d1d] text-base cursor-pointer hover:text-[#2acc97]" @click="pageHandler('left')"></i>
                     <div class="flex items-center">
                         <input type="number" min="1" :max="100" @keyup.enter="pageEnteredHandler($event.target.value)" :value="pageNumber" class="w-[30px] border border-solid border-[#1d1d1d]/50"/>
-                        <div>/100</div>
+                        <div>/{{ totalPage }}</div>
                     </div>
                     <i class="fa-solid fa-circle-arrow-right text-[#1d1d1d] text-base cursor-pointer hover:text-[#2acc97]" @click="pageHandler('right')"></i>
                 </div>
@@ -140,8 +145,9 @@ fetchData()
         </div>
         <div class="w-full flex flex-col bg-[#f5f7fb]">
             <StatisticTableCard :is-root-row="true"/>
-            <StatisticTableCard />
-            <StatisticTableCard />
+            <div v-for="card in registCardList" :key="card.licenseId">
+                <StatisticTableCard :car="card"/>
+            </div>
         </div>
     </div>
 </template>
