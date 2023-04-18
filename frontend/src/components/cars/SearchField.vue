@@ -79,7 +79,7 @@ const licenseSearch = (content) => {
 //SECTION - fetch all available brands
 const fetchAllAvailableBrands = async () => {
     // console.log(`cartype: ${props.carType}`);
-    const res = await fetch(`http://localhost:1111/filter/allBrand`, {
+    const res = await fetch(`http://localhost:1111/filter/brand/all`, {
         method: 'POST',
         credentials: "include",
         headers: {
@@ -98,7 +98,7 @@ const fetchAllAvailableBrands = async () => {
 
 //SECTION - fetch all available cities
 const fetchAllAvailableCities = async () => {
-    const res = await fetch(`http://localhost:1111/filter/allCity`, {
+    const res = await fetch(`http://localhost:1111/filter/city/all`, {
         method: 'POST',
         credentials: "include",
         headers: {

@@ -120,7 +120,7 @@ const fetchDataSortedByBrand = async () => {
 // logic - specific brand
 const fetchCarDataWithSpecificBrand = async () => {
     loading.value = true
-    const res = await fetch(`http://localhost:1111/filter/exactBrand`, {
+    const res = await fetch(`http://localhost:1111/filter/brand/exact`, {
         method: 'POST',
         credentials: "include",
         headers: {
@@ -182,7 +182,7 @@ const fetchCarDataWithSpecificTime = async () => {
 // logic - specific city
 const fetchCarDataWithSpecificCity = async () => {
     loading.value = true
-    const res = await fetch(`http://localhost:1111/filter/exactCity`, {
+    const res = await fetch(`http://localhost:1111/filter/city/exact`, {
         method: 'POST',
         credentials: "include",
         headers: {
