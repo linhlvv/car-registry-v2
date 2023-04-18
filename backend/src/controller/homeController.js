@@ -37,6 +37,7 @@ import { insertCentre } from './admin/insertCentre';
 import { removeCentre } from './admin/removeCentre'
 
 import { allRegist } from './stats/allRegist'
+import { registByTime } from './stats/registByTime'
 
 let homepage = async (req, res) => {
   console.log(req.session.id === undefined ? `Session: ` : `\x1b[4mSession\x1b[0m: `, req.session.id)
@@ -52,5 +53,6 @@ module.exports = {
   homepage, authenticate, verifyToken, logout, centreInfo, 
   vehicles, registed, expired, findByLicense, detailModal, getDataForChart,
   ownerInfo, registHistory, owner, brand, allBrand, exactBrand, time, allCity, exactCity,
-  changePassword, viewAllCentres, viewAllCars, insertCentre, removeCentre, newRegist, previewRegist, updateModify, allRegist, previewInfo
+  changePassword, viewAllCentres, viewAllCars, insertCentre, removeCentre, newRegist, previewRegist, updateModify, previewInfo,
+  allRegist, registByTime
 }

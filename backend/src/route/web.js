@@ -87,6 +87,9 @@ const initWebRoute = (app) => {
                                                                                     
   // logic - trả về tất cả đăng kiểm của centre này
   router.post('/allRegist', verifyToken, homeController.allRegist)
+                                                                                    
+  // logic - gửi year, month, quarter, để lọc đăng kiểm, carType để lọc loại xe
+  router.post('/regist/time', verifyToken, homeController.registByTime)
 
   return app.use('/', router)
 }
