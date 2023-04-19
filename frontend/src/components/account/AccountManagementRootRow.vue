@@ -4,7 +4,7 @@
             Name
         </div>
         <div class="font-semibold flex items-center gap-1 justify-center text-center w-[15%] text-opacity-70 max-[710px]:hidden">
-            Phone
+            Activation date
         </div>
         <div class="font-semibold flex items-center gap-1 text-center justify-center w-[15%] text-opacity-70 max-[770px]:hidden">
             City
