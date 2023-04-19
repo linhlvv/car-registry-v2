@@ -79,7 +79,7 @@ const loading = ref(false)
 const registCardList = ref([])
 const fetchData = async () => {
     loading.value = true
-    const res = await fetch(`http://localhost:1111/allRegist`, {
+    const res = await fetch(`http://localhost:1111/regist/all`, {
         method: 'POST',
         credentials: "include",
         headers: {

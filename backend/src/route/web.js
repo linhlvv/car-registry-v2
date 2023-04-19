@@ -25,19 +25,23 @@ const initWebRoute = (app) => {
   router.post('/filter/brand', verifyToken, homeController.brand)
                                                                                     
   // logic - trả về tất cả các brand của centre này
-  router.post('/filter/allBrand', verifyToken, homeController.allBrand)
+  router.post('/filter/brand/all', verifyToken, homeController.allBrand)
+  // task - /filter/allBrand -> /filter/brand/all
                                                                                     
   // logic - trả về tất cả xe có brand khớp với brand gửi lên
-  router.post('/filter/exactBrand', verifyToken, homeController.exactBrand)
+  router.post('/filter/brand/exact', verifyToken, homeController.exactBrand)
+  // task - /filter/exactBrand -> /filter/brand/exact
                                                                                     
   // logic - filter theo thời gian regist hoặc expire
   router.post('/filter/time', verifyToken, homeController.time)
                                                                                     
   // logic - trả về tất cả các city của centre này
-  router.post('/filter/allCity', verifyToken, homeController.allCity)
+  router.post('/filter/city/all', verifyToken, homeController.allCity)
+  // task - /filter/allCity -> /filter/city/all
                                                                                     
   // logic - trả về tất cả xe có city khớp với city gửi lên
-  router.post('/filter/exactCity', verifyToken, homeController.exactCity)
+  router.post('/filter/city/exact', verifyToken, homeController.exactCity)
+  // task - /filter/exactCity -> /filter/city/exact
                                                                                     
                                                                                     
   // logic - trả về lịch sử đăng kiểm của owner
@@ -86,7 +90,15 @@ const initWebRoute = (app) => {
                                                                                     
                                                                                     
   // logic - trả về tất cả đăng kiểm của centre này
-  router.post('/allRegist', verifyToken, homeController.allRegist)
+  router.post('/regist/all', verifyToken, homeController.allRegist)
+  // task - /allRegist -> /regist/all
+                                                                                    
+  // logic - gửi year, month, quarter, để lọc đăng kiểm, carType để lọc loại xe
+  router.post('/regist/time', verifyToken, homeController.registByTime)
+                                                                                    
+                                                                                    
+  // logic - dự đoán các xe sắp hết hạn
+  router.post('/forecast', verifyToken, homeController.forecast)
 
   return app.use('/', router)
 }

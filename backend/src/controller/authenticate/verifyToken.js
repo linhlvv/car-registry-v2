@@ -3,7 +3,6 @@ import jwt from 'jsonwebtoken';
 let verifyToken = (req, res, next) => {
   const token = req.get('Authorization') || req.session.token;
   if (!token) {
-    console.log('ko');
     return res.sendStatus(401)
   }
   try {
