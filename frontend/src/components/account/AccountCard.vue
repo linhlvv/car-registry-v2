@@ -1,4 +1,5 @@
 <script setup>
+import ModificationModal from './ModificationModal.vue';
 const props = defineProps(['item']);
 </script>
 
@@ -13,13 +14,13 @@ const props = defineProps(['item']);
             <i class="fa-sharp fa-solid fa-xmark p-2 px-[10px] text-[12px] cursor-pointer text-white border-none rounded-[50%] bg-[#293241] hover:bg-[#e7e7e7] hover:text-[#293241]"></i>
         </div> -->
         <div class="font-bold text-[#4f555a] flex items-center ml-5 w-[25%] max-[770px]:w-[34.5%] max-[710px]:w-[40%] max-[600px]:w-4/5">
-            Trung Tâm Đăng Kiểm Trần Vỹ
+            {{ item.name }}
         </div>
         <div class="font-bold text-[#4f555a] break-all flex items-center justify-center text-center w-[15%] max-[710px]:hidden">
-            0981054950
+            {{ item.activation }}
         </div>
         <div class="font-bold text-[#4f555a] flex items-center text-center justify-center w-[15%] max-[770px]:hidden">
-            Ho Chi Minh
+            {{ item.city }}
         </div>
         <div class="font-bold text-[#4f555a] flex items-center text-right justify-end w-[30%] max-[770px]:w-[35.5%] max-[710px]:w-[40%] max-[600px]:hidden">
             tranhaphuong081003@gmail.com

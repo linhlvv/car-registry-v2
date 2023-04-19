@@ -3,8 +3,8 @@ import Introduction from "../components/home/Introduction.vue";
 import Categories from "../components/home/Categories.vue";
 import AdminCate from "../components/home/AdminCate.vue";
 import { useAccountStore } from "../stores/AccountStore";
-import 'vue3-carousel/dist/carousel.css'
-import { Carousel, Slide, Pagination, Navigation } from 'vue3-carousel'
+// import 'vue3-carousel/dist/carousel.css'
+// import { Carousel, Slide, Pagination, Navigation } from 'vue3-carousel'
 
 const accountStore = useAccountStore();
 
