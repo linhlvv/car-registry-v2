@@ -8,23 +8,20 @@ let registByTime = async (req, res) => {
   if (page === undefined)
     page = 1
 
-  let carType = req.body.carType
   let year = parseInt(req.body.year)
   let month = parseInt(req.body.month)
   let quarter = parseInt(req.body.quarter)
-  
-  let filter = carType === 'registed' ? 'date' : 'expire'
 
   let match = ''
   if(req.body.year !== "All") {
-    match += `\nand year(` + filter + `) = ` + year
+    match += `\nand year(date) = ` + year
   }
   if(req.body.month !== "All") {
-    match += `\nand month(` + filter + `) = ` + month
+    match += `\nand month(date) = ` + month
   }
   else if(req.body.quarter !== "All") {
-    match += `\nand month(` + filter + `) > ` + (quarter - 1) * 3 +
-            `\nand month(` + filter + `) <= ` + quarter * 3 
+    match += `\nand month(date) > ` + (quarter - 1) * 3 +
+            `\nand month(date) <= ` + quarter * 3 
   }
 
   let count = `
@@ -52,7 +49,7 @@ let registByTime = async (req, res) => {
   join company c 
     on v.ownerId = c.id
   where centreId = ` + req.session.userid + match + ` 
-  order by ` + filter + ` desc
+  order by date asc
     limit ? offset ?`
   
   // bug - đã gọi được api kết quả trả về chính xác
