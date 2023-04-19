@@ -112,7 +112,7 @@ watch(pageNumber, (newPage, oldPage) => {
 </script>
 
 <template>
-    <div class="w-4/5 flex flex-col shadow-md rounded-md overflow-hidden">
+    <div class="w-4/5 flex flex-col shadow-md rounded-xl overflow-hidden">
         <div class="w-full flex flex-col bg-white p-4 gap-3">
             <div class="w-full flex items-center justify-between">
                 <SearchBar width="w-2/5" placeholder="Enter a license ID or tax number..."/>
