@@ -55,13 +55,13 @@ if(localStorage.getItem('token') === null) {
                             <NavbarButton icon="fa-sharp fa-solid fa-house" content="Home" link="/"/>
                         </li>
                         <li v-if="!accountStore.isAdmin">
-                            <NavbarButton :current="route.path === '/registNewCar'" icon="fa-solid fa-circle-plus" content="Regist" link="/regist-new-car"/>
+                            <NavbarButton :current="route.path === '/regist-new-car'" icon="fa-solid fa-circle-plus" content="Regist" link="/regist-new-car"/>
                         </li>
                         <li v-if="accountStore.isAdmin">
-                            <NavbarButton :current="route.path === '/manageDatabase'" icon="fa-sharp fa-solid fa-database" content="Manage database" link="/manage-database"/>
+                            <NavbarButton :current="route.path === '/manage-database'" icon="fa-sharp fa-solid fa-database" content="Manage database" link="/manage-database"/>
                         </li>
                         <li v-if="accountStore.isAdmin"> 
-                            <NavbarButton :current="route.path === '/accountManagement'" icon="fa-sharp fa-solid fa-users" content="Account management" link="/account-management"/>
+                            <NavbarButton :current="route.path === '/account-management'" icon="fa-sharp fa-solid fa-users" content="Account management" link="/account-management"/>
                         </li>
                         <li> 
                             <NavbarButton :current="route.path === '/cars'" icon="fa-solid fa-car" content="Cars" link="/cars"/>
