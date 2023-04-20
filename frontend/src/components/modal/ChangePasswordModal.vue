@@ -14,13 +14,14 @@ const password = ref({
     newPassConfirmation: '',
 });
 
+//SECTION - change password
 let loadingInterval;
 const second = ref(0)
 const posted = ref(false)
 const loadingOn = ref(false)
 
+// logic - put to be
 const confirmChange = async() => {
-    
     if(password.value.newPass !== password.value.newPassConfirmation) {
         document.getElementById('error').innerHTML = '<i class="fa-solid fa-xmark"></i> Wrong new password confirmation'
     } else {
@@ -57,22 +58,25 @@ const confirmChange = async() => {
     }
 };
 
+// logic - trigger interval
 const trigger = () => {
-  second.value = 0
-  loadingInterval = setInterval(() => {
-    second.value += 1
-  }, 1000);
+    second.value = 0
+    loadingInterval = setInterval(() => {
+        second.value += 1
+    }, 1000);
 };
 
+// logic - second watcher
 watch(second, (newSec, oldSec) => {
-  if(newSec === 3) {
-    second.value = 0
-    router.push('/logAndReg/login')
-    posted.value = false
-    clearInterval(loadingInterval)
-  }
+    if(newSec === 3) {
+        second.value = 0
+        router.push('/log-and-reg/login')
+        posted.value = false
+        clearInterval(loadingInterval)
+    }
 });
 
+//SECTION - password length checker
 const passLengthType = ref('')
 const lengthLineColor = ref('bg-[#fa7763]')
 const lengthTextColor = ref('text-[#fa7763]')
@@ -99,6 +103,7 @@ watch(() => password.value.newPass, (newPassword, oldPassword) => {
     }
 })
 
+//SECTION - modal handler
 const closeModal = () => {
     emits('closeModal')
 };
