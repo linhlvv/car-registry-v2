@@ -7,11 +7,16 @@ const time = ref({
     year: 'All', quarter: 'All', month: 'All'
 });
 
+const handleTimeChange = (timeValue) => {
+    time.value = timeValue
+};
+
 </script>
 
 <template>
     <div class="w-full flex items-center flex-col gap-5 py-5">
-        <StatisticTable :time="time"/>
+        <div>{{ time }}</div>
+        <StatisticTable :time="time" @selected-time-clicked="handleTimeChange"/>
         <div class="w-full flex justify-center" v-if="time.year !== 'All'">
             <StatisticChart :year="parseInt(time.year)"/>
         </div>

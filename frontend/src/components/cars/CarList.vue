@@ -230,9 +230,9 @@ const fetchCarByLicense = async () => {
         console.log(res.error);
     }
     const dataFetched = JSON.parse(await res.text())
-    console.log(`car brand: ${JSON.stringify(dataFetched)}`);
-    list.value = dataFetched.Car
-    console.log(`car brand: ${JSON.stringify(list.value)}`);
+    console.log(`car license: ${JSON.stringify(dataFetched)}`);
+    list.value = dataFetched.car
+    console.log(`car license: ${JSON.stringify(list.value)}`);
     // totalPage.value = 1
     loading.value = false
 }

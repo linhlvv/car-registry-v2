@@ -9,6 +9,30 @@ const props = defineProps(['time'])
 
 const accountStore = useAccountStore()
 
+
+//SECTION - page number handler
+const totalPage = ref();
+const pageNumber = ref(1);
+const pageHandler = (direction) => {
+    if(direction === 'left') {
+        if (pageNumber.value > 1) {
+            pageNumber.value -= +1;
+            emit('prevPage');
+        }
+    } else {
+        if (pageNumber.value < 100) {
+            pageNumber.value += +1;
+            emit('nextPage');
+        }
+    }
+};
+
+const pageEnteredHandler = (number) => {
+    if(1 <= number && number <= 100) {
+        pageNumber.value = +number;
+    }
+};
+
 //SECTION - time handler
 const yearList = ['All', '2021', '2022', '2023']
 const quarterList = [
@@ -49,30 +73,8 @@ const timeClicked = (value, type) => {
         props.time.month = value
     }
     // console.log(`time changes to ${{year: props.time.year, quarter: props.time.quarter, month: props.time.month}}`);
+    pageNumber.value = 1
     emit('selectedTimeClicked', {year: props.time.year, quarter: props.time.quarter, month: props.time.month})
-};
-
-//SECTION - page number handler
-const totalPage = ref();
-const pageNumber = ref(1);
-const pageHandler = (direction) => {
-    if(direction === 'left') {
-        if (pageNumber.value > 1) {
-            pageNumber.value -= +1;
-            emit('prevPage');
-        }
-    } else {
-        if (pageNumber.value < 100) {
-            pageNumber.value += +1;
-            emit('nextPage');
-        }
-    }
-};
-
-const pageEnteredHandler = (number) => {
-    if(1 <= number && number <= 100) {
-        pageNumber.value = +number;
-    }
 };
 
 const loading = ref(false)
@@ -102,11 +104,49 @@ const fetchData = async () => {
     registCardList.value = dataFetched.data
     loading.value = false
 };
-fetchData()
+// fetchData()
+
+const fetchDataWithSpecificTime = async () => {
+    loading.value = true
+    const res = await fetch(`http://localhost:1111/regist/time`, {
+        method: 'POST',
+        credentials: "include",
+        headers: {
+            'Content-Type': 'application/json',
+            'Authorization': `${accountStore.getToken}`
+        },
+        body: JSON.stringify(
+            {
+                resPerPage: 7,
+                page: pageNumber.value,
+                year: props.time.year,
+                quarter: props.time.quarter,
+                month: props.time.month
+            }
+        ),
+    })
+    if(res.error) {
+        console.log(res.error);
+    }
+    const dataFetched = JSON.parse(await res.text())
+    // console.log(`registries: ${JSON.stringify(dataFetched)}`);
+    totalPage.value = dataFetched.count
+    registCardList.value = dataFetched.data
+    loading.value = false
+}
 
 //SECTION - watcher
 watch(pageNumber, (newPage, oldPage) => {
-    fetchData()
+    if(props.time.year === 'All') {
+        fetchData()
+    } else {
+        fetchDataWithSpecificTime()
+    }
+    
+}, { immediate: true });
+
+watch(() => props.time, async (newTime, oldTime) => {
+    fetchDataWithSpecificTime()
 });
 
 </script>
@@ -119,8 +159,8 @@ watch(pageNumber, (newPage, oldPage) => {
                 <div class="flex items-center gap-2">
                     <i class="fa-solid fa-circle-arrow-left text-[#1d1d1d] text-base cursor-pointer hover:text-[#2acc97]" @click="pageHandler('left')"></i>
                     <div class="flex items-center">
-                        <input type="number" min="1" :max="100" @keyup.enter="pageEnteredHandler($event.target.value)" :value="pageNumber" class="w-[30px] border border-solid border-[#1d1d1d]/50"/>
-                        <div>/{{ totalPage }}</div>
+                        <input type="number" min="1" :max="100" @keyup.enter="pageEnteredHandler($event.target.value)" :value="pageNumber" class="w-[30px] border border-solid border-[#1d1d1d]/50 text-[14px] text-[#1d1d1d] font-semibold text-opacity-80"/>
+                        <div class="text-[14px] text-[#1d1d1d] font-semibold text-opacity-80">/{{ totalPage }}</div>
                     </div>
                     <i class="fa-solid fa-circle-arrow-right text-[#1d1d1d] text-base cursor-pointer hover:text-[#2acc97]" @click="pageHandler('right')"></i>
                 </div>
