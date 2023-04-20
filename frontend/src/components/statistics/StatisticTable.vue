@@ -65,6 +65,7 @@ const timeClicked = (value, type) => {
         props.time.month = 'All'
         props.time.quarter = 'All'
         props.time.year = value;
+        document.documentElement.scrollTop = screen.height/5
     } else if (type === 'quarter') {
         props.time.month = 'All'
         props.time.quarter = value
@@ -149,14 +150,26 @@ watch(() => props.time, async (newTime, oldTime) => {
     fetchDataWithSpecificTime()
 });
 
+const scrollToChart = () => {
+    document.documentElement.scrollTop = screen.height
+};
+
 </script>
 
 <template>
     <div class="w-4/5 flex flex-col shadow-md rounded-xl overflow-hidden">
         <div class="w-full flex flex-col bg-white p-4 gap-3">
             <div class="w-full flex items-center justify-between">
-                <SearchBar width="w-2/5" placeholder="Enter a license ID or tax number..."/>
-                <div class="flex items-center gap-2">
+                <div class="w-3/4 flex items-center gap-2">
+                    <SearchBar width="w-1/2" placeholder="Enter a license ID or tax number..."/>
+                    <button v-if="time.year !== 'All'" @click="scrollToChart" class="text-[12px] text-white flex items-center gap-1 font-semibold bg-[#2acc97]/90 active:bg-[#2acc97] p-2 rounded-md">
+                        View chart 
+                        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" fill="currentColor" class="w-5 h-5">
+                            <path fill-rule="evenodd" d="M4.25 2A2.25 2.25 0 002 4.25v11.5A2.25 2.25 0 004.25 18h11.5A2.25 2.25 0 0018 15.75V4.25A2.25 2.25 0 0015.75 2H4.25zM15 5.75a.75.75 0 00-1.5 0v8.5a.75.75 0 001.5 0v-8.5zm-8.5 6a.75.75 0 00-1.5 0v2.5a.75.75 0 001.5 0v-2.5zM8.584 9a.75.75 0 01.75.75v4.5a.75.75 0 01-1.5 0v-4.5a.75.75 0 01.75-.75zm3.58-1.25a.75.75 0 00-1.5 0v6.5a.75.75 0 001.5 0v-6.5z" clip-rule="evenodd" />
+                        </svg>
+                    </button>
+                </div>
+                <div class="flex items-center gap-2 w-fit">
                     <i class="fa-solid fa-circle-arrow-left text-[#1d1d1d] text-base cursor-pointer hover:text-[#2acc97]" @click="pageHandler('left')"></i>
                     <div class="flex items-center">
                         <input type="number" min="1" :max="100" @keyup.enter="pageEnteredHandler($event.target.value)" :value="pageNumber" class="w-[30px] border border-solid border-[#1d1d1d]/50 text-[14px] text-[#1d1d1d] font-semibold text-opacity-80"/>
