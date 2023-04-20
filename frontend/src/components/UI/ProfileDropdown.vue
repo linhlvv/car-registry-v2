@@ -44,7 +44,7 @@ const passwordManagementModalHandler = () => {
                         </div>
                     </div>
                     <div @click="dropdownHandler">
-                        <router-link to="/logAndReg/login" class="flex gap-2 items-center px-4 py-2 text-[#1d1d1d] font-medium hover:bg-gray-100 dark:hover:bg-gray-600 dark:hover:text-white">
+                        <router-link to="/log-and-reg/login" class="flex gap-2 items-center px-4 py-2 text-[#1d1d1d] font-medium hover:bg-gray-100 dark:hover:bg-gray-600 dark:hover:text-white">
                             <i class="fa-sharp fa-solid fa-right-from-bracket"></i>
                             Sign out
                         </router-link>

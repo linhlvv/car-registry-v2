@@ -4,7 +4,7 @@ const router = createRouter({
   history: createWebHistory(import.meta.env.BASE_URL),
   routes: [
     {
-      path: '/logAndReg',
+      path: '/log-and-reg',
       name: 'LoginAndRegister',
       components: {
         default: () => import('@/pages/Auth.vue'),
