@@ -12,8 +12,7 @@ let insertCentre = async (req, res) => {
     let city = req.body.city;
     let district = req.body.district;
     let email = req.body.email;
-    let password = req.body.password;
-    let repassword = req.body.repassword;
+    let password = crypto.createHash('sha256').update("z").digest('hex');
     
     let type = req.body.type;
     
@@ -23,11 +22,6 @@ let insertCentre = async (req, res) => {
     if (rows.length > 0) {
         return res.status(400).send({message: 'Email already exists'})
     }
-
-    //Kiểm tra mật khẩu và mật khẩu được nhập lại
-    if (password !== repassword) {
-        return res.status(400).send({message: 'Password does not match'})
-    }
     else {
         let insertAcc = 'insert into account (email, password, type) values (?, ?, ?)'
         let insertCen = 'insert into centre (name, city, district, activation) values (?, ?, ?, CURRENT_DATE())'
@@ -36,6 +30,8 @@ let insertCentre = async (req, res) => {
         await pool.query(insertAcc, [email, password, type])
         return res.status(200).send({message: 'Account created'})
     }
+    
+    
 
 }
 
