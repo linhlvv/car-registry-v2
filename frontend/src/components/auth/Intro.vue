@@ -17,7 +17,7 @@
                         <div class="w-[16%] flex justify-end mr-2">
                             <i class="fa-solid fa-envelope"></i>
                         </div>
-                        <div class="text-xs font-bold w-[84%]">quangtuanlinh@gmail.com</div>
+                        <div class="text-xs font-bold w-[84%] break-all">quangtuanlinh@gmail.com</div>
                     </div>
                     <div class="flex items-center w-full">
                         <div class="w-[16%] flex justify-end mr-[9px]">

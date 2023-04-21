@@ -4,7 +4,7 @@ const props = defineProps(['icon', 'link', 'content', 'current']);
 </script>
 
 <template>
-    <router-link :to="link" :class="{underlined: current}" class= "text-[#293241] border-2 border-solid border-transparent h-full text-center dark:text-white duration-300 hover:text-base hover:bg-[#2acc97] hover:text-white p-4 flex items-center gap-1">
+    <router-link :to="link" :class="{underlined: current}" class= "text-[#293241] border-2 border-solid border-transparent h-full text-center dark:text-white duration-300 hover:text-base hover:bg-[#2acc97] hover:text-white px-4 py-3 flex items-center gap-1">
         <i :class="icon"></i>
         {{ content }}
     </router-link>

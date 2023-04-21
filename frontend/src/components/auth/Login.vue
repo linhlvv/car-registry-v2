@@ -7,6 +7,8 @@ import { useRouter } from 'vue-router';
 import { ref } from 'vue';
 
 localStorage.removeItem('token')
+localStorage.removeItem('id')
+localStorage.removeItem('userType')
 const logout = fetch("http://localhost:1111/logout", {
     credentials: "include",
 })
@@ -31,7 +33,10 @@ const loginHandler = async() => {
     if(res.error) {
         console.log(res.error);
     }
-    // console.log(`${res}`);
+    if(res.status === 400) {
+        document.getElementById('loginFailedMessage').innerHTML = '<i class="fa-solid fa-ban"></i> Wrong email or password'
+        return
+    }
     const data = JSON.parse(await res.text())
     // console.log(`account data login: ${JSON.stringify(data)}`);
     console.log(`authToken login: ${JSON.stringify(data)}`);
@@ -57,6 +62,7 @@ const loginHandler = async() => {
                     <div class="text-[10px] font-bold text-[#1d1d1d] text-opacity-90">Password</div>
                     <Input placeholder="Password" type="password" v-model="accountInfo.password"/>
                 </div>
+                <div id="loginFailedMessage" class="w-full text-red-400 text-sm font-semibold"></div>
                 <!-- <div>{{ email }}</div> -->
                 <Button @clicked="loginHandler" icon="fa-sharp fa-solid fa-right-to-bracket">
                     <template #content>Login</template>

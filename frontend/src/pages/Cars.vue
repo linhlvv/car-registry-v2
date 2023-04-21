@@ -1,41 +1,10 @@
 <script setup>
 import CarInfoModal from '../components/modal/CarInfoModal.vue';
 import RegistrationFormModal from '../components/modal/RegistrationFormModal.vue';
-import RootRow from '../components/cars/RootRow.vue';
 import CarList from '../components/cars/CarList.vue';
 import SearchField from '../components/cars/SearchField.vue';
-import { ref } from 'vue';
-
-const totalPage = ref()
-const bindTotalPage = (total) => {
-    console.log(total);
-    totalPage.value = total
-    console.log(totalPage.value);
-}
-bindTotalPage()
-
-//SECTION - car info modal handler
-const carDetailModal = ref(false);
-const carInfoLicense = ref('')
-const openCarInfo = (license) => {
-    carInfoLicense.value = license
-    console.log(`license: ${license}`);
-    carDetailModal.value = true
-};
-
-//SECTION - car reg form modal handler
-const registrationModal = ref(false);
-const carRegistLicense = ref('')
-const openCarRegistration = (license) => {
-    carRegistLicense.value = license
-    registrationModal.value = true
-};
-
-//SECTION - modal turn off
-const turnOffModal = () => {
-    carDetailModal.value = false
-    registrationModal.value = false
-};
+import BarChart from '../components/cars/BarChart.vue'
+import { reactive, ref } from 'vue';
 
 //SECTION - page handler
 const pageNumber = ref(1);
@@ -50,48 +19,125 @@ const specifiedPage = (number) => {
     pageNumber.value = +number
 };
 
+//SECTION - bind total page number
+const totalPage = ref()
+const bindTotalPage = (total) => {
+    totalPage.value = total
+}
+bindTotalPage()
+
+//SECTION - bind sort order
+const order = ref('asc')
+const bindOrder = (givenOrder) => {
+    if(order.value !== givenOrder) {
+        order.value = givenOrder
+        pageNumber.value = 1
+    }
+}
+
+//SECTION - car info modal handler
+const carDetailModal = ref(false);
+const carInfoLicense = ref('')
+const openCarInfo = (license) => {
+    carInfoLicense.value = license
+    console.log(`license: ${license}`);
+    carDetailModal.value = true
+};
+
+//SECTION - car regist form modal handler
+const registrationModal = ref(false);
+const carRegistLicense = ref('')
+const openCarRegistration = (license) => {
+    carRegistLicense.value = license
+    registrationModal.value = true
+};
+
+//SECTION - modal turn off
+const turnOffModal = () => {
+    carDetailModal.value = false
+    registrationModal.value = false
+};
+
 //SECTION - license search
 const licenseSearchContent = ref('');
 const licenseSearchEntered = (content) => {
     licenseSearchContent.value = content
 };
 
+//SECTION - reload
+const reloaded = ref(false)
+const reload = () => {
+    filter.value = 'No filter'
+    city.value = 'All'
+    brand.value = 'All'
+    owner.value = ''
+    time.value = { year: 'All', quarter: 'All', month: 'All' }
+    reloaded.value = !reloaded.value
+    // console.log(reloaded.value);
+}
+
 //SECTION - filter handler
-const filter = ref('');
-const city = ref('')
-const brand = ref('')
+const filter = ref('No filter');
+const city = ref('All')
+const brand = ref('All')
 const owner = ref('')
-const time = ref ({
-    year: '', quarter: '', month: ''
+const time = ref({
+    year: 'All', quarter: 'All', month: 'All'
 })
+
+// logic - general filter handler
 const filterSelected = (value) => {
     filter.value = value
+    if(filter.value !== 'Owner') {
+        pageNumber.value = 1
+    }
     console.log(`filter value: ${filter.value}`);
 };
+
+// logic - city filter handler
 const citySelected = (value) => {
     city.value = value
     console.log(`city value: ${city.value}`);
 }
+
+// logic - owner filter handler
 const ownerEntered = (value) => {
     owner.value = value
+    pageNumber.value = 1
     console.log(`owner value: ${owner.value}`);
 }
+
+// logic - brand filter handler
 const brandSelected = (value) => {
     brand.value = value
+    pageNumber.value = 1
     console.log(`brand value: ${brand.value}`);
 }
+
+// logic - time filter handler
 const timeSelected = (value) => {
     time.value = value
-    console.log(`time value: ${time.value.year} ${time.value.quarter} ${time.value.month}`);
+    pageNumber.value = 1
+    console.log(`time value: ${JSON.stringify(time.value)}`);
 };
 
 //SECTION - car type handler
 const carType = ref('registed');
+
+// logic - bind car type (registed/expired)
 const carTypeHandler = (value) => {
     carType.value = value
+    filter.value = 'No filter'
+    brand.value = 'All'
+    city.value = 'All'
+    owner.value = ''
+    time.value = {
+        year: 'All', quarter: 'All', month: 'All'
+    }
     pageNumber.value = 1
 };
 
+// logic - check whether the car type value matches the button value or not
 const carTypeMatched = (value) => {
     if(carType.value === value) {
         return true
@@ -100,6 +146,7 @@ const carTypeMatched = (value) => {
     }
 };
 
+//SECTION - small selection handler with small screen with
 const selectionOpened = ref(false)
 const openSelectHandler = () => {
     selectionOpened.value = !selectionOpened.value
@@ -121,6 +168,10 @@ const openSelectHandler = () => {
         <div class="my-6">
             <div class="flex items-center flex-col gap-5 justify-center">
 
+                <div class="">
+
+                </div>
+
                 <!-- default car type filter -->
                 <div class="flex custom-shadow w-[70vw] rounded-2xl overflow-hidden bg-white max-[535px]:hidden">
                     
@@ -135,7 +186,7 @@ const openSelectHandler = () => {
                     <div 
                         @click="carTypeHandler('expired')"
                         class="w-1/2 text-base font-medium gap-1 flex items-center justify-center text-center duration-200 cursor-pointer p-2 py-4 max-[997px]:text-sm max-[738px]:text-xs max-[625px]:text-[10px]"
-                        :class="carTypeMatched('expired') ? 'bg-[#2acc97] text-white' : 'hover:text-[#2acc97]'"
+                        :class="carTypeMatched('expired') ? 'bg-[#93a3e6] text-white' : 'hover:text-[#93a3e6]'"
                     >
                         <i class="fa-solid fa-car-burst"></i>
                         <div>Expired cars</div>
@@ -175,8 +226,11 @@ const openSelectHandler = () => {
                         @next-page="nextPage" 
                         @prev-page="prevPage" 
                         @specified-page="specifiedPage"
+                        @sendSortOrder="bindOrder"
+                        @reloadData="reload"
                         :page-num="pageNumber"
                         :total-page="totalPage"
+                        :car-type="carType"
                     />
                     <CarList 
                         :filter="filter" 
@@ -186,10 +240,17 @@ const openSelectHandler = () => {
                         :time="time"
                         :page-number="pageNumber" 
                         :car-type="carType"
+                        :sort-order="order"
+                        :specific-license="licenseSearchContent"
+                        :reloaded="reloaded"
                         @openCarInfo="openCarInfo" 
                         @openCarRegistration="openCarRegistration"
                         @totalPageNum="bindTotalPage"
                     />
+                </div>
+                <div v-if="time.year !== 'All'" class="w-[80vw] flex flex-col items-center bg-white rounded-xl custom-shadow">
+                    <div class="py-2 font-semibold text-xl text-[#1f1f1f] text-opacity-70">Statistical Chart</div>
+                    <BarChart :car-type="carType" :year="parseInt(time.year)"/>
                 </div>
             </div>
         </div>

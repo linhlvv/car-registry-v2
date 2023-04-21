@@ -18,7 +18,6 @@ const passwordManagementModalHandler = () => {
     } else {
         passwordManagementModalIsOn.value = true
     }
-    console.log(passwordManagementModalIsOn.value);
 };
 
 </script>
@@ -30,12 +29,12 @@ const passwordManagementModalHandler = () => {
             <ChangePasswordModal @close-modal="passwordManagementModalHandler" />
         </div>
         <Transition name="bounce">
-            <div v-if="!dropdownHidden" id="dropdown" class="z-10 bg-white divide-y divide-gray-100 rounded-lg shadow w-44 dark:bg-gray-700 absolute right-2">
+            <div v-if="!dropdownHidden" id="dropdown" class="bg-white divide-y z-50 divide-gray-100 rounded-lg shadow w-44 dark:bg-gray-700 absolute right-2">
                 <div class="py-2 text-sm text-gray-700 dark:text-gray-200" aria-labelledby="dropdownDefaultButton">
                     <div @click="dropdownHandler"> 
                         <router-link :to="`/center/${accountStore.ID}`" class="flex gap-2 items-center px-4 py-2 text-[#1d1d1d] font-medium hover:bg-gray-100 dark:hover:bg-gray-600 dark:hover:text-white">
                             <i class="fa-sharp fa-solid fa-user"></i>
-                            Profile
+                            Profile 
                         </router-link>
                     </div>
                     <div @click="dropdownHandler">
@@ -45,7 +44,7 @@ const passwordManagementModalHandler = () => {
                         </div>
                     </div>
                     <div @click="dropdownHandler">
-                        <router-link to="/logAndReg/login" class="flex gap-2 items-center px-4 py-2 text-[#1d1d1d] font-medium hover:bg-gray-100 dark:hover:bg-gray-600 dark:hover:text-white">
+                        <router-link to="/log-and-reg/login" class="flex gap-2 items-center px-4 py-2 text-[#1d1d1d] font-medium hover:bg-gray-100 dark:hover:bg-gray-600 dark:hover:text-white">
                             <i class="fa-sharp fa-solid fa-right-from-bracket"></i>
                             Sign out
                         </router-link>

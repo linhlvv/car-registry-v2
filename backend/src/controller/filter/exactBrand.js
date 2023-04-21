@@ -14,7 +14,7 @@ let exactBrand = async (req, res) => {
   let type = carType === 'registed' ? ' >= ' : ' < '
   
   let count = `
-  select count(*) from registry re
+  select count(*) as total from registry re
 join vehicles v
 on re.licenseId = v.licenseId
   where (brand, re.licenseId, expire) in
@@ -28,9 +28,12 @@ on re.licenseId = v.licenseId
   and brand = ?`
   const [countRows, countFields] = await pool.query(count, [req.session.userid, brand])
   
+  let queryType = carType === 'registed' 
+                              ? 're.date as registryDate'
+                              : 'timestampdiff(month, re.date, re.expire) as duration'
 
   let query = `
-  select re.licenseId as license, v.brand, v.model, v.version, re.date as registryDate, re.expire, p.name
+  select re.licenseId as license, v.brand, v.model, v.version, ` + queryType + `, re.expire, p.name
     from registry re
   join vehicles v 
     on v.licenseId = re.licenseId
@@ -48,7 +51,7 @@ on re.licenseId = v.licenseId
   and expire` + type + `current_date()
   and brand = "` + brand + `"
           union all 
-  select re.licenseId as license, v.brand, v.model, v.version, re.date as registryDate, re.expire, c.name
+  select re.licenseId as license, v.brand, v.model, v.version, ` + queryType + `, re.expire, c.name
     from registry re
   join vehicles v 
     on v.licenseId = re.licenseId

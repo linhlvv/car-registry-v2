@@ -9,21 +9,24 @@ let time = async (req, res) => {
     page = 1
 
   let carType = req.body.carType
-  let year = req.body.year
-  let month = req.body.month
-  let quarter = req.body.quarter
+  let year = parseInt(req.body.year)
+  let month = parseInt(req.body.month)
+  let quarter = parseInt(req.body.quarter)
   
   let type = carType === 'registed' ? ' >= ' : ' < '
-  
+  let sort = carType === 'registed' ? 'registryDate' : 'expire'
+  let filterType = carType === 'registed' ? 're.date' : 're.expire'
+
   let match = ''
-  if(month !== undefined) {
-    match = `\nand month(re.date) = ` + month + 
-                `\nand year(re.date) = ` + year
+  if(req.body.month !== "All") {
+    match = `\nand month(` + filterType + `) = ` + month
   }
-  else if(quarter !== undefined) {
-    match = `\nand month(re.date) > ` + (quarter - 1) * 3 +
-            `\nand month(re.date) <= ` + quarter * 3 +
-                `\nand year(re.date) = ` + year
+  else if(req.body.quarter !== "All") {
+    match = `\nand month(` + filterType + `) > ` + (quarter - 1) * 3 +
+            `\nand month(` + filterType + `) <= ` + quarter * 3 
+  }
+  if(req.body.year !== "All") {
+    match += `\nand year(` + filterType + `) = ` + year
   }
 
   let count = `
@@ -42,8 +45,12 @@ let time = async (req, res) => {
   + match
   const [countRows, countFields] = await pool.query(count, [req.session.userid])
   
+  let queryType = carType === 'registed' 
+                              ? 're.date as registryDate'
+                              : 'timestampdiff(month, re.date, re.expire) as duration'
+
   let query = `
-  select re.licenseId as license, v.brand, v.model, v.version, re.date as registryDate, re.expire, p.name
+  select re.licenseId as license, v.brand, v.model, v.version, ` + queryType + `, re.expire, p.name
     from registry re
   join vehicles v 
     on v.licenseId = re.licenseId
@@ -61,7 +68,7 @@ let time = async (req, res) => {
   and expire` + type + `current_date()`
     + match +
           `\nunion all 
-  select re.licenseId as license, v.brand, v.model, v.version, re.date as registryDate, re.expire, c.name
+  select re.licenseId as license, v.brand, v.model, v.version, ` + queryType + `, re.expire, c.name
     from registry re
   join vehicles v 
     on v.licenseId = re.licenseId
@@ -78,7 +85,7 @@ let time = async (req, res) => {
   `  group by re.licenseId)  
   and expire` + type + `current_date()`
     + match +
-    `\norder by registryDate
+    `\norder by ` + sort + ` 
     limit ? offset ?`
   
   // bug - đã gọi được api kết quả trả về chính xác

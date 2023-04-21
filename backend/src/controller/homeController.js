@@ -7,18 +7,27 @@ import { verifyToken } from './authenticate/verifyToken';
 import { centreInfo } from './info/centreInfo';
 import { getDataForChart } from './info/data4Chart';
 import { detailModal } from './info/detailModal';
+import { previewRegist } from './info/previewRegist';
+import { newRegist } from './info/newRegist';
+import { updateModify } from './info/updateModify';
+import { previewInfo } from './info/previewInfo'
 
 import { expired } from './categories/expired';
 import { registed } from './categories/registed';
 import { vehicles } from './categories/vehicles';
+import { findByLicense} from './categories/findByLicense';
 
 import { owner } from './filter/owner'
 import { brand } from './filter/brand'
 import { allBrand } from './filter/allBrand'
 import { exactBrand } from './filter/exactBrand'
 import { time } from './filter/time'
+import { allCity } from './filter/allCity'
+import { exactCity } from './filter/exactCity'
 
 import { ownerInfo } from './owner/ownerInfo';
+import { registHistory } from './owner/registHistory';
+
 
 import { changePassword } from './authenticate/changePassword';
 
@@ -26,6 +35,12 @@ import { viewAllCentres } from './admin/viewAllCentres';
 import { viewAllCars } from './admin/viewAllCars';
 import { insertCentre } from './admin/insertCentre';
 import { removeCentre } from './admin/removeCentre'
+
+import { allRegist } from './stats/allRegist'
+import { registByTime } from './stats/registByTime'
+import { registByLicense } from './stats/registByLicense'
+
+import { forecast } from './forecast/forecast'
 
 let homepage = async (req, res) => {
   console.log(req.session.id === undefined ? `Session: ` : `\x1b[4mSession\x1b[0m: `, req.session.id)
@@ -39,7 +54,8 @@ let homepage = async (req, res) => {
 
 module.exports = {
   homepage, authenticate, verifyToken, logout, centreInfo, 
-  vehicles, registed, expired, detailModal, getDataForChart,
-  ownerInfo, owner, brand, allBrand, exactBrand, time,
-  changePassword, viewAllCentres, viewAllCars, insertCentre, removeCentre
+  vehicles, registed, expired, findByLicense, detailModal, getDataForChart,
+  ownerInfo, registHistory, owner, brand, allBrand, exactBrand, time, allCity, exactCity,
+  changePassword, viewAllCentres, viewAllCars, insertCentre, removeCentre, newRegist, previewRegist, updateModify, previewInfo,
+  allRegist, registByTime, forecast, registByLicense
 }

@@ -1,14 +1,40 @@
 <script setup>
+import { ref } from 'vue';
 import AccountCard from './AccountCard.vue';
 import AccountManagementRootRow from './AccountManagementRootRow.vue';
+import { useAccountStore } from '../../stores/AccountStore';
 
-const accountList = [
+const accountStore = useAccountStore()
+
+const accountList = ref([
     {id: 1, email: 'tuandeptrai@gmail.com', password: '123456'},
     {id: 2, email: 'tuandeptrai@gmail.com', password: '123456'},
     {id: 3, email: 'tuandeptrai@gmail.com', password: '123456'},
     {id: 4, email: 'tuandeptrai@gmail.com', password: '123456'},
     {id: 5, email: 'tuandeptrai@gmail.com', password: '123456'},
-];
+]);
+const loading = ref(false)
+
+const fetchAvailableCenters = async () => {
+    loading.value = true
+    const res = await fetch(`http://localhost:1111/view-all-centres`, {
+        credentials: "include",
+        headers: {
+            'Content-Type': 'application/json',
+            'Authorization': `${accountStore.getToken}`
+        },
+    })
+    if(res.error) {
+        console.log(res.error);
+    }
+    const dataFetched = JSON.parse(await res.text())
+    accountList.value = [...dataFetched]
+    console.log(`centers: ${JSON.stringify(accountList.value)}`);
+    loading.value = false
+};
+
+fetchAvailableCenters()
+
 </script>
 
 <template>

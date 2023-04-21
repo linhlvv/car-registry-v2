@@ -20,7 +20,6 @@ import {
 import { ref, onMounted, onBeforeMount, watch, onUpdated } from 'vue';
 import { Bar } from 'vue-chartjs';
 import { useAccountStore } from "../../stores/AccountStore";
-import { computed } from '@vue/reactivity';
 
 ChartJS.register(CategoryScale, LinearScale, BarElement, Title, Tooltip, Legend)
 
@@ -49,7 +48,6 @@ const fetchData = async () => {
         }
     })
     dataList.value = JSON.parse(await res.text())
-    console.log(dataList);
     chartData.value = dataList.value.Data[props.year];
     console.log(`chart data: ${JSON.stringify(chartData.value)}`);
 

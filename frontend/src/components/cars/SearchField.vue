@@ -1,11 +1,15 @@
 <script setup>
-import { ref } from 'vue';
+import { ref, watch } from 'vue';
 import SearchBar from '../UI/SearchBar.vue';
+import { useAccountStore } from '../../stores/AccountStore';
 
-const props = defineProps(['pageNum', 'totalPage']);
+const accountStore = useAccountStore()
+
+const props = defineProps(['pageNum', 'totalPage', 'carType']);
 const emit = defineEmits([
     'nextPage',
     'prevPage',
+    'sendSortOrder',
     'specifiedPage',
     'licenseSearch',
     'selectedFilterClicked',
@@ -13,78 +17,14 @@ const emit = defineEmits([
     'selectedOwnerClicked',
     'selectedBrandClicked',
     'selectedTimeClicked',
+    'reloadData',
 ]);
-const selected = ref('No filter');
-const pageNumber = ref(props.pageNum);
-console.log(pageNumber.value);
 
-const pageHandler = (direction) => {
-    if(direction === 'left') {
-        if (pageNumber.value > 1) {
-            pageNumber.value -= +1;
-            emit('prevPage');
-        }
-    } else {
-        if (pageNumber.value < props.totalPage) {
-            pageNumber.value += +1;
-            emit('nextPage');
-        }
-    }
-};
-
-const enterHandler = (number) => {
-    if(1 <= number && number <= props.totalPage) {
-        pageNumber.value = +number;
-        emit('specifiedPage', +number);
-    }
-};
-
-const city = ref('All');
-const owner = ref('All');
-const brand = ref('All');
-const time = ref({
-    year: 'All', quarter: 'All', month: 'All',
-});
-
-const filterClickedHandler = (value) => {
-    console.log(`filter ${selected.value}`);
-    emit('selectedFilterClicked', value)
-}
-
-const cityClicked = (value) => {
-    console.log(`city ${city.value}`);
-    emit('selectedCityClicked', value)
-}
-
-const ownerClicked = (value) => {
-    owner.value = value
-    console.log(`owner ${owner.value}`);
-    emit('selectedOwnerClicked', value)
-}
-
-const brandClicked = (value) => {
-    console.log(`brand changes to ${brand.value}`);
-    emit('selectedBrandClicked', value)
-}
-
-const timeClicked = (value, type) => {
-    if(type === 'year') {
-        time.value.year = value;
-    } else if (type === 'quarter') {
-        time.value.quarter = value
-        time.value.month = 'All'
-    } else {
-        time.value.month = value
-        time.value.quarter = 'All'
-    }
-    // console.log(`time changes to ${{year: time.value.year, quarter: time.value.quarter, month: time.value.month}}`);
-    emit('selectedTimeClicked', time.value)
-}
-
+//SECTION - Filter list
 const filterList = ['No filter', 'City', 'Owner', 'Brand', 'Time']
-const cityList = ['All', 'Ho Chi Minh', 'Ha Noi', 'Bac Ninh', 'Hue']
-const brandList = ['All', 'Mercedes', 'RollRoyce', 'Toyota', 'Kia', 'Ferrari', 'Vinfast']
-const yearList = ['All', '2019', '2020', '2021', '2022', '2023']
+const cityList = ref(['All'])
+const brandList = ref(['All'])
+const yearList = ['All', '2021', '2022', '2023']
 const quarterList = [
     {content: 'All', value: 'All'},
     {content: 'Q1', value: '1'},
@@ -108,14 +48,20 @@ const monthList = [
     {content: 'December', value: '12'}, 
 ]
 
-const fromAtoZ = ref(true);
+//SECTION - filter sorting
+const fromAtoZ = ref('asc');
+
+// logic - alphabetical order asc or desc
 const fromAtoZClicked = () => {
-    fromAtoZ.value = true
+    fromAtoZ.value = 'asc'
+    emit('sendSortOrder', fromAtoZ.value)
 };
 const fromZtoAClicked = () => {
-    fromAtoZ.value = false
+    fromAtoZ.value = 'desc'
+    emit('sendSortOrder', fromAtoZ.value)
 };
 
+// logic - time order
 const timeAscending = ref(true)
 const timeAscendingClicked = () => {
     timeAscending.value = true
@@ -124,8 +70,158 @@ const timeDescendingClicked = () => {
     timeAscending.value = false
 }
 
+
+//SECTION - find car by license
 const licenseSearch = (content) => {
     emit('licenseSearch', content)
+};
+
+//SECTION - fetch all available brands
+const fetchAllAvailableBrands = async () => {
+    // console.log(`cartype: ${props.carType}`);
+    const res = await fetch(`http://localhost:1111/filter/brand/all`, {
+        method: 'POST',
+        credentials: "include",
+        headers: {
+            'Content-Type': 'application/json',
+            'Authorization': `${accountStore.getToken}`
+        },
+        body: JSON.stringify({carType: props.carType}),
+    })
+    if(res.error) {
+        console.log(res.error);
+    }
+    const dataFetched = JSON.parse(await res.text())
+    brandList.value = ['All', ...dataFetched.data]
+    // console.log(`all available brands: ${JSON.stringify(brandList.value)}`);
+};
+
+//SECTION - fetch all available cities
+const fetchAllAvailableCities = async () => {
+    const res = await fetch(`http://localhost:1111/filter/city/all`, {
+        method: 'POST',
+        credentials: "include",
+        headers: {
+            'Content-Type': 'application/json',
+            'Authorization': `${accountStore.getToken}`
+        },
+        body: JSON.stringify({carType: props.carType}),
+    })
+    if(res.error) {
+        console.log(res.error);
+    }
+    const dataFetched = JSON.parse(await res.text())
+    cityList.value = ['All', ...dataFetched.data]
+    // console.log(`all available citites: ${JSON.stringify(dataFetched.data)}`);
+}
+
+//SECTION - handle pagination
+// logic - pagination with previous and next button
+const pageNumber = ref(props.pageNum);
+const pageHandler = (direction) => {
+    if(direction === 'left') {
+        if (pageNumber.value > 1) {
+            pageNumber.value -= +1;
+            emit('prevPage');
+        }
+    } else {
+        if (pageNumber.value < props.totalPage) {
+            pageNumber.value += +1;
+            emit('nextPage');
+        }
+    }
+};
+
+// logic - navigate to exact page when enter is pressed
+const enterHandler = (number) => {
+    if(1 <= number && number <= props.totalPage) {
+        pageNumber.value = +number;
+        emit('specifiedPage', +number);
+    }
+};
+
+//SECTION - Filter handler
+const selected = ref('No filter');
+const city = ref('All');
+const owner = ref('');
+const brand = ref('All');
+const time = ref({
+    year: 'All', quarter: 'All', month: 'All',
+});
+
+// logic - general filter
+const filterClickedHandler = (value) => {
+    brand.value = 'All'
+    time.value = {
+        year: 'All', quarter: 'All', month: 'All',
+    }
+    console.log(`filter ${selected.value}`);
+    if(selected.value === 'Brand') {
+        fetchAllAvailableBrands()
+    }
+    if(selected.value === 'City') {
+        fetchAllAvailableCities()
+    }
+    emit('selectedFilterClicked', value)
+}
+
+// logic - city filter
+const cityClicked = (value) => {
+    console.log(`city ${city.value}`);
+    emit('selectedCityClicked', value)
+}
+
+// logic - owner filter
+const ownerClicked = (value) => {
+    owner.value = value
+    console.log(`owner ${owner.value}`);
+    emit('selectedOwnerClicked', value)
+}
+
+// logic - brand filter
+const brandClicked = (value) => {
+    console.log(`brand changes to ${brand.value}`);
+    emit('selectedBrandClicked', value)
+}
+
+// logic - time filter with year + quarter or year + month
+const timeClicked = (value, type) => {
+    if(type === 'year') {
+        time.value.year = value;
+        time.value.month = 'All'
+        time.value.quarter = 'All'
+    } else if (type === 'quarter') {
+        time.value.quarter = value
+        time.value.month = 'All'
+    } else {
+        time.value.month = value
+        time.value.quarter = 'All'
+    }
+    // console.log(`time changes to ${{year: time.value.year, quarter: time.value.quarter, month: time.value.month}}`);
+    emit('selectedTimeClicked', {year: time.value.year, quarter: time.value.quarter, month: time.value.month})
+};
+
+//SECTION - watcher
+// logic - reset filter after car type change event
+watch(() => props.carType, (newCarType, oldCarType) => {
+    if(newCarType !== oldCarType) {
+        selected.value = 'No filter'
+        time.value = {
+            year: 'All', quarter: 'All', month: 'All',
+        }
+        owner.value = ''
+        brand.value = 'All'
+        city.value = 'All'
+    }
+});
+
+//SECTION - reload data
+const reload = async () => {
+    selected.value = 'No filter'
+    brand.value = 'All'
+    city.value = 'All'
+    owner.value = ''
+    emit('reloadData')
 };
 
 </script>
@@ -135,6 +231,7 @@ const licenseSearch = (content) => {
         <div class="w-full flex items-center">
             <div class="flex items-center w-[77.5%] gap-3">
                 <SearchBar @search-entered="licenseSearch" width="w-[30%]" placeholder="Enter a license plate..."/>
+                <i @click="reload" class="fa-solid fa-rotate text-[#292929] p-[6px] rounded-[50%] hover:text-[#2acc97] active:bg-[#2acc97]/10 cursor-pointer"></i>
             </div>
 
             <!-- Pagination -->
@@ -160,9 +257,9 @@ const licenseSearch = (content) => {
                 </select>
 
                 <!-- Ordering -->
-                <div v-if="selected !== 'No filter' && selected !== 'Time' && city === 'All' && owner === 'All' && brand === 'All'" class="flex flex-col gap-1">
-                    <i @click="fromAtoZClicked" class="fa-solid fa-arrow-up-z-a text-[#1d1d1d] cursor-pointer duration-100" :class="fromAtoZ ? 'text-[#2acc97]' : ''"></i>
-                    <i @click="fromZtoAClicked" class="fa-solid fa-arrow-up-a-z text-[#1d1d1d] cursor-pointer duration-100" :class="!fromAtoZ ? 'text-[#2acc97]' : ''"></i>
+                <div v-if="selected !== 'No filter' && selected !== 'Time' && city === 'All' && brand === 'All'" class="flex flex-col gap-1">
+                    <i @click="fromAtoZClicked" class="fa-solid fa-arrow-up-z-a text-[#1d1d1d] cursor-pointer" :class="fromAtoZ === 'asc' ? 'text-[#2acc97]' : ''"></i>
+                    <i @click="fromZtoAClicked" class="fa-solid fa-arrow-up-a-z text-[#1d1d1d] cursor-pointer" :class="fromAtoZ === 'desc' ? 'text-[#2acc97]' : ''"></i>
                 </div>
                 <div v-else-if="selected === 'Time'" class="flex flex-col gap-1">
                     <i @click="timeAscendingClicked" class="fa-solid fa-arrow-up text-[#1d1d1d] cursor-pointer duration-100" :class="timeAscending ? 'text-[#2acc97]' : ''"></i>
@@ -187,7 +284,7 @@ const licenseSearch = (content) => {
                     <div class="flex items-center">
                         <h1 class="text-[#9196a4] font-semibold">Owner</h1>
                     </div>
-                    <SearchBar @search-entered="ownerClicked" width="w-[70%]" placeholder="Enter the SSN..."/>
+                    <SearchBar @search-entered="ownerClicked" width="w-[70%]" placeholder="Enter the SSN or tax..."/>
                 </div>
 
                 <!-- Brand filter -->
@@ -196,12 +293,12 @@ const licenseSearch = (content) => {
                         <h1 class="text-[#9196a4] font-semibold">Brand</h1>
                     </div>
                     <select v-model="brand" @change="brandClicked(brand)" id="countries" class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-[4px] focus:ring-[#2acc97] focus:border-[#2acc97] block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500">
-                        <option v-for="singleBrand in brandList" :key="singleBrand">
+                        <option v-for="singleBrand in brandList" :key="singleBrand" :value="singleBrand">
                             {{ singleBrand }}
                         </option>
                     </select>
                 </div>
-
+                
                 <!-- Time filter -->
                 <div id="sub-filter" v-show="selected === 'Time'" class="flex items-center gap-2 w-full">
                     <select v-model="time.year" @change="timeClicked(time.year, 'year')" class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-[4px] focus:ring-[#2acc97] focus:border-[#2acc97] block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500">

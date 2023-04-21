@@ -1,37 +1,48 @@
-import pool from "../../configs/connectDB"
-
-// task - Viết preview thông tin xe và thông tin đăng kiểm
-// input - licenseId
-// output - thông tin xe và thông tin đăng kiểm
+import pool from "../../configs/connectDB";
+// task - Preview Regist 
+// input - license Id
+// output - regist Id, Regist Date, Expire Date
 
 let previewRegist = async (req, res) => {
-  let licenseId = req.body.licenseId
-  let base = `select r.id AS r_id, r.name as r_name, v.*, `
-  let regist = `SELECT r.id, r.date, r.expire, c.name FROM vehicles v LEFT JOIN registry r ON r.licenseId = v.licenseId LEFT JOIN centre c ON r.centreId = c.id where r.licenseId = ?`
-  const [rows2, fields2] = await pool.query(regist, [licenseId])
-  let date = new Date().toISOString().slice(0, 10);
-  let expired = (rows2[rows2.length-1].expire > date)
-  
-  let type = `select type 
-  from owner o 
-  join vehicles v 
-  on o.id = v.ownerId
-  where v.licenseId = ?`
-  const [rows, fields] = await pool.query(type, [licenseId])
+    let licenseId = req.body.licenseId
+    let centreId = req.session.userid
+    
+    //Kiểm tra ngày sửa chữa
+    let currentDate = new Date();
+    currentDate.setMonth(currentDate.getMonth() - 6);
+    let sixMonthsAgo = currentDate.toISOString().slice(0, 10);
+
+    let date = new Date();
+    let registDate = date.toISOString().slice(0, 10);
+    let query = 'select modifyDate from vehicles where licenseId = ?'
+    let modifyDate = await pool.query(query,[licenseId])
+    modifyDate = modifyDate[0][0].modifyDate
+    let expireDate = new Date();
+    if (modifyDate == null || modifyDate == '') {
+        expireDate.setMonth(date.getMonth() + 18)
+
+    }
+    if (modifyDate > sixMonthsAgo) {
+        expireDate.setMonth(date.getMonth() + 12)
+    }
+    else {
+        expireDate.setMonth(date.getMonth() + 6)
+    }
+    expireDate = expireDate.toISOString().slice(0, 10);
+    let findId = `SELECT (MAX(id) + 1) as id FROM registry`
+    let id = await pool.query(findId)
+    id = id[0][0].id
+    
+    // logic - lấy tên trung tâm đăng kiểm hiện tạiSELECT (MAX(id) + 1) FROM 'registry'
+    let getCentreName = 'select name from centre where id = ?'
+    let centreName = await pool.query(getCentreName, [centreId])
+    centreName = centreName[0][0].name
 
 
-  if (rows[0].type === 1) {
-    let query = base + ` p.* from vehicles v left join region r on v.regionId = r.id JOIN personal p on v.ownerId = p.id WHERE v.licenseId = ?`
-    const [rows, fields] = await pool.query(query, [licenseId])
-    return res.send({data: rows, data2: rows2[rows2.length-1],valid: expired, ownerType: 1})
-  }
-  else {
-    let query = base + ` c.* from vehicles v left join region r on v.regionId = r.id JOIN company c on v.ownerId = c.id WHERE v.licenseId = ?`
-    const [rows, fields] = await pool.query(query, [licenseId])
-    return res.send({data: rows, data2: rows2[rows2.length-1], valid: expired, ownerType: 0})
-  }
+    return res.send({id, registDate, expireDate, centreName})
+    
 }
 
 module.exports = {
-  previewRegist
+    previewRegist
 }

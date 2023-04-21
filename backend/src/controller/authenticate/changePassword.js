@@ -16,20 +16,20 @@ let changePassword = async (req, res) => {
     let check = await pool.query(query, [id, oldPass])
     if (check[0].length > 0) {
         if (newPass === oldPass) {
-            return res.send({message: 'New password is the same as old password'})
+            return res.status(400).send({message: 'New password is the same as old password'})
         }
         if (newPass === reNewPass) {
             let query = 'update account set password = ? where id = ? and password = ?'
             await pool.query(query, [newPass, id, oldPass])
-            return res.send({message: 'Password changed'})
+            return res.status(200).send({message: 'Password changed'})
         }
         
         else {
-            return res.send({message: 'New password does not match'})
+            return res.status(400).send({message: 'New password does not match'})
         }
     }
     else {
-        return res.send({message: 'Wrong password'})
+        return res.status(400).send({message: 'Wrong password'})
     }
 }
 
