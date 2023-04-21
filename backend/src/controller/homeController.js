@@ -38,6 +38,7 @@ import { removeCentre } from './admin/removeCentre'
 
 import { allRegist } from './stats/allRegist'
 import { registByTime } from './stats/registByTime'
+import { registByLicense } from './stats/registByLicense'
 
 import { forecast } from './forecast/forecast'
 
@@ -56,5 +57,5 @@ module.exports = {
   vehicles, registed, expired, findByLicense, detailModal, getDataForChart,
   ownerInfo, registHistory, owner, brand, allBrand, exactBrand, time, allCity, exactCity,
   changePassword, viewAllCentres, viewAllCars, insertCentre, removeCentre, newRegist, previewRegist, updateModify, previewInfo,
-  allRegist, registByTime, forecast
+  allRegist, registByTime, forecast, registByLicense
 }

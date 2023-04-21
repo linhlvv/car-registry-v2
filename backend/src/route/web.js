@@ -96,6 +96,9 @@ const initWebRoute = (app) => {
   // logic - gửi year, month, quarter, để lọc đăng kiểm, carType để lọc loại xe
   router.post('/regist/time', verifyToken, homeController.registByTime)
                                                                                     
+  // logic - gửi biển số xe, lọc các đăng kiểm của xe này
+  router.post('/regist/find', verifyToken, homeController.registByLicense)
+                                                                                    
                                                                                     
   // logic - dự đoán các xe sắp hết hạn
   router.post('/forecast', verifyToken, homeController.forecast)
