@@ -12,6 +12,8 @@ let registByTime = async (req, res) => {
   let month = parseInt(req.body.month)
   let quarter = parseInt(req.body.quarter)
 
+  let order = req.body.order === "asc" ? "asc" : "desc"
+
   let match = ''
   if(req.body.year !== "All") {
     match += `\nand year(date) = ` + year
@@ -49,7 +51,7 @@ let registByTime = async (req, res) => {
   join company c 
     on v.ownerId = c.id
   where centreId = ` + req.session.userid + match + ` 
-  order by date asc
+  order by date ` + order + `
     limit ? offset ?`
   
   // bug - đã gọi được api kết quả trả về chính xác
