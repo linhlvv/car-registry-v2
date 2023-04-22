@@ -74,6 +74,8 @@ const initWebRoute = (app) => {
                                                                                     
   // logic - deactivate 1 centre
   router.post('/remove-centre', verifyToken, homeController.removeCentre)
+  // logic - đọc dữ liệu từ file excel thêm vào db
+  router.post('/read-excel', verifyToken, homeController.addDataFromExcel)
                                                                                     
                                                                                     
   // logic - tạo đăng kiểm mới
