@@ -34,7 +34,8 @@ import { changePassword } from './authenticate/changePassword';
 import { viewAllCentres } from './admin/viewAllCentres';
 import { viewAllCars } from './admin/viewAllCars';
 import { insertCentre } from './admin/insertCentre';
-import { removeCentre } from './admin/removeCentre'
+import { removeCentre } from './admin/removeCentre';
+import { addDataFromExcel } from './admin/addDataFromExcel'
 
 import { allRegist } from './stats/allRegist'
 import { registByTime } from './stats/registByTime'
@@ -57,5 +58,6 @@ module.exports = {
   vehicles, registed, expired, findByLicense, detailModal, getDataForChart,
   ownerInfo, registHistory, owner, brand, allBrand, exactBrand, time, allCity, exactCity,
   changePassword, viewAllCentres, viewAllCars, insertCentre, removeCentre, newRegist, previewRegist, updateModify, previewInfo,
-  allRegist, registByTime, forecast, registByLicense
+  allRegist, registByTime, forecast, registByLicense,
+  addDataFromExcel
 }
