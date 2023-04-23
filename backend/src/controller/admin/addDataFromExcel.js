@@ -1,6 +1,6 @@
-const multer = require('multer');
-const XLSX = require('xlsx');
-const path = require('path');
+import multer from 'multer';
+import XLSX from 'xlsx';
+import path from 'path';
 import pool from '../../configs/connectDB';
 
 // task - lấy data từ file excel thêm vào vehicles và owners
