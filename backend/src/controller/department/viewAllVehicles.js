@@ -2,7 +2,7 @@ import pool from '../../configs/connectDB';
 
 //TODO - View tất cả xe 
 
-let viewAllCars = async (req, res) => {
+let viewAllVehicles = async (req, res) => {
   if (req.session.authority !== 1) 
 		return res.sendStatus(403)
   
@@ -67,5 +67,5 @@ let viewAllCars = async (req, res) => {
 }
 
 module.exports = {
-    viewAllCars
+  viewAllVehicles
 }

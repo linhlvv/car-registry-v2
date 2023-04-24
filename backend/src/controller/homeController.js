@@ -31,8 +31,6 @@ import { registHistory } from './owner/registHistory';
 
 import { changePassword } from './authenticate/changePassword';
 
-import { viewAllCentres } from './admin/viewAllCentres';
-import { viewAllCars } from './admin/viewAllCars';
 import { insertCentre } from './admin/insertCentre';
 import { removeCentre } from './admin/removeCentre';
 import { addDataFromExcel } from './admin/addDataFromExcel'
@@ -42,6 +40,9 @@ import { registByTime } from './stats/registByTime'
 import { registByLicense } from './stats/registByLicense'
 
 import { forecast } from './forecast/forecast'
+
+import { viewAllCentres } from './department/viewAllCentres';
+import { viewAllVehicles } from './department/viewAllVehicles';
 
 let homepage = async (req, res) => {
   console.log(req.session.id === undefined ? `Session: ` : `\x1b[4mSession\x1b[0m: `, req.session.id)
@@ -57,7 +58,7 @@ module.exports = {
   homepage, authenticate, verifyToken, logout, centreInfo, 
   vehicles, registed, expired, findByLicense, detailModal, getDataForChart,
   ownerInfo, registHistory, owner, brand, allBrand, exactBrand, time, allCity, exactCity,
-  changePassword, viewAllCentres, viewAllCars, insertCentre, removeCentre, newRegist, previewRegist, updateModify, previewInfo,
+  changePassword, viewAllCentres, viewAllVehicles, insertCentre, removeCentre, newRegist, previewRegist, updateModify, previewInfo,
   allRegist, registByTime, forecast, registByLicense,
   addDataFromExcel
 }

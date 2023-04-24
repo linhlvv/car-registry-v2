@@ -63,12 +63,6 @@ const initWebRoute = (app) => {
   // logic - thay đổi mật khẩu tài khoản đang đăng nhập
   router.post('/change-password',verifyToken ,homeController.changePassword)
                                                                                     
-  // logic - admin xem tất cả các centre
-  router.get('/centre/all', verifyToken, homeController.viewAllCentres)
-                                                                                    
-  // logic - admin xem tất cả các xe toàn cục
-  router.post('/vehicles/admin', verifyToken, homeController.viewAllCars)
-                                                                                    
   // logic - activate 1 centre mới
   router.post('/insert-centre', verifyToken, homeController.insertCentre)
                                                                                     
@@ -104,6 +98,13 @@ const initWebRoute = (app) => {
                                                                                     
   // logic - dự đoán các xe sắp hết hạn
   router.post('/forecast', verifyToken, homeController.forecast)
+                                                                                    
+                                                                                    
+  // logic - admin xem tất cả các centre
+  router.get('/centre/all', verifyToken, homeController.viewAllCentres)
+                                                                                    
+  // logic - admin xem tất cả các xe toàn cục
+  router.post('/vehicles/admin/all', verifyToken, homeController.viewAllVehicles)
 
   return app.use('/', router)
 }
