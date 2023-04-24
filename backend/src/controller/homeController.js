@@ -45,6 +45,7 @@ import { viewAllCentres } from './department/viewAllCentres';
 import { viewAllVehicles } from './department/viewAllVehicles';
 import { viewRegistedVehicles } from './department/viewRegistedVehicles';
 import { viewExpiredVehicles } from './department/viewExpiredVehicles';
+import { viewUnregistedVehicles } from './department/viewUnregistedVehicles';
 
 let homepage = async (req, res) => {
   console.log(req.session.id === undefined ? `Session: ` : `\x1b[4mSession\x1b[0m: `, req.session.id)
@@ -62,6 +63,6 @@ module.exports = {
   ownerInfo, registHistory, owner, brand, allBrand, exactBrand, time, allCity, exactCity,
   changePassword, insertCentre, removeCentre, newRegist, previewRegist, updateModify, previewInfo,
   allRegist, registByTime, forecast, registByLicense,
-  viewAllCentres, viewAllVehicles, viewRegistedVehicles, viewExpiredVehicles,
+  viewAllCentres, viewAllVehicles, viewRegistedVehicles, viewExpiredVehicles, viewUnregistedVehicles,
   addDataFromExcel
 }

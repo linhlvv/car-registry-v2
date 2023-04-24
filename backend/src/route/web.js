@@ -108,9 +108,12 @@ const initWebRoute = (app) => {
                                                                                     
   // logic - admin xem tất cả các xe đã đăng kiểm toàn cục
   router.post('/vehicles/admin/registed', verifyToken, homeController.viewRegistedVehicles)
-
+                                                                                    
   // logic - admin xem tất cả các xe đã hết hạn toàn cục
   router.post('/vehicles/admin/expired', verifyToken, homeController.viewExpiredVehicles)
+                                                                                    
+  // logic - admin xem tất cả các xe chưa đăng kiểm toàn cục
+  router.post('/vehicles/admin/unregisted', verifyToken, homeController.viewUnregistedVehicles)
 
   return app.use('/', router)
 }
