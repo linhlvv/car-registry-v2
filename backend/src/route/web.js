@@ -64,10 +64,10 @@ const initWebRoute = (app) => {
   router.post('/change-password',verifyToken ,homeController.changePassword)
                                                                                     
   // logic - admin xem tất cả các centre
-  router.get('/view-all-centres', verifyToken, homeController.viewAllCentres)
+  router.get('/centre/all', verifyToken, homeController.viewAllCentres)
                                                                                     
   // logic - admin xem tất cả các xe toàn cục
-  router.get('/view-all-cars', verifyToken, homeController.viewAllCars)
+  router.post('/vehicles/admin', verifyToken, homeController.viewAllCars)
                                                                                     
   // logic - activate 1 centre mới
   router.post('/insert-centre', verifyToken, homeController.insertCentre)
