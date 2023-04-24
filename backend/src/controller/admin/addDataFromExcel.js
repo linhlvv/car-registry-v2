@@ -33,10 +33,8 @@ const storage = multer.diskStorage({
 const upload = multer({ storage: storage }).single('file');
 
 let addDataFromExcel = async (req, res) => {
-    console.log(req.body)
-    let ownerType = req.body.ownerType
+    let ownerType = parseInt(req.body.ownerType)
     upload(req, res, async (err) => {
-      
         if (err) {
           console.log(err)
             return res.status(400).send({message: 'Upload file failed'})
@@ -51,6 +49,7 @@ let addDataFromExcel = async (req, res) => {
             const workbook = XLSX.readFile(req.file.path);
             const sheet_name_list = workbook.SheetNames;
             const data = XLSX.utils.sheet_to_json(workbook.Sheets[sheet_name_list[0]]);
+            ownerType = req.body.ownerType
             console.log(ownerType)
             // Thêm dữ liệu vào db
             for (let i = 0; i < data.length; i++) {
@@ -60,8 +59,8 @@ let addDataFromExcel = async (req, res) => {
                 //Chuyển ngày sinh về đúng định dạng
                 data[i]['Ngày sinh'] = excelDateToJSDate(data[i]['Ngày sinh']) 
                 let addPersonal = 
-                `insert into owner (type) VALUES ('1');
-                insert into personal (id, dob, ssn, name, address, phone, gender) 
+                `insert into owner (type) VALUES (1); \
+                insert into personal (id, dob, ssn, name, address, phone, gender) \
                 values ((SELECT MAX(ID) FROM owner), ?, ?, ?, ?, ?, ?);`
                 let params = [data[i]['Ngày sinh'], data[i]['SSN'], data[i]['Họ và tên'], data[i]['Địa chỉ'], data[i]['Số điện thoại'], data[i]['Giới tính']]
                 try {
@@ -94,7 +93,7 @@ let addDataFromExcel = async (req, res) => {
               //Thêm vào vehicles
               if (data[i]['Sửa chữa'] == 'Chưa') {
                 data[i]['Sửa chữa'] = 0
-                data[i]['Ngày sửa chữa'] = 'NULL'
+                data[i]['Ngày sửa chữa'] = null
               } 
               else if (data[i]['Sửa chữa'] == 'Đã sửa chữa') {
                 data[i]['Sửa chữa'] = 1
@@ -102,7 +101,7 @@ let addDataFromExcel = async (req, res) => {
               //Chuyển các định dạng ngày về js
               data[i]['Ngày đăng ký'] = excelDateToJSDate(data[i]['Ngày đăng ký'])
               data[i]['Ngày sản xuất'] = excelDateToJSDate(data[i]['Ngày sản xuất'])
-              if (data[i]['Ngày sửa chữa'] != 'NULL') {
+              if (data[i]['Ngày sửa chữa'] !== null) {
                 data[i]['Ngày sửa chữa'] = excelDateToJSDate(data[i]['Ngày sửa chữa'])
               }
 
