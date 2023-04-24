@@ -98,13 +98,16 @@ const initWebRoute = (app) => {
                                                                                     
   // logic - dự đoán các xe sắp hết hạn
   router.post('/forecast', verifyToken, homeController.forecast)
-                                                                                    
+
                                                                                     
   // logic - admin xem tất cả các centre
   router.get('/centre/all', verifyToken, homeController.viewAllCentres)
                                                                                     
   // logic - admin xem tất cả các xe toàn cục
   router.post('/vehicles/admin/all', verifyToken, homeController.viewAllVehicles)
+                                                                                    
+  // logic - admin xem tất cả các xe đã đăng kiểm toàn cục
+  router.post('/vehicles/admin/registed', verifyToken, homeController.viewRegistedVehicles)
 
   return app.use('/', router)
 }
