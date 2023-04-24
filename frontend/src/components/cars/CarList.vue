@@ -240,21 +240,27 @@ const fetchCarByLicense = async () => {
 //SECTION - watchers
 // logic - page number watcher
 watch(() => props.pageNumber, async(newPageNumber, oldPageNumber) => {
-    if(newPageNumber !== oldPageNumber) {
-        console.log(`page number of carlist has changed to: ${props.pageNumber}`);
+    console.log(`page number of carlist has changed to: ${props.pageNumber}`);
         
-        if(props.filter === 'No filter') {
-            fetchCarData()
-        }
-        if(props.filter === 'Brand') {
-            fetchDataSortedByBrand()
-        }
-        if(props.filter === 'Time') {
-            fetchCarDataWithSpecificTime()
-        }
-        if(props.filter === 'City') {
-            fetchCarDataWithSpecificCity()
-        }
+    if(props.filter === 'No filter') {
+        fetchCarData()
+    }
+    if(props.filter === 'Owner' && props.owner === '') {
+        fetchCarData()
+    }
+    if(props.filter === 'Brand' && props.brand === 'All') {
+        fetchDataSortedByBrand()
+    } else if(props.filter === 'Brand' && props.brand !== 'All') {
+        fetchCarDataWithSpecificBrand()
+    }
+    if(props.filter === 'Time') {
+        console.log(props.pageNumber);
+        fetchCarDataWithSpecificTime()
+    }
+    if(props.filter === 'City' && props.city !== 'All') {
+        fetchCarDataWithSpecificCity()
+    } else if(props.filter === 'City' && props.city === 'All') {
+        fetchCarData()
     }
 });
 
@@ -263,7 +269,7 @@ watch(() => props.filter, async(newFilter, oldFilter) => {
     // console.log(props.pageNumber, newPageNumber, oldPageNumber);
     if(newFilter !== oldFilter) {
         console.log(`filter has changed to: ${props.filter}`);
-        if(newFilter === 'No filter') {
+        if(newFilter === 'No filter' || newFilter === 'Owner') {
             fetchCarData()
         }
         if(newFilter === 'Brand') {
