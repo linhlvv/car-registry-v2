@@ -1,6 +1,6 @@
 import pool from "../../configs/connectDB"
 
-let viewRegistedVehicles = async (req, res) => {
+let viewExpiredVehicles = async (req, res) => {
   let resPerPage = parseInt(req.body.resPerPage)
   let page = parseInt(req.body.page)
   if (resPerPage === undefined)
@@ -16,7 +16,7 @@ let viewRegistedVehicles = async (req, res) => {
   left join registry re
   on re.licenseId = v.licenseId
   group by v.licenseId)  
-  and expire >= current_date()`
+  and expire < current_date()`
   const [countRows, countFields] = await pool.query(count)
   
   let query = `
@@ -35,7 +35,7 @@ let viewRegistedVehicles = async (req, res) => {
     left join registry re
       on re.licenseId = v.licenseId
     group by re.licenseId)  
-  and expire >= current_date()
+  and expire < current_date()
           union all 
   select re.licenseId as license, v.brand, v.model, v.version,
     re.date as regist, re.expire, c.name, (re.expire >= current_date()) as status
@@ -52,7 +52,7 @@ let viewRegistedVehicles = async (req, res) => {
     left join registry re
       on re.licenseId = v.licenseId
     group by re.licenseId)  
-  and expire >= current_date()
+  and expire < current_date()
     order by license
     limit ? offset ?`
 
@@ -63,5 +63,5 @@ let viewRegistedVehicles = async (req, res) => {
 }
 
 module.exports = {
-  viewRegistedVehicles
+  viewExpiredVehicles
 }
