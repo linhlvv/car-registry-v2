@@ -1,7 +1,10 @@
 <script setup>
 import RegistrationCarAndOwner from '../components/modal/RegistrationCarAndOwner.vue';
 import RegistrationCert from '../components/modal/RegistrationCert.vue';
+import { useAccountStore } from '../stores/AccountStore';
 import { ref, watch } from 'vue';
+
+const accountStore = useAccountStore()
 
 //SECTION - details
 // logic - owner
@@ -36,13 +39,53 @@ const fetchData = () => {
 // logic - fetch data
 const loading = ref(false)
 const fetchCarAndOwnerDataDetails = async () => {
-    console.log(`fetch data: ${info.value.licenseId}`);
+    loading.value = true
+    const res = await fetch(`http://localhost:1111/preview-info`, {
+        method: 'POST',
+        credentials: "include",
+        headers: {
+            'Content-Type': 'application/json',
+            'Authorization': `${accountStore.getToken}`
+        },
+        body: JSON.stringify(
+            {
+                licenseId: info.value.licenseId,
+            }
+        ),
+    })
+    if(res.error) {
+        console.log(res.error);
+    }
+    const dataFetched = JSON.parse(await res.text())
+    console.log(`car info: ${JSON.stringify(dataFetched)}`);
+    loading.value = false
 };
-
+//FIXME
+const fetchRegistryInfo = async () => {
+    loading.value = true
+    const res = await fetch(`http://localhost:1111/preview-regist`, {
+        method: 'POST',
+        credentials: "include",
+        headers: {
+            'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({licenseId: info.value.licenseId}),
+    })
+    if(res.error) {
+        console.log(res.error);
+    }
+    const dataFetched = JSON.parse(await res.text())
+    console.log(`car info: ${JSON.stringify(dataFetched)}`);
+    registryInfo.value = dataFetched
+    // console.log(dataFetched.ownerType);
+    console.log(`info: ${JSON.stringify(registryInfo.value)}`);
+    loading.value = false
+}
 
 //SECTION - watchers
 watch(() => info.value.licenseId, (newId, oldId) => {
-    fetchData()
+    fetchCarAndOwnerDataDetails()
+    fetchRegistryInfo()
 });
 </script>
 

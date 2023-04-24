@@ -97,13 +97,14 @@ const filterSelected = (value) => {
 // logic - city filter handler
 const citySelected = (value) => {
     city.value = value
+    pageNumber.value = 1
     console.log(`city value: ${city.value}`);
 }
 
 // logic - owner filter handler
 const ownerEntered = (value) => {
-    owner.value = value
     pageNumber.value = 1
+    owner.value = value
     console.log(`owner value: ${owner.value}`);
 }
 
@@ -247,10 +248,6 @@ const openSelectHandler = () => {
                         @openCarRegistration="openCarRegistration"
                         @totalPageNum="bindTotalPage"
                     />
-                </div>
-                <div v-if="time.year !== 'All'" class="w-[80vw] flex flex-col items-center bg-white rounded-xl custom-shadow">
-                    <div class="py-2 font-semibold text-xl text-[#1f1f1f] text-opacity-70">Statistical Chart</div>
-                    <BarChart :car-type="carType" :year="parseInt(time.year)"/>
                 </div>
             </div>
         </div>
