@@ -10,11 +10,11 @@ import pool from '../../configs/connectDB';
 // bug - không nhận được ownerType
 //Hàm chuyển date từ excel sang js
 function excelDateToJSDate(excelDate) {
-  var date = new Date((excelDate - 25569) * 86400000);
-  var year = date.getFullYear();
-  var month = ('0' + (date.getMonth() + 1)).slice(-2);
-  var day = ('0' + date.getDate()).slice(-2);
-  var formattedDate = year + '-' + month + '-' + day;
+  let date = new Date((excelDate - 25569) * 86400000);
+  let year = date.getFullYear();
+  let month = ('0' + (date.getMonth() + 1)).slice(-2);
+  let day = ('0' + date.getDate()).slice(-2);
+  let formattedDate = year + '-' + month + '-' + day;
   return formattedDate;
 }
 
@@ -33,7 +33,7 @@ const storage = multer.diskStorage({
 const upload = multer({ storage: storage }).single('file');
 
 let addDataFromExcel = async (req, res) => {
-    console.log(req)
+    console.log(req.body)
     let ownerType = req.body.ownerType
     upload(req, res, async (err) => {
       
@@ -94,6 +94,7 @@ let addDataFromExcel = async (req, res) => {
               //Thêm vào vehicles
               if (data[i]['Sửa chữa'] == 'Chưa') {
                 data[i]['Sửa chữa'] = 0
+                data[i]['Ngày sửa chữa'] = 'NULL'
               } 
               else if (data[i]['Sửa chữa'] == 'Đã sửa chữa') {
                 data[i]['Sửa chữa'] = 1
@@ -101,7 +102,9 @@ let addDataFromExcel = async (req, res) => {
               //Chuyển các định dạng ngày về js
               data[i]['Ngày đăng ký'] = excelDateToJSDate(data[i]['Ngày đăng ký'])
               data[i]['Ngày sản xuất'] = excelDateToJSDate(data[i]['Ngày sản xuất'])
-              data[i]['Ngày sửa chữa'] = excelDateToJSDate(data[i]['Ngày sửa chữa'])
+              if (data[i]['Ngày sửa chữa'] != 'NULL') {
+                data[i]['Ngày sửa chữa'] = excelDateToJSDate(data[i]['Ngày sửa chữa'])
+              }
 
               let addVehicle =
               `insert into vehicles (licenseId, certId, certDate, regionId, ownerId, brand, model, version, manafractureDate, modified, modifyDate)
