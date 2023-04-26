@@ -58,12 +58,14 @@ let addDataFromExcel = async (req, res) => {
                 console.log("Add to personal")
                 //Chuyển ngày sinh về đúng định dạng
                 data[i]['Ngày sinh'] = excelDateToJSDate(data[i]['Ngày sinh']) 
+                let addOwner = 'insert into owner (type) VALUES (1);'
+                
                 let addPersonal = 
-                `insert into owner (type) VALUES (1); \
-                insert into personal (id, dob, ssn, name, address, phone, gender) \
+                `insert into personal (id, dob, ssn, name, address, phone, gender) \
                 values ((SELECT MAX(ID) FROM owner), ?, ?, ?, ?, ?, ?);`
                 let params = [data[i]['Ngày sinh'], data[i]['SSN'], data[i]['Họ và tên'], data[i]['Địa chỉ'], data[i]['Số điện thoại'], data[i]['Giới tính']]
                 try {
+                  await pool.query(addOwner)
                   await pool.query(addPersonal, params)
                 } catch (err) {
                   if (err.code === 'ER_DUP_ENTRY') {
@@ -75,12 +77,13 @@ let addDataFromExcel = async (req, res) => {
               }
               //Thêm vào company
               else if (ownerType == 0) {
+                addOwner = `insert into owner (type) VALUES (0);`
                 let addCompany = 
-                `insert into owner (type) VALUES ('2');
-                insert into company (id, name, address, phone, taxnum, ownership) 
+                `insert into company (id, name, address, phone, taxnum, ownership) 
                 values ((SELECT MAX(ID) FROM owner), ?, ?, ?, ?, ?);`
                 let params = [data[i]['Tên công ty'], data[i]['Địa chỉ'], data[i]['Số điện thoại'], data[i]['Mã thuế'], data[i]['Hình thức sở hữu']]
                 try {
+                  await pool.query(addOwner)
                   await pool.query(addCompany, params)
                 } catch (err) {
                   if (err.code === 'ER_DUP_ENTRY') {
