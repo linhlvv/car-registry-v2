@@ -40,9 +40,17 @@ const totalPage = ref()
 const loading = ref(false)
 
 //SECTION - fetch default car data
+//TODO
 const fetchCarData = async() => {
     loading.value = true
-    const res = await fetch(`http://localhost:1111/vehicles/${props.carType}`, {
+    let fetchRoute = `http://localhost:1111/vehicles/${props.carType}`;
+    let fetchBody;
+    if(accountStore.isAdmin) {
+
+    } else {
+
+    }
+    const res = await fetch(fetchRoute, {
         method: 'POST',
         credentials: "include",
         headers: {
@@ -64,7 +72,15 @@ const fetchCarData = async() => {
 fetchCarData()
 
 //SECTION - fetch data of all cars by corresponding owner code
+//TODO
 const fetchCarByOwnerCode = async () => {
+    let fetchRoute;
+    let fetchBody;
+    if(accountStore.isAdmin) {
+
+    } else {
+
+    }
     loading.value = true
     const res = await fetch(`http://localhost:1111/filter/owner`, {
         method: 'POST',
@@ -88,7 +104,15 @@ const fetchCarByOwnerCode = async () => {
 
 //SECTION - sort cars by brand
 // logic - all brands
+//TODO
 const fetchDataSortedByBrand = async () => {
+    let fetchRoute;
+    let fetchBody;
+    if(accountStore.isAdmin) {
+
+    } else {
+
+    }
     loading.value = true
     const res = await fetch(`http://localhost:1111/filter/brand`, {
         method: 'POST',
@@ -118,7 +142,15 @@ const fetchDataSortedByBrand = async () => {
 }
 
 // logic - specific brand
+//TODO
 const fetchCarDataWithSpecificBrand = async () => {
+    let fetchRoute;
+    let fetchBody;
+    if(accountStore.isAdmin) {
+
+    } else {
+
+    }
     loading.value = true
     const res = await fetch(`http://localhost:1111/filter/brand/exact`, {
         method: 'POST',
@@ -148,7 +180,15 @@ const fetchCarDataWithSpecificBrand = async () => {
 }
 
 // logic - specific time
+//TODO
 const fetchCarDataWithSpecificTime = async () => {
+    let fetchRoute;
+    let fetchBody;
+    if(accountStore.isAdmin) {
+
+    } else {
+
+    }
     loading.value = true
     const res = await fetch(`http://localhost:1111/filter/time`, {
         method: 'POST',
@@ -180,7 +220,15 @@ const fetchCarDataWithSpecificTime = async () => {
 }
 
 // logic - specific city
+//TODO
 const fetchCarDataWithSpecificCity = async () => {
+    let fetchRoute;
+    let fetchBody;
+    if(accountStore.isAdmin) {
+
+    } else {
+
+    }
     loading.value = true
     const res = await fetch(`http://localhost:1111/filter/city/exact`, {
         method: 'POST',
@@ -210,7 +258,15 @@ const fetchCarDataWithSpecificCity = async () => {
 }
 
 // logic - specific license
+//TODO
 const fetchCarByLicense = async () => {
+    let fetchRoute;
+    let fetchBody;
+    if(accountStore.isAdmin) {
+
+    } else {
+
+    }
     loading.value = true
     const res = await fetch(`http://localhost:1111/vehicles/find`, {
         method: 'POST',
