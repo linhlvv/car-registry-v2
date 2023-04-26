@@ -33,7 +33,7 @@ if(localStorage.getItem('token') === null) {
             <div class="flex items-center">
                 <div class="flex items-center pt-[2px] cursor-pointer mr-6 text-[16px] font-semibold text-white dark:text-white hover:underline max-[732px]:hidden">2812-0810-2001</div>
                 <div v-if="!isLoggedIn">
-                    <router-link to="/logAndReg/login" class="text-[16px] text-slate-700 font-medium p-2 px-4 bg-white dark:text-blue-500 hover:text-[#2acc97] rounded-lg">Login</router-link>
+                    <router-link to="/log-and-reg/login" class="text-[16px] text-slate-700 font-medium p-2 px-4 bg-white dark:text-blue-500 hover:text-[#2acc97] rounded-lg">Login</router-link>
                 </div>
                 <div v-else>
                     <ProfileDropdown />
