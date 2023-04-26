@@ -2,7 +2,9 @@
 import RegistrationCarAndOwner from './RegistrationCarAndOwner.vue';
 import RegistrationCert from './RegistrationCert.vue';
 import { ref, watch } from 'vue';
+import { useRouter } from 'vue-router';
 
+const router = useRouter()
 const props = defineProps(['license'])
 const emit = defineEmits(['exitModal']);
 const exitModal = () => {
@@ -91,6 +93,8 @@ const submitFormHandler = async () => {
     }
 };
 
+const docs = ref(null)
+
 const second = ref(0)
 let loadingInterval;
 
@@ -108,6 +112,9 @@ watch(second, (newSec, oldSec) => {
     if(newSec === 3) {
         second.value = 0
         loadingSubmit.value = false
+        const param = props.license.replace('.', '=')
+        let route = router.resolve({ path: `/print-pdf/${param}` })
+        window.open(route.href)
         window.location.reload()
         clearInterval(loadingInterval)
     }
@@ -119,7 +126,7 @@ watch(second, (newSec, oldSec) => {
     <div class="bg-black/40 backdrop-blur-[2px] top-0 left-0 w-full h-screen blur-xl fixed z-10 backdrop-animation" @click="exitModal"></div>
     <div class="bg-[#f5f7fb] rounded-[8px] p-4 fixed top-[3vh] left-[10%] w-4/5 z-50 flex modal-animation overflow-hidden h-fit">
         <div v-if="!loadingSubmit" class="flex flex-col gap-2 w-full">
-            <div class="w-full flex gap-2 h-[450px]">
+            <div ref="docs" class="w-full flex gap-2 h-[450px]">
                 <RegistrationCarAndOwner :owner-type="ownerType" :info="carDetailedInfo" :regist-new-car="false"/>
                 <RegistrationCert :registry-info="registrationInfo"/>
             </div>
