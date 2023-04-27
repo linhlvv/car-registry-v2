@@ -1,9 +1,13 @@
 <script setup>
 import RegistrationCarAndOwner from './RegistrationCarAndOwner.vue';
 import RegistrationCert from './RegistrationCert.vue';
+import { useAccountStore } from '../../stores/AccountStore';
+import { useRegistrationCertStore } from '../../stores/RegistrationCertStore'
 import { ref, watch } from 'vue';
 import { useRouter } from 'vue-router';
 
+const accountStore = useAccountStore();
+const registrationCertStore = useRegistrationCertStore()
 const router = useRouter()
 const props = defineProps(['license'])
 const emit = defineEmits(['exitModal']);
@@ -24,6 +28,7 @@ const findCarInfo = async() => {
         credentials: "include",
         headers: {
             'Content-Type': 'application/json',
+            'Authorization': `${accountStore.getToken}`
         },
         body: JSON.stringify({licenseId: props.license}),
     })
@@ -50,6 +55,7 @@ const fetchRegistrationInfo = async () => {
         credentials: "include",
         headers: {
             'Content-Type': 'application/json',
+            'Authorization': `${accountStore.getToken}`
         },
         body: JSON.stringify({licenseId: props.license}),
     })
@@ -76,6 +82,7 @@ const submitFormHandler = async () => {
         credentials: "include",
         headers: {
             'Content-Type': 'application/json',
+            'Authorization': `${accountStore.getToken}`
         },
         body: JSON.stringify({
             id: registrationInfo.value.id,
@@ -112,8 +119,9 @@ watch(second, (newSec, oldSec) => {
     if(newSec === 3) {
         second.value = 0
         loadingSubmit.value = false
+        registrationCertStore.setRegistrationCertInfo(JSON.stringify(registryCert.value.info))
         const param = props.license.replace('.', '=')
-        let route = router.resolve({ path: `/print-pdf/${param}` })
+        let route = router.resolve({ path: `/print-pdf/${param}` }) 
         window.open(route.href)
         window.location.reload()
         clearInterval(loadingInterval)
