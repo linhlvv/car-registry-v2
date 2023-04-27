@@ -23,7 +23,7 @@ const props = defineProps(['info', 'ownerType', 'registNewCar']);
             <div class="w-full flex items-center gap-7">
                 <RegistrationFormInput :disabled="true" title="Certification ID" input-width="w-[30%]" v-model="info.certId"/>
                 <RegistrationFormInput :disabled="true" title="Certification date" input-width="w-[30%]" v-model="info.certDate"/>
-                <RegistrationFormInput :disabled="(info.licenseId === '' || info.licenseId === null) ? true : false" placeholder="yyyy-mm-dd" title="Modification date" input-width="w-[30%]" v-model="info.modifyDate"/>
+                <RegistrationFormInput :disabled="true" title="Modification date" input-width="w-[30%]" v-model="info.modifyDate"/>
             </div>
         </div>
         <div class="flex flex-col w-full">
