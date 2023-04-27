@@ -8,23 +8,11 @@ let forecast = async (req, res) => {
   if (page === undefined)
     page = 1
 
-  let year = parseInt(req.body.year)
-  let month = parseInt(req.body.month)
-  let quarter = parseInt(req.body.quarter)
-  
-  let filter = 'expire'
-
-  let match = ''
-  if(req.body.year !== "All") {
-    match += `\nand year(` + filter + `) = ` + year
-  }
-  if(req.body.month !== "All") {
-    match += `\nand month(` + filter + `) = ` + month
-  }
-  else if(req.body.quarter !== "All") {
-    match += `\nand month(` + filter + `) > ` + (quarter - 1) * 3 +
-            `\nand month(` + filter + `) <= ` + quarter * 3 
-  }
+  let year = new Date().getFullYear()
+  let month = new Date().getMonth() + 1
+  let match = `\nand year(expire) = ` + year
+            + `\nand month(expire) = ` + month
+            + `\nand expire >= CURRENT_DATE()`
 
   let count = `
   select count(*) as total
@@ -35,25 +23,23 @@ let forecast = async (req, res) => {
 
   let query = `
   select r.licenseId, brand, model, version, date, expire, 
-    p.name as name, (expire < CURRENT_DATE()) as status
+    p.name as name, (expire >= CURRENT_DATE()) as status
   from registry r
   join vehicles v 
     on r.licenseId = v.licenseId
   join personal p 
     on v.ownerId = p.id
-  where centreId = ` + req.session.userid + match + ` 
-    and expire >= CURRENT_DATE()
+  where centreId = ` + req.session.userid + match + `
         union all
   select r.licenseId, brand, model, version, date, expire, 
-    c.name as name, (expire < CURRENT_DATE()) as status
+    c.name as name, (expire >=CURRENT_DATE()) as status
   from registry r
   join vehicles v 
     on r.licenseId = v.licenseId
   join company c 
     on v.ownerId = c.id
   where centreId = ` + req.session.userid + match + ` 
-    and expire >= CURRENT_DATE()
-  order by ` + filter + ` asc
+  order by expire asc
     limit ? offset ?`
   
   // bug - đã gọi được api kết quả trả về chính xác
