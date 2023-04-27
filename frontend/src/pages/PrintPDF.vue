@@ -1,11 +1,13 @@
 <script setup>
 import { computed, onBeforeUpdate, onMounted, ref } from 'vue';
 import { useRoute } from 'vue-router';
+import { useRegistrationCertStore } from '../stores/RegistrationCertStore';
 
 const route = useRoute()
+const registrationCertStore = useRegistrationCertStore()
 
 const carAndOwnerInfo = ref({});
-const regisFormInfo = ref({});
+const registCertInfo = ref({});
 const ownerType = ref(0);
 const name = ref('Vu Minh Tuan');
 const date = ref(new Date())
@@ -29,20 +31,20 @@ const fetchCarAndOwnerInfo = async () => {
     const dataFetched = JSON.parse(await res.text())
     carAndOwnerInfo.value = dataFetched.data[0]
     ownerType.value = dataFetched.ownerType
+    carAndOwnerInfo.value.address = carAndOwnerInfo.value.address.charAt(0).toUpperCase() + carAndOwnerInfo.value.address.slice(1)
     console.log(ownerType.value);
 }
 
 //TODO
-const fetchRegistrationCertInfo = async () => {
-
-}
-
 const print = () => {
     window.print()
 };
 
 onMounted(() => {
     fetchCarAndOwnerInfo()
+    registCertInfo.value = registrationCertStore.registrationCert
+    registrationCertStore.removeCert()
+    console.log(registCertInfo.value);
     // setTimeout(print, 1000)
 });
 
@@ -126,19 +128,19 @@ onMounted(() => {
             </div>
             <div class="flex items-start justify-between w-full">
                 <p>Registry ID:</p>
-                <p class="max-w-1/2 max-w-[50%] text-right">8159</p>
-            </div>
-            <div class="flex items-start justify-between w-full">
-                <p>Center:</p>
-                <p class="max-w-1/2 max-w-[50%] text-right">Trung tâm Đăng kiểm Miền Bắc II</p>
+                <p class="max-w-1/2 max-w-[50%] text-right">{{ registCertInfo.id }}</p>
             </div>
             <div class="flex items-start justify-between w-full">
                 <p>Registry date:</p>
-                <p class="max-w-1/2 max-w-[50%] text-right">28/12/2003</p>
+                <p class="max-w-1/2 max-w-[50%] text-right">{{ registCertInfo.date }}</p>
             </div>
             <div class="flex items-start justify-between w-full">
                 <p>Expired date:</p>
-                <p class="max-w-1/2 max-w-[50%] text-right">28/12/2003</p>
+                <p class="max-w-1/2 max-w-[50%] text-right">{{ registCertInfo.expire }}</p>
+            </div>
+            <div class="flex items-start justify-between w-full">
+                <p>Center:</p>
+                <p class="max-w-1/2 max-w-[50%] text-right">{{ registCertInfo.name }}</p>
             </div>
         </div>
         <div class="w-full flex items-center justify-center mt-6">
