@@ -40,11 +40,12 @@ const print = () => {
     window.print()
 };
 
+//TODO - add fetch function, param id and license
 onMounted(() => {
     fetchCarAndOwnerInfo()
     registCertInfo.value = registrationCertStore.registrationCert
     registrationCertStore.removeCert()
-    console.log(registCertInfo.value);
+    // console.log(registCertInfo.value);
     // setTimeout(print, 1000)
 });
 
