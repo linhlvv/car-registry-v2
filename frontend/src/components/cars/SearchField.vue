@@ -260,7 +260,7 @@ const reload = async () => {
                 <div class="flex items-center">
                     <h1 class="text-[#9196a4] font-semibold">Filter</h1>
                 </div>
-                <select @change="filterClickedHandler(selected)" v-model="selected" id="countries" class=" bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-[4px] focus:ring-[#2acc97] focus:border-[#2acc97] block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500">
+                <select @change="filterClickedHandler(selected)" v-model="selected" id="countries" class=" bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-[4px] focus:outline-[#2acc97] block w-full p-2.5">
                     <option :value="item" v-for="item in filterList" :key="item">
                         {{ item }}
                     </option>
@@ -283,7 +283,7 @@ const reload = async () => {
                         <div class="flex items-center">
                             <h1 class="text-[#9196a4] font-semibold">City</h1>
                         </div>
-                        <select v-model="city" @change="cityClicked(city)" id="countries" class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-[4px] focus:ring-[#2acc97] focus:border-[#2acc97] block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500">
+                        <select v-model="city" @change="cityClicked(city)" id="countries" class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-[4px] focus:outline-[#2acc97] block w-full p-2.5">
                             <option v-for="singleCity in cityList" :key="singleCity">
                                 {{ singleCity }}
                             </option>
@@ -307,7 +307,7 @@ const reload = async () => {
                         <div class="flex items-center">
                             <h1 class="text-[#9196a4] font-semibold">Brand</h1>
                         </div>
-                        <select v-model="brand" @change="brandClicked(brand)" id="countries" class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-[4px] focus:ring-[#2acc97] focus:border-[#2acc97] block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500">
+                        <select v-model="brand" @change="brandClicked(brand)" id="countries" class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-[4px] focus:outline-[#2acc97] block w-full p-2.5">
                             <option v-for="singleBrand in brandList" :key="singleBrand" :value="singleBrand">
                                 {{ singleBrand }}
                             </option>
@@ -318,17 +318,17 @@ const reload = async () => {
                 <!-- Time filter -->
                 <Transition name="slide-fade">
                     <div v-show="selected === 'Time'" class="flex items-center gap-2 w-full">
-                        <select v-model="time.year" @change="timeClicked(time.year, 'year')" class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-[4px] focus:ring-[#2acc97] focus:border-[#2acc97] block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500">
+                        <select v-model="time.year" @change="timeClicked(time.year, 'year')" class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-[4px] focus:outline-[#2acc97] block w-full p-2.5">
                             <option v-for="singleYear in yearList" :key="singleYear" :value="singleYear">
                                 {{ singleYear }}
                             </option>
                         </select>
-                        <select :disabled="time.year === 'All'" v-model="time.quarter" @change="timeClicked(time.quarter, 'quarter')" class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-[4px] focus:ring-[#2acc97] focus:border-[#2acc97] block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500 disabled:opacity-60">
+                        <select :disabled="time.year === 'All'" v-model="time.quarter" @change="timeClicked(time.quarter, 'quarter')" class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-[4px] focus:outline-[#2acc97] block w-full p-2.5 disabled:opacity-60">
                             <option v-for="singleQ in quarterList" :key="singleQ.value" :value="singleQ.value">
                                 {{ singleQ.content }}
                             </option>
                         </select>
-                        <select :disabled="time.year === 'All'" v-model="time.month" @change="timeClicked(time.month, 'month')" class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-[4px] focus:ring-[#2acc97] focus:border-[#2acc97] block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500 disabled:opacity-60">
+                        <select :disabled="time.year === 'All'" v-model="time.month" @change="timeClicked(time.month, 'month')" class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-[4px] focus:outline-[#2acc97] block w-full p-2.5 disabled:opacity-60">
                             <option v-for="singleMonth in monthList" :key="singleMonth.value" :value="singleMonth.value">
                                 {{ singleMonth.content }}
                             </option>

@@ -1,5 +1,94 @@
 <script setup>
-import { ref } from 'vue';
+import Pagination from '../components/forecast/Pagination.vue';
+import ForecastCard from '../components/forecast/ForecastCard.vue';
+import { computed, onMounted, ref, watch } from 'vue';
+import { useAccountStore } from '../stores/AccountStore';
+
+const accountStore = useAccountStore()
+
+//SECTION - response per page
+const resPerPage = ref(7);
+
+const minHeight = ref('min-h-[400px]')
+
+//SECTION - pagination
+const pageNumber = ref(1);
+const totalPage = ref(2);
+
+const navigateToSpecificPage = (page) => {
+    pageNumber.value = page
+}
+
+const navigatePageWithDirection = (direction) => {
+    if(direction === 'left') {
+        if(pageNumber.value > 1) {
+            pageNumber.value -= 1;
+        }
+    } else {
+        if(pageNumber.value < totalPage.value) {
+            pageNumber.value += 1;
+        }
+    }
+}
+
+
+//SECTION - data fetcher
+const forecastList = ref();
+const totalRes = ref(0);
+const fetchForecastList = async () => {
+    let fetchRoute;
+    let fetchBody;
+    if(accountStore.isAdmin) {
+        
+    } else {
+        fetchRoute = 'http://localhost:1111/forecast'
+        fetchBody = {
+            resPerPage: resPerPage.value,
+            page: pageNumber.value
+        }
+    }
+    const res = await fetch(fetchRoute, {
+        method: 'POST',
+        credentials: "include",
+        headers: {
+            'Content-Type': 'application/json',
+            'Authorization': `${accountStore.getToken}`
+        },
+        body: JSON.stringify(fetchBody)
+    })
+    if(res.error) {
+        console.log(res.error);
+    }
+    const dataFetched = JSON.parse(await res.text())
+    forecastList.value = dataFetched.data
+    totalPage.value = dataFetched.countPage
+    totalRes.value = dataFetched.countData
+};
+
+onMounted(() => {
+    fetchForecastList()
+});
+
+watch(() => pageNumber.value, (newPage, oldPage) => {
+    fetchForecastList()
+});
+
+watch(() => resPerPage.value, () => {
+    pageNumber.value = 1
+    if(resPerPage.value === 5) {
+        minHeight.value = 'min-h-[300px]'
+    }
+    if(resPerPage.value === 7) {
+        minHeight.value = 'min-h-[400px]'
+    }
+    if(resPerPage.value === 10) {
+        minHeight.value = 'min-h-[550px]'
+    }
+    if(resPerPage.value === 12) {
+        minHeight.value = 'min-h-[650px]'
+    }
+    fetchForecastList()
+});
 
 </script>
 
@@ -7,8 +96,34 @@ import { ref } from 'vue';
     <div>
         <div class="my-6">
             <div class="flex justify-center">
-                <div class="flex items-center flex-col w-[80vw] custom-shadow rounded-2xl overflow-hidden">
-                    
+                <div class="flex items-center flex-col w-[90vw]">
+                    <div class="flex justify-end items-center w-full gap-8">
+                        <div class="flex items-center gap-2">
+                            <div class="text-[13px] font-semibold">Results per page</div>
+                            <select v-model="resPerPage" class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:outline-[#2acc97] block w-full p-2.5">
+                                <option value="5">5</option>
+                                <option value="7" selected>7</option>
+                                <option value="10">10</option>
+                                <option value="12">12</option>
+                            </select>
+                        </div>
+                        <div class="text-[14px] font-semibold flex items-center gap-2">
+                            <p>Total:</p>
+                            <p class="text-[#2acc97]">{{ totalRes }}</p>
+                        </div>
+                    </div>
+                    <div class="w-full flex flex-col gap-[2px] mb-4" :class="minHeight">
+                        <ForecastCard :is-root-row="true"/>
+                        <div v-for="card in forecastList" :key="card">
+                            <ForecastCard :info="card"/>
+                        </div>
+                    </div>
+                    <Pagination 
+                        :total-page="totalPage" 
+                        :current-page="pageNumber"
+                        @pageClicked="navigateToSpecificPage"
+                        @navigatePage="navigatePageWithDirection"
+                    />
                 </div>
             </div>
         </div>
@@ -16,7 +131,7 @@ import { ref } from 'vue';
 </template>
 
 <style scoped>
-    .custom-shadow {
-        box-shadow: -5px 8px 8px #ebecf0;
-    }
+    /* select { 
+        outline:none; 
+    } */
 </style>
