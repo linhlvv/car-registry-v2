@@ -107,7 +107,7 @@ watch(() => resPerPage.value, () => {
                                 <option value="12">12</option>
                             </select>
                         </div>
-                        <div class="text-[13px] font-semibold flex items-center gap-2">
+                        <div class="text-[14px] font-semibold flex items-center gap-2">
                             <p>Total:</p>
                             <p class="text-[#2acc97]">{{ totalRes }}</p>
                         </div>
