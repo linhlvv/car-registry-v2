@@ -14,6 +14,7 @@ const messageTime = 3
 const errorMessageOn = ref(false)
 const errorMessageTime = ref(messageTime)
 let errorMessageInterval;
+//TODO - post account
 const handleAddAccount = () => {
     if(accountInfo.value.email === '' ||
         accountInfo.value.name === '' ||
