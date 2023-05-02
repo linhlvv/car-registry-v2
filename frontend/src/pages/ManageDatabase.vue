@@ -22,11 +22,18 @@ const removeFile = () => {
 	}
 };
 
-const errorMessageTime = ref(5)
+const messageTime = 5
+const errorMessageTime = ref(messageTime)
 const errorMessageOn = ref(false)
+let errorMessageInterval;
 const upload = async () => {
 	if(!hasFile.value) {
 		errorMessageOn.value = true
+		clearInterval(errorMessageInterval)
+		errorMessageTime.value = messageTime
+		errorMessageInterval = setInterval(() => {
+			errorMessageTime.value -= 1
+		}, 1000);
 	} else {
 
 	}
@@ -34,6 +41,14 @@ const upload = async () => {
 
 //SECTION - owner type selection
 const ownerTypePicked = ref(null);
+
+//SECTION - watchers
+watch(() => errorMessageTime.value, () => {
+	if(errorMessageTime.value === 0) {
+		errorMessageOn.value = false
+		errorMessageTime.value = messageTime
+	}
+});
 
 </script>
 
