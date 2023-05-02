@@ -4,7 +4,13 @@ import AccountCard from './AccountCard.vue';
 import AccountManagementRootRow from './AccountManagementRootRow.vue';
 import { useAccountStore } from '../../stores/AccountStore';
 
+const emit = defineEmits(['openModificationModal'])
+
 const accountStore = useAccountStore()
+
+const openModModal = () => {
+    emit('openModificationModal')
+}
 
 const accountList = ref([
     {id: 1, email: 'tuandeptrai@gmail.com', password: '123456'},
@@ -43,7 +49,7 @@ fetchAvailableCenters()
         <div class="mb-8 w-full">
             <div class=" flex flex-col gap-[6px] items-center w-full">
                 <div v-for="item in accountList" :key="item.id" class="w-full">
-                    <AccountCard :item="item"/>
+                    <AccountCard :item="item" @open-modification-modal="openModModal"/>
                 </div>
             </div>
         </div>
