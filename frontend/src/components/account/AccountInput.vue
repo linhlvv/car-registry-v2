@@ -4,8 +4,8 @@ defineEmits(['update:modelValue']);
 </script>
 
 <template>
-    <div class="text-[10px] font-medium text-[#898c91] ml-[1px]">{{ title }}</div>
-    <input :placeholder="placeholder" :type="type" :value="modelValue" @input="$emit('update:modelValue', $event.target.value)" class="border-t-none border-r-none border-l-none border-b-2 border-b-[#898c91] placeholder:text-[12px] text-[12px] placeholder:font-medium font-medium placeholder:text-[#1d1d1d] placeholder:opacity-70 py-1"/>
+    <div class="text-[11px] font-medium text-[#898c91] ml-[1px]">{{ title }}</div>
+    <input :type="type" :value="modelValue" @input="$emit('update:modelValue', $event.target.value)" class="border-t-none border-r-none border-l-none border-b-2 border-b-[#898c91] placeholder:text-[14px] text-[14px] placeholder:font-medium font-medium placeholder:text-[#1d1d1d] placeholder:opacity-70 py-1"/>
 </template>
 
 <style scoped>
