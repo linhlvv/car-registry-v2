@@ -23,6 +23,11 @@ const router = createRouter({
       ]
     },
     {
+      path: '/print-pdf/:license',
+      name: 'PrintPDF',
+      component: () => import('@/pages/PrintPDF.vue'),
+    },
+    {
       path: '/',
       component: () => import('@/layout/DefaultLayout.vue'),
       children: [

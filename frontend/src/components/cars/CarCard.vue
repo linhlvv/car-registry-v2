@@ -29,7 +29,10 @@ const regist = () => {
             </div>
         </div>
         <div v-else class="max-[736px]:hidden font-bold text-[11px] max-[900px]:text-[10px] flex justify-center items-center w-[26%]">
-            <div class="max-[736px]:hidden font-semibold text-[#616367] text-[11px] max-[900px]:text-[10px] flex justify-center items-center w-full">
+            <div class="max-[736px]:hidden font-semibold text-[#616367] text-[11px] max-[900px]:text-[10px] flex justify-center items-center w-1/2">
+                {{ car.duration }}
+            </div>
+            <div class="max-[736px]:hidden font-semibold text-[#616367] text-[11px] max-[900px]:text-[10px] flex justify-center items-center w-1/2">
                 {{ car.expire }}
             </div>
         </div>
