@@ -36,7 +36,7 @@ watch(() => errorMessageTime.value, () => {
         errorMessageOn.value = false
         errorMessageTime.value = messageTime
     }
-})
+});
 
 </script>
 
