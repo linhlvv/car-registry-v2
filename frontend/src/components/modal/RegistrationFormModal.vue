@@ -9,7 +9,7 @@ import { useRouter } from 'vue-router';
 const accountStore = useAccountStore();
 const registrationCertStore = useRegistrationCertStore()
 const router = useRouter()
-const props = defineProps(['license'])
+const props = defineProps(['license']);
 const emit = defineEmits(['exitModal']);
 const exitModal = () => {
     emit('exitModal');
@@ -23,7 +23,7 @@ const registryCert = ref({info: {}, valid: true})
 //SECTION - fetch car info and owner info
 const findCarInfo = async() => {
     loading.value = true
-    const res = await fetch(`http://localhost:1111/vehicles/modal`, {
+    const res = await fetch(`http://localhost:1111/preview-info`, {
         method: 'POST',
         credentials: "include",
         headers: {
