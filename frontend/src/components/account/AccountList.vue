@@ -17,7 +17,7 @@ const loading = ref(false)
 
 const fetchAvailableCenters = async () => {
     loading.value = true
-    const res = await fetch(`http://localhost:1111/view-all-centres`, {
+    const res = await fetch(`http://localhost:1111/centre/all`, {
         credentials: "include",
         headers: {
             'Content-Type': 'application/json',
@@ -28,7 +28,7 @@ const fetchAvailableCenters = async () => {
         console.log(res.error);
     }
     const dataFetched = JSON.parse(await res.text())
-    accountList.value = [...dataFetched]
+    accountList.value = [...dataFetched.data]
     console.log(`centers: ${JSON.stringify(accountList.value)}`);
     loading.value = false
 };
