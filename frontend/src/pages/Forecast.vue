@@ -113,7 +113,7 @@ watch(() => resPerPage.value, () => {
 <template>
     <div>
         <div v-if="registModalOn">
-            <RegistrationFormModal :license-id="modalLicense" @exit-modal="handleRegistModal"/>
+            <RegistrationFormModal :license="modalLicense" @exit-modal="handleRegistModal"/>
         </div>
         <div v-if="infoModalOn">
             <CarInfoModal :license-id="modalLicense" @exit-modal="handleInfoModal"/>
