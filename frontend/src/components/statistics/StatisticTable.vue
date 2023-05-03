@@ -4,11 +4,15 @@ import SearchBar from '../UI/SearchBar.vue';
 import { useAccountStore } from '../../stores/AccountStore';
 import { ref, watch } from 'vue';
 
-const emit = defineEmits(['selectedTimeClicked'])
+const emit = defineEmits(['selectedTimeClicked', 'openCertInfoModal'])
 const props = defineProps(['time'])
 
 const accountStore = useAccountStore()
 
+//SECTION - modal handler
+const openModal = (license) => {
+    emit('openCertInfoModal', license)
+}
 
 //SECTION - page number handler
 const totalPage = ref();
@@ -100,7 +104,7 @@ const fetchData = async () => {
         console.log(res.error);
     }
     const dataFetched = JSON.parse(await res.text())
-    // console.log(`registries: ${JSON.stringify(dataFetched)}`);
+    console.log(`registries: ${JSON.stringify(dataFetched)}`);
     totalPage.value = dataFetched.count
     registCardList.value = dataFetched.data
     loading.value = false
@@ -199,7 +203,7 @@ const scrollToChart = () => {
         <div class="w-full flex flex-col bg-[#f5f7fb]">
             <StatisticTableCard :is-root-row="true"/>
             <div v-for="card in registCardList" :key="card.licenseId">
-                <StatisticTableCard :car="card"/>
+                <StatisticTableCard :car="card" @open-info="openModal"/>
             </div>
         </div>
     </div>
