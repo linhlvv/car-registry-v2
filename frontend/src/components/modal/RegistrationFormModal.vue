@@ -1,9 +1,15 @@
 <script setup>
 import RegistrationCarAndOwner from './RegistrationCarAndOwner.vue';
 import RegistrationCert from './RegistrationCert.vue';
+import { useAccountStore } from '../../stores/AccountStore';
+import { useRegistrationCertStore } from '../../stores/RegistrationCertStore'
 import { ref, watch } from 'vue';
+import { useRouter } from 'vue-router';
 
-const props = defineProps(['license'])
+const accountStore = useAccountStore();
+const registrationCertStore = useRegistrationCertStore()
+const router = useRouter()
+const props = defineProps(['license']);
 const emit = defineEmits(['exitModal']);
 const exitModal = () => {
     emit('exitModal');
@@ -17,11 +23,12 @@ const registryCert = ref({info: {}, valid: true})
 //SECTION - fetch car info and owner info
 const findCarInfo = async() => {
     loading.value = true
-    const res = await fetch(`http://localhost:1111/vehicles/modal`, {
+    const res = await fetch(`http://localhost:1111/preview-info`, {
         method: 'POST',
         credentials: "include",
         headers: {
             'Content-Type': 'application/json',
+            'Authorization': `${accountStore.getToken}`
         },
         body: JSON.stringify({licenseId: props.license}),
     })
@@ -48,6 +55,7 @@ const fetchRegistrationInfo = async () => {
         credentials: "include",
         headers: {
             'Content-Type': 'application/json',
+            'Authorization': `${accountStore.getToken}`
         },
         body: JSON.stringify({licenseId: props.license}),
     })
@@ -74,6 +82,7 @@ const submitFormHandler = async () => {
         credentials: "include",
         headers: {
             'Content-Type': 'application/json',
+            'Authorization': `${accountStore.getToken}`
         },
         body: JSON.stringify({
             id: registrationInfo.value.id,
@@ -90,6 +99,8 @@ const submitFormHandler = async () => {
         triggerInterval()
     }
 };
+
+const docs = ref(null)
 
 const second = ref(0)
 let loadingInterval;
@@ -108,6 +119,10 @@ watch(second, (newSec, oldSec) => {
     if(newSec === 3) {
         second.value = 0
         loadingSubmit.value = false
+        registrationCertStore.setRegistrationCertInfo(JSON.stringify(registryCert.value.info))
+        const param = props.license.replace('.', '=')
+        let route = router.resolve({ path: `/print-pdf/${param}` }) 
+        window.open(route.href)
         window.location.reload()
         clearInterval(loadingInterval)
     }
@@ -119,7 +134,7 @@ watch(second, (newSec, oldSec) => {
     <div class="bg-black/40 backdrop-blur-[2px] top-0 left-0 w-full h-screen blur-xl fixed z-10 backdrop-animation" @click="exitModal"></div>
     <div class="bg-[#f5f7fb] rounded-[8px] p-4 fixed top-[3vh] left-[10%] w-4/5 z-50 flex modal-animation overflow-hidden h-fit">
         <div v-if="!loadingSubmit" class="flex flex-col gap-2 w-full">
-            <div class="w-full flex gap-2 h-[450px]">
+            <div ref="docs" class="w-full flex gap-2 h-[450px]">
                 <RegistrationCarAndOwner :owner-type="ownerType" :info="carDetailedInfo" :regist-new-car="false"/>
                 <RegistrationCert :registry-info="registrationInfo"/>
             </div>

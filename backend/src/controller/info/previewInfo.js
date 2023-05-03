@@ -13,17 +13,21 @@ let previewInfo = async (req, res) => {
   on o.id = v.ownerId
   where v.licenseId = ?`
   const [rows, fields] = await pool.query(type, [licenseId])
-
-
-  if (rows[0].type === 1) {
-    let query = base + ` p.* from vehicles v left join region r on v.regionId = r.id JOIN personal p on v.ownerId = p.id WHERE v.licenseId = ?`
-    const [rows, fields] = await pool.query(query, [licenseId])
-    return res.send({data: rows, data2: rows2[rows2.length-1],valid: expired, ownerType: 1})
+  if (rows[0] == null) {
+    
+    return res.send({data: null, valid: false})
   }
   else {
-    let query = base + ` c.* from vehicles v left join region r on v.regionId = r.id JOIN company c on v.ownerId = c.id WHERE v.licenseId = ?`
-    const [rows, fields] = await pool.query(query, [licenseId])
-    return res.send({data: rows, ownerType: 0})
+    if (rows[0].type === 1) {
+      let query = base + ` p.* from vehicles v left join region r on v.regionId = r.id JOIN personal p on v.ownerId = p.id WHERE v.licenseId = ?`
+      const [rows, fields] = await pool.query(query, [licenseId])
+      return res.send({data: rows, ownerType: 1})
+    }
+    else {
+      let query = base + ` c.* from vehicles v left join region r on v.regionId = r.id JOIN company c on v.ownerId = c.id WHERE v.licenseId = ?`
+      const [rows, fields] = await pool.query(query, [licenseId])
+      return res.send({data: rows, ownerType: 0})
+    }
   }
 }
 

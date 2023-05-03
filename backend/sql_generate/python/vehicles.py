@@ -7,7 +7,7 @@ import datetime
 
 # Tạo danh sách mã đăng kiểm
 cerIDs = []
-for i in range(1110):
+for i in range(555):
     cerID = str(random.randrange(0, 9)) + str(random.randrange(0, 9)) + str(random.randrange(0, 9)) + str(random.randrange(0, 9)) + "-" + str(random.randrange(0, 9)) + str(random.randrange(0, 9)) + \
         str(random.randrange(0, 9))+str(random.randrange(0, 9)) + "-" + str(random.randrange(0, 9)) + \
         str(random.randrange(0, 9)) + \
@@ -43,7 +43,7 @@ models = ['Camry', 'F-150', 'Civic', 'Silverado', 'Altima', '3 Series', 'E-Class
 years = [i for i in range(2015, 2019)]
 ran_cars = []
 manu_dates = []
-for i in range(1110):
+for i in range(555):
     modified = random.random() >= 0.5
     modifieds.append(modified)
     brand = random.choice(brands)
@@ -80,7 +80,7 @@ for i in range(1110):
 # Tạo danh sách 1110 biển số xe
 license_plates = []
 acodes = []
-for i in range(1110):
+for i in range(555):
     # Chọn một mã vùng ngẫu nhiên
     area_code = random.choice(area_codes)
     acodes.append(area_code)
@@ -105,6 +105,6 @@ with io.open('./backend/sql_generate/sql/vehicles.sql', 'w', encoding='utf-8') a
                           + "max(id), '"
                        + info + "', '" + str(time) + "', '"
                        + str(int(modify)) + "', " + (str(modifyDate) if str(modifyDate)=='NULL' else "'"+str(modifyDate)+"'") + " "
-                       + "from owner where type = 0 and id not in (select owner.id from owner right join vehicles on owner.id=vehicles.ownerId);"
+                       + "from owner where type = 1 and id not in (select owner.id from owner right join vehicles on owner.id=vehicles.ownerId);"
             for acode, plate, id, info, time, manuDate, modify, modifyDate in zip(acodes, license_plates, cerIDs, ran_cars, random_dates, manu_dates, modifieds, modify_dates)]))
     f.close()

@@ -6,6 +6,16 @@ import { ref } from 'vue';
 
 const centerInfo = ref({});
 
+const modalOn = ref(false);
+
+const openModal = () => {
+    modalOn.value = true
+}
+
+const exitModal = () => {
+    modalOn.value = false
+};
+
 </script>
 
 <template>
@@ -22,9 +32,11 @@ const centerInfo = ref({});
                 <span class="text-3xl font-semibold text-[#2acc97] whitespace-nowrap">Available account list</span>
                 <hr class="w-full border-[1.25px] border-slate-300">
             </div>
-            <AccountList />
+            <AccountList @open-modification-modal="openModal"/>
         </div>
-        <ModificationModal />
+        <div v-if="modalOn">
+            <ModificationModal @exit="exitModal"/>
+        </div>
     </div>
 </template>
 

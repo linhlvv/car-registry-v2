@@ -119,12 +119,14 @@ const fetchAllAvailableCities = async () => {
 // logic - pagination with previous and next button
 const pageNumber = ref(props.pageNum);
 const pageHandler = (direction) => {
+    console.log(direction);
     if(direction === 'left') {
         if (pageNumber.value > 1) {
             pageNumber.value -= +1;
             emit('prevPage');
         }
     } else {
+        console.log(pageNumber.value, props.totalPage);
         if (pageNumber.value < props.totalPage) {
             pageNumber.value += +1;
             emit('nextPage');
@@ -151,6 +153,7 @@ const time = ref({
 
 // logic - general filter
 const filterClickedHandler = (value) => {
+    pageNumber.value = 1
     brand.value = 'All'
     time.value = {
         year: 'All', quarter: 'All', month: 'All',
@@ -167,12 +170,14 @@ const filterClickedHandler = (value) => {
 
 // logic - city filter
 const cityClicked = (value) => {
+    pageNumber.value = 1
     console.log(`city ${city.value}`);
     emit('selectedCityClicked', value)
 }
 
 // logic - owner filter
 const ownerClicked = (value) => {
+    pageNumber.value = 1
     owner.value = value
     console.log(`owner ${owner.value}`);
     emit('selectedOwnerClicked', value)
@@ -180,12 +185,14 @@ const ownerClicked = (value) => {
 
 // logic - brand filter
 const brandClicked = (value) => {
+    pageNumber.value = 1
     console.log(`brand changes to ${brand.value}`);
     emit('selectedBrandClicked', value)
 }
 
 // logic - time filter with year + quarter or year + month
 const timeClicked = (value, type) => {
+    pageNumber.value = 1
     if(type === 'year') {
         time.value.year = value;
         time.value.month = 'All'
@@ -204,7 +211,9 @@ const timeClicked = (value, type) => {
 //SECTION - watcher
 // logic - reset filter after car type change event
 watch(() => props.carType, (newCarType, oldCarType) => {
+    pageNumber.value = 1
     if(newCarType !== oldCarType) {
+        
         selected.value = 'No filter'
         time.value = {
             year: 'All', quarter: 'All', month: 'All',
@@ -217,6 +226,7 @@ watch(() => props.carType, (newCarType, oldCarType) => {
 
 //SECTION - reload data
 const reload = async () => {
+    pageNumber.value = 1
     selected.value = 'No filter'
     brand.value = 'All'
     city.value = 'All'
@@ -238,8 +248,8 @@ const reload = async () => {
             <div class="flex items-center gap-2 w-[20%] justify-end">
                 <i class="fa-solid fa-circle-arrow-left text-[#1d1d1d] text-base cursor-pointer hover:text-[#2acc97]" @click="pageHandler('left')"></i>
                 <div class="flex items-center">
-                    <input type="number" min="1" :max="totalPage" :value="props.pageNum" @keyup.enter="enterHandler($event.target.value)" class="border border-[#1d1d1d] border-opacity-10 p-[2px] w-10">
-                    <div>/{{ totalPage }}</div>
+                    <input type="number" min="1" :max="totalPage" :value="props.pageNum" @keyup.enter="enterHandler($event.target.value)" class="border border-[#1d1d1d] border-opacity-10 p-[2px] w-10 text-[14px] text-[#1d1d1d] font-semibold">
+                    <div class="text-[14px] text-[#1d1d1d] font-semibold">/{{ totalPage }}</div>
                     <!-- <div class="text-green-400">{{ typeof pageNumber }}</div> -->
                 </div>
                 <i class="fa-solid fa-circle-arrow-right text-[#1d1d1d] text-base cursor-pointer hover:text-[#2acc97]" @click="pageHandler('right')"></i>
@@ -250,7 +260,7 @@ const reload = async () => {
                 <div class="flex items-center">
                     <h1 class="text-[#9196a4] font-semibold">Filter</h1>
                 </div>
-                <select @change="filterClickedHandler(selected)" v-model="selected" id="countries" class=" bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-[4px] focus:ring-[#2acc97] focus:border-[#2acc97] block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500">
+                <select @change="filterClickedHandler(selected)" v-model="selected" id="countries" class=" bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-[4px] focus:outline-[#2acc97] block w-full p-2.5">
                     <option :value="item" v-for="item in filterList" :key="item">
                         {{ item }}
                     </option>
@@ -268,55 +278,64 @@ const reload = async () => {
             </div>
             <div class="w-[70%] flex items-center ml-3">
                 <!-- City filter -->
-                <div id="sub-filter" v-show="selected === 'City'" class="flex items-center gap-2">
-                    <div class="flex items-center">
-                        <h1 class="text-[#9196a4] font-semibold">City</h1>
+                <Transition name="slide-fade">
+                    <div v-show="selected === 'City'" class="flex items-center gap-2">
+                        <div class="flex items-center">
+                            <h1 class="text-[#9196a4] font-semibold">City</h1>
+                        </div>
+                        <select v-model="city" @change="cityClicked(city)" id="countries" class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-[4px] focus:outline-[#2acc97] block w-full p-2.5">
+                            <option v-for="singleCity in cityList" :key="singleCity">
+                                {{ singleCity }}
+                            </option>
+                        </select>
                     </div>
-                    <select v-model="city" @change="cityClicked(city)" id="countries" class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-[4px] focus:ring-[#2acc97] focus:border-[#2acc97] block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500">
-                        <option v-for="singleCity in cityList" :key="singleCity">
-                            {{ singleCity }}
-                        </option>
-                    </select>
-                </div>
+                </Transition>
 
                 <!-- Owner filter -->
-                <div id="sub-filter" v-show="selected === 'Owner'" class="flex items-center gap-2">
-                    <div class="flex items-center">
-                        <h1 class="text-[#9196a4] font-semibold">Owner</h1>
+                <Transition name="slide-fade">
+                    <div v-show="selected === 'Owner'" class="flex items-center gap-2">
+                        <div class="flex items-center">
+                            <h1 class="text-[#9196a4] font-semibold">Owner</h1>
+                        </div>
+                        <SearchBar @search-entered="ownerClicked" width="w-[70%]" placeholder="Enter the SSN or tax..."/>
                     </div>
-                    <SearchBar @search-entered="ownerClicked" width="w-[70%]" placeholder="Enter the SSN or tax..."/>
-                </div>
-
+                </Transition>
+                
                 <!-- Brand filter -->
-                <div id="sub-filter" v-show="selected === 'Brand'" class="flex items-center gap-2">
-                    <div class="flex items-center">
-                        <h1 class="text-[#9196a4] font-semibold">Brand</h1>
+                <Transition name="slide-fade">
+                    <div v-show="selected === 'Brand'" class="flex items-center gap-2">
+                        <div class="flex items-center">
+                            <h1 class="text-[#9196a4] font-semibold">Brand</h1>
+                        </div>
+                        <select v-model="brand" @change="brandClicked(brand)" id="countries" class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-[4px] focus:outline-[#2acc97] block w-full p-2.5">
+                            <option v-for="singleBrand in brandList" :key="singleBrand" :value="singleBrand">
+                                {{ singleBrand }}
+                            </option>
+                        </select>
                     </div>
-                    <select v-model="brand" @change="brandClicked(brand)" id="countries" class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-[4px] focus:ring-[#2acc97] focus:border-[#2acc97] block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500">
-                        <option v-for="singleBrand in brandList" :key="singleBrand" :value="singleBrand">
-                            {{ singleBrand }}
-                        </option>
-                    </select>
-                </div>
+                </Transition>
                 
                 <!-- Time filter -->
-                <div id="sub-filter" v-show="selected === 'Time'" class="flex items-center gap-2 w-full">
-                    <select v-model="time.year" @change="timeClicked(time.year, 'year')" class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-[4px] focus:ring-[#2acc97] focus:border-[#2acc97] block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500">
-                        <option v-for="singleYear in yearList" :key="singleYear" :value="singleYear">
-                            {{ singleYear }}
-                        </option>
-                    </select>
-                    <select :disabled="time.year === 'All'" v-model="time.quarter" @change="timeClicked(time.quarter, 'quarter')" class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-[4px] focus:ring-[#2acc97] focus:border-[#2acc97] block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500 disabled:opacity-60">
-                        <option v-for="singleQ in quarterList" :key="singleQ.value" :value="singleQ.value">
-                            {{ singleQ.content }}
-                        </option>
-                    </select>
-                    <select :disabled="time.year === 'All'" v-model="time.month" @change="timeClicked(time.month, 'month')" class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-[4px] focus:ring-[#2acc97] focus:border-[#2acc97] block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500 disabled:opacity-60">
-                        <option v-for="singleMonth in monthList" :key="singleMonth.value" :value="singleMonth.value">
-                            {{ singleMonth.content }}
-                        </option>
-                    </select>
-                </div>
+                <Transition name="slide-fade">
+                    <div v-show="selected === 'Time'" class="flex items-center gap-2 w-full">
+                        <select v-model="time.year" @change="timeClicked(time.year, 'year')" class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-[4px] focus:outline-[#2acc97] block w-full p-2.5">
+                            <option v-for="singleYear in yearList" :key="singleYear" :value="singleYear">
+                                {{ singleYear }}
+                            </option>
+                        </select>
+                        <select :disabled="time.year === 'All'" v-model="time.quarter" @change="timeClicked(time.quarter, 'quarter')" class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-[4px] focus:outline-[#2acc97] block w-full p-2.5 disabled:opacity-60">
+                            <option v-for="singleQ in quarterList" :key="singleQ.value" :value="singleQ.value">
+                                {{ singleQ.content }}
+                            </option>
+                        </select>
+                        <select :disabled="time.year === 'All'" v-model="time.month" @change="timeClicked(time.month, 'month')" class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-[4px] focus:outline-[#2acc97] block w-full p-2.5 disabled:opacity-60">
+                            <option v-for="singleMonth in monthList" :key="singleMonth.value" :value="singleMonth.value">
+                                {{ singleMonth.content }}
+                            </option>
+                        </select>
+                    </div>
+                </Transition>
+                
             </div>
         </div>
     </div>
@@ -339,5 +358,22 @@ const reload = async () => {
             opacity: 1;
             transform: translateX(0px);
         }
+    }
+
+    .slide-fade-enter-active {
+        transition: all 0.6s ease-in-out;
+    }
+
+    .slide-fade-leave-active {
+        transition: all 0.1s cubic-bezier(1, 0.5, 0.8, 1);
+    }
+
+    .slide-fade-enter-from {
+        transform: translateX(10px);
+        opacity: 0;
+    }
+    .slide-fade-leave-to {
+        transform: translateX(-10px);
+        opacity: 0;
     }
 </style>

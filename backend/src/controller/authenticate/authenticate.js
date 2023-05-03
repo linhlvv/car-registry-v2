@@ -12,10 +12,11 @@ let authenticate = async (req, res) => {
       if (result.length > 0) {
         req.session.email = email;
         req.session.userid = result[0].id;
+        req.session.authority = result[0].type;
         const payload = {
           email: req.session.email,
-          id: req.session.userid
-          
+          id: req.session.userid,
+          authority: req.session.authority
         }
         const authToken = jwt.sign(payload, process.env.SECRET, {expiresIn: '20000000000000s'})
         req.session.token = authToken

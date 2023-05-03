@@ -1,5 +1,10 @@
 <script setup>
 const props = defineProps(['car', 'isRootRow']);
+const emit = defineEmits(['openInfo'])
+
+const openInfo = () => {
+    emit('openInfo', props.car.licenseId)
+};
 </script>
 
 <template>

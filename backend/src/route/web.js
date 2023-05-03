@@ -63,17 +63,13 @@ const initWebRoute = (app) => {
   // logic - thay đổi mật khẩu tài khoản đang đăng nhập
   router.post('/change-password',verifyToken ,homeController.changePassword)
                                                                                     
-  // logic - admin xem tất cả các centre
-  router.get('/view-all-centres', verifyToken, homeController.viewAllCentres)
-                                                                                    
-  // logic - admin xem tất cả các xe toàn cục
-  router.get('/view-all-cars', verifyToken, homeController.viewAllCars)
-                                                                                    
   // logic - activate 1 centre mới
   router.post('/insert-centre', verifyToken, homeController.insertCentre)
                                                                                     
   // logic - deactivate 1 centre
   router.post('/remove-centre', verifyToken, homeController.removeCentre)
+  // logic - đọc dữ liệu từ file excel thêm vào db
+  router.post('/read-excel', verifyToken, homeController.addDataFromExcel)
                                                                                     
                                                                                     
   // logic - tạo đăng kiểm mới
@@ -102,6 +98,22 @@ const initWebRoute = (app) => {
                                                                                     
   // logic - dự đoán các xe sắp hết hạn
   router.post('/forecast', verifyToken, homeController.forecast)
+
+                                                                                    
+  // logic - admin xem tất cả các centre
+  router.get('/centre/all', verifyToken, homeController.viewAllCentres)
+                                                                                    
+  // logic - admin xem tất cả các xe toàn cục
+  router.post('/vehicles/admin/all', verifyToken, homeController.viewAllVehicles)
+                                                                                    
+  // logic - admin xem tất cả các xe đã đăng kiểm toàn cục
+  router.post('/vehicles/admin/registed', verifyToken, homeController.viewRegistedVehicles)
+                                                                                    
+  // logic - admin xem tất cả các xe đã hết hạn toàn cục
+  router.post('/vehicles/admin/expired', verifyToken, homeController.viewExpiredVehicles)
+                                                                                    
+  // logic - admin xem tất cả các xe chưa đăng kiểm toàn cục
+  router.post('/vehicles/admin/unregisted', verifyToken, homeController.viewUnregistedVehicles)
 
   return app.use('/', router)
 }

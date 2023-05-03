@@ -40,9 +40,17 @@ const totalPage = ref()
 const loading = ref(false)
 
 //SECTION - fetch default car data
+//TODO
 const fetchCarData = async() => {
     loading.value = true
-    const res = await fetch(`http://localhost:1111/vehicles/${props.carType}`, {
+    let fetchRoute = `http://localhost:1111/vehicles/${props.carType}`;
+    let fetchBody;
+    if(accountStore.isAdmin) {
+
+    } else {
+
+    }
+    const res = await fetch(fetchRoute, {
         method: 'POST',
         credentials: "include",
         headers: {
@@ -64,7 +72,15 @@ const fetchCarData = async() => {
 fetchCarData()
 
 //SECTION - fetch data of all cars by corresponding owner code
+//TODO
 const fetchCarByOwnerCode = async () => {
+    let fetchRoute;
+    let fetchBody;
+    if(accountStore.isAdmin) {
+
+    } else {
+
+    }
     loading.value = true
     const res = await fetch(`http://localhost:1111/filter/owner`, {
         method: 'POST',
@@ -88,7 +104,15 @@ const fetchCarByOwnerCode = async () => {
 
 //SECTION - sort cars by brand
 // logic - all brands
+//TODO
 const fetchDataSortedByBrand = async () => {
+    let fetchRoute;
+    let fetchBody;
+    if(accountStore.isAdmin) {
+
+    } else {
+
+    }
     loading.value = true
     const res = await fetch(`http://localhost:1111/filter/brand`, {
         method: 'POST',
@@ -118,7 +142,15 @@ const fetchDataSortedByBrand = async () => {
 }
 
 // logic - specific brand
+//TODO
 const fetchCarDataWithSpecificBrand = async () => {
+    let fetchRoute;
+    let fetchBody;
+    if(accountStore.isAdmin) {
+
+    } else {
+
+    }
     loading.value = true
     const res = await fetch(`http://localhost:1111/filter/brand/exact`, {
         method: 'POST',
@@ -148,7 +180,15 @@ const fetchCarDataWithSpecificBrand = async () => {
 }
 
 // logic - specific time
+//TODO
 const fetchCarDataWithSpecificTime = async () => {
+    let fetchRoute;
+    let fetchBody;
+    if(accountStore.isAdmin) {
+
+    } else {
+
+    }
     loading.value = true
     const res = await fetch(`http://localhost:1111/filter/time`, {
         method: 'POST',
@@ -180,7 +220,15 @@ const fetchCarDataWithSpecificTime = async () => {
 }
 
 // logic - specific city
+//TODO
 const fetchCarDataWithSpecificCity = async () => {
+    let fetchRoute;
+    let fetchBody;
+    if(accountStore.isAdmin) {
+
+    } else {
+
+    }
     loading.value = true
     const res = await fetch(`http://localhost:1111/filter/city/exact`, {
         method: 'POST',
@@ -210,7 +258,15 @@ const fetchCarDataWithSpecificCity = async () => {
 }
 
 // logic - specific license
+//TODO
 const fetchCarByLicense = async () => {
+    let fetchRoute;
+    let fetchBody;
+    if(accountStore.isAdmin) {
+
+    } else {
+
+    }
     loading.value = true
     const res = await fetch(`http://localhost:1111/vehicles/find`, {
         method: 'POST',
@@ -240,21 +296,27 @@ const fetchCarByLicense = async () => {
 //SECTION - watchers
 // logic - page number watcher
 watch(() => props.pageNumber, async(newPageNumber, oldPageNumber) => {
-    if(newPageNumber !== oldPageNumber) {
-        console.log(`page number of carlist has changed to: ${props.pageNumber}`);
+    console.log(`page number of carlist has changed to: ${props.pageNumber}`);
         
-        if(props.filter === 'No filter') {
-            fetchCarData()
-        }
-        if(props.filter === 'Brand') {
-            fetchDataSortedByBrand()
-        }
-        if(props.filter === 'Time') {
-            fetchCarDataWithSpecificTime()
-        }
-        if(props.filter === 'City') {
-            fetchCarDataWithSpecificCity()
-        }
+    if(props.filter === 'No filter') {
+        fetchCarData()
+    }
+    if(props.filter === 'Owner' && props.owner === '') {
+        fetchCarData()
+    }
+    if(props.filter === 'Brand' && props.brand === 'All') {
+        fetchDataSortedByBrand()
+    } else if(props.filter === 'Brand' && props.brand !== 'All') {
+        fetchCarDataWithSpecificBrand()
+    }
+    if(props.filter === 'Time') {
+        console.log(props.pageNumber);
+        fetchCarDataWithSpecificTime()
+    }
+    if(props.filter === 'City' && props.city !== 'All') {
+        fetchCarDataWithSpecificCity()
+    } else if(props.filter === 'City' && props.city === 'All') {
+        fetchCarData()
     }
 });
 
@@ -263,7 +325,7 @@ watch(() => props.filter, async(newFilter, oldFilter) => {
     // console.log(props.pageNumber, newPageNumber, oldPageNumber);
     if(newFilter !== oldFilter) {
         console.log(`filter has changed to: ${props.filter}`);
-        if(newFilter === 'No filter') {
+        if(newFilter === 'No filter' || newFilter === 'Owner') {
             fetchCarData()
         }
         if(newFilter === 'Brand') {
