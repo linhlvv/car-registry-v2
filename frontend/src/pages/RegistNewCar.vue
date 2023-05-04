@@ -155,7 +155,6 @@ watch(() => errorMessageTime.value, () => {
 
 <template>
     <div class="w-full relative">
-        <div>{{ errorMessageTime }}</div>
         <div class="w-full bg-[#f5f7fb] py-4 px-2">
             <div class="flex flex-col gap-2 w-full items-center">
                 <div class="flex items-center w-4/5 bg-white rounded-[4px] overflow-hidden shadow">
@@ -182,14 +181,16 @@ watch(() => errorMessageTime.value, () => {
                     <RegistrationCarAndOwner :info="info" :regist-new-car="true" :owner-type="ownerType"/>
                     <RegistrationCert :registry-info="registryInfo"/>
                 </div>
-                <Transition name="fade">
-                    <div v-if="errorMessageOn" class="w-full flex items-center g-1 text-[#cc502a]">
-                        <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.75" stroke="currentColor" class="w-6 h-6">
-                            <path stroke-linecap="round" stroke-linejoin="round" d="M6 18L18 6M6 6l12 12" />
-                        </svg>
-                        <p class="text-base font-medium">No valid CERT to be registed</p>
-                    </div>
-                </Transition>
+                <div class="w-full h-6">
+                    <Transition name="fade">
+                        <div v-if="errorMessageOn" class="w-full flex items-center g-1 text-[#cc502a]">
+                            <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.75" stroke="currentColor" class="w-6 h-6">
+                                <path stroke-linecap="round" stroke-linejoin="round" d="M6 18L18 6M6 6l12 12" />
+                            </svg>
+                            <p class="text-base font-medium">No valid CERT to be registed</p>
+                        </div>
+                    </Transition>
+                </div>
                 <div class="w-full flex gap-4 justify-end">
                     <button @click="handleRegist" class="flex items-center gap-2 bg-[#2acc97]/80 hover:bg-[#2acc97]/90 active:bg-[#2acc97] text-white font-semibold text-xs p-3 px-4 rounded-[4px]">
                         Regist
