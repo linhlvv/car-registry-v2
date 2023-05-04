@@ -16,7 +16,9 @@ let previewRegist = async (req, res) => {
     let registDate = date.toISOString().slice(0, 10);
     let query = 'select modifyDate from vehicles where licenseId = ?'
     let modifyDate = await pool.query(query,[licenseId])
-    modifyDate = modifyDate[0][0].modifyDate
+    if (modifyDate != null) {
+        modifyDate = modifyDate[0][0].modifyDate
+    }
     let expireDate = new Date();
     if (modifyDate == null || modifyDate == '') {
         expireDate.setMonth(date.getMonth() + 18)

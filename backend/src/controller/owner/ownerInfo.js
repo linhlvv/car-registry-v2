@@ -9,7 +9,7 @@ let ownerInfo = async (req, res) => {
 
   if (rows[0].type === 1) {
     let owner = `
-    select name, phone, address, dob, ssn
+    select name, phone, address, dob, ssn, gender
     from owner o 
     join personal p 
     on o.id = p.id
@@ -20,7 +20,7 @@ let ownerInfo = async (req, res) => {
   }
   else {
     let owner = `
-    select name, phone, address, taxnum
+    select name, phone, address, taxnum, ownership
     from owner o 
     join company c 
     on o.id = c.id
