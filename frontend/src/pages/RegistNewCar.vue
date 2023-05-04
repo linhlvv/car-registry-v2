@@ -8,11 +8,13 @@ const accountStore = useAccountStore()
 
 //SECTION - details
 // logic - owner
-const info = ref({
+const defaultInfo = {
     licenseId: '', r_name: '', manafractureDate: '', brand: '', model: '', version: '',
     certId: '', certDate: '', modifyDate: '',
     name: '', ssn: '', dob: '', address: '', phone: '', taxnum:''
-});
+}
+let prevLicenseInput
+const info = ref({...defaultInfo});
 
 // logic - form
 const registryInfo = ref({
@@ -38,6 +40,7 @@ const fetchData = () => {
 
 // logic - fetch data
 const loading = ref(false)
+const noResultFound = ref(false)
 const fetchCarAndOwnerDataDetails = async () => {
     loading.value = true
     const res = await fetch(`http://localhost:1111/preview-info`, {
@@ -58,6 +61,15 @@ const fetchCarAndOwnerDataDetails = async () => {
     }
     const dataFetched = JSON.parse(await res.text())
     console.log(`car info: ${JSON.stringify(dataFetched)}`);
+    if(dataFetched.data === null) {
+        prevLicenseInput = info.value.licenseId
+        noResultFound.value = true
+        info.value = {...defaultInfo, licenseId: prevLicenseInput}
+    } else {
+        info.value = dataFetched.data[0]
+        ownerType.value = dataFetched.ownerType
+        noResultFound.value = false
+    }
     loading.value = false
 };
 //FIXME
@@ -84,8 +96,7 @@ const fetchRegistryInfo = async () => {
 
 //SECTION - watchers
 watch(() => info.value.licenseId, (newId, oldId) => {
-    fetchCarAndOwnerDataDetails()
-    fetchRegistryInfo()
+    fetchData()
 });
 </script>
 
@@ -102,21 +113,45 @@ watch(() => info.value.licenseId, (newId, oldId) => {
                     <i class="fa-solid fa-user-tie"></i>
                 </div>
             </div>
-            <div>{{ info }}</div>
+            <div class="w-full h-6">
+                <Transition name="slide-fade">
+                    <div v-if="noResultFound" class="w-full flex items-center text-[#cc502a] gap-1">
+                        <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.75" stroke="currentColor" class="w-6 h-6">
+                            <path stroke-linecap="round" stroke-linejoin="round" d="M18.364 18.364A9 9 0 005.636 5.636m12.728 12.728A9 9 0 015.636 5.636m12.728 12.728L5.636 5.636" />
+                        </svg>
+                        <p class="text-base font-medium">No result found! Please try again</p>
+                    </div>
+                </Transition>
+            </div>
             <div class="w-full flex gap-2 h-[450px]">
                 <RegistrationCarAndOwner :info="info" :regist-new-car="true" :owner-type="ownerType"/>
                 <RegistrationCert :registry-info="registryInfo"/>
             </div>
             <div class="w-full flex gap-4 justify-end">
-                <button class="flex items-center gap-2 bg-[#2acc97]/60 hover:bg-[#2acc97]/75 active:bg-[#2acc97]/90 text-white font-semibold text-xs p-3 px-4 rounded-[4px]">
+                <button class="flex items-center gap-2 bg-[#2acc97]/80 hover:bg-[#2acc97]/90 active:bg-[#2acc97] text-white font-semibold text-xs p-3 px-4 rounded-[4px]">
                     Regist
                     <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" fill="currentColor" class="w-5 h-5">
                         <path d="M9.25 13.25a.75.75 0 001.5 0V4.636l2.955 3.129a.75.75 0 001.09-1.03l-4.25-4.5a.75.75 0 00-1.09 0l-4.25 4.5a.75.75 0 101.09 1.03L9.25 4.636v8.614z" />
                         <path d="M3.5 12.75a.75.75 0 00-1.5 0v2.5A2.75 2.75 0 004.75 18h10.5A2.75 2.75 0 0018 15.25v-2.5a.75.75 0 00-1.5 0v2.5c0 .69-.56 1.25-1.25 1.25H4.75c-.69 0-1.25-.56-1.25-1.25v-2.5z" />
                     </svg>
-
                 </button>
             </div>
         </div>
     </div>
 </template>
+
+<style scoped>
+.slide-fade-enter-active {
+    transition: all 0.5s ease-out;
+}
+
+.slide-fade-leave-active {
+    transition: all 0.2s cubic-bezier(1, 0.5, 0.8, 1);
+}
+
+.slide-fade-enter-from,
+.slide-fade-leave-to {
+    transform: translateX(10px);
+    opacity: 0;
+}
+</style>
