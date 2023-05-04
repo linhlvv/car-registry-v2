@@ -11,6 +11,7 @@ import { previewRegist } from './info/previewRegist';
 import { newRegist } from './info/newRegist';
 import { updateModify } from './info/updateModify';
 import { previewInfo } from './info/previewInfo'
+import { viewLatestRegist } from './info/viewLatestRegist'
 
 import { expired } from './categories/expired';
 import { registed } from './categories/registed';
@@ -64,5 +65,6 @@ module.exports = {
   changePassword, insertCentre, removeCentre, newRegist, previewRegist, updateModify, previewInfo,
   allRegist, registByTime, forecast, registByLicense,
   viewAllCentres, viewAllVehicles, viewRegistedVehicles, viewExpiredVehicles, viewUnregistedVehicles,
-  addDataFromExcel
+  addDataFromExcel,
+  viewLatestRegist
 }
