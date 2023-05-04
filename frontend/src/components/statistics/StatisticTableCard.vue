@@ -3,7 +3,8 @@ const props = defineProps(['car', 'isRootRow']);
 const emit = defineEmits(['openInfo'])
 
 const openInfo = () => {
-    emit('openInfo', props.car.licenseId)
+    // console.log(props.car.id);
+    emit('openInfo', props.car.id)
 };
 </script>
 
@@ -39,7 +40,7 @@ const openInfo = () => {
         </div>
 
         <div v-if="!isRootRow" class="flex items-center w-[10%] justify-center">
-            <div class="flex items-center justify-center gap-1 rounded-full text-[11px] bg-[#f5f7fb] px-3 py-1 mt-[2px] cursor-pointer duration-200 hover:bg-[#2acc97] text-[#293241] hover:text-white max-[820px]:bg-transparent max-[820px]:px-1" @click="openInfo">
+            <div class="flex items-center justify-center gap-1 rounded-full text-[11px] bg-[#f5f7fb] px-2 py-1 mt-[2px] cursor-pointer duration-200 hover:bg-[#2acc97] text-[#293241] hover:text-white max-[820px]:bg-transparent max-[820px]:px-1" @click="openInfo">
                 <i class="fa-solid fa-circle-info flex items-center text-[12px] max-[952px]:hidden max-[820px]:flex"></i>
                 <div class="max-[820px]:hidden font-semibold">Detail</div>
             </div>
