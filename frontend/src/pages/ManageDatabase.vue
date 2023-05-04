@@ -66,6 +66,7 @@ watch(() => errorMessageTime.value, () => {
 	if(errorMessageTime.value === 0) {
 		errorMessageOn.value = false
 		errorMessageTime.value = messageTime
+		clearInterval(errorMessageInterval)
 	}
 });
 
