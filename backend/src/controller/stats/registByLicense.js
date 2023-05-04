@@ -19,7 +19,7 @@ let registByLicense = async (req, res) => {
 	let [countRows, countFields] = await pool.query(find, [centreId, licenseId])
 
 	let query = `
-	select r.licenseId, brand, model, version, date, expire, 
+	select r.id, r.licenseId, brand, model, version, date, expire, 
 			p.name as name, (expire < CURRENT_DATE()) as status
 	from registry r
 	join vehicles v 
@@ -29,7 +29,7 @@ let registByLicense = async (req, res) => {
 	where centreId = ?
     and r.licenseId = ?
 					union all
-	select r.licenseId, brand, model, version, date, expire, 
+	select r.id, r.licenseId, brand, model, version, date, expire, 
 			c.name as name, (expire < CURRENT_DATE()) as status
 	from registry r
 	join vehicles v 
