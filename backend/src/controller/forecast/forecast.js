@@ -22,7 +22,7 @@ let forecast = async (req, res) => {
   const [countRows, countFields] = await pool.query(count, [req.session.userid])
 
   let query = `
-  select r.licenseId, brand, model, version, date, expire, 
+  select r.licenseId, brand, model, version, date, max(expire) expire, 
     p.name as name, (expire >= CURRENT_DATE()) as status
   from registry r
   join vehicles v 
@@ -30,8 +30,9 @@ let forecast = async (req, res) => {
   join personal p 
     on v.ownerId = p.id
   where centreId = ` + req.session.userid + match + `
+  group by licenseId
         union all
-  select r.licenseId, brand, model, version, date, expire, 
+  select r.licenseId, brand, model, version, date,  max(expire) expire, 
     c.name as name, (expire >=CURRENT_DATE()) as status
   from registry r
   join vehicles v 
@@ -39,9 +40,10 @@ let forecast = async (req, res) => {
   join company c 
     on v.ownerId = c.id
   where centreId = ` + req.session.userid + match + ` 
+  group by licenseId
   order by expire asc
     limit ? offset ?`
-  
+
   // bug - đã gọi được api kết quả trả về chính xác
   const [rows, fields] = await pool.query(query, [resPerPage, 
                                                   resPerPage * (page - 1)])
