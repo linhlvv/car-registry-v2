@@ -17,7 +17,7 @@ const mutatedParam = computed(() => {
 })
 
 const fetchCarAndOwnerInfo = async () => {
-    const res = await fetch(`http://localhost:1111/vehicles/modal`, {
+    const res = await fetch(`http://localhost:1111/preview-info`, {
         method: 'POST',
         credentials: "include",
         headers: {
@@ -29,6 +29,7 @@ const fetchCarAndOwnerInfo = async () => {
         console.log(res.error);
     }
     const dataFetched = JSON.parse(await res.text())
+    console.log(JSON.stringify(dataFetched));
     carAndOwnerInfo.value = dataFetched.data[0]
     ownerType.value = dataFetched.ownerType
     carAndOwnerInfo.value.address = carAndOwnerInfo.value.address.charAt(0).toUpperCase() + carAndOwnerInfo.value.address.slice(1)
@@ -43,8 +44,8 @@ const print = () => {
 //TODO - add fetch function, param id and license
 onMounted(() => {
     fetchCarAndOwnerInfo()
-    registCertInfo.value = registrationCertStore.registrationCert
-    registrationCertStore.removeCert()
+    // registCertInfo.value = registrationCertStore.registrationCert
+    // registrationCertStore.removeCert()
     // console.log(registCertInfo.value);
     // setTimeout(print, 1000)
 });
