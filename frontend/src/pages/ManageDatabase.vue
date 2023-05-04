@@ -1,5 +1,8 @@
 <script setup>
 import { computed, onMounted, ref, watch } from 'vue';
+import { useAccountStore } from '../stores/AccountStore';
+
+const accountStore = useAccountStore()
 
 //SECTION - file upload handler
 const file = ref()
@@ -35,7 +38,23 @@ const upload = async () => {
 			errorMessageTime.value -= 1
 		}, 1000);
 	} else {
-
+		const formData = new FormData()
+		formData.append("ownerType", ownerTypePicked)
+		formData.append("file", file.value.files[0])
+		const res = await fetch(`http://localhost:1111/read-excel`, {
+			method: 'POST',
+			credentials: "include",
+			headers: {
+				'Authorization': `${accountStore.getToken}`
+			},
+			body: formData
+		})
+		if(res.error) {
+			console.log(res.error);
+		}
+		console.log(res);
+		// const dataFetched = JSON.parse(await res.text())
+		// console.log(JSON.stringify(dataFetched));
 	}
 }
 
@@ -89,11 +108,11 @@ watch(() => errorMessageTime.value, () => {
 				<p class="font-medium text-[#1d1d1d] text-base">Please choose an owner type of the uploaded file</p>
 				<div class="w-full flex justify-evenly">
 					<div>
-						<input type="radio" id="one" value="company" v-model="ownerTypePicked" />
+						<input type="radio" id="one" :value="0" v-model="ownerTypePicked" />
 						<label for="one" class="text-base font-medium text-[#1d1d1d] ml-1">Company</label>
 					</div>
 					<div>
-						<input type="radio" id="two" value="person" v-model="ownerTypePicked" />
+						<input type="radio" id="two" :value="1" v-model="ownerTypePicked" />
 						<label for="two" class="text-base font-medium text-[#1d1d1d] ml-1">Person</label>
 					</div>
 				</div>
