@@ -38,6 +38,7 @@ import { addDataFromExcel } from './admin/addDataFromExcel'
 import { allRegist } from './stats/allRegist'
 import { registByTime } from './stats/registByTime'
 import { registByLicense } from './stats/registByLicense'
+import { registModal } from './stats/registModal'
 
 import { forecast } from './forecast/forecast'
 
@@ -62,7 +63,7 @@ module.exports = {
   vehicles, registed, expired, findByLicense, detailModal, getDataForChart,
   ownerInfo, registHistory, owner, brand, allBrand, exactBrand, time, allCity, exactCity,
   changePassword, insertCentre, removeCentre, newRegist, previewRegist, updateModify, previewInfo,
-  allRegist, registByTime, forecast, registByLicense,
+  allRegist, registByTime, forecast, registByLicense, registModal,
   viewAllCentres, viewAllVehicles, viewRegistedVehicles, viewExpiredVehicles, viewUnregistedVehicles,
   addDataFromExcel
 }

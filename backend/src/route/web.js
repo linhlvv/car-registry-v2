@@ -95,6 +95,9 @@ const initWebRoute = (app) => {
   // logic - gửi biển số xe, lọc các đăng kiểm của xe này
   router.post('/regist/find', verifyToken, homeController.registByLicense)
                                                                                     
+  // logic - gửi biển số xe, lọc các đăng kiểm của xe này
+  router.post('/regist/detail', verifyToken, homeController.registModal)
+                                                                                    
                                                                                     
   // logic - dự đoán các xe sắp hết hạn
   router.post('/forecast', verifyToken, homeController.forecast)

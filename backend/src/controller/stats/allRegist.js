@@ -17,7 +17,7 @@ let allRegist = async (req, res) => {
 	let centreId = req.session.userid
 	// query lấy về licenseId, Tên xe bao gồm brand, model, version ; regist date, expire date, và tên chủ sở hữu(tên công ty nếu type = 0, tên cá nhân nếu type = 1 )
 	let query = `
-	select r.licenseId, brand, model, version, date, expire, 
+	select r.id, r.licenseId, brand, model, version, date, expire, 
 			p.name as name, (expire < CURRENT_DATE()) as status
 	from registry r
 	join vehicles v 
@@ -26,7 +26,7 @@ let allRegist = async (req, res) => {
 			on v.ownerId = p.id
 	where centreId = ` + centreId + ` 
 					union all
-	select r.licenseId, brand, model, version, date, expire, 
+	select r.id, r.licenseId, brand, model, version, date, expire, 
 			c.name as name, (expire < CURRENT_DATE()) as status
 	from registry r
 	join vehicles v 
