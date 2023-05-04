@@ -4,7 +4,8 @@ import pool from "../../configs/connectDB"
 
 let detailModal = async (req, res) => {
   let licenseId = req.body.licenseId
-  let base = `select r.id AS r_id, r.name as r_name, v.*, `
+
+ let base = `select r.id AS r_id, r.name as r_name, v.*, `
   let regist = `SELECT r.id, r.date, r.expire as expire, c.name FROM vehicles v LEFT JOIN registry r ON r.licenseId = v.licenseId LEFT JOIN centre c ON r.centreId = c.id where r.licenseId = ?`
   const [rows2, fields2] = await pool.query(regist, [licenseId])
   

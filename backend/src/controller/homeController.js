@@ -8,14 +8,15 @@ import { centreInfo } from './info/centreInfo';
 import { getDataForChart } from './info/data4Chart';
 import { detailModal } from './info/detailModal';
 import { previewRegist } from './info/previewRegist';
-import { newRegist } from './info/newRegist';
-import { updateModify } from './info/updateModify';
+import { newRegist } from './management/newRegist';
+import { updateModify } from './management/updateModify';
 import { previewInfo } from './info/previewInfo'
+import { viewLatestRegist } from './info/viewLatestRegist'
 
-import { expired } from './categories/expired';
-import { registed } from './categories/registed';
-import { vehicles } from './categories/vehicles';
-import { findByLicense} from './categories/findByLicense';
+import { expired } from './vehicles/expired';
+import { registed } from './vehicles/registed';
+import { vehicles } from './vehicles/vehicles';
+import { findByLicense} from './vehicles/findByLicense';
 
 import { owner } from './filter/owner'
 import { brand } from './filter/brand'
@@ -38,6 +39,7 @@ import { addDataFromExcel } from './admin/addDataFromExcel'
 import { allRegist } from './stats/allRegist'
 import { registByTime } from './stats/registByTime'
 import { registByLicense } from './stats/registByLicense'
+import { registModal } from './stats/registModal'
 
 import { forecast } from './forecast/forecast'
 
@@ -62,7 +64,8 @@ module.exports = {
   vehicles, registed, expired, findByLicense, detailModal, getDataForChart,
   ownerInfo, registHistory, owner, brand, allBrand, exactBrand, time, allCity, exactCity,
   changePassword, insertCentre, removeCentre, newRegist, previewRegist, updateModify, previewInfo,
-  allRegist, registByTime, forecast, registByLicense,
+  allRegist, registByTime, forecast, registByLicense, registModal,
   viewAllCentres, viewAllVehicles, viewRegistedVehicles, viewExpiredVehicles, viewUnregistedVehicles,
-  addDataFromExcel
+  addDataFromExcel,
+  viewLatestRegist
 }
