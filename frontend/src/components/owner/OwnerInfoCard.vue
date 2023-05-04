@@ -3,7 +3,7 @@ const props = defineProps(['width', 'title', 'content', 'justify']);
 </script>
 
 <template>
-    <div class="h-full flex flex-col" :class="width, justify">
+    <div class="py-2 flex flex-col" :class="width, justify">
         <div class="text-xs text-[#2acc97] font-bold">
             {{ title }}
         </div>
