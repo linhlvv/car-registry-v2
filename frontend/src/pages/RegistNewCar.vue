@@ -7,6 +7,7 @@ import { ref, watch } from 'vue';
 const accountStore = useAccountStore()
 
 //SECTION - details
+
 // logic - owner
 const defaultInfo = {
     licenseId: '', r_name: '', manafractureDate: '', brand: '', model: '', version: '',
@@ -45,40 +46,53 @@ const fetchData = () => {
 const loading = ref(false)
 const noResultFound = ref(false)
 const hasResult = ref(false)
+const regex = /^\d\d[A-Z]\-\d\d\d\.\d\d$/g;
+const wrongRegex = ref(false)
 const fetchCarAndOwnerDataDetails = async () => {
-    loading.value = true
-    const res = await fetch(`http://localhost:1111/preview-info`, {
-        method: 'POST',
-        credentials: "include",
-        headers: {
-            'Content-Type': 'application/json',
-            'Authorization': `${accountStore.getToken}`
-        },
-        body: JSON.stringify(
-            {
-                licenseId: info.value.licenseId,
-            }
-        ),
-    })
-    if(res.error) {
-        console.log(res.error);
-    }
-    const dataFetched = JSON.parse(await res.text())
-    console.log(`car info: ${JSON.stringify(dataFetched)}`);
-    if(dataFetched.data === null) {
-        prevLicenseInput = info.value.licenseId
-        noResultFound.value = true
+
+    if(info.value.licenseId.toUpperCase().match(regex) === null) {
+        noResultFound.value = false
         hasResult.value = false
+        prevLicenseInput = info.value.licenseId
+        wrongRegex.value = true
         info.value = {...defaultInfo, licenseId: prevLicenseInput}
         registryInfo.value = {...defaultCert}
     } else {
-        hasResult.value = true
-        info.value = dataFetched.data[0]
-        ownerType.value = dataFetched.ownerType
-        noResultFound.value = false
-        fetchRegistryInfo()
+        wrongRegex.value = false
+        loading.value = true
+        const res = await fetch(`http://localhost:1111/preview-info`, {
+            method: 'POST',
+            credentials: "include",
+            headers: {
+                'Content-Type': 'application/json',
+                'Authorization': `${accountStore.getToken}`
+            },
+            body: JSON.stringify(
+                {
+                    licenseId: info.value.licenseId,
+                }
+            ),
+        })
+        if(res.error) {
+            console.log(res.error);
+        }
+        const dataFetched = JSON.parse(await res.text())
+        console.log(`car info: ${JSON.stringify(dataFetched)}`);
+        if(dataFetched.data === null) {
+            prevLicenseInput = info.value.licenseId
+            noResultFound.value = true
+            hasResult.value = false
+            info.value = {...defaultInfo, licenseId: prevLicenseInput}
+            registryInfo.value = {...defaultCert}
+        } else {
+            hasResult.value = true
+            info.value = dataFetched.data[0]
+            ownerType.value = dataFetched.ownerType
+            noResultFound.value = false
+            fetchRegistryInfo()
+        }
+        loading.value = false
     }
-    loading.value = false
 };
 
 const fetchRegistryInfo = async () => {
@@ -141,6 +155,7 @@ const handleRegist = async () => {
 
 //SECTION - watchers
 watch(() => info.value.licenseId, (newId, oldId) => {
+    console.log(info.value.licenseId);
     fetchData()
 });
 
@@ -174,6 +189,14 @@ watch(() => errorMessageTime.value, () => {
                                 <path stroke-linecap="round" stroke-linejoin="round" d="M18.364 18.364A9 9 0 005.636 5.636m12.728 12.728A9 9 0 015.636 5.636m12.728 12.728L5.636 5.636" />
                             </svg>
                             <p class="text-base font-medium">No result found! Please try again</p>
+                        </div>
+                    </Transition>
+                    <Transition name="slide-fade">
+                        <div v-if="wrongRegex" class="w-full flex items-center text-[#cc502a] gap-1">
+                            <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.75" stroke="currentColor" class="w-6 h-6">
+                                <path stroke-linecap="round" stroke-linejoin="round" d="M18.364 18.364A9 9 0 005.636 5.636m12.728 12.728A9 9 0 015.636 5.636m12.728 12.728L5.636 5.636" />
+                            </svg>
+                            <p class="text-base font-medium">Please enter correct form of license ID - XXX-XXX.XX (e.g. 08P-008.10)</p>
                         </div>
                     </Transition>
                 </div>
