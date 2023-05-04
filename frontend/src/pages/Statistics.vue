@@ -18,16 +18,23 @@ const scrollUp = () => {
 
 const chart = ref(null);
 
+const modalOn = ref(false)
+
 const openCertInfoModal = (license) => {
+    modalOn.value = true
     console.log(license);
+};
+
+const closeModal = () => {
+    modalOn.value = false
 };
 
 </script>
 
 <template>
     <div class="w-full">
-        <div>
-            <CertInfoModal />
+        <div v-if="modalOn">
+            <CertInfoModal @exit-modal="closeModal"/>
         </div>
         <div class="w-full flex items-center flex-col gap-5 py-5 relative z-0">
             <StatisticTable :time="time" @selected-time-clicked="handleTimeChange" @openCertInfoModal="openCertInfoModal"/>
