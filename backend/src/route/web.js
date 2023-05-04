@@ -83,6 +83,9 @@ const initWebRoute = (app) => {
                                                                                     
   // logic - trả về info xe đăng kiểm
   router.post('/preview-info', verifyToken, homeController.previewInfo)
+
+  // logic - trả về thông tin xe vừa đăng kiểm
+  router.post('/info/regist/latest', verifyToken, homeController.viewLatestRegist)
                                                                                     
                                                                                     
   // logic - trả về tất cả đăng kiểm của centre này
