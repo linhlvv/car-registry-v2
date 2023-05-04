@@ -12,10 +12,10 @@ import { newRegist } from './info/newRegist';
 import { updateModify } from './info/updateModify';
 import { previewInfo } from './info/previewInfo'
 
-import { expired } from './categories/expired';
-import { registed } from './categories/registed';
-import { vehicles } from './categories/vehicles';
-import { findByLicense} from './categories/findByLicense';
+import { expired } from './vehicles/expired';
+import { registed } from './vehicles/registed';
+import { vehicles } from './vehicles/vehicles';
+import { findByLicense} from './vehicles/findByLicense';
 
 import { owner } from './filter/owner'
 import { brand } from './filter/brand'
