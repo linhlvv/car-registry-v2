@@ -37,7 +37,7 @@ const searchResult = (result) => {
         <div class="w-full flex relative justify-end z-0">
             <input placeholder="Choose an option" v-model="content" class="w-full relative z-10 p-1 pl-2 text-[13px] text-[#1d1d1d] font-semibold border-dashed border-2 border-[#2acc97] rounded-lg"/>
             <div class="absolute z-10 py-1 flex justify-end">
-                <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="w-6 h-6 z-30 text-gray-500">
+                <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" class="w-6 h-6 z-30 text-gray-500">
                     <path stroke-linecap="round" stroke-linejoin="round" d="M8.25 15L12 18.75 15.75 15m-7.5-6L12 5.25 15.75 9" />
                 </svg>
             </div>
