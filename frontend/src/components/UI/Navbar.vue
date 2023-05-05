@@ -5,9 +5,11 @@ import SuggestionSelect from './SuggestionSelect.vue'
 
 import { useRoute } from 'vue-router';
 import { useAccountStore } from '../../stores/AccountStore'
-import { ref } from 'vue';
+import { useAdminSelectionStore } from '../../stores/AdminSelectionStore'
+import { onMounted, ref } from 'vue';
 
 const accountStore = useAccountStore()
+const adminSelectionStore = useAdminSelectionStore()
 const route = useRoute();
 
 const emit = defineEmits(['verticalNavClicked']);
@@ -34,6 +36,36 @@ const adminSelections = ref([
     {name: 'Region', value: selection.value.region},
     {name: 'Center', value: selection.value.center},
 ]);
+
+const currentSelection = ref(adminSelections.value[selection.value.all])
+const currentSpecificSelect = ref('')
+
+const moveSelection = (direction) => {
+    currentSpecificSelect.value = ''
+    if(direction === 'right') {
+        if(currentSelection.value.value === selection.value.center) {
+            currentSelection.value = adminSelections.value[selection.value.all]
+        } else {
+            currentSelection.value = adminSelections.value[currentSelection.value.value + 1]
+        }
+    } else {
+        if(currentSelection.value.value === selection.value.all) {
+            currentSelection.value = adminSelections.value[selection.value.center]
+        } else {
+            currentSelection.value = adminSelections.value[currentSelection.value.value - 1]
+        }   
+    }
+    adminSelectionStore.setSelection(currentSelection.value.name, currentSpecificSelect.value)
+};
+
+const handleSetSelection = (item) => {
+    currentSpecificSelect.value = item
+    adminSelectionStore.setSelection(currentSelection.value.name, currentSpecificSelect.value)
+}
+
+onMounted(() => {
+    adminSelectionStore.setSelection(currentSelection.value.name, currentSpecificSelect.value)
+});
 
 </script>
 
@@ -94,19 +126,33 @@ const adminSelections = ref([
         <nav class="bg-white dark:bg-gray-700">
             <div class="max-w-screen-xl mx-auto">
                 <div class="flex items-center justify-between">
-                    <div class="flex justify-center items-center cursor-pointer w-[10%] py-6 text-[#2acc97] duration-200 hover:text-white hover:bg-[#2acc97]">
+                    <button @click="moveSelection('left')" class="flex justify-center items-center cursor-pointer w-[10%] py-6 text-[#2acc97] duration-200 hover:text-white hover:bg-[#2acc97]/90 active:bg-[#2acc97]">
                         <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="w-7 h-7">
                             <path stroke-linecap="round" stroke-linejoin="round" d="M11.25 9l-3 3m0 0l3 3m-3-3h7.5M21 12a9 9 0 11-18 0 9 9 0 0118 0z" />
                         </svg>
-                    </div>
-                    <div class="py-3 w-4/5 flex items-center justify-center">
-                        <SuggestionSelect :data="['Tuan', 'Phuong', 'Phuong xinh', 'Ha Phuong', 'Tran Ha Phuong', 'Vu Minh Tuan', 'Tuan yeu Phuong', 'Minh Tuan', 'THP', 'VMT']"/>
-                    </div>
-                    <div class="flex justify-center items-center cursor-pointer w-[10%] py-6 text-[#2acc97] duration-200 hover:text-white hover:bg-[#2acc97]">
+                    </button>
+                    <Transition>
+                        <div class="py-3 w-4/5 flex flex-col items-center justify-center gap-2">
+                            <div class="flex items-center gap-1">
+                                <svg v-if="currentSelection.value === selection.all" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor" class="w-5 h-4 p-1 text-[#eded4a] bg-red-400">
+                                    <path fill-rule="evenodd" d="M10.788 3.21c.448-1.077 1.976-1.077 2.424 0l2.082 5.007 5.404.433c1.164.093 1.636 1.545.749 2.305l-4.117 3.527 1.257 5.273c.271 1.136-.964 2.033-1.96 1.425L12 18.354 7.373 21.18c-.996.608-2.231-.29-1.96-1.425l1.257-5.273-4.117-3.527c-.887-.76-.415-2.212.749-2.305l5.404-.433 2.082-5.006z" clip-rule="evenodd" />
+                                </svg>
+                                <i v-if="currentSelection.value === selection.region" class="fa-solid fa-city text-[#2acc97]"></i>
+                                <svg v-if="currentSelection.value === selection.center" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor" class="w-6 h-6 text-[#2acc97]">
+                                    <path fill-rule="evenodd" d="M4.5 2.25a.75.75 0 000 1.5v16.5h-.75a.75.75 0 000 1.5h16.5a.75.75 0 000-1.5h-.75V3.75a.75.75 0 000-1.5h-15zM9 6a.75.75 0 000 1.5h1.5a.75.75 0 000-1.5H9zm-.75 3.75A.75.75 0 019 9h1.5a.75.75 0 010 1.5H9a.75.75 0 01-.75-.75zM9 12a.75.75 0 000 1.5h1.5a.75.75 0 000-1.5H9zm3.75-5.25A.75.75 0 0113.5 6H15a.75.75 0 010 1.5h-1.5a.75.75 0 01-.75-.75zM13.5 9a.75.75 0 000 1.5H15A.75.75 0 0015 9h-1.5zm-.75 3.75a.75.75 0 01.75-.75H15a.75.75 0 010 1.5h-1.5a.75.75 0 01-.75-.75zM9 19.5v-2.25a.75.75 0 01.75-.75h4.5a.75.75 0 01.75.75v2.25a.75.75 0 01-.75.75h-4.5A.75.75 0 019 19.5z" clip-rule="evenodd" />
+                                </svg>
+                                <p class="text-lg font-medium text-[#1d1d1d]">{{ currentSelection.name }}</p>
+                            </div>
+                            <div>{{ currentSpecificSelect }}</div>
+                            <SuggestionSelect v-model="currentSpecificSelect" @bindSpecificSelect="handleSetSelection" v-if="currentSelection.value !== selection.all" :data="['Tuan', 'Phuong', 'Phuong xinh', 'Ha Phuong', 'Tran Ha Phuong', 'Vu Minh Tuan', 'Tuan yeu Phuong', 'Minh Tuan', 'THP', 'VMT']"/>
+                        </div>
+                    </Transition>
+                    
+                    <button @click="moveSelection('right')" class="flex justify-center items-center cursor-pointer w-[10%] py-6 text-[#2acc97] duration-200 hover:text-white hover:bg-[#2acc97]/90 active:bg-[#2acc97]">
                         <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="w-7 h-7">
                             <path stroke-linecap="round" stroke-linejoin="round" d="M12.75 15l3-3m0 0l-3-3m3 3h-7.5M21 12a9 9 0 11-18 0 9 9 0 0118 0z" />
                         </svg>
-                    </div>
+                    </button>
                 </div>
             </div>
         </nav>
@@ -115,5 +161,13 @@ const adminSelections = ref([
 </template>
 
 <style scoped>
+    .fade-enter-active,
+    .fade-leave-active {
+        transition: opacity 0.5s ease;
+    }
 
+    .fade-enter-from,
+    .fade-leave-to {
+        opacity: 0;
+    }
 </style>
