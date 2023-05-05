@@ -36,7 +36,7 @@ const openInfo = () => {
         </div>
 
         <div class="font-semibold text-[#616367] flex text-right justify-end items-center w-[22%]" :class="isRootRow ? 'text-[12px] max-[900px]:text-[11px]' : 'text-[11px] max-[900px]:text-[10px]'">
-            {{ isRootRow ? 'Center' : car.name}}
+            {{ isRootRow ? 'Owner' : car.name}}
         </div>
 
         <div v-if="!isRootRow" class="flex items-center w-[10%] justify-center">
