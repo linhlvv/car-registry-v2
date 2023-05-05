@@ -1,6 +1,7 @@
 <script setup>
 import ProfileDropdown from './ProfileDropdown.vue';
 import NavbarButton from './NavbarButton.vue';
+import SuggestionSelect from './SuggestionSelect.vue'
 
 import { useRoute } from 'vue-router';
 import { useAccountStore } from '../../stores/AccountStore'
@@ -21,6 +22,18 @@ if(localStorage.getItem('token') === null) {
 } else {
     isLoggedIn.value = true
 };
+
+const selection = ref({
+    all: 0,
+    region: 1,
+    center: 2,
+})
+
+const adminSelections = ref([
+    {name: 'All', value: selection.value.all},
+    {name: 'Region', value: selection.value.region},
+    {name: 'Center', value: selection.value.center},
+]);
 
 </script>
 
@@ -73,6 +86,27 @@ if(localStorage.getItem('token') === null) {
                             <NavbarButton :current="route.path === '/statistics'" icon="fa-solid fa-chart-simple" content="Statistics" link="/statistics"/>
                         </li>
                     </ul>
+                </div>
+            </div>
+        </nav>
+    </div>
+    <div v-show="route.path !== '/'" class="max-[732px]:hidden w-full">
+        <nav class="bg-white dark:bg-gray-700">
+            <div class="max-w-screen-xl mx-auto">
+                <div class="flex items-center justify-between">
+                    <div class="flex justify-center items-center cursor-pointer w-[10%] py-6 text-[#2acc97] duration-200 hover:text-white hover:bg-[#2acc97]">
+                        <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="w-7 h-7">
+                            <path stroke-linecap="round" stroke-linejoin="round" d="M11.25 9l-3 3m0 0l3 3m-3-3h7.5M21 12a9 9 0 11-18 0 9 9 0 0118 0z" />
+                        </svg>
+                    </div>
+                    <div class="py-3 w-4/5 flex items-center justify-center">
+                        <SuggestionSelect :data="['Tuan', 'Phuong', 'Phuong xinh', 'Ha Phuong', 'Tran Ha Phuong', 'Vu Minh Tuan', 'Tuan yeu Phuong', 'Minh Tuan', 'THP', 'VMT']"/>
+                    </div>
+                    <div class="flex justify-center items-center cursor-pointer w-[10%] py-6 text-[#2acc97] duration-200 hover:text-white hover:bg-[#2acc97]">
+                        <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="w-7 h-7">
+                            <path stroke-linecap="round" stroke-linejoin="round" d="M12.75 15l3-3m0 0l-3-3m3 3h-7.5M21 12a9 9 0 11-18 0 9 9 0 0118 0z" />
+                        </svg>
+                    </div>
                 </div>
             </div>
         </nav>
