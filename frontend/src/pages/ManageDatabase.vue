@@ -11,7 +11,7 @@ const selectedFile = ref(null)
 // onMounted(() => {
 // 	console.log(file.value.files[0]);
 // })
-
+//FIXME - fix duplicate uploaded file
 const fileUploadHandler = () => {
     console.log(file.value.files[0]);
 	selectedFile.value = file.value.files[0]
@@ -22,12 +22,15 @@ const removeFile = () => {
 	if(selectedFile.value !== null) {
 		hasFile.value = false
 		selectedFile.value = null
+		file.value.files[0] = undefined
+		ownerTypePicked.value = null
 	}
 };
 
 const messageTime = 5
 const errorMessageTime = ref(messageTime)
 const errorMessageOn = ref(false)
+const ownerTypeErrorMessageOn = ref(false)
 let errorMessageInterval;
 const upload = async () => {
 	if(!hasFile.value) {
@@ -38,6 +41,11 @@ const upload = async () => {
 			errorMessageTime.value -= 1
 		}, 1000);
 	} else {
+		if(ownerTypePicked.value === null) {
+			ownerTypeErrorMessageOn.value = true
+			return
+		}
+		ownerTypeErrorMessageOn.value = false
 		const formData = new FormData()
 		formData.append("ownerType", ownerTypePicked)
 		formData.append("file", file.value.files[0])
@@ -70,6 +78,12 @@ watch(() => errorMessageTime.value, () => {
 	}
 });
 
+watch(() => ownerTypePicked.value, (newType, oldType) => {
+	if(hasFile.value && oldType === null) {
+		ownerTypeErrorMessageOn.value = false
+	}
+});
+
 </script>
 
 <template>
@@ -79,7 +93,7 @@ watch(() => errorMessageTime.value, () => {
 				<path stroke-linecap="round" stroke-linejoin="round" d="M12 9v3.75m9-.75a9 9 0 11-18 0 9 9 0 0118 0zm-9 3.75h.008v.008H12v-.008z" />
 			</svg>
 			<p class="text-base font-medium text-[#cc5b2a]">
-				Be careful! Remember to classify file by car owner type (company/person)
+				Be careful! Remember to classify files by car owner type (company/person)
 			</p>
 		</div>
         <label for="dropzone-file" class="flex flex-col items-center justify-center px-4 w-full h-64 border-2 border-[#2acc97] border-dashed rounded-lg cursor-pointer bg-transparent hover:bg-[#2acc97]/10">
@@ -106,7 +120,7 @@ watch(() => errorMessageTime.value, () => {
 		<!-- <div>{{ selectedFile.name }}</div> -->
 		<Transition name="slide-fade">
 			<div v-if="hasFile" class="w-full flex flex-col gap-4 p-4 border-[#2acc97] border-dashed border-2 rounded-lg">
-				<p class="font-medium text-[#1d1d1d] text-base">Please choose an owner type of the uploaded file</p>
+				<p class="font-medium text-[#1d1d1d] text-base">Choose an owner type of the uploaded file</p>
 				<div class="w-full flex justify-evenly">
 					<div>
 						<input type="radio" id="one" :value="0" v-model="ownerTypePicked" />
@@ -125,6 +139,14 @@ watch(() => errorMessageTime.value, () => {
 					<path fill-rule="evenodd" d="M9.401 3.003c1.155-2 4.043-2 5.197 0l7.355 12.748c1.154 2-.29 4.5-2.599 4.5H4.645c-2.309 0-3.752-2.5-2.598-4.5L9.4 3.003zM12 8.25a.75.75 0 01.75.75v3.75a.75.75 0 01-1.5 0V9a.75.75 0 01.75-.75zm0 8.25a.75.75 0 100-1.5.75.75 0 000 1.5z" clip-rule="evenodd" />
 				</svg>
 				<p class="text-base font-medium">No chosen file to be uploaded!</p>
+			</div>
+		</Transition>
+		<Transition name="fade">
+			<div v-if="ownerTypeErrorMessageOn" class="w-full flex items-center p-3 gap-2 text-[#cc5b2a]">
+				<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor" class="w-6 h-6">
+					<path fill-rule="evenodd" d="M9.401 3.003c1.155-2 4.043-2 5.197 0l7.355 12.748c1.154 2-.29 4.5-2.599 4.5H4.645c-2.309 0-3.752-2.5-2.598-4.5L9.4 3.003zM12 8.25a.75.75 0 01.75.75v3.75a.75.75 0 01-1.5 0V9a.75.75 0 01.75-.75zm0 8.25a.75.75 0 100-1.5.75.75 0 000 1.5z" clip-rule="evenodd" />
+				</svg>
+				<p class="text-base font-medium">Please choose an owner type of the uploaded file!</p>
 			</div>
 		</Transition>
 		<button @click="upload" class="py-2 px-3 rounded-lg bg-[#2acc97]/80 font-semibold text-white text-[14px] flex items-center gap-1 hover:bg-[#2acc97]/90 active:bg-[#2acc97]">

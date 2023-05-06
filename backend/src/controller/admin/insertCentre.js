@@ -14,7 +14,7 @@ let insertCentre = async (req, res) => {
     let email = req.body.email;
     let password = crypto.createHash('sha256').update("z").digest('hex');
     
-    let type = req.body.type;
+    let type = 0;
     
     //Kiểm tra tồn tại chưa
     let check = 'select * from account where email = ?'
