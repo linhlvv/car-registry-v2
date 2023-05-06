@@ -1,5 +1,5 @@
 import express from 'express'
-import { verifyToken } from '../controller/authenticate/verifyToken'
+import { verifyToken } from '../controller/verifyToken'
 import homeController from '../controller/homeController'
 let router = express.Router()
 
