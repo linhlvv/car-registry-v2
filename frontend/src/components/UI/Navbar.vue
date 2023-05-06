@@ -146,7 +146,6 @@ onMounted(() => {
                                 </svg>
                                 <p class="text-lg font-medium text-[#1d1d1d]">{{ currentSelection.name }}</p>
                             </div>
-                            <div>{{ currentSpecificSelect }}</div>
                             <SuggestionSelect v-model="currentSpecificSelect" @bindSpecificSelect="handleSetSelection" v-if="currentSelection.value !== selection.all" :data="['Tuan', 'Phuong', 'Phuong xinh', 'Ha Phuong', 'Tran Ha Phuong', 'Vu Minh Tuan', 'Tuan yeu Phuong', 'Minh Tuan', 'THP', 'VMT']"/>
                         </div>
                     </Transition>
@@ -160,8 +159,6 @@ onMounted(() => {
             </div>
         </nav>
     </div>
-    <div>{{ verification }}</div>
-    <!-- <NoSpecificSelect v-if="" /> -->
 </template>
 
 <style scoped>
@@ -174,4 +171,6 @@ onMounted(() => {
     .fade-leave-to {
         opacity: 0;
     }
+
+    
 </style>
