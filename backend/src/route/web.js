@@ -4,23 +4,23 @@ import homeController from '../controller/homeController'
 let router = express.Router()
 
 const initWebRoute = (app) => {
-  // SECTION - homepage
+  // section - homepage
   router.get('/', homeController.homepage)
                                                                                     
                                                                                     
-  // SECTION - access
+  // section - access
   router.post('/auth', homeController.authenticate);
   router.get('/logout', homeController.logout);
                                                                                     
                                                                                     
-  // SECTION - vehicles
+  // section - vehicles
   router.post('/vehicles/all', verifyToken, homeController.vehicles)
   router.post('/vehicles/registed', verifyToken, homeController.registed)
   router.post('/vehicles/expired', verifyToken, homeController.expired)
   router.post('/vehicles/find', verifyToken, homeController.findByLicense)
                                                                                     
                                                                                     
-  // SECTION - filter cho vehicles
+  // section - filter cho vehicles
   // logic - gửi code có thể là ssn hoặc taxnum 
   router.post('/filter/owner', verifyToken, homeController.owner)
                                                                                     
@@ -47,7 +47,7 @@ const initWebRoute = (app) => {
   // task - /filter/exactCity -> /filter/city/exact
                                                                                     
                                                                                     
-  // SECTION - info
+  // section - info
   // logic - trả về lịch sử đăng kiểm của owner
   router.post('/owner/history', verifyToken, homeController.registHistory)
                                                                                     
@@ -91,7 +91,7 @@ const initWebRoute = (app) => {
   router.post('/info/regist/latest', verifyToken, homeController.viewLatestRegist)
                                                                                     
                                                                                     
-  // SECTION - statistic
+  // section - statistic
   // logic - trả về tất cả đăng kiểm của centre này
   router.post('/regist/all', verifyToken, homeController.allRegist)
                                                                                     
@@ -105,12 +105,12 @@ const initWebRoute = (app) => {
   router.post('/regist/detail', verifyToken, homeController.registModal)
                                                                                     
                                                                                     
-  // SECTION - forecast
+  // section - forecast
   // logic - dự đoán các xe sắp hết hạn
   router.post('/forecast', verifyToken, homeController.forecast)
 
                                                                                     
-  // SECTION - department
+  // section - department
   // logic - admin xem tất cả các centre
   router.get('/centre/all', verifyToken, homeController.viewAllCentres)
                                                                                     
