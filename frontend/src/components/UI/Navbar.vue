@@ -2,6 +2,7 @@
 import ProfileDropdown from './ProfileDropdown.vue';
 import NavbarButton from './NavbarButton.vue';
 import SuggestionSelect from './SuggestionSelect.vue'
+import NoSpecificSelect from './NoSpecificSelect.vue';
 
 import { useRoute } from 'vue-router';
 import { useAccountStore } from '../../stores/AccountStore'
@@ -39,6 +40,7 @@ const adminSelections = ref([
 
 const currentSelection = ref(adminSelections.value[selection.value.all])
 const currentSpecificSelect = ref('')
+const verification = ref(true)
 
 const moveSelection = (direction) => {
     currentSpecificSelect.value = ''
@@ -55,16 +57,17 @@ const moveSelection = (direction) => {
             currentSelection.value = adminSelections.value[currentSelection.value.value - 1]
         }   
     }
-    adminSelectionStore.setSelection(currentSelection.value.name, currentSpecificSelect.value)
+    adminSelectionStore.setSelection(currentSelection.value.value, currentSpecificSelect.value)
+    verification.value = adminSelectionStore.getVerified
 };
 
 const handleSetSelection = (item) => {
     currentSpecificSelect.value = item
-    adminSelectionStore.setSelection(currentSelection.value.name, currentSpecificSelect.value)
+    adminSelectionStore.setSelection(currentSelection.value.value, currentSpecificSelect.value)
 }
 
 onMounted(() => {
-    adminSelectionStore.setSelection(currentSelection.value.name, currentSpecificSelect.value)
+    adminSelectionStore.setSelection(currentSelection.value.value, currentSpecificSelect.value)
 });
 
 </script>
@@ -157,7 +160,8 @@ onMounted(() => {
             </div>
         </nav>
     </div>
-    
+    <div>{{ verification }}</div>
+    <!-- <NoSpecificSelect v-if="" /> -->
 </template>
 
 <style scoped>
