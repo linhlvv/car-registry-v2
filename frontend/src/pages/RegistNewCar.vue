@@ -3,8 +3,10 @@ import RegistrationCarAndOwner from '../components/modal/RegistrationCarAndOwner
 import RegistrationCert from '../components/modal/RegistrationCert.vue';
 import { useAccountStore } from '../stores/AccountStore';
 import { ref, watch } from 'vue';
+import { useRouter } from 'vue-router';
 
 const accountStore = useAccountStore()
+const router = useRouter()
 
 //SECTION - details
 
@@ -116,6 +118,7 @@ const fetchRegistryInfo = async () => {
     loading.value = false
 }
 
+// logic - handle regist submit
 const messageTime = 3
 const errorMessageTime = ref(messageTime)
 const errorMessageOn = ref(false)
@@ -147,18 +150,33 @@ const handleRegist = async () => {
             console.log(res.error);
         }
         console.log(res.status);
-        // if(res.status === 200) {
-        //     triggerInterval()
-        // }
+        if(res.status === 200) {
+            triggerInterval()
+        }
     }
 }
 
+// logic - interval handler
+const loadingSubmit = ref(false)
+const intervalSec = 2
+const second = ref(0)
+let loadingInterval
+const triggerInterval = () => {
+    loadingSubmit.value = true
+    second.value = 0
+    loadingInterval = setInterval(() => {
+        second.value += 1
+    }, 1000);
+}
+
 //SECTION - watchers
+// logic - watch license id input
 watch(() => info.value.licenseId, (newId, oldId) => {
     console.log(info.value.licenseId);
     fetchData()
 });
 
+// logic - watch error message time
 watch(() => errorMessageTime.value, () => {
     if(errorMessageTime.value === 0) {
         errorMessageTime.value = messageTime
@@ -166,10 +184,33 @@ watch(() => errorMessageTime.value, () => {
         clearInterval(errorMessageInterval)
     }
 });
+
+// logic - watch loading submit time
+watch(() => second.value, () => {
+    if(second.value === intervalSec) {
+        second.value = 0
+        loadingSubmit.value = false
+        // info.value.licenseId
+        const param = info.value.licenseId.replace('.', '=')
+        let route = router.resolve({ path: `/print-pdf/${param}` })
+        window.open(route.href)
+        window.location.reload()
+        clearInterval(loadingInterval)
+    }
+});
+
 </script>
 
 <template>
     <div class="w-full relative">
+        <div v-if="loadingSubmit" class="border-4 border-solid border-[#2acc97] rounded-[8px] fixed top-[15vh] left-[25%] w-1/2 z-50 flex modal-animation overflow-hidden h-fit">
+            <div class="w-full flex gap-4 flex-col items-center justify-center bg-white h-[350px]">
+                <svg class="checkmark" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 52 52"><circle class="checkmark__circle" cx="26" cy="26" r="25" fill="none"/><path class="checkmark__check" fill="none" d="M14.1 27.2l7.1 7.2 16.7-16.8"/></svg>
+                <span class="w-full text-center text-[#1d1d1d] text-xl font-semibold">
+                    Regist successfully
+                </span>
+            </div>
+        </div>
         <div class="w-full bg-[#f5f7fb] py-4 px-2">
             <div class="flex flex-col gap-2 w-full items-center">
                 <div class="flex items-center w-4/5 bg-white rounded-[4px] overflow-hidden shadow">
@@ -229,30 +270,77 @@ watch(() => errorMessageTime.value, () => {
 </template>
 
 <style scoped>
-.slide-fade-enter-active {
-    transition: all 0.5s ease-out;
-}
+    .slide-fade-enter-active {
+        transition: all 0.5s ease-out;
+    }
 
-.slide-fade-leave-active {
-    transition: all 0.2s cubic-bezier(1, 0.5, 0.8, 1);
-}
+    .slide-fade-leave-active {
+        transition: all 0.2s cubic-bezier(1, 0.5, 0.8, 1);
+    }
 
-.slide-fade-enter-from,
-.slide-fade-leave-to {
-    transform: translateX(10px);
-    opacity: 0;
-}
+    .slide-fade-enter-from,
+    .slide-fade-leave-to {
+        transform: translateX(10px);
+        opacity: 0;
+    }
 
-.fade-enter-active {
-    transition: all 0.5s ease-out;
-}
+    .fade-enter-active {
+        transition: all 0.5s ease-out;
+    }
 
-.fade-leave-active {
-    transition: all 0.2s cubic-bezier(1, 0.5, 0.8, 1);
-}
+    .fade-leave-active {
+        transition: all 0.2s cubic-bezier(1, 0.5, 0.8, 1);
+    }
 
-.fade-enter-from,
-.fade-leave-to {
-    opacity: 0;
-}
+    .fade-enter-from,
+    .fade-leave-to {
+        opacity: 0;
+    }
+
+    .checkmark__circle {
+        stroke-dasharray: 166;
+        stroke-dashoffset: 166;
+        stroke-width: 2;
+        stroke-miterlimit: 10;
+        stroke: #2acc97;
+        fill: none;
+        animation: stroke 0.6s cubic-bezier(0.65, 0, 0.45, 1) forwards;
+    }
+
+    .checkmark {
+        width: 144px;
+        height: 144px;
+        border-radius: 50%;
+        display: block;
+        stroke-width: 2;
+        stroke: #2acc97;
+        stroke-miterlimit: 10;
+        animation: fill .4s ease-in-out .4s forwards, scale .3s ease-in-out .9s both;
+    }
+
+    .checkmark__check {
+        transform-origin: 50% 50%;
+        stroke-dasharray: 48;
+        stroke-dashoffset: 48;
+        animation: stroke 0.3s cubic-bezier(0.65, 0, 0.45, 1) 0.8s forwards;
+    }
+
+    @keyframes stroke {
+        100% {
+            stroke-dashoffset: 0;
+        }
+    }
+    @keyframes scale {
+        0%, 100% {
+            transform: none;
+        }
+        50% {
+            transform: scale3d(1.1, 1.1, 1);
+        }
+    }
+    @keyframes fill {
+        100% {
+            box-shadow: inset 0px 0px 0px 30px white;
+        }
+    }
 </style>

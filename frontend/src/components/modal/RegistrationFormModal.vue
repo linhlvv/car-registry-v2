@@ -119,7 +119,6 @@ watch(second, (newSec, oldSec) => {
     if(newSec === 3) {
         second.value = 0
         loadingSubmit.value = false
-        registrationCertStore.setRegistrationCertInfo(JSON.stringify(registryCert.value.info))
         const param = props.license.replace('.', '=')
         let route = router.resolve({ path: `/print-pdf/${param}` }) 
         window.open(route.href)
