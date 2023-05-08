@@ -3,10 +3,13 @@ import Pagination from '../components/forecast/Pagination.vue';
 import ForecastCard from '../components/forecast/ForecastCard.vue';
 import CarInfoModal from '../components/modal/CarInfoModal.vue';
 import RegistrationFormModal from '../components/modal/RegistrationFormModal.vue';
+import { useAdminSelectionStore } from '../stores/AdminSelectionStore';
+import NoSpecificSelect from '../components/UI/NoSpecificSelect.vue';
 import { computed, onMounted, ref, watch } from 'vue';
 import { useAccountStore } from '../stores/AccountStore';
 
 const accountStore = useAccountStore()
+const adminSelectionStore = useAdminSelectionStore()
 
 //SECTION - response per page
 const resPerPage = ref(7);
@@ -57,11 +60,27 @@ const fetchForecastList = async () => {
     let fetchRoute;
     let fetchBody;
     if(accountStore.isAdmin) {
-        fetchRoute = `http://localhost:1111/forecast`
-        fetchBody = {
-            resPerPage: resPerPage.value,
-            page: pageNumber.value
-        }
+        if(adminSelectionStore.getSelected === 'all') {
+            fetchRoute = `http://localhost:1111/forecast/admin/all`
+            fetchBody = {
+                resPerPage: resPerPage.value,
+                page: pageNumber.value
+            }
+        } else if(adminSelectionStore.getSelected === 'region') {
+            fetchRoute = `http://localhost:1111/forecast/admin/area`
+            fetchBody = {
+                resPerPage: resPerPage.value,
+                page: pageNumber.value,
+                area: adminSelectionStore.getOptionSelected
+            }
+        } else {
+            fetchRoute = `http://localhost:1111/forecast/admin/centre`
+            fetchBody = {
+                resPerPage: resPerPage.value,
+                page: pageNumber.value,
+                centre: adminSelectionStore.getOptionSelected
+            }
+        } 
     } else {
         fetchRoute = `http://localhost:1111/forecast`
         fetchBody = {
@@ -69,6 +88,7 @@ const fetchForecastList = async () => {
             page: pageNumber.value
         }
     }
+    console.log(fetchRoute);
     const res = await fetch(fetchRoute, {
         method: 'POST',
         credentials: "include",
@@ -82,6 +102,7 @@ const fetchForecastList = async () => {
         console.log(res.error);
     }
     const dataFetched = JSON.parse(await res.text())
+    console.log(dataFetched);
     forecastList.value = dataFetched.data
     totalPage.value = dataFetched.countPage
     totalRes.value = dataFetched.countData
@@ -112,58 +133,88 @@ watch(() => resPerPage.value, () => {
     fetchForecastList()
 });
 
+watch(() => adminSelectionStore.getOptionSelected, () => {
+    fetchForecastList()
+});
+
+watch(() => adminSelectionStore.getSelected, () => {
+    fetchForecastList()
+});
+
 </script>
 
 <template>
     <div>
-        <div v-if="registModalOn">
-            <RegistrationFormModal :license="modalLicense" @exit-modal="handleRegistModal"/>
-        </div>
-        <div v-if="infoModalOn">
-            <CarInfoModal :license-id="modalLicense" @exit-modal="handleInfoModal"/>
-        </div>
-        <div class="my-6">
-            <div class="flex justify-center">
-                <div class="flex items-center flex-col w-[90vw]">
-                    <div class="flex justify-end items-center w-full gap-8">
-                        <div class="flex items-center gap-2">
-                            <div class="text-[13px] font-semibold">Results per page</div>
-                            <select v-model="resPerPage" class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:outline-[#2acc97] block w-full p-2.5">
-                                <option value="5">5</option>
-                                <option value="7" selected>7</option>
-                                <option value="10">10</option>
-                                <option value="12">12</option>
-                            </select>
-                        </div>
-                        <div class="text-[14px] font-semibold flex items-center gap-2">
-                            <p>Total:</p>
-                            <p class="text-[#2acc97]">{{ totalRes }}</p>
-                        </div>
-                    </div>
-                    <div class="w-full flex flex-col gap-[2px] mb-4" :class="minHeight">
-                        <ForecastCard :is-root-row="true"/>
-                        <div v-for="card in forecastList" :key="card">
-                            <ForecastCard 
-                                :info="card"
-                                @open-info="handleInfoModal"
-                                @regist="handleRegistModal"
+        <Transition name="fade" mode="out-in">
+            <div v-if="!adminSelectionStore.getVerified" class="w-full flex items-center">
+                <NoSpecificSelect />
+            </div>
+            <div v-else>
+                <div>{{ adminSelectionStore.getOptionSelected }}</div>
+                <div v-if="registModalOn">
+                    <RegistrationFormModal :license="modalLicense" @exit-modal="handleRegistModal"/>
+                </div>
+                <div v-if="infoModalOn">
+                    <CarInfoModal :license-id="modalLicense" @exit-modal="handleInfoModal"/>
+                </div>
+                <div class="my-6">
+                    <div class="flex justify-center">
+                        <div class="flex items-center flex-col w-[90vw]">
+                            <div class="flex justify-end items-center w-full gap-8">
+                                <div class="flex items-center gap-2">
+                                    <div class="text-[13px] font-semibold">Results per page</div>
+                                    <select v-model="resPerPage" class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:outline-[#2acc97] block w-full p-2.5">
+                                        <option value="5">5</option>
+                                        <option value="7" selected>7</option>
+                                        <option value="10">10</option>
+                                        <option value="12">12</option>
+                                    </select>
+                                </div>
+                                <div class="text-[14px] font-semibold flex items-center gap-2">
+                                    <p>Total:</p>
+                                    <p class="text-[#2acc97]">{{ totalRes }}</p>
+                                </div>
+                            </div>
+                            <div class="w-full flex flex-col gap-[2px] mb-4" :class="minHeight">
+                                <ForecastCard :is-root-row="true"/>
+                                <div v-for="card in forecastList" :key="card">
+                                    <ForecastCard 
+                                        :info="card"
+                                        @open-info="handleInfoModal"
+                                        @regist="handleRegistModal"
+                                    />
+                                </div>
+                            </div>
+                            <Pagination 
+                                :total-page="totalPage" 
+                                :current-page="pageNumber"
+                                @pageClicked="navigateToSpecificPage"
+                                @navigatePage="navigatePageWithDirection"
                             />
                         </div>
                     </div>
-                    <Pagination 
-                        :total-page="totalPage" 
-                        :current-page="pageNumber"
-                        @pageClicked="navigateToSpecificPage"
-                        @navigatePage="navigatePageWithDirection"
-                    />
                 </div>
             </div>
-        </div>
+        </Transition>
     </div>
 </template>
 
 <style scoped>
-    /* select { 
-        outline:none; 
-    } */
+    .custom-shadow {
+        box-shadow: -5px 6px 8px #ebecf0;
+    }
+
+    input[type=radio] {
+        accent-color: #2acc97;
+    }
+
+    .fade-enter-active,
+    .fade-leave-active {
+        transition: all 0.3s ease;
+    }
+    
+    .fade-enter-from,
+    .fade-leave-to {
+        opacity: 0;
+    }
 </style>
