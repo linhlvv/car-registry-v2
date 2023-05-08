@@ -13,7 +13,7 @@ export const useAccountStore = defineStore('accountStore', {
     },
     isAdmin() {
       const type = localStorage.getItem('userType')
-      return (type === 1 ? true : false)
+      return (type === '1' ? true : false)
     },
     ID() {
       return localStorage.getItem('id')
