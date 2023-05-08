@@ -125,6 +125,17 @@ const initWebRoute = (app) => {
                                                                                     
   // logic - admin xem tất cả các xe chưa đăng kiểm toàn cục
   router.post('/vehicles/admin/unregisted', verifyToken, homeController.viewUnregistedVehicles)
+                                                                                    
+  // logic - admin xem tất cả dự đoán
+  router.post('/forecast/admin/all', verifyToken, homeController.forecastAll)
+  // logic - admin xem tất cả dự đoán theo khu vực
+  router.post('/forecast/admin/area', verifyToken, homeController.forecastByArea)
+  // logic - admin xem tất cả dự đoán theo trung tâm
+  router.post('/forecast/admin/centre', verifyToken, homeController.forecastByCentre)
+
+  // logic - tất cả các thành phố kèm mã vùng
+  router.get('/stats/area', verifyToken, homeController.allArea)
+
 
   return app.use('/', router)
 }

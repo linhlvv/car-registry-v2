@@ -9,11 +9,13 @@ import { logout } from "./user/authenticate/logout";
 import { changePassword } from "./user/authenticate/changePassword";
   // section - info
 import { centreInfo } from "./user/info/centreInfo";
-import { getDataForChart } from "./user/info/data4Chart";
+import { getDataForChart } from "./centre/info/data4Chart";
 import { detailModal } from "./user/info/detailModal";
 import { previewInfo } from "./user/info/previewInfo";
   // section - owner
 import { ownerInfo } from "./user/owner/ownerInfo";
+  // section - stats
+import { allArea } from "./user/stats/allArea";
 
 // section - centre
   // section - filter
@@ -46,6 +48,12 @@ import { registed } from "./centre/vehicles/registed";
 import { vehicles } from "./centre/vehicles/vehicles";
 
 // section - department
+  // section - filter
+
+  // section - forecast
+import { forecastAll } from "./department/forecast/forecastAll";
+import { forecastByCentre } from "./department/forecast/forecastByCentre";
+import { forecastByArea } from "./department/forecast/forecastByArea.js";
   // section - management
 import { addDataFromExcel } from "./department/management/addDataFromExcel";
 import { insertCentre } from "./department/management/insertCentre";
@@ -86,6 +94,7 @@ module.exports = {
   authenticate, logout, changePassword,
   centreInfo, getDataForChart, detailModal, previewInfo,
   ownerInfo,
+  allArea,
   
   allBrand, allCity, brand, exactBrand, exactCity, owner, time,
   forecast,
@@ -95,6 +104,7 @@ module.exports = {
   allRegist, registByLicense, registByTime, registModal,
   expired, findByLicense, registed, vehicles,
   
+  forecastAll, forecastByCentre, forecastByArea,
   addDataFromExcel, insertCentre, removeCentre,
   viewAllCentres, viewAllVehicles, viewRegistedVehicles, viewExpiredVehicles, viewUnregistedVehicles,
 };
