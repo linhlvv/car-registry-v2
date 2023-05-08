@@ -16,6 +16,7 @@ import { previewInfo } from "./user/info/previewInfo";
 import { ownerInfo } from "./user/owner/ownerInfo";
   // section - stats
 import { allArea } from "./user/stats/allArea";
+import { allCentre } from "./user/stats/allCentre";
 
 // section - centre
   // section - filter
@@ -94,7 +95,7 @@ module.exports = {
   authenticate, logout, changePassword,
   centreInfo, getDataForChart, detailModal, previewInfo,
   ownerInfo,
-  allArea,
+  allArea, allCentre,
   
   allBrand, allCity, brand, exactBrand, exactCity, owner, time,
   forecast,

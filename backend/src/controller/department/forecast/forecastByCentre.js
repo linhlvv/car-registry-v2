@@ -13,13 +13,20 @@ let forecastByCentre = async (req, res) => {
     year +
     `\nand month(expire) = ` +
     month +
-    `\nand expire >= CURRENT_DATE()`;
+    `\nand expire >= CURRENT_DATE()` +
+    `\nand ce.name = '` + req.body.centre + `'`;
 
   let count =
     `
   select count(*) as total
-    from registry re 
-  where 1 = 1` +
+    from registry r
+  join vehicles v
+    on r.licenseId = v.licenseId
+  join region re
+    on v.regionId = re.id
+  join centre ce
+    on ce.id = r.centreId
+  ` +
     match +
     `
   `;
@@ -29,28 +36,36 @@ let forecastByCentre = async (req, res) => {
 
   let query =
     `
-  select r.licenseId, brand, model, version, date, max(expire) expire, 
-    p.name as name, (expire >= CURRENT_DATE()) as status
+  select r.licenseId, brand, model, version, date, max(expire) as expire, 
+    p.name as name, (expire >= CURRENT_DATE()) as status, ce.name as centre
   from registry r
   join vehicles v 
     on r.licenseId = v.licenseId
   join personal p 
-    on v.ownerId = p.id` +
+    on v.ownerId = p.id
+  join region re
+    on v.regionId = re.id
+  join centre ce
+    on ce.id = r.centreId` +
     match +
     `
   group by licenseId
         union all
-  select r.licenseId, brand, model, version, date,  max(expire) expire, 
-    c.name as name, (expire >=CURRENT_DATE()) as status
+  select r.licenseId, brand, model, version, date,  max(expire) as expire, 
+    c.name as name, (expire >=CURRENT_DATE()) as status, ce.name as centre
   from registry r
   join vehicles v 
     on r.licenseId = v.licenseId
   join company c 
-    on v.ownerId = c.id` +
+    on v.ownerId = c.id
+  join region re
+    on v.regionId = re.id
+  join centre ce
+    on ce.id = r.centreId` +
     match +
     ` 
   group by licenseId
-  order by expire asc
+  order by licenseId asc
     limit ? offset ?`;
 
   // bug - đã gọi được api kết quả trả về chính xác
@@ -66,5 +81,5 @@ let forecastByCentre = async (req, res) => {
 };
 
 module.exports = {
-  forecastByCentre
+  forecastByCentre 
 };

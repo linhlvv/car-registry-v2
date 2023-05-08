@@ -135,6 +135,8 @@ const initWebRoute = (app) => {
 
   // logic - tất cả các thành phố kèm mã vùng
   router.get('/stats/area', verifyToken, homeController.allArea)
+  // logic - tất cả các trung tâm
+  router.get('/stats/centre', verifyToken, homeController.allCentre)
 
 
   return app.use('/', router)
