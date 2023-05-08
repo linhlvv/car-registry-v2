@@ -4,6 +4,10 @@ let findByLicense = async (req, res) => {
   let carType = req.body.carType
   let license = req.body.license
 
+  if (carType === undefined || license === undefined) {
+    return res.status(422).send({message: 'Missing parameter!'})
+  }
+
   let type = carType === 'expired' ? ' < ' : ' >= '
   let queryType = carType === 'registed' 
                               ? 're.date as registryDate'

@@ -7,13 +7,18 @@ import pool from '../../../configs/connectDB';
 
 let insertCentre = async (req, res) => {
 
-    console.log(req.body)
     let name = req.body.centreName;
     let city = req.body.city;
     let district = req.body.district;
     let email = req.body.email;
     let password = crypto.createHash('sha256').update("z").digest('hex');
     
+    if (carType === undefined || order === undefined || resPerPage === undefined || page === undefined) {
+        return res.status(422).send({message: 'Missing parameter!'})
+    }
+
+    
+
     let type = 0;
     
     //Kiểm tra tồn tại chưa

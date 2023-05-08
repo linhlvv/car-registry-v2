@@ -4,6 +4,10 @@ import pool from "../../../configs/connectDB";
 let ownerInfo = async (req, res) => {
   let ownerid = req.body.ownerId;
 
+  if (ownerid === undefined) {
+    return res.status(422).send({ message: "Missing parameter!" });
+  }
+
   let type = `select type from owner where id = ` + ownerid;
   const [rows, fields] = await pool.query(type);
 

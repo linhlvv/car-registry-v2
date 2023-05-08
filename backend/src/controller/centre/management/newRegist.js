@@ -16,6 +16,9 @@ let newRegist = async(req, res) => {
     let expireDate = req.body.expireDate
     let centreId = req.session.userid
 
+    if (licenseId === undefined || id === undefined || registDate === undefined || expireDate === undefined || centreId === undefined) {
+        return res.status(422).send({ message: "Missing parameter!" });
+    }
 
     // logic - nếu licenseId đã có trong db thì chỉ add vào registry
 

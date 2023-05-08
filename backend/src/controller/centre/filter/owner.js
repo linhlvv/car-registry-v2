@@ -3,6 +3,11 @@ import pool from "../../../configs/connectDB"
 let owner = async (req, res) => {
   let carType = req.body.carType
   let code = req.body.code
+
+  if (carType === undefined || code === undefined) {
+    return res.status(422).send({message: 'Missing parameter!'})
+  }
+  
   // logic - dùng code thay cho ssn vì có cả taxnum nữa
   let type = carType === 'registed' ? ' >= ' : ' < '
 

@@ -3,6 +3,9 @@ import pool from "../../../configs/connectDB";
 let registModal = async (req, res) => {
   let registId = req.body.id
 
+  if (registId === undefined) {
+    return res.status(422).send({message: 'Missing parameter!'})
+  }
   let query = `
   select r.licenseId as licenseId, r.id, r.date, r.expire, c.name, v.brand, v.model, v.version
     from registry r

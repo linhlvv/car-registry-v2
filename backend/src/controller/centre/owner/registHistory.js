@@ -2,6 +2,11 @@ import pool from "../../../configs/connectDB";
 // task - đang làm dở
 let registHistory = async (req, res) => {
   let ownerid = req.body.ownerid;
+
+  if (ownerid === undefined) {
+    return res.status(422).send({ message: "Missing parameter!" });
+  }
+  
   let carType = "registed";
 
   let type = "";
