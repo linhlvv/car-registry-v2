@@ -2,12 +2,11 @@
 import ProfileDropdown from './ProfileDropdown.vue';
 import NavbarButton from './NavbarButton.vue';
 import SuggestionSelect from './SuggestionSelect.vue'
-import NoSpecificSelect from './NoSpecificSelect.vue';
 
 import { useRoute } from 'vue-router';
 import { useAccountStore } from '../../stores/AccountStore'
 import { useAdminSelectionStore } from '../../stores/AdminSelectionStore'
-import { onMounted, ref } from 'vue';
+import { onMounted, ref, watch } from 'vue';
 
 const accountStore = useAccountStore()
 const adminSelectionStore = useAdminSelectionStore()
@@ -19,6 +18,7 @@ const verticalNavClickedHandler = () => {
     emit('verticalNavClicked');
 };
 
+//SECTION - auth handler
 const isLoggedIn = ref(false)
 if(localStorage.getItem('token') === null) {
     isLoggedIn.value = false
@@ -26,6 +26,8 @@ if(localStorage.getItem('token') === null) {
     isLoggedIn.value = true
 };
 
+
+//SECTION - admin selection
 const selection = ref({
     all: 0,
     region: 1,
@@ -42,6 +44,7 @@ const currentSelection = ref(adminSelections.value[selection.value.all])
 const currentSpecificSelect = ref('')
 const verification = ref(true)
 
+// logic - navigate next, prev selection
 const moveSelection = (direction) => {
     currentSpecificSelect.value = ''
     if(direction === 'right') {
@@ -61,13 +64,60 @@ const moveSelection = (direction) => {
     verification.value = adminSelectionStore.getVerified
 };
 
+// logic - set specific option of selection
 const handleSetSelection = (item) => {
     currentSpecificSelect.value = item
     adminSelectionStore.setSelection(currentSelection.value.value, currentSpecificSelect.value)
 }
 
+//SECTION - fetch region and center name
+
+const regionList = ref(null)
+const centerList = ref(null)
+const currentList = ref()
+const fetchRegionAndCenterList = async () => {
+    const res1 = await fetch(`http://localhost:1111/stats/area`, {
+        credentials: "include",
+        headers: {
+            'Authorization': `${accountStore.getToken}`,
+            'Content-Type': 'application/json',
+        }
+    })
+    if(res1.error) {
+        console.log(res1.error);
+    }
+    const dataFetched1 = JSON.parse(await res1.text())
+    regionList.value = dataFetched1.areas
+
+    const res2 = await fetch(`http://localhost:1111/stats/centre`, {
+        credentials: "include",
+        headers: {
+            'Authorization': `${accountStore.getToken}`,
+            'Content-Type': 'application/json',
+        }
+    })
+    if(res2.error) {
+        console.log(res2.error);
+    }
+    const dataFetched2 = JSON.parse(await res2.text())
+    centerList.value = dataFetched2.areas
+}
+
+
+watch(() => currentSelection.value, () => {
+    if(currentSelection.value.value === adminSelections.value[selection.value.region].value) {
+        currentList.value = []
+        currentList.value = [...regionList.value]
+    } else if (currentSelection.value.value === adminSelections.value[selection.value.center].value) {
+        currentList.value = []
+        currentList.value = [...centerList.value]
+    }
+    currentSpecificSelect.value = ''
+});
+
 onMounted(() => {
     adminSelectionStore.setSelection(currentSelection.value.value, currentSpecificSelect.value)
+    fetchRegionAndCenterList()
 });
 
 </script>
@@ -125,7 +175,7 @@ onMounted(() => {
             </div>
         </nav>
     </div>
-    <div v-show="route.path !== '/'" class="max-[732px]:hidden w-full">
+    <div v-show="route.path !== '/' && accountStore.isAdmin" class="max-[732px]:hidden w-full">
         <nav class="bg-white dark:bg-gray-700">
             <div class="max-w-screen-xl mx-auto">
                 <div class="flex items-center justify-between">
@@ -146,7 +196,7 @@ onMounted(() => {
                                 </svg>
                                 <p class="text-lg font-medium text-[#1d1d1d]">{{ currentSelection.name }}</p>
                             </div>
-                            <SuggestionSelect v-model="currentSpecificSelect" @bindSpecificSelect="handleSetSelection" v-if="currentSelection.value !== selection.all" :data="['Tuan', 'Phuong', 'Phuong xinh', 'Ha Phuong', 'Tran Ha Phuong', 'Vu Minh Tuan', 'Tuan yeu Phuong', 'Minh Tuan', 'THP', 'VMT']"/>
+                            <SuggestionSelect v-model="currentSpecificSelect" @bindSpecificSelect="handleSetSelection" v-if="currentSelection.value !== selection.all" :data="currentList"/>
                         </div>
                     </Transition>
                     
