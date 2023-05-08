@@ -2,7 +2,7 @@ import pool from "../../../configs/connectDB"
 
 let allArea = async (req, res) => {
   let query = `
-    select name
+    select distinct name
       from region
     order by name asc
   `
