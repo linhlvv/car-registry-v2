@@ -57,9 +57,13 @@ const fetchForecastList = async () => {
     let fetchRoute;
     let fetchBody;
     if(accountStore.isAdmin) {
-        
+        fetchRoute = `http://localhost:1111/forecast`
+        fetchBody = {
+            resPerPage: resPerPage.value,
+            page: pageNumber.value
+        }
     } else {
-        fetchRoute = 'http://localhost:1111/forecast'
+        fetchRoute = `http://localhost:1111/forecast`
         fetchBody = {
             resPerPage: resPerPage.value,
             page: pageNumber.value
