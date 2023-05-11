@@ -1,10 +1,11 @@
 <script setup>
-import { ref } from 'vue';
+import { onMounted, ref, watch } from 'vue';
 import AccountCard from './AccountCard.vue';
 import AccountManagementRootRow from './AccountManagementRootRow.vue';
 import { useAccountStore } from '../../stores/AccountStore';
 
-const emit = defineEmits(['openModificationModal'])
+const props = defineProps(['isRefetched'])
+const emit = defineEmits(['openModificationModal', 'stopRefetch'])
 
 const accountStore = useAccountStore()
 
@@ -39,7 +40,15 @@ const fetchAvailableCenters = async () => {
     loading.value = false
 };
 
-fetchAvailableCenters()
+onMounted(() => {
+    fetchAvailableCenters()
+});
+
+watch(() => props.isRefetched, (newStatus, oldStatus) => {
+    if(newStatus) {
+        fetchAvailableCenters()
+    }
+});
 
 </script>
 
@@ -57,10 +66,5 @@ fetchAvailableCenters()
 </template>
 
 <style scoped>
-    
-    @media screen and (max-width: 640px) {
-        .item {
-            flex-direction: column;
-        }
-    }
+
 </style>
