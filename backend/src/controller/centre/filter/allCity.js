@@ -22,13 +22,17 @@ let allCity = async (req, res) => {
   group by name`
   
   // bug - đã gọi được api kết quả trả về chính xác
-  const [rows, fields] = await pool.query(query, [req.session.userid])
-  let cities = []
-  for(let i = 0; i < rows.length; i++) {
-    cities.push(rows[i].name)
+  try {
+    const [rows, fields] = await pool.query(query, [req.session.userid])
+    let cities = []
+    for(let i = 0; i < rows.length; i++) {
+      cities.push(rows[i].name)
+    }
+    return res.send({data: cities})
   }
-  return res.send({data: cities})
-
+  catch (err) {
+    return res.status(500).send({ErrorCode: err.code, ErrorNo: err.errno})
+  }
 }
 
 module.exports = {

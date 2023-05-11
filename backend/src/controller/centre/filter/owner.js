@@ -53,8 +53,13 @@ let owner = async (req, res) => {
   and taxnum = ?
     order by license`
   // bug - đã test call api ngon lành ko vấn đề gì
-  const [rows, fields] = await pool.query(query, [code, code])
-  return res.send({data: rows})
+  try {
+    const [rows, fields] = await pool.query(query, [code, code])
+    return res.send({data: rows})
+  }
+  catch (err) {
+    return res.status(500).send({ErrorCode: err.code, ErrorNo: err.errno})
+  }
 }
 
 module.exports = {
