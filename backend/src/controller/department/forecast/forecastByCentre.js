@@ -36,8 +36,7 @@ let forecastByCentre = async (req, res) => {
 
   let query =
     `
-  select r.licenseId, brand, model, version, date, max(expire) as expire, 
-    p.name as name, (expire >= CURRENT_DATE()) as status
+  select r.licenseId, brand, model, version, max(expire) as expire, p.name as name
   from registry r
   join vehicles v 
     on r.licenseId = v.licenseId
@@ -51,8 +50,7 @@ let forecastByCentre = async (req, res) => {
     `
   group by licenseId
         union all
-  select r.licenseId, brand, model, version, date,  max(expire) as expire, 
-    c.name as name, (expire >=CURRENT_DATE()) as status
+  select r.licenseId, brand, model, version, max(expire) as expire, c.name as name
   from registry r
   join vehicles v 
     on r.licenseId = v.licenseId

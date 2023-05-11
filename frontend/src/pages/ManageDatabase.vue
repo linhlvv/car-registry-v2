@@ -22,7 +22,6 @@ const removeFile = () => {
 	if(selectedFile.value !== null) {
 		hasFile.value = false
 		selectedFile.value = null
-		file.value.files[0] = undefined
 		ownerTypePicked.value = null
 	}
 };
@@ -47,8 +46,9 @@ const upload = async () => {
 		}
 		ownerTypeErrorMessageOn.value = false
 		const formData = new FormData()
-		formData.append("ownerType", ownerTypePicked)
+		formData.append("ownerType", ownerTypePicked.value)
 		formData.append("file", file.value.files[0])
+		console.log(formData);
 		const res = await fetch(`http://localhost:1111/read-excel`, {
 			method: 'POST',
 			credentials: "include",
