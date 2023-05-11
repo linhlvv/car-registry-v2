@@ -83,6 +83,10 @@ const router = createRouter({
         },
       ]
     },
+    {
+      path: "/:pathMatch(.*)*",
+      component: () => import('@/pages/InvalidPage.vue'),
+    }
   ]
 })
 

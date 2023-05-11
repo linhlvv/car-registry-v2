@@ -8,7 +8,6 @@ const cloneData = ref([])
 const shownData = ref([])
 
 const dropdownShown = ref(false);
-const content = ref('');
 
 onMounted(() => {
     cloneData.value = [...props.data]
@@ -21,6 +20,11 @@ watch(() => props.modelValue, () => {
     // console.log(content.value, shownData.value);
     cloneData.value = [...props.data]
 });
+
+watch(() => props.data, () => {
+    cloneData.value = [...props.data]
+    shownData.value = [...props.data]
+})
 
 const searchResult = (result) => {
     const textArr = props.modelValue.split(' ')

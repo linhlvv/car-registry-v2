@@ -1,4 +1,9 @@
 <script setup>
+import { onMounted, ref } from 'vue';
+import { useAccountStore } from '../../stores/AccountStore';
+
+const accountStore = useAccountStore()
+
 const props = defineProps(['car', 'carTypeSelection', 'loading']);
 
 const emit = defineEmits(['openInfo', 'regist']);
@@ -8,6 +13,11 @@ const openInfo = () => {
 const regist = () => {
     emit('regist', props.car.license)
 };
+
+const isAdmin = ref(false)
+onMounted(() => {
+    isAdmin.value = accountStore.isAdmin
+});
 
 </script>
 
@@ -45,7 +55,7 @@ const regist = () => {
                 <i class="fa-solid fa-circle-info flex items-center text-[12px] max-[952px]:hidden max-[820px]:flex"></i>
                 <div class="max-[820px]:hidden font-semibold">Detail</div>
             </div>
-            <div class="flex items-center justify-center gap-1 rounded-full text-[11px] bg-[#f5f7fb] px-3 py-1 mt-[2px] cursor-pointer duration-200 hover:bg-[#2acc97] text-[#293241] hover:text-white max-[820px]:bg-transparent max-[820px]:px-1" @click="regist">
+            <div v-if="!isAdmin" class="flex items-center justify-center gap-1 rounded-full text-[11px] bg-[#f5f7fb] px-3 py-1 mt-[2px] cursor-pointer duration-200 hover:bg-[#2acc97] text-[#293241] hover:text-white max-[820px]:bg-transparent max-[820px]:px-1" @click="regist">
                 <i class="fa-sharp fa-solid fa-registered flex items-center text-[12px] max-[952px]:hidden max-[820px]:flex"></i>
                 <div class="max-[820px]:hidden font-semibold">Regist</div>
             </div>
