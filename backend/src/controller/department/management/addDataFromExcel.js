@@ -34,6 +34,11 @@ const upload = multer({ storage: storage }).single('file');
 
 let addDataFromExcel = async (req, res) => {
     let ownerType = parseInt(req.body.ownerType)
+
+    if (ownerType === undefined) {
+      return res.status(422).send({message: 'Missing parameter!'})
+    }
+
     upload(req, res, async (err) => {
         if (err) {
           console.log(err)

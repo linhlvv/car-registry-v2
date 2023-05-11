@@ -25,10 +25,11 @@ let insertCentre = async (req, res) => {
     }
     else {
         let insertAcc = 'insert into account (email, password, type) values (?, ?, ?)'
-        let insertCen = 'insert into centre (name, city, district, activation) values (?, ?, ?, CURRENT_DATE())'
+        let insertCen = 'insert into centre (id, name, city, district, activation) values ((SELECT MAX(id) FROM `account`), ?, ?, ?, CURRENT_DATE())'
         
-        await pool.query(insertCen, [name, city, district])
+        
         await pool.query(insertAcc, [email, password, type])
+        await pool.query(insertCen, [name, city, district])
         return res.status(200).send({message: 'Account created'})
     }
 }

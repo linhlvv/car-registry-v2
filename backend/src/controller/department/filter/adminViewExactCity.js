@@ -1,6 +1,6 @@
 import pool from "../../../configs/connectDB"
 
-let exactCity = async (req, res) => {
+let adminViewExactCity = async (req, res) => {
   let resPerPage = parseInt(req.body.resPerPage)
   let page = parseInt(req.body.page) 
   if (resPerPage === undefined)
@@ -11,10 +11,7 @@ let exactCity = async (req, res) => {
   let carType = req.body.carType
   let city = req.body.city
   
-  if (carType === undefined || 
-      city === undefined || 
-      resPerPage === undefined || 
-      page === undefined) {
+  if (carType === undefined || city === undefined || resPerPage === undefined || page === undefined) {
     return res.status(422).send({message: 'Missing parameter!'})
   }
   
@@ -93,5 +90,5 @@ on r.id = v.regionId
 }
 
 module.exports = {
-  exactCity
+  adminViewExactCity
 }
