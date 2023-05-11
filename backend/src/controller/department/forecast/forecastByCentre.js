@@ -3,8 +3,10 @@ import pool from "../../../configs/connectDB";
 let forecastByCentre = async (req, res) => {
   let resPerPage = parseInt(req.body.resPerPage);
   let page = parseInt(req.body.page);
-  if (resPerPage === undefined) resPerPage = 10;
-  if (page === undefined) page = 1;
+  if (req.body.resPerPage === undefined)
+    resPerPage = 10
+  if (req.body.page === undefined)
+    page = 1
 
   let year = new Date().getFullYear();
   let month = new Date().getMonth() + 1;
