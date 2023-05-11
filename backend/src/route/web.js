@@ -133,8 +133,32 @@ const initWebRoute = (app) => {
   // logic - admin xem tất cả dự đoán theo trung tâm
   router.post('/forecast/admin/centre', verifyToken, homeController.forecastByCentre)
 
+  
+    // section - filter cho vehicles dùng cho admin
+  // logic - gửi code có thể là ssn hoặc taxnum 
+  router.post('/filter/admin/owner', verifyToken, homeController.adminFilterOwner)
+                                                                                    
+  // logic - gửi order là asc hay desc để sort result theo brand
+  router.post('/filter/admin/brand', verifyToken, homeController.adminFilterBrand)
+                                                                                    
+  // logic - trả về tất cả các brand của centre này
+  router.post('/filter/admin/brand/all', verifyToken, homeController.adminViewAllBrand)
+                                                                                    
+  // logic - trả về tất cả xe có brand khớp với brand gửi lên
+  router.post('/filter/admin/brand/exact', verifyToken, homeController.adminViewExactBrand)
+                                                                                    
+  // logic - filter theo thời gian regist hoặc expire
+  router.post('/filter/admin/time', verifyToken, homeController.adminFilterTime)
+                                                                                    
+  // logic - trả về tất cả các city của centre này
+  router.post('/filter/admin/city/all', verifyToken, homeController.adminViewAllCity)
+                                                                                    
+  // logic - trả về tất cả xe có city khớp với city gửi lên
+  router.post('/filter/admin/city/exact', verifyToken, homeController.adminViewExactCity)
+
   // logic - tất cả các thành phố kèm mã vùng
   router.get('/stats/area', verifyToken, homeController.allArea)
+
   // logic - tất cả các trung tâm
   router.get('/stats/centre', verifyToken, homeController.allCentre)
 

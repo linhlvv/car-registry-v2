@@ -1,6 +1,6 @@
 import pool from "../../../configs/connectDB"
 // task - đang làm dở đừng động vào
-let time = async (req, res) => {
+let adminFilterTime = async (req, res) => {
   let resPerPage = parseInt(req.body.resPerPage)
   let page = parseInt(req.body.page) 
   if (resPerPage === undefined)
@@ -13,12 +13,7 @@ let time = async (req, res) => {
   let month = parseInt(req.body.month)
   let quarter = parseInt(req.body.quarter)
   
-  if (carType === undefined ||
-      year === undefined || 
-      month === undefined || 
-      quarter === undefined || 
-      resPerPage === undefined || 
-      page === undefined) {
+  if (carType === undefined || year === undefined || month === undefined || quarter === undefined || resPerPage === undefined || page === undefined) {
     return res.status(422).send({message: 'Missing parameter!'})
   }
   
@@ -104,5 +99,5 @@ let time = async (req, res) => {
 }
 
 module.exports = {
-  time
+  adminFilterTime
 }

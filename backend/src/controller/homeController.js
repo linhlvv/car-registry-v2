@@ -50,6 +50,14 @@ import { vehicles } from "./centre/vehicles/vehicles";
 
 // section - department
   // section - filter
+import { adminFilterBrand } from "./department/filter/adminFilterBrand";
+import { adminFilterOwner } from "./department/filter/adminFilterOwner";
+import { adminFilterTime } from "./department/filter/adminFilterTime";
+import { adminViewAllBrand } from "./department/filter/adminViewAllBrand";
+import { adminViewAllCity } from "./department/filter/adminViewAllCity";
+import { adminViewExactBrand } from "./department/filter/adminViewExactBrand";
+import { adminViewExactCity } from "./department/filter/adminViewExactCity";
+
 
   // section - forecast
 import { forecastAll } from "./department/forecast/forecastAll";
@@ -108,4 +116,5 @@ module.exports = {
   forecastAll, forecastByCentre, forecastByArea,
   addDataFromExcel, insertCentre, removeCentre,
   viewAllCentres, viewAllVehicles, viewRegistedVehicles, viewExpiredVehicles, viewUnregistedVehicles,
+  adminFilterBrand, adminFilterOwner, adminFilterTime, adminViewAllBrand, adminViewAllCity, adminViewExactBrand, adminViewExactCity
 };
