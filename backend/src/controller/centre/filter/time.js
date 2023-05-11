@@ -21,7 +21,7 @@ let time = async (req, res) => {
   }
   
   let type = carType === 'registed' ? ' >= ' : ' < '
-  let sort = carType === 'registed, ' ? 'registryDate, ' : 'expire, ' + order
+  let sort = (carType === 'registed ' ? 'registryDate ' : 'expire ') + order
   let filterType = carType === 'registed' ? 're.date' : 're.expire'
 
   let match = ''
@@ -102,6 +102,7 @@ let time = async (req, res) => {
     return res.send({data: rows, count: Math.ceil(countRows[0].total / resPerPage)})
   }
   catch (err) {
+    console.log(err);
     return res.status(500).send({ErrorCode: err.code, ErrorNo: err.errno})
   }
 }
