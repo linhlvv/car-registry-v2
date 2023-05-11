@@ -26,13 +26,7 @@ let forecast = async (req, res) => {
   select count(*) as total
     from registry re
   where centreId = ` +
-    req.session.userid +
-    match +
-    `
-  `;
-  const [countRows, countFields] = await pool.query(count, [
-    req.session.userid,
-  ]);
+    req.session.userid + match
 
   let query =
     `
@@ -43,8 +37,7 @@ let forecast = async (req, res) => {
   join personal p 
     on v.ownerId = p.id
   where centreId = ` +
-    req.session.userid +
-    match +
+    req.session.userid + match +
     `
   group by licenseId
         union all
@@ -55,25 +48,32 @@ let forecast = async (req, res) => {
   join company c 
     on v.ownerId = c.id
   where centreId = ` +
-    req.session.userid +
-    match +
+    req.session.userid + match +
     ` 
   group by licenseId
   order by expire asc
     limit ? offset ?`;
 
   // bug - đã gọi được api kết quả trả về chính xác
-  const [rows, fields] = await pool.query(query, [
-    resPerPage,
-    resPerPage * (page - 1),
-  ]);
-  return res.send({
-    data: rows,
-    countData: countRows[0].total,
-    countPage: Math.ceil(countRows[0].total / resPerPage),
-  });
-};
+  try {
+    const [countRows, countFields] = await pool.query(count, [
+      req.session.userid,
+    ]);
+    const [rows, fields] = await pool.query(query, [
+      resPerPage,
+      resPerPage * (page - 1),
+    ]);
+    return res.send({
+      data: rows,
+      countData: countRows[0].total,
+      countPage: Math.ceil(countRows[0].total / resPerPage),
+    });
+  }
+  catch (err) {
+    return res.status(500).send({ErrorCode: err.code, ErrorNo: err.errno})
+  }
+}
 
 module.exports = {
   forecast,
-};
+}
