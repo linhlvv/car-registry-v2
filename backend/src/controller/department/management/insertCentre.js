@@ -1,9 +1,7 @@
+import crypto from 'crypto';
 import pool from '../../../configs/connectDB';
 // logic - Lấy data từ body, kiểm tra tồn tại acc hay chưa, sau đó check pass mới và repass nếu pass mới và repass khớp thì insert vào db, nếu không thì trả về lỗi
-
 // task - tạo acc mới và centre mới
-
-
 
 let insertCentre = async (req, res) => {
 
@@ -16,8 +14,6 @@ let insertCentre = async (req, res) => {
     if (carType === undefined || order === undefined || resPerPage === undefined || page === undefined) {
         return res.status(422).send({message: 'Missing parameter!'})
     }
-
-    
 
     let type = 0;
     
@@ -35,9 +31,6 @@ let insertCentre = async (req, res) => {
         await pool.query(insertAcc, [email, password, type])
         return res.status(200).send({message: 'Account created'})
     }
-    
-    
-
 }
 
 module.exports = {
