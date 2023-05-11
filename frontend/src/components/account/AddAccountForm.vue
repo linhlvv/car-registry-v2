@@ -8,12 +8,14 @@ const emit = defineEmits('refetchList')
 
 const accountStore = useAccountStore()
 
-const accountInfo = ref({
+const defaultInfo = {
     email: '',
     name: '',
     district: '',
     city: '',
-});
+}
+
+const accountInfo = ref({...defaultInfo});
 
 const messageTime = 3
 const errorMessageOn = ref(false)
@@ -52,6 +54,7 @@ const handleAddAccount = async () => {
         console.log(res);
         if(res.status === 200) {
             emit('refetchList')
+            accountInfo.value = {...defaultInfo}
         }
     }
 };
