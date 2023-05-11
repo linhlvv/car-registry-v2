@@ -7,10 +7,10 @@ import pool from "../../../configs/connectDB";
 let allRegist = async (req, res) => {
 	let resPerPage = parseInt(req.body.resPerPage)
 	let page = parseInt(req.body.page) 
-	if (resPerPage === undefined)
-			resPerPage = 10
-	if (page === undefined)
-			page = 1
+	if (req.body.resPerPage === undefined)
+    resPerPage = 10
+  if (req.body.page === undefined)
+    page = 1
 
 	let [countRows, countFields] = await pool.query('select count(*) as total from registry where centreId = ?', req.session.userid)
 
