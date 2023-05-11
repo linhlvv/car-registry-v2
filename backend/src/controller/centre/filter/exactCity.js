@@ -3,9 +3,9 @@ import pool from "../../../configs/connectDB"
 let exactCity = async (req, res) => {
   let resPerPage = parseInt(req.body.resPerPage)
   let page = parseInt(req.body.page) 
-  if (resPerPage === undefined)
+  if (req.body.resPerPage === undefined)
     resPerPage = 10
-  if (page === undefined)
+  if (req.body.page === undefined)
     page = 1
 
   let carType = req.body.carType
@@ -35,7 +35,6 @@ on r.id = v.regionId
   group by v.licenseId)  
   and expire` + type + `current_date()
   and name = ?`
-  const [countRows, countFields] = await pool.query(count, [req.session.userid, city])
   
   let queryType = carType === 'registed' 
                               ? 're.date as registryDate'
@@ -85,10 +84,16 @@ on r.id = v.regionId
     limit ? offset ?`
   
   // bug - đã gọi được api kết quả trả về chính xác
-  const [rows, fields] = await pool.query(query, [resPerPage, 
-                                                  resPerPage * (page - 1)])
-  console.log(count)
-  return res.send({data: rows, count: Math.ceil(countRows[0].total / resPerPage)})
+  try {
+    const [countRows, countFields] = await pool.query(count, [req.session.userid, city])
+    const [rows, fields] = await pool.query(query, [resPerPage, 
+      resPerPage * (page - 1)])
+    return res.send({data: rows, count: Math.ceil(countRows[0].total / resPerPage)})
+  }
+  catch (err) {
+    return res.status(500).send({ErrorCode: err.code, ErrorNo: err.errno})
+  }
+  
 
 }
 

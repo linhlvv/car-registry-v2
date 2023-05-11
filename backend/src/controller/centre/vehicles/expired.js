@@ -3,9 +3,9 @@ import pool from "../../../configs/connectDB"
 let expired = async (req, res) => {
   let resPerPage = parseInt(req.body.resPerPage)
   let page = parseInt(req.body.page) 
-  if (resPerPage === undefined)
+  if (req.body.resPerPage === undefined)
     resPerPage = 10
-  if (page === undefined)
+  if (req.body.page === undefined)
     page = 1
 
   let count = `
