@@ -175,7 +175,7 @@ onMounted(() => {
             </div>
         </nav>
     </div>
-    <div v-show="route.path !== '/' && accountStore.isAdmin" class="max-[732px]:hidden w-full">
+    <div v-show="route.path !== '/' && route.path !== '/account-management' && route.path !== '/manage-database' && accountStore.isAdmin" class="max-[732px]:hidden w-full">
         <nav class="bg-white dark:bg-gray-700">
             <div class="max-w-screen-xl mx-auto">
                 <div class="flex items-center justify-between">
