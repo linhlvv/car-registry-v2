@@ -11,7 +11,7 @@ let insertCentre = async (req, res) => {
     let email = req.body.email;
     let password = crypto.createHash('sha256').update("z").digest('hex');
     
-    if (carType === undefined || order === undefined || resPerPage === undefined || page === undefined) {
+    if (name === undefined || city === undefined || district === undefined || email === undefined) {
         return res.status(422).send({message: 'Missing parameter!'})
     }
 
