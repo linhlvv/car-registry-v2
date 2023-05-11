@@ -7,6 +7,11 @@ let updateModify = async (req, res) => {
     
     let licenseId = req.body.licenseId;
     let modifyDate = req.body.modifyDate;
+
+    if (licenseId === undefined || modifyDate === undefined) {
+        return res.status(422).send({ message: "Missing parameter!" });
+    }
+    
     let getOldModifyDate = 'select modifyDate from vehicles where licenseId = ?'
     let oldModifyDate = await pool.query(getOldModifyDate, [licenseId])
     oldModifyDate = oldModifyDate[0][0].modifyDate

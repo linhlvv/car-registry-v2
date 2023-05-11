@@ -10,7 +10,9 @@ let changePassword = async (req, res) => {
     let newPass = crypto.createHash('sha256').update(req.body.newPass).digest('hex');
     let reNewPass = crypto.createHash('sha256').update(req.body.reNewPass).digest('hex');
 
-    console.log(oldPass)
+    if (id === undefined || oldPass === undefined || newPass === undefined || reNewPass === undefined) {
+        return res.status(422).send({message: 'Missing parameter!'})
+    }
 
     let query = 'select * from account where id = ? and password = ?';
     let check = await pool.query(query, [id, oldPass])

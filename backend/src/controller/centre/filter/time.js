@@ -9,12 +9,19 @@ let time = async (req, res) => {
     page = 1
 
   let carType = req.body.carType
+  let order = req.body.order
   let year = parseInt(req.body.year)
   let month = parseInt(req.body.month)
   let quarter = parseInt(req.body.quarter)
   
+  if (carType === undefined || order === undefined 
+    || year === undefined || month === undefined || quarter === undefined 
+    || resPerPage === undefined || page === undefined) {
+    return res.status(422).send({message: 'Missing parameter!'})
+  }
+  
   let type = carType === 'registed' ? ' >= ' : ' < '
-  let sort = carType === 'registed' ? 'registryDate' : 'expire'
+  let sort = carType === 'registed, ' ? 'registryDate, ' : 'expire, ' + order
   let filterType = carType === 'registed' ? 're.date' : 're.expire'
 
   let match = ''

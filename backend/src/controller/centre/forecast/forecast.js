@@ -6,6 +6,10 @@ let forecast = async (req, res) => {
   if (resPerPage === undefined) resPerPage = 10;
   if (page === undefined) page = 1;
 
+  if (resPerPage === undefined || page === undefined) {
+    return res.status(422).send({ message: "Missing parameter!" });
+  }
+
   let year = new Date().getFullYear();
   let month = new Date().getMonth() + 1;
   let match =
@@ -30,8 +34,7 @@ let forecast = async (req, res) => {
 
   let query =
     `
-  select r.licenseId, brand, model, version, date, max(expire) expire, 
-    p.name as name, (expire >= CURRENT_DATE()) as status
+  select r.licenseId, brand, model, version, max(expire) expire, p.name as name
   from registry r
   join vehicles v 
     on r.licenseId = v.licenseId
@@ -43,8 +46,7 @@ let forecast = async (req, res) => {
     `
   group by licenseId
         union all
-  select r.licenseId, brand, model, version, date,  max(expire) expire, 
-    c.name as name, (expire >=CURRENT_DATE()) as status
+  select r.licenseId, brand, model, version, max(expire) expire, c.name as name
   from registry r
   join vehicles v 
     on r.licenseId = v.licenseId

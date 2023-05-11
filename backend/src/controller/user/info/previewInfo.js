@@ -4,6 +4,11 @@ import pool from "../../../configs/connectDB";
 
 let previewInfo = async (req, res) => {
   let licenseId = req.body.licenseId;
+
+  if (licenseId === undefined) {
+    return res.status(422).send({ message: "Missing parameter!" });
+  }
+
   let base = `select r.id AS r_id, r.name as r_name, v.*, `;
   let date = new Date().toISOString().slice(0, 10);
 

@@ -7,6 +7,10 @@ let viewLatestRegist = async (req, res) => {
   let licenseId = req.body.licenseId;
   let centreId = req.session.userid;
 
+  if (licenseId === undefined) {
+    return res.status(422).send({ message: "Missing parameter!" });
+  }
+  
   //Kiểm tra ngày sửa chữa
   let currentDate = new Date();
   currentDate.setMonth(currentDate.getMonth() - 6);

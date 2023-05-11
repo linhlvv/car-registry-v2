@@ -3,6 +3,10 @@ import pool from "../../../configs/connectDB"
 let allBrand = async (req, res) => {
   let carType = req.body.carType
   
+  if (carType === undefined) {
+    return res.status(422).send({message: 'Missing parameter!'})
+  }
+  
   let type = carType === 'registed' ? ' >= ' : ' < '
 
   let query = `
