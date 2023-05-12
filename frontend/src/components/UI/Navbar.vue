@@ -26,6 +26,9 @@ if(localStorage.getItem('token') === null) {
     isLoggedIn.value = true
 };
 
+const isAdmin = ref(localStorage.getItem('userType') === '1')
+console.log(isAdmin.value);
+
 
 //SECTION - admin selection
 const selection = ref({
@@ -152,13 +155,13 @@ onMounted(() => {
                         <li>
                             <NavbarButton icon="fa-sharp fa-solid fa-house" content="Home" link="/"/>
                         </li>
-                        <li v-if="!accountStore.isAdmin">
+                        <li v-if="!isAdmin">
                             <NavbarButton :current="route.path === '/regist-new-car'" icon="fa-solid fa-circle-plus" content="Regist" link="/regist-new-car"/>
                         </li>
-                        <li v-if="accountStore.isAdmin">
+                        <li v-if="isAdmin">
                             <NavbarButton :current="route.path === '/manage-database'" icon="fa-sharp fa-solid fa-database" content="Manage database" link="/manage-database"/>
                         </li>
-                        <li v-if="accountStore.isAdmin"> 
+                        <li v-if="isAdmin"> 
                             <NavbarButton :current="route.path === '/account-management'" icon="fa-sharp fa-solid fa-users" content="Account management" link="/account-management"/>
                         </li>
                         <li> 
@@ -175,7 +178,7 @@ onMounted(() => {
             </div>
         </nav>
     </div>
-    <div v-show="route.path !== '/' && route.path !== '/account-management' && route.path !== '/manage-database' && accountStore.isAdmin" class="max-[732px]:hidden w-full">
+    <div v-show="route.path !== '/' && route.path !== '/account-management' && route.path !== '/manage-database' && isAdmin" class="max-[732px]:hidden w-full">
         <nav class="bg-white dark:bg-gray-700">
             <div class="max-w-screen-xl mx-auto">
                 <div class="flex items-center justify-between">
