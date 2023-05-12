@@ -180,7 +180,7 @@ const fetchCarDataWithSpecificBrand = async () => {
 }
 
 // logic - specific time
-//TODO
+//TODO remember to add order asc/desc
 const fetchCarDataWithSpecificTime = async () => {
     let fetchRoute;
     let fetchBody;
@@ -205,6 +205,7 @@ const fetchCarDataWithSpecificTime = async () => {
                 year: props.time.year,
                 quarter: props.time.quarter,
                 month: props.time.month,
+                order: 'desc'
             }
         ),
     })
@@ -212,7 +213,7 @@ const fetchCarDataWithSpecificTime = async () => {
         console.log(res.error);
     }
     const dataFetched = JSON.parse(await res.text())
-    console.log(`car brand: ${JSON.stringify(dataFetched)}`);
+    console.log(`car time: ${JSON.stringify(dataFetched)}`);
     list.value = dataFetched.data
     totalPage.value = dataFetched.count
     postTotalPage()

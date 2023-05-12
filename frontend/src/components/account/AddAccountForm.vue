@@ -1,21 +1,28 @@
 <script setup>
 import { ref, watch } from 'vue';
+import { useAccountStore } from '../../stores/AccountStore';
 import Button from '../UI/Button.vue';
 import AccountInput from './AccountInput.vue';
 
-const accountInfo = ref({
+const emit = defineEmits('refetchList')
+
+const accountStore = useAccountStore()
+
+const defaultInfo = {
     email: '',
     name: '',
     district: '',
     city: '',
-});
+}
+
+const accountInfo = ref({...defaultInfo});
 
 const messageTime = 3
 const errorMessageOn = ref(false)
 const errorMessageTime = ref(messageTime)
 let errorMessageInterval;
 //TODO - post account
-const handleAddAccount = () => {
+const handleAddAccount = async () => {
     if(accountInfo.value.email === '' ||
         accountInfo.value.name === '' ||
         accountInfo.value.district === '' ||
@@ -27,7 +34,28 @@ const handleAddAccount = () => {
                 errorMessageTime.value -= 1
             }, 1000);
     } else {
-
+        const res = await fetch(`http://localhost:1111/insert-centre`, {
+            method: 'POST',
+            credentials: "include",
+            headers: {
+                'Content-Type': 'application/json',
+                'Authorization': `${accountStore.getToken}`
+            },
+            body: JSON.stringify({
+                centreName: accountInfo.value.name,
+                email: accountInfo.value.email,
+                city: accountInfo.value.city,
+                district: accountInfo.value.district,
+            }),
+        })
+        if(res.error) {
+            console.log(res.error);
+        }
+        console.log(res);
+        if(res.status === 200) {
+            emit('refetchList')
+            accountInfo.value = {...defaultInfo}
+        }
     }
 };
 
