@@ -7,11 +7,13 @@ let verifyToken = (req, res, next) => {
   }
   try {
     const verified = jwt.verify(token, process.env.SECRET)
-    req.session.userid = verified.id
-    req.session.email = verified.email
-    req.session.authority = verified.authority
-    req.session.token = token
-    req.user = verified
+    if (!req.session.userid || !req.session.email) {
+      req.session.userid = verified.id
+      req.session.email = verified.email
+      req.session.authority = verified.authority
+      req.session.token = token
+      req.user = verified
+    }
     next()
   }
   catch (err) {
