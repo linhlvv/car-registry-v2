@@ -13,7 +13,6 @@ let adminViewAllCity = async (req, res) => {
   from vehicles v join
   (select re.licenseId as license, max(expire) as expire
   from registry re
-  where centreId = ` + req.session.userid + `
   group by re.licenseId) ok
   on v.licenseId = ok.license
   join region r 
