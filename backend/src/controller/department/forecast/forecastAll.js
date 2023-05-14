@@ -8,63 +8,61 @@ let forecastAll = async (req, res) => {
   if (req.body.page === undefined)
     page = 1
 
+  let type = req.body.type === 'new' ? 'new' : 'renew'
+
   let year = new Date().getFullYear();
-  let month = new Date().getMonth() + 1;
+  let month = new Date().getMonth() + 1
   let match =
     `\nand year(expire) = ` +
     year +
     `\nand month(expire) = ` +
     month +
-    `\nand expire >= CURRENT_DATE()`;
+    `\nand expire >= CURRENT_DATE()`
 
-  let count =
-    `
+  let count = `
   select count(*) as total
     from registry re 
-  where 1 = 1` +
-    match +
-    `
-  `;
-  const [countRows, countFields] = await pool.query(count, [
-    req.session.userid,
-  ]);
+  where 1 = 1` + match
 
-  let query =
-    `
-  select r.licenseId, brand, model, version, max(expire) expire, p.name as name
+  let query = `
+  select r.licenseId, brand, model, version, max(expire) as expire, p.name as name
   from registry r
   join vehicles v 
     on r.licenseId = v.licenseId
   join personal p 
-    on v.ownerId = p.id` +
-    match +
-    `
+    on v.ownerId = p.id` + match + `
   group by licenseId
         union all
-  select r.licenseId, brand, model, version, max(expire) expire, c.name as name
+  select r.licenseId, brand, model, version, max(expire) as expire, c.name as name
   from registry r
   join vehicles v 
     on r.licenseId = v.licenseId
   join company c 
-    on v.ownerId = c.id` +
-    match +
-    ` 
+    on v.ownerId = c.id` + match + ` 
   group by licenseId
-  order by expire asc
-    limit ? offset ?`;
+  order by expire asc, licenseId
+    limit ? offset ?`
 
   // bug - đã gọi được api kết quả trả về chính xác
-  const [rows, fields] = await pool.query(query, [
-    resPerPage,
-    resPerPage * (page - 1),
-  ]);
-  return res.send({
-    data: rows,
-    countData: countRows[0].total,
-    countPage: Math.ceil(countRows[0].total / resPerPage),
-  });
-};
+  try {
+    const [countRows, countFields] = await pool.query(count, [
+      req.session.userid,
+    ])
+    const [rows, fields] = await pool.query(query, [
+      resPerPage,
+      resPerPage * (page - 1),
+    ]);
+    return res.send({
+      data: rows,
+      countData: countRows[0].total,
+      countPage: Math.ceil(countRows[0].total / resPerPage),
+    })
+  }
+  catch (err) {
+    return res.status(500).send({ErrorCode: err.code, ErrorNo: err.errno})
+  }
+}
 
 module.exports = {
   forecastAll
-};
+}
