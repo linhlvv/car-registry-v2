@@ -3,7 +3,7 @@ import ProfileDropdown from './ProfileDropdown.vue';
 import NavbarButton from './NavbarButton.vue';
 import SuggestionSelect from './SuggestionSelect.vue'
 
-import { useRoute } from 'vue-router';
+import { useRoute, useRouter } from 'vue-router';
 import { useAccountStore } from '../../stores/AccountStore'
 import { useAdminSelectionStore } from '../../stores/AdminSelectionStore'
 import { onMounted, ref, watch } from 'vue';
@@ -11,6 +11,7 @@ import { onMounted, ref, watch } from 'vue';
 const accountStore = useAccountStore()
 const adminSelectionStore = useAdminSelectionStore()
 const route = useRoute();
+const router = useRouter()
 
 const emit = defineEmits(['verticalNavClicked']);
 
@@ -20,11 +21,6 @@ const verticalNavClickedHandler = () => {
 
 //SECTION - auth handler
 const isLoggedIn = ref(false)
-if(localStorage.getItem('token') === null) {
-    isLoggedIn.value = false
-} else {
-    isLoggedIn.value = true
-};
 
 const isAdmin = ref(localStorage.getItem('userType') === '1')
 console.log(isAdmin.value);
@@ -119,8 +115,17 @@ watch(() => currentSelection.value, () => {
 });
 
 onMounted(() => {
-    adminSelectionStore.setSelection(currentSelection.value.value, currentSpecificSelect.value)
-    fetchRegionAndCenterList()
+    if(localStorage.getItem('token') === null) {
+        isLoggedIn.value = false
+    } else {
+        isLoggedIn.value = true
+    }
+    if(isLoggedIn.value === false) {
+        router.push('/log-and-reg/login')
+    } else {
+        adminSelectionStore.setSelection(currentSelection.value.value, currentSpecificSelect.value)
+        fetchRegionAndCenterList()
+    }
 });
 
 </script>
