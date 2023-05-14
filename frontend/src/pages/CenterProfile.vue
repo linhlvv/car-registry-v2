@@ -7,6 +7,7 @@ const centerInfo = ref({});
 const fetchCenterInfoData = async() => {
     const res = await fetch(`http://localhost:1111/centre-info`, {
         credentials: "include",
+        'Authorization': `${localStorage.getItem('token')}`,
     })
     const dataList = JSON.parse(await res.text())[0]
     console.log(`center info: ${JSON.stringify(dataList)}`);
