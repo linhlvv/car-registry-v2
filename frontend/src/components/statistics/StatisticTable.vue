@@ -134,7 +134,7 @@ const fetchDataWithSpecificTime = async () => {
         console.log(res.error);
     }
     const dataFetched = JSON.parse(await res.text())
-    // console.log(`registries: ${JSON.stringify(dataFetched)}`);
+    console.log(`spec time: ${JSON.stringify(dataFetched)}`);
     totalPage.value = dataFetched.count
     registCardList.value = dataFetched.data
     loading.value = false
@@ -202,7 +202,7 @@ const scrollToChart = () => {
         </div>
         <div class="w-full flex flex-col bg-[#f5f7fb]">
             <StatisticTableCard :is-root-row="true"/>
-            <div v-for="card in registCardList" :key="card.licenseId">
+            <div v-for="(card, index) in registCardList" :key="index">
                 <StatisticTableCard :car="card" @open-info="openModal"/>
             </div>
         </div>
