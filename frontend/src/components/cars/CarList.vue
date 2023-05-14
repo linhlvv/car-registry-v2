@@ -420,7 +420,7 @@ watch(() => props.reloaded, async(newReloaded, oldReloaded) => {
 </script>
 
 <template>
-    <div class="w-full flex flex-col">
+    <div id="table" class="w-full flex flex-col overflow-x-scroll">
         <RootRow :carType="props.carType"/>
         <!-- <div>{{ reloaded }}</div> -->
         <div class="flex flex-col items-center w-full" style="{overflow-wrap: 'anywhere';}">
@@ -446,3 +446,22 @@ watch(() => props.reloaded, async(newReloaded, oldReloaded) => {
         </div>
     </div>
 </template>
+
+<style scoped>
+    #table::-webkit-scrollbar {
+        height: 6px;
+    }
+    
+    #table::-webkit-scrollbar-track {
+        border-radius: 12px;
+    }
+    
+    #table::-webkit-scrollbar-thumb {
+        background-color: #2acc97;
+        outline: none;
+        border-radius: 12px;
+    }
+    #table::-webkit-scrollbar-thumb:hover {
+        background-color: #0ce29b;
+    }
+</style>

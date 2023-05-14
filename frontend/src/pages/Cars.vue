@@ -218,7 +218,7 @@ const openSelectHandler = () => {
                             </div>
                         </div>
                         
-                        <div class="flex custom-shadow items-center flex-col w-[90vw] rounded-2xl overflow-hidden">
+                         <div class="flex custom-shadow items-center flex-col w-[90vw] rounded-t-lg rounded-b-[3px] overflow-hidden">
                             <SearchField
                                 @selectedFilterClicked="filterSelected" 
                                 @selectedCityClicked="citySelected"
