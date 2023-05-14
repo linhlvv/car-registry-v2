@@ -161,7 +161,7 @@ const scrollToChart = () => {
 </script>
 
 <template>
-    <div class="w-4/5 flex flex-col shadow-md rounded-xl overflow-hidden">
+    <div class="w-4/5 flex flex-col shadow-md rounded-t-lg rounded-b-[4px] overflow-hidden">
         <div class="w-full flex flex-col bg-white p-4 gap-3">
             <div class="w-full flex items-center justify-between">
                 <div class="w-3/4 flex items-center gap-2">
@@ -200,7 +200,7 @@ const scrollToChart = () => {
                 </select>
             </div>
         </div>
-        <div class="w-full flex flex-col bg-[#f5f7fb]">
+        <div id="table" class="w-full flex flex-col bg-[#f5f7fb] overflow-x-scroll">
             <StatisticTableCard :is-root-row="true"/>
             <TransitionGroup name="list" tag="div">
                 <div v-if="registCardList.length !== 0" v-for="(card, index) in registCardList" :key="index">
@@ -233,5 +233,22 @@ const scrollToChart = () => {
 
     .list-leave-active {
         position: absolute;
+    }
+
+    #table::-webkit-scrollbar {
+        height: 6px;
+    }
+    
+    #table::-webkit-scrollbar-track {
+        border-radius: 12px;
+    }
+    
+    #table::-webkit-scrollbar-thumb {
+        background-color: #2acc97;
+        outline: none;
+        border-radius: 12px;
+    }
+    #table::-webkit-scrollbar-thumb:hover {
+        background-color: #0ce29b;
     }
 </style>
