@@ -202,9 +202,14 @@ const scrollToChart = () => {
         </div>
         <div class="w-full flex flex-col bg-[#f5f7fb]">
             <StatisticTableCard :is-root-row="true"/>
-            <div v-for="(card, index) in registCardList" :key="index">
-                <StatisticTableCard :car="card" @open-info="openModal"/>
-            </div>
+            <TransitionGroup name="list" tag="div">
+                <div v-if="registCardList.length !== 0" v-for="(card, index) in registCardList" :key="index">
+                    <StatisticTableCard :car="card" @open-info="openModal"/>
+                </div>
+                <div v-else class="p-2 flex w-full mt-[2px] bg-white min-h-[50px]">
+                    <p class="pt-1 text-center w-full text-base font-semibold text-red-500">No result found!</p>
+                </div>
+            </TransitionGroup>
         </div>
     </div>
 </template>
@@ -212,5 +217,21 @@ const scrollToChart = () => {
 <style scoped>
     textarea:focus, input:focus{
         outline: none;
+    }
+
+    .list-move, /* apply transition to moving elements */
+    .list-enter-active,
+    .list-leave-active {
+        transition: all 0.5s ease;
+    }
+
+    .list-enter-from,
+    .list-leave-to {
+    opacity: 0;
+        transform: translateX(10px);
+    }
+
+    .list-leave-active {
+        position: absolute;
     }
 </style>
