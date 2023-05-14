@@ -73,6 +73,10 @@ const initWebRoute = (app) => {
   router.post('/remove-centre', verifyToken, homeController.removeCentre)
   // logic - đọc dữ liệu từ file excel thêm vào db
   router.post('/read-excel', verifyToken, homeController.addDataFromExcel)
+  // logic - hiển thị dữ liệu xem trước của centre
+  router.get('/preview-centre-info', verifyToken, homeController.previewCentreInfo)
+  // logic - update thông tin của centre
+  router.put('/update-centre-info', verifyToken, homeController.updateCentreInfo)
                                                                                     
                                                                                     
   // logic - tạo đăng kiểm mới
@@ -82,7 +86,7 @@ const initWebRoute = (app) => {
   router.post('/preview-regist', verifyToken, homeController.previewRegist)
                                                                                     
   // logic - check và update modification date của đăng kiểm
-  router.post('/update-modify', verifyToken, homeController.updateModify)
+  router.put('/update-modify', verifyToken, homeController.updateModify)
                                                                                     
   // logic - trả về info xe đăng kiểm
   router.post('/preview-info', verifyToken, homeController.previewInfo)

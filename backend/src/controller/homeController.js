@@ -67,6 +67,9 @@ import { forecastByArea } from "./department/forecast/forecastByArea.js";
 import { addDataFromExcel } from "./department/management/addDataFromExcel";
 import { insertCentre } from "./department/management/insertCentre";
 import { removeCentre } from "./department/management/removeCentre";
+import { previewCentreInfo } from "./department/management/previewCentreInfo";
+import { updateCentreInfo } from "./department/management/updateCentreInfo";
+
   // section - vehicles
 import { viewAllCentres } from "./department/vehicles/viewAllCentres";
 import { viewAllVehicles } from "./department/vehicles/viewAllVehicles";
@@ -114,7 +117,7 @@ module.exports = {
   expired, findByLicense, registed, vehicles,
   
   forecastAll, forecastByCentre, forecastByArea,
-  addDataFromExcel, insertCentre, removeCentre,
+  addDataFromExcel, insertCentre, removeCentre, previewCentreInfo, updateCentreInfo,
   viewAllCentres, viewAllVehicles, viewRegistedVehicles, viewExpiredVehicles, viewUnregistedVehicles,
   adminFilterBrand, adminFilterOwner, adminFilterTime, adminViewAllBrand, adminViewAllCity, adminViewExactBrand, adminViewExactCity
 };
