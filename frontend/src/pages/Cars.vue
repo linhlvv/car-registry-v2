@@ -65,6 +65,7 @@ const turnOffModal = () => {
 const licenseSearchContent = ref('');
 const licenseSearchEntered = (content) => {
     licenseSearchContent.value = content
+    console.log(licenseSearchContent.value);
 };
 
 //SECTION - reload
@@ -73,7 +74,8 @@ const reload = () => {
     filter.value = 'No filter'
     city.value = 'All'
     brand.value = 'All'
-    owner.value = ''
+    owner.value = null
+    licenseSearchContent.value = null
     time.value = { year: 'All', quarter: 'All', month: 'All' }
     reloaded.value = !reloaded.value
     // console.log(reloaded.value);
