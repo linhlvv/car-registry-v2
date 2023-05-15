@@ -69,6 +69,7 @@ import { insertCentre } from "./department/management/insertCentre";
 import { removeCentre } from "./department/management/removeCentre";
 import { previewCentreInfo } from "./department/management/previewCentreInfo";
 import { updateCentreInfo } from "./department/management/updateCentreInfo";
+import { searchCentreByName } from "./department/management/searchCentreByName";
 
   // section - vehicles
 import { viewAllCentres } from "./department/vehicles/viewAllCentres";
@@ -117,7 +118,7 @@ module.exports = {
   expired, findByLicense, registed, vehicles,
   
   forecastAll, forecastByCentre, forecastByArea,
-  addDataFromExcel, insertCentre, removeCentre, previewCentreInfo, updateCentreInfo,
+  addDataFromExcel, insertCentre, removeCentre, previewCentreInfo, updateCentreInfo, searchCentreByName,
   viewAllCentres, viewAllVehicles, viewRegistedVehicles, viewExpiredVehicles, viewUnregistedVehicles,
   adminFilterBrand, adminFilterOwner, adminFilterTime, adminViewAllBrand, adminViewAllCity, adminViewExactBrand, adminViewExactCity
 };

@@ -77,6 +77,8 @@ const initWebRoute = (app) => {
   router.get('/preview-centre-info', verifyToken, homeController.previewCentreInfo)
   // logic - update thông tin của centre
   router.put('/update-centre-info', verifyToken, homeController.updateCentreInfo)
+  // logic - tìm centre bằng tên
+  router.post('/search-centre', verifyToken, homeController.searchCentreByName)
                                                                                     
                                                                                     
   // logic - tạo đăng kiểm mới
