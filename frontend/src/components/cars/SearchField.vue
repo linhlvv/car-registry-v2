@@ -238,9 +238,9 @@ const reload = async () => {
 
 <template>
     <div class="bg-white w-full p-6 px-7 flex flex-col gap-3 justify-center">
-        <div class="w-full flex items-center">
-            <div class="flex items-center w-[77.5%] gap-3">
-                <SearchBar @search-entered="licenseSearch" width="w-[30%]" placeholder="Enter a license plate..."/>
+        <div class="w-full flex items-center justify-between">
+            <div class="flex items-center w-1/2 gap-3">
+                <SearchBar @search-entered="licenseSearch" width="w-[90%]" placeholder="Enter a license plate..."/>
                 <i @click="reload" class="fa-solid fa-rotate text-[#292929] p-[6px] rounded-[50%] hover:text-[#2acc97] active:bg-[#2acc97]/10 cursor-pointer"></i>
             </div>
 
