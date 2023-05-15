@@ -130,7 +130,7 @@ watch(second, (newSec, oldSec) => {
 </script>
 
 <template>
-    <div class="bg-black/40 backdrop-blur-[2px] top-0 left-0 w-full h-screen blur-xl fixed z-10 backdrop-animation" @click="exitModal"></div>
+    <div class="bg-black/40 backdrop-blur-[2px] top-0 left-0 w-full h-screen blur-xl fixed z-50 backdrop-animation" @click="exitModal"></div>
     <div class="bg-[#f5f7fb] rounded-[8px] p-4 fixed top-[3vh] left-[10%] w-4/5 z-50 flex modal-animation overflow-hidden h-fit">
         <div v-if="!loadingSubmit" class="flex flex-col gap-2 w-full">
             <div ref="docs" class="w-full flex gap-2 h-[450px]">
