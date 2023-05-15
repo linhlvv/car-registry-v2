@@ -378,10 +378,10 @@ watch(() => props.brand, async(newBrand, oldBrand) => {
 // logic - owner watcher
 watch(() => props.owner, async(newOwner, oldOwner) => {
     // console.log(props.pageNumber, newPageNumber, oldPageNumber);
-    if(newOwner !== oldOwner) {
-        console.log(`owner has changed to: ${props.owner}`);
+    console.log(`owner has changed to: ${props.owner}`);
+    if(props.owner !== null && props.owner !== '') {
         fetchCarByOwnerCode()
-    } 
+    }
 });
 
 // logic - time watcher
@@ -402,9 +402,9 @@ watch(() => props.carType, async(newCarType, oldCarType) => {
 });
 
 // logic - license id watcher
-watch(() => props.specificLicense, async(newLicense, oldLicense) => {
-    if(newLicense !== oldLicense) {
-        console.log(`license: ${newLicense}`);
+watch(() => props.specificLicense, () => {
+    console.log(`license: ${props.specificLicense}`);
+    if(props.specificLicense !== null && props.specificLicense !== '') {
         fetchCarByLicense()
     }
 });
