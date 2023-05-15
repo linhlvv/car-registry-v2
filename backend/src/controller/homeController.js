@@ -1,7 +1,7 @@
 require("dotenv").config();
 
 import { verifyToken } from "./verifyToken";
-
+import { verifyAdmin } from "./verifyAdmin";
 // section - user
   // section - authenticate
 import { authenticate } from "./user/authenticate/authenticate";
@@ -102,7 +102,7 @@ let homepage = async (req, res) => {
 };
 
 module.exports = {
-  homepage, verifyToken,
+  homepage, verifyToken, verifyAdmin,
 
   authenticate, logout, changePassword,
   centreInfo, getDataForChart, detailModal, previewInfo,
