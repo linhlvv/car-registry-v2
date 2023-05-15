@@ -40,7 +40,7 @@ const closeModal = () => {
         <div v-if="modalOn">
             <CertInfoModal :cert-id="certId" @exit-modal="closeModal"/>
         </div>
-        <div class="w-full flex items-center flex-col gap-5 py-5 relative z-0">
+        <div class="w-full flex items-center flex-col gap-5 py-5">
             <StatisticTable :time="time" @selected-time-clicked="handleTimeChange" @openCertInfoModal="openCertInfoModal"/>
             <Transition name="slide-fade">
                 <div ref="chart" class="w-full flex justify-center" v-if="time.year !== 'All'">
