@@ -43,8 +43,8 @@ onMounted(() => {
 </script>
 
 <template>
-    <div class="bg-black/40 backdrop-blur-[2px] top-0 left-0 w-full h-screen blur-xl fixed z-10 backdrop-animation" @click="exitModal"></div>
-    <div class="fade bg-[#f5f7fb] rounded-[8px] p-4 fixed top-[10vh] left-[20%] w-3/5 z-40 flex flex-col modal-animation overflow-hidden h-fit">
+    <div class="bg-black/40 backdrop-blur-[2px] top-0 left-0 w-full h-screen blur-xl fixed z-50 backdrop-animation" @click="exitModal"></div>
+    <div class="fade bg-[#f5f7fb] rounded-[8px] p-4 fixed top-[10vh] left-[20%] w-3/5 z-[60] flex flex-col modal-animation overflow-hidden h-fit">
         <div class="w-full flex justify-end relative">
             <svg @click="exitModal" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="w-7 h-7 absolute text-[#cc5b2a] p-1 rounded-[50%] cursor-pointer duration-150 ease-in-out hover:bg-[#cc5b2a]/10 active:bg-[#cc5b2a]/20">
                 <path stroke-linecap="round" stroke-linejoin="round" d="M6 18L18 6M6 6l12 12" />
