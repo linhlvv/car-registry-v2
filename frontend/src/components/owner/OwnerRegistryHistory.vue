@@ -49,7 +49,7 @@ fetchOwnerRegistryHistory()
         </div>
         <OwnerCarsNav @change-tag="changeTagHandler" :registed-tag="registedTag"/>
         <!-- <div>{{ registedTag }}</div> -->
-        <div class="flex flex-col w-full gap-[2px]">
+        <div id="table" class="flex flex-col w-full gap-[2px] overflow-x-scroll">
             <OwnerRegistryCard :is-root-row="true" license-plate="License plate" name="Name"/>
             <div v-if="registedTag && registedList.length > 0" v-for="card in registedList" :key="card.licensePlate" class="w-full">
                 <OwnerRegistryCard :is-root-row="false" :license-plate="card.license" :name="`${card.brand} ${card.model} ${card.version}`" :regist-date="card.registryDate" :expired-date="card.expire" :center="card.name"/>
@@ -81,5 +81,22 @@ fetchOwnerRegistryHistory()
             opacity: 1;
             transform: translateX(0rem);
         }
+    }
+
+    #table::-webkit-scrollbar {
+        height: 6px;
+    }
+    
+    #table::-webkit-scrollbar-track {
+        border-radius: 12px;
+    }
+    
+    #table::-webkit-scrollbar-thumb {
+        background-color: #2acc97;
+        outline: none;
+        border-radius: 12px;
+    }
+    #table::-webkit-scrollbar-thumb:hover {
+        background-color: #0ce29b;
     }
 </style>
