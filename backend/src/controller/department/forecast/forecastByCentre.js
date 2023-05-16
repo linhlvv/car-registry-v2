@@ -1,5 +1,5 @@
 import pool from "../../../configs/connectDB";
-
+// input - resPerPage, page, centre
 let forecastByCentre = async (req, res) => {
   let resPerPage = parseInt(req.body.resPerPage);
   let page = parseInt(req.body.page);
@@ -8,18 +8,18 @@ let forecastByCentre = async (req, res) => {
   if (req.body.page === undefined)
     page = 1
 
+  if (req.body.centre === undefined)
+    return res.status(422).send({ErrorCode: 'ER_MISSING_PARAM'})
+
   let year = new Date().getFullYear();
   let month = new Date().getMonth() + 1;
   let match =
-    `\nand year(expire) = ` +
-    year +
-    `\nand month(expire) = ` +
-    month +
+    `\nand year(expire) = ` + year +
+    `\nand month(expire) = ` + month +
     `\nand expire >= CURRENT_DATE()` +
     `\nand ce.name = '` + req.body.centre + `'`;
 
-  let count =
-    `
+  let count = `
   select count(*) as total
     from registry r
   join vehicles v
@@ -28,16 +28,9 @@ let forecastByCentre = async (req, res) => {
     on v.regionId = re.id
   join centre ce
     on ce.id = r.centreId
-  ` +
-    match +
-    `
-  `;
-  const [countRows, countFields] = await pool.query(count, [
-    req.session.userid,
-  ]);
+  ` + match
 
-  let query =
-    `
+  let query = `
   select r.licenseId, brand, model, version, max(expire) as expire, p.name as name
   from registry r
   join vehicles v 
@@ -47,9 +40,7 @@ let forecastByCentre = async (req, res) => {
   join region re
     on v.regionId = re.id
   join centre ce
-    on ce.id = r.centreId` +
-    match +
-    `
+    on ce.id = r.centreId` + match + `
   group by licenseId
         union all
   select r.licenseId, brand, model, version, max(expire) as expire, c.name as name
@@ -61,24 +52,30 @@ let forecastByCentre = async (req, res) => {
   join region re
     on v.regionId = re.id
   join centre ce
-    on ce.id = r.centreId` +
-    match +
-    ` 
+    on ce.id = r.centreId` + match + ` 
   group by licenseId
   order by licenseId asc
     limit ? offset ?`;
 
   // bug - đã gọi được api kết quả trả về chính xác
-  const [rows, fields] = await pool.query(query, [
-    resPerPage,
-    resPerPage * (page - 1),
-  ]);
-  return res.send({
-    data: rows,
-    countData: countRows[0].total,
-    countPage: Math.ceil(countRows[0].total / resPerPage),
-  });
-};
+  try {
+    const [countRows, countFields] = await pool.query(count, [
+      req.session.userid,
+    ])
+    const [rows, fields] = await pool.query(query, [
+      resPerPage,
+      resPerPage * (page - 1),
+    ])
+    return res.send({
+      data: rows,
+      countData: countRows[0].total,
+      countPage: Math.ceil(countRows[0].total / resPerPage),
+    })
+  }
+  catch (err) {
+    return res.status(500).send({ErrorCode: err.code, ErrorNo: err.errno})
+  }
+}
 
 module.exports = {
   forecastByCentre 
