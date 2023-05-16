@@ -19,7 +19,7 @@ fetchCenterInfoData();
 
 <template>
     <div class="w-full">
-        <div class="flex p-[2rem] gap-[3rem] relative max-w-full max-[914px]:flex-col">
+        <div class="flex p-[2rem] gap-[3rem] max-w-full max-[914px]:flex-col">
             <Information :center="centerInfo"/>
         </div>
     </div>
