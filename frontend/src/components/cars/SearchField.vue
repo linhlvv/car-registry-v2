@@ -10,6 +10,7 @@ const emit = defineEmits([
     'nextPage',
     'prevPage',
     'sendSortOrder',
+    'sendTimeSortOrder',
     'specifiedPage',
     'licenseSearch',
     'selectedFilterClicked',
@@ -62,12 +63,14 @@ const fromZtoAClicked = () => {
 };
 
 // logic - time order
-const timeAscending = ref(true)
+const timeAscending = ref('asc')
 const timeAscendingClicked = () => {
-    timeAscending.value = true
+    timeAscending.value = 'asc'
+    emit('sendTimeSortOrder', 'asc')
 }
 const timeDescendingClicked = () => {
-    timeAscending.value = false
+    timeAscending.value = 'desc'
+    emit('sendTimeSortOrder', 'desc')
 }
 
 
@@ -272,8 +275,8 @@ const reload = async () => {
                     <i @click="fromZtoAClicked" class="fa-solid fa-arrow-up-a-z text-[#1d1d1d] cursor-pointer" :class="fromAtoZ === 'desc' ? 'text-[#2acc97]' : ''"></i>
                 </div>
                 <div v-else-if="selected === 'Time'" class="flex flex-col gap-1">
-                    <i @click="timeAscendingClicked" class="fa-solid fa-arrow-up text-[#1d1d1d] cursor-pointer duration-100" :class="timeAscending ? 'text-[#2acc97]' : ''"></i>
-                    <i @click="timeDescendingClicked" class="fa-solid fa-arrow-down text-[#1d1d1d] cursor-pointer duration-100" :class="!timeAscending ? 'text-[#2acc97]' : ''"></i>
+                    <i @click="timeAscendingClicked" class="fa-solid fa-arrow-up text-[#1d1d1d] cursor-pointer duration-100" :class="timeAscending === 'asc' ? 'text-[#2acc97]' : ''"></i>
+                    <i @click="timeDescendingClicked" class="fa-solid fa-arrow-down text-[#1d1d1d] cursor-pointer duration-100" :class="timeAscending === 'desc' ? 'text-[#2acc97]' : ''"></i>
                 </div>
             </div>
             <div class="w-[70%] flex items-center ml-3">

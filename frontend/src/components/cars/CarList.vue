@@ -16,6 +16,7 @@ const props = defineProps([
     'time',
     'carType',
     'sortOrder',
+    'timeSortOrder',
     'specificLicense',
     'reloaded'
 ])
@@ -205,7 +206,7 @@ const fetchCarDataWithSpecificTime = async () => {
                 year: props.time.year,
                 quarter: props.time.quarter,
                 month: props.time.month,
-                order: 'desc'
+                order: props.timeSortOrder
             }
         ),
     })
@@ -416,6 +417,12 @@ watch(() => props.reloaded, async(newReloaded, oldReloaded) => {
         console.log(newReloaded);
         fetchCarData()
     }
+});
+
+// logic - time sort order watcher
+watch(() => props.timeSortOrder, () => {
+    console.log(`time order: ${props.timeSortOrder}`);
+    fetchCarDataWithSpecificTime()
 });
 </script>
 

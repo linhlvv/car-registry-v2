@@ -38,6 +38,12 @@ const bindOrder = (givenOrder) => {
     }
 }
 
+const timeOrder = ref('asc')
+const bindTimeOrder = (ord) => {
+    timeOrder.value = ord
+    pageNumber.value = 1
+}
+
 //SECTION - car info modal handler
 const carDetailModal = ref(false);
 const carInfoLicense = ref('')
@@ -232,6 +238,7 @@ const openSelectHandler = () => {
                                 @prev-page="prevPage" 
                                 @specified-page="specifiedPage"
                                 @sendSortOrder="bindOrder"
+                                @sendTimeSortOrder="bindTimeOrder"
                                 @reloadData="reload"
                                 :page-num="pageNumber"
                                 :total-page="totalPage"
@@ -246,6 +253,7 @@ const openSelectHandler = () => {
                                 :page-number="pageNumber" 
                                 :car-type="carType"
                                 :sort-order="order"
+                                :time-sort-order="timeOrder"
                                 :specific-license="licenseSearchContent"
                                 :reloaded="reloaded"
                                 @openCarInfo="openCarInfo" 
