@@ -202,7 +202,7 @@ watch(() => second.value, () => {
 </script>
 
 <template>
-    <div class="w-full relative">
+    <div class="w-full">
         <div v-if="loadingSubmit" class="border-4 border-solid border-[#2acc97] rounded-[8px] fixed top-[15vh] left-[25%] w-1/2 z-50 flex modal-animation overflow-hidden h-fit">
             <div class="w-full flex gap-4 flex-col items-center justify-center bg-white h-[350px]">
                 <svg class="checkmark" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 52 52"><circle class="checkmark__circle" cx="26" cy="26" r="25" fill="none"/><path class="checkmark__check" fill="none" d="M14.1 27.2l7.1 7.2 16.7-16.8"/></svg>
@@ -213,12 +213,12 @@ watch(() => second.value, () => {
         </div>
         <div class="w-full bg-[#f5f7fb] py-4 px-2">
             <div class="flex flex-col gap-2 w-full items-center">
-                <div class="flex items-center w-4/5 bg-white rounded-[4px] overflow-hidden shadow">
-                    <div @click="changeOwnerType(0)" class="w-1/2 items-center flex justify-center gap-2 py-3 cursor-pointer" :class="ownerType === 0 ? 'text-white bg-[#2acc97]' : 'text-[#1d1d1d] bg-white hover:text-[#2acc97] duration-150 ease-out'">
+                <div class="flex flex-col min-[732px]:flex-row items-center w-4/5 bg-white rounded-[4px] overflow-hidden shadow">
+                    <div @click="changeOwnerType(0)" class="w-full min-[732px]:w-1/2 items-center flex justify-center gap-2 py-3 cursor-pointer" :class="ownerType === 0 ? 'text-white bg-[#2acc97]' : 'text-[#1d1d1d] bg-white hover:text-[#2acc97] duration-150 ease-out'">
                         <div class="text-[14px] font-semibold">Registration for company</div>
                         <i class="fa-solid fa-building-columns"></i>
                     </div>
-                    <div @click="changeOwnerType(1)" class="w-1/2 items-center flex justify-center gap-2 py-3 cursor-pointer" :class="ownerType === 1 ? 'text-white bg-[#2acc97]' : 'text-[#1d1d1d] bg-white hover:text-[#2acc97] duration-150 ease-out'">
+                    <div @click="changeOwnerType(1)" class="w-full min-[732px]:w-1/2 items-center flex justify-center gap-2 py-3 cursor-pointer" :class="ownerType === 1 ? 'text-white bg-[#2acc97]' : 'text-[#1d1d1d] bg-white hover:text-[#2acc97] duration-150 ease-out'">
                         <div class="text-[14px] font-semibold">Registration for person</div>
                         <i class="fa-solid fa-user-tie"></i>
                     </div>
@@ -241,7 +241,7 @@ watch(() => second.value, () => {
                         </div>
                     </Transition>
                 </div>
-                <div class="w-full flex gap-2 h-[450px]">
+                <div class="w-full flex flex-col gap-2 min-[732px]:h-[450px] min-[732px]:flex-row">
                     <RegistrationCarAndOwner :info="info" :regist-new-car="true" :owner-type="ownerType"/>
                     <RegistrationCert :registry-info="registryInfo"/>
                 </div>
