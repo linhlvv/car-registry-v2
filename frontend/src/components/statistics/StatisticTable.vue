@@ -165,7 +165,7 @@ const scrollToChart = () => {
         <div class="w-full flex flex-col bg-white p-4 gap-3">
             <div class="w-full flex items-center justify-between">
                 <div class="w-3/4 flex items-center gap-2">
-                    <SearchBar width="w-1/2" placeholder="Enter a license ID or tax number..."/>
+                    <SearchBar width="w-3/4 min-[732px]:w-3/5" placeholder="Enter a license ID..."/>
                     <button v-if="time.year !== 'All'" @click="scrollToChart" class="text-[12px] text-white flex items-center gap-1 font-semibold bg-[#2acc97]/90 active:bg-[#2acc97] p-2 rounded-md">
                         View chart 
                         <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" fill="currentColor" class="w-5 h-5">
@@ -182,7 +182,7 @@ const scrollToChart = () => {
                     <i class="fa-solid fa-circle-arrow-right text-[#1d1d1d] text-base cursor-pointer hover:text-[#2acc97]" @click="pageHandler('right')"></i>
                 </div>
             </div>
-            <div class="flex items-center gap-2 w-full">
+            <div class="flex flex-col min-[732px]:flex-row items-center gap-2 w-full">
                 <select v-model="time.year" @change="timeClicked(time.year, 'year')" class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-[4px] focus:ring-[#2acc97] focus:border-[#2acc97] block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500">
                     <option v-for="singleYear in yearList" :key="singleYear" :value="singleYear">
                         {{ singleYear }}
