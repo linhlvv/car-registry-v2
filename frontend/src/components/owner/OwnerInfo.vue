@@ -34,14 +34,14 @@ fetchOwnerInfo()
 </script>
 
 <template>
-    <div class="w-full flex flex-col gap-3">
+    <div id="info" class="w-full flex flex-col gap-3 overflow-x-scroll">
         <div class="w-full flex items-center justify-between">
             <div class="w-1/4 text-3xl font-medium flex items-center text-[#1d1d1d] text-opacity-60">
                 Owner profile
             </div>
             <hr class="border-[1.25px] w-3/4 border-[#1d1d1d] border-opacity-10">
         </div>
-        <div class="w-full flex rounded-md bg-white shadow-sm">
+        <div class="min-w-[640px] flex rounded-md bg-white shadow-sm">
             <div class="w-[30%] flex flex-col items-center justify-center p-7 gap-5 border-r border-[#1d1d1d] border-opacity-10">
                 <div class="flex justify-center">
                     <svg v-if="ownerType === 1" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="w-20 h-20 p-2 text-[#2acc97] border-dashed border-[3px] rounded-[50px] border-[#2acc97]">
@@ -74,3 +74,23 @@ fetchOwnerInfo()
         </div>
     </div>
 </template>
+
+<style scoped>
+
+    #info::-webkit-scrollbar {
+        height: 6px;
+    }
+    
+    #info::-webkit-scrollbar-track {
+        border-radius: 12px;
+    }
+    
+    #info::-webkit-scrollbar-thumb {
+        background-color: #2acc97;
+        outline: none;
+        border-radius: 12px;
+    }
+    #info::-webkit-scrollbar-thumb:hover {
+        background-color: #0ce29b;
+    }
+</style>

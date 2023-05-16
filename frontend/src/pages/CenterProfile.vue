@@ -7,6 +7,7 @@ const centerInfo = ref({});
 const fetchCenterInfoData = async() => {
     const res = await fetch(`http://localhost:1111/centre-info`, {
         credentials: "include",
+        'Authorization': `${localStorage.getItem('token')}`,
     })
     const dataList = JSON.parse(await res.text())[0]
     console.log(`center info: ${JSON.stringify(dataList)}`);
@@ -18,7 +19,7 @@ fetchCenterInfoData();
 
 <template>
     <div class="w-full">
-        <div class="flex p-[2rem] gap-[3rem] relative max-w-full max-[914px]:flex-col">
+        <div class="flex p-[2rem] gap-[3rem] max-w-full max-[914px]:flex-col">
             <Information :center="centerInfo"/>
         </div>
     </div>

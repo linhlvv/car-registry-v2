@@ -4,16 +4,17 @@ import Intro from './Intro.vue'
 import Button from '../UI/Button.vue';
 import { useAccountStore } from '../../stores/AccountStore'
 import { useRouter } from 'vue-router';
-import { ref } from 'vue';
+import { onMounted, ref } from 'vue';
 
-localStorage.removeItem('token')
-localStorage.removeItem('id')
-localStorage.removeItem('userType')
-const logout = fetch("http://localhost:1111/logout", {
-    credentials: "include",
-})
-if(logout.error) {
-    console.log(logout.error);
+const logout = () => {
+    const res = fetch("http://localhost:1111/logout", {
+        credentials: "include",
+    })
+    
+    if(res.error) {
+        console.log(res.error);
+    }
+    console.log('log out');
 }
 
 const router = useRouter();
@@ -45,6 +46,13 @@ const loginHandler = async() => {
         router.push('/')
     }
 };
+
+onMounted(() => {
+    localStorage.removeItem('token')
+    localStorage.removeItem('id')
+    localStorage.removeItem('userType')
+    logout()
+});
 
 </script>
 

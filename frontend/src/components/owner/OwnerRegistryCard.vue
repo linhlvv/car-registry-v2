@@ -4,7 +4,7 @@ const props = defineProps(['isRootRow', 'licensePlate', 'name', 'center', 'regis
 </script>
 
 <template>
-    <div class="w-full flex rounded-sm p-2 slide-fade" :class="isRootRow ? 'rounded-t-lg bg-[#2acc97]/10' : 'bg-white'">
+    <div class="min-w-[800px] flex rounded-sm p-2 slide-fade" :class="isRootRow ? 'rounded-t-lg bg-[#2acc97]/10' : 'bg-white'">
         <div :class="isRootRow ? 'text-sm font-semibold' : 'text-xs font-semibold'" class="w-[15%] flex items-center justify-center text-center text-[#1d1d1d]">
             {{ licensePlate }}
         </div>

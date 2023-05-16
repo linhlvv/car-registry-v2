@@ -175,7 +175,7 @@ watch(() => adminSelectionStore.getSelected, () => {
                                     <p class="text-[#2acc97]">{{ totalRes }}</p>
                                 </div>
                             </div>
-                            <div class="w-full flex flex-col gap-[2px] mb-4" :class="minHeight">
+                            <div id="table" class="w-full overflow-x-scroll flex flex-col gap-[2px] mb-4" :class="minHeight">
                                 <ForecastCard :is-root-row="true"/>
                                 <div v-for="card in forecastList" :key="card">
                                     <ForecastCard 
@@ -216,5 +216,22 @@ watch(() => adminSelectionStore.getSelected, () => {
     .fade-enter-from,
     .fade-leave-to {
         opacity: 0;
+    }
+
+    #table::-webkit-scrollbar {
+        height: 6px;
+    }
+    
+    #table::-webkit-scrollbar-track {
+        border-radius: 12px;
+    }
+    
+    #table::-webkit-scrollbar-thumb {
+        background-color: #2acc97;
+        outline: none;
+        border-radius: 12px;
+    }
+    #table::-webkit-scrollbar-thumb:hover {
+        background-color: #0ce29b;
     }
 </style>

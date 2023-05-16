@@ -38,6 +38,12 @@ const bindOrder = (givenOrder) => {
     }
 }
 
+const timeOrder = ref('asc')
+const bindTimeOrder = (ord) => {
+    timeOrder.value = ord
+    pageNumber.value = 1
+}
+
 //SECTION - car info modal handler
 const carDetailModal = ref(false);
 const carInfoLicense = ref('')
@@ -65,6 +71,7 @@ const turnOffModal = () => {
 const licenseSearchContent = ref('');
 const licenseSearchEntered = (content) => {
     licenseSearchContent.value = content
+    console.log(licenseSearchContent.value);
 };
 
 //SECTION - reload
@@ -73,7 +80,8 @@ const reload = () => {
     filter.value = 'No filter'
     city.value = 'All'
     brand.value = 'All'
-    owner.value = ''
+    owner.value = null
+    licenseSearchContent.value = null
     time.value = { year: 'All', quarter: 'All', month: 'All' }
     reloaded.value = !reloaded.value
     // console.log(reloaded.value);
@@ -177,7 +185,7 @@ const openSelectHandler = () => {
                 <div class="my-6">
                     <div class="flex items-center flex-col gap-5 justify-center">
                         <!-- default car type filter -->
-                        <div class="flex custom-shadow w-[70vw] rounded-2xl overflow-hidden bg-white max-[535px]:hidden">
+                        <div class="flex custom-shadow w-[70vw] rounded-2xl overflow-hidden bg-white max-[732px]:hidden">
                             <div 
                                 @click="carTypeHandler('registed')"
                                 class="w-1/2 text-base font-medium gap-1 flex items-center justify-center text-center duration-200 cursor-pointer p-2 py-4 max-[997px]:text-sm max-[738px]:text-xs max-[625px]:text-[10px]"
@@ -198,27 +206,29 @@ const openSelectHandler = () => {
                         </div>
                         
                         <!-- responsive select dropdown -->
-                        <div class="w-4/5 flex flex-col min-[535px]:hidden">
+                        <div class="w-4/5 flex flex-col min-[732px]:hidden">
                             <div @click="openSelectHandler" class="w-full rounded-lg p-2 flex items-center justify-between text-white text-base bg-[#2acc97]">
                                 <div class="font-semibold">Select</div>
                                 <i class="fa-solid fa-caret-down"></i>
                             </div>
-                            <div :class="!selectionOpened ? 'hidden' : ''" class="w-full z-10 bg-white divide-y divide-gray-100 rounded-lg shadow dark:bg-gray-700 dark:divide-gray-600">
-                                <ul class="p-3 space-y-3 text-sm text-gray-700 dark:text-gray-200"  >
-                                    <div class="flex items-center">
-                                        <input @click="carTypeHandler('registed')" id="default-radio-2" type="radio" value="registed" v-model="carType" name="registed" class="w-4 h-4">
-                                        <label for="default-radio-2" class="ml-2 text-sm font-medium text-gray-900 dark:text-gray-300">Registed cars</label>
-                                    </div>
-                                
-                                    <div class="flex items-center">
-                                        <input @click="carTypeHandler('expired')" id="default-radio-3" type="radio" value="expired" v-model="carType" name="expired" class="w-4 h-4">
-                                        <label for="default-radio-3" class="ml-2 text-sm font-medium text-gray-900 dark:text-gray-300">Expired cars</label>
-                                    </div>    
-                                </ul>
-                            </div>
+                            <Transition name="slide-fade">
+                                <div v-if="selectionOpened" class="w-full bg-white divide-y divide-gray-100 rounded-lg shadow dark:bg-gray-700 dark:divide-gray-600">
+                                    <ul class="p-3 space-y-3 text-sm text-gray-700 dark:text-gray-200"  >
+                                        <div class="flex items-center">
+                                            <input @click="carTypeHandler('registed')" id="default-radio-2" type="radio" value="registed" v-model="carType" name="registed" class="w-4 h-4">
+                                            <label for="default-radio-2" class="ml-2 text-sm font-medium text-gray-900 dark:text-gray-300">Registed cars</label>
+                                        </div>
+                                    
+                                        <div class="flex items-center">
+                                            <input @click="carTypeHandler('expired')" id="default-radio-3" type="radio" value="expired" v-model="carType" name="expired" class="w-4 h-4">
+                                            <label for="default-radio-3" class="ml-2 text-sm font-medium text-gray-900 dark:text-gray-300">Expired cars</label>
+                                        </div>    
+                                    </ul>
+                                </div>
+                            </Transition>
                         </div>
                         
-                        <div class="flex custom-shadow items-center flex-col w-[90vw] rounded-2xl overflow-hidden">
+                         <div class="flex custom-shadow items-center flex-col w-[90vw] rounded-t-lg rounded-b-[3px] overflow-hidden">
                             <SearchField
                                 @selectedFilterClicked="filterSelected" 
                                 @selectedCityClicked="citySelected"
@@ -230,6 +240,7 @@ const openSelectHandler = () => {
                                 @prev-page="prevPage" 
                                 @specified-page="specifiedPage"
                                 @sendSortOrder="bindOrder"
+                                @sendTimeSortOrder="bindTimeOrder"
                                 @reloadData="reload"
                                 :page-num="pageNumber"
                                 :total-page="totalPage"
@@ -244,6 +255,7 @@ const openSelectHandler = () => {
                                 :page-number="pageNumber" 
                                 :car-type="carType"
                                 :sort-order="order"
+                                :time-sort-order="timeOrder"
                                 :specific-license="licenseSearchContent"
                                 :reloaded="reloaded"
                                 @openCarInfo="openCarInfo" 
@@ -275,5 +287,16 @@ const openSelectHandler = () => {
     .fade-enter-from,
     .fade-leave-to {
         opacity: 0;
+    }
+
+    .slide-fade-enter-active,
+    .slide-fade-leave-active {
+        transition: all 0.3s ease;
+    }
+    
+    .slide-fade-enter-from,
+    .slide-fade-leave-to {
+        opacity: 0;
+        transform: translateY(-10px);
     }
 </style>

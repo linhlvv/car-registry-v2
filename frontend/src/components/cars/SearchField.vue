@@ -10,6 +10,7 @@ const emit = defineEmits([
     'nextPage',
     'prevPage',
     'sendSortOrder',
+    'sendTimeSortOrder',
     'specifiedPage',
     'licenseSearch',
     'selectedFilterClicked',
@@ -62,12 +63,14 @@ const fromZtoAClicked = () => {
 };
 
 // logic - time order
-const timeAscending = ref(true)
+const timeAscending = ref('asc')
 const timeAscendingClicked = () => {
-    timeAscending.value = true
+    timeAscending.value = 'asc'
+    emit('sendTimeSortOrder', 'asc')
 }
 const timeDescendingClicked = () => {
-    timeAscending.value = false
+    timeAscending.value = 'desc'
+    emit('sendTimeSortOrder', 'desc')
 }
 
 
@@ -238,14 +241,14 @@ const reload = async () => {
 
 <template>
     <div class="bg-white w-full p-6 px-7 flex flex-col gap-3 justify-center">
-        <div class="w-full flex items-center">
-            <div class="flex items-center w-[77.5%] gap-3">
-                <SearchBar @search-entered="licenseSearch" width="w-[30%]" placeholder="Enter a license plate..."/>
+        <div class="w-full flex items-center justify-between max-[535px]:items-start max-[535px]:flex-col-reverse max-[535px]:gap-y-2">
+            <div class="flex items-center w-1/2 gap-3 max-[535px]:w-full">
+                <SearchBar @search-entered="licenseSearch" width="w-full" placeholder="Enter a license plate..."/>
                 <i @click="reload" class="fa-solid fa-rotate text-[#292929] p-[6px] rounded-[50%] hover:text-[#2acc97] active:bg-[#2acc97]/10 cursor-pointer"></i>
             </div>
 
             <!-- Pagination -->
-            <div class="flex items-center gap-2 w-[20%] justify-end">
+            <div class="flex items-center gap-2 w-[20%] justify-end max-[535px]:w-full">
                 <i class="fa-solid fa-circle-arrow-left text-[#1d1d1d] text-base cursor-pointer hover:text-[#2acc97]" @click="pageHandler('left')"></i>
                 <div class="flex items-center">
                     <input type="number" min="1" :max="totalPage" :value="props.pageNum" @keyup.enter="enterHandler($event.target.value)" class="border border-[#1d1d1d] border-opacity-10 p-[2px] w-10 text-[14px] text-[#1d1d1d] font-semibold">
@@ -255,8 +258,8 @@ const reload = async () => {
                 <i class="fa-solid fa-circle-arrow-right text-[#1d1d1d] text-base cursor-pointer hover:text-[#2acc97]" @click="pageHandler('right')"></i>
             </div>
         </div>
-        <div class="w-full flex items-center">
-            <div class="w-[30%] flex items-center gap-2">
+        <div class="w-full min-[732px]:flex-row flex flex-col gap-y-2 min-[732px]:items-center">
+            <div class="w-full min-[732px]:w-[30%] flex items-center gap-2">
                 <div class="flex items-center">
                     <h1 class="text-[#9196a4] font-semibold">Filter</h1>
                 </div>
@@ -272,15 +275,15 @@ const reload = async () => {
                     <i @click="fromZtoAClicked" class="fa-solid fa-arrow-up-a-z text-[#1d1d1d] cursor-pointer" :class="fromAtoZ === 'desc' ? 'text-[#2acc97]' : ''"></i>
                 </div>
                 <div v-else-if="selected === 'Time'" class="flex flex-col gap-1">
-                    <i @click="timeAscendingClicked" class="fa-solid fa-arrow-up text-[#1d1d1d] cursor-pointer duration-100" :class="timeAscending ? 'text-[#2acc97]' : ''"></i>
-                    <i @click="timeDescendingClicked" class="fa-solid fa-arrow-down text-[#1d1d1d] cursor-pointer duration-100" :class="!timeAscending ? 'text-[#2acc97]' : ''"></i>
+                    <i @click="timeAscendingClicked" class="fa-solid fa-arrow-up text-[#1d1d1d] cursor-pointer duration-100" :class="timeAscending === 'asc' ? 'text-[#2acc97]' : ''"></i>
+                    <i @click="timeDescendingClicked" class="fa-solid fa-arrow-down text-[#1d1d1d] cursor-pointer duration-100" :class="timeAscending === 'desc' ? 'text-[#2acc97]' : ''"></i>
                 </div>
             </div>
-            <div class="w-[70%] flex items-center ml-3">
+            <div class="w-full min-[732px]:w-[70%] flex items-center max-[731px]:justify-end min-[732px]:ml-3">
                 <!-- City filter -->
                 <Transition name="slide-fade">
-                    <div v-show="selected === 'City'" class="flex items-center gap-2">
-                        <div class="flex items-center">
+                    <div v-show="selected === 'City'" class="flex max-[731px]:w-full max-[731px]:pr-[26px] items-center gap-2">
+                        <div class="flex items-center max-[731px]:pr-[10px]">
                             <h1 class="text-[#9196a4] font-semibold">City</h1>
                         </div>
                         <select v-model="city" @change="cityClicked(city)" id="countries" class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-[4px] focus:outline-[#2acc97] block w-full p-2.5">
@@ -303,7 +306,7 @@ const reload = async () => {
                 
                 <!-- Brand filter -->
                 <Transition name="slide-fade">
-                    <div v-show="selected === 'Brand'" class="flex items-center gap-2">
+                    <div v-show="selected === 'Brand'" class="flex max-[731px]:w-full items-center gap-2">
                         <div class="flex items-center">
                             <h1 class="text-[#9196a4] font-semibold">Brand</h1>
                         </div>
@@ -317,7 +320,7 @@ const reload = async () => {
                 
                 <!-- Time filter -->
                 <Transition name="slide-fade">
-                    <div v-show="selected === 'Time'" class="flex items-center gap-2 w-full">
+                    <div v-show="selected === 'Time'" class="flex max-[731px]:w-full items-center gap-2 w-full">
                         <select v-model="time.year" @change="timeClicked(time.year, 'year')" class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-[4px] focus:outline-[#2acc97] block w-full p-2.5">
                             <option v-for="singleYear in yearList" :key="singleYear" :value="singleYear">
                                 {{ singleYear }}

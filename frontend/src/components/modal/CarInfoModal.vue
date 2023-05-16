@@ -42,7 +42,7 @@ findCarInfo()
 </script>
 
 <template>
-    <div class="bg-black/40 top-0 left-0 w-full h-full blur-xl fixed z-10" @click="exitModal"></div>
+    <div class="bg-black/40 top-0 left-0 w-full h-full blur-xl fixed z-50" @click="exitModal"></div>
     <div class="bg-white rounded-[8px] fixed top-[5vh] left-[20%] max-[560px]:left-[10%] w-3/5 max-[560px]:w-4/5 z-50 flex modal-animation overflow-hidden max-[560px]:flex-col max-[560px]:absolute">
         <div class="w-3/5 max-[560px]:w-full border-r text-[#1d1d1d] mb-3">
             <div class="flex flex-col items-center w-full">

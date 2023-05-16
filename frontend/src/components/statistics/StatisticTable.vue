@@ -134,7 +134,7 @@ const fetchDataWithSpecificTime = async () => {
         console.log(res.error);
     }
     const dataFetched = JSON.parse(await res.text())
-    // console.log(`registries: ${JSON.stringify(dataFetched)}`);
+    console.log(`spec time: ${JSON.stringify(dataFetched)}`);
     totalPage.value = dataFetched.count
     registCardList.value = dataFetched.data
     loading.value = false
@@ -161,11 +161,11 @@ const scrollToChart = () => {
 </script>
 
 <template>
-    <div class="w-4/5 flex flex-col shadow-md rounded-xl overflow-hidden">
+    <div class="w-4/5 flex flex-col shadow-md rounded-t-lg rounded-b-[4px] overflow-hidden">
         <div class="w-full flex flex-col bg-white p-4 gap-3">
             <div class="w-full flex items-center justify-between">
                 <div class="w-3/4 flex items-center gap-2">
-                    <SearchBar width="w-1/2" placeholder="Enter a license ID or tax number..."/>
+                    <SearchBar width="w-3/4 min-[732px]:w-3/5" placeholder="Enter a license ID..."/>
                     <button v-if="time.year !== 'All'" @click="scrollToChart" class="text-[12px] text-white flex items-center gap-1 font-semibold bg-[#2acc97]/90 active:bg-[#2acc97] p-2 rounded-md">
                         View chart 
                         <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" fill="currentColor" class="w-5 h-5">
@@ -182,7 +182,7 @@ const scrollToChart = () => {
                     <i class="fa-solid fa-circle-arrow-right text-[#1d1d1d] text-base cursor-pointer hover:text-[#2acc97]" @click="pageHandler('right')"></i>
                 </div>
             </div>
-            <div class="flex items-center gap-2 w-full">
+            <div class="flex flex-col min-[732px]:flex-row items-center gap-2 w-full">
                 <select v-model="time.year" @change="timeClicked(time.year, 'year')" class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-[4px] focus:ring-[#2acc97] focus:border-[#2acc97] block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500">
                     <option v-for="singleYear in yearList" :key="singleYear" :value="singleYear">
                         {{ singleYear }}
@@ -200,11 +200,16 @@ const scrollToChart = () => {
                 </select>
             </div>
         </div>
-        <div class="w-full flex flex-col bg-[#f5f7fb]">
+        <div id="table" class="w-full flex flex-col bg-[#f5f7fb] overflow-x-scroll">
             <StatisticTableCard :is-root-row="true"/>
-            <div v-for="card in registCardList" :key="card.licenseId">
-                <StatisticTableCard :car="card" @open-info="openModal"/>
-            </div>
+            <TransitionGroup name="list" tag="div">
+                <div v-if="registCardList.length !== 0" v-for="(card, index) in registCardList" :key="index">
+                    <StatisticTableCard :car="card" @open-info="openModal"/>
+                </div>
+                <div v-else class="p-2 flex w-full mt-[2px] bg-white min-h-[50px]">
+                    <p class="pt-1 text-center w-full text-base font-semibold text-red-500">No result found!</p>
+                </div>
+            </TransitionGroup>
         </div>
     </div>
 </template>
@@ -212,5 +217,38 @@ const scrollToChart = () => {
 <style scoped>
     textarea:focus, input:focus{
         outline: none;
+    }
+
+    .list-move, /* apply transition to moving elements */
+    .list-enter-active,
+    .list-leave-active {
+        transition: all 0.5s ease;
+    }
+
+    .list-enter-from,
+    .list-leave-to {
+    opacity: 0;
+        transform: translateX(10px);
+    }
+
+    .list-leave-active {
+        position: absolute;
+    }
+
+    #table::-webkit-scrollbar {
+        height: 6px;
+    }
+    
+    #table::-webkit-scrollbar-track {
+        border-radius: 12px;
+    }
+    
+    #table::-webkit-scrollbar-thumb {
+        background-color: #2acc97;
+        outline: none;
+        border-radius: 12px;
+    }
+    #table::-webkit-scrollbar-thumb:hover {
+        background-color: #0ce29b;
     }
 </style>

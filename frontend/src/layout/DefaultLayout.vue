@@ -1,5 +1,5 @@
 <script setup>
-import { ref } from 'vue';
+import { nextTick, onBeforeUnmount, onMounted, ref, watch } from 'vue';
 import Navbar from '../components/UI/Navbar.vue';
 import VerticalNavbar from '../components/UI/VerticalNavbar.vue';
 
@@ -7,13 +7,38 @@ const verticalNavOpened = ref(false);
 const verticalNavHandler = () => {
     verticalNavOpened.value = !verticalNavOpened.value
 };
+
+const screenW = ref(window.innerWidth)
+
+const onResize = () => {
+    screenW.value = window.innerWidth
+}
+
+onMounted(() => {
+    nextTick(() => {
+        window.addEventListener('resize', onResize)
+    })
+});
+
+onBeforeUnmount(() => {
+    window.removeEventListener('resize', onResize)
+});
+
+watch(screenW, () => {
+    if(screenW.value >= 732) {
+        verticalNavOpened.value = false
+    }
+});
+
 </script>
 
 <template>
-    <Navbar @vertical-nav-clicked="verticalNavHandler"/>
-    <div v-if="verticalNavOpened">
-        <VerticalNavbar @turn-off-nav="verticalNavHandler"/>
-    </div>
+    <Navbar :vertical-nav-on="verticalNavOpened" @vertical-nav-clicked="verticalNavHandler"/>
+    <Transition name="fade">
+        <div v-if="verticalNavOpened">
+            <VerticalNavbar :nav-on="verticalNavOpened" @turn-off-nav="verticalNavHandler"/>
+        </div>
+    </Transition>
     <router-view v-slot="{ Component, route }">
         <transition :name="route.meta.transition || 'fade'" mode="out-in">
             <component :is="Component" />

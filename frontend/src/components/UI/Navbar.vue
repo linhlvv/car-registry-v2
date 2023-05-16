@@ -3,7 +3,7 @@ import ProfileDropdown from './ProfileDropdown.vue';
 import NavbarButton from './NavbarButton.vue';
 import SuggestionSelect from './SuggestionSelect.vue'
 
-import { useRoute } from 'vue-router';
+import { useRoute, useRouter } from 'vue-router';
 import { useAccountStore } from '../../stores/AccountStore'
 import { useAdminSelectionStore } from '../../stores/AdminSelectionStore'
 import { onMounted, ref, watch } from 'vue';
@@ -11,8 +11,10 @@ import { onMounted, ref, watch } from 'vue';
 const accountStore = useAccountStore()
 const adminSelectionStore = useAdminSelectionStore()
 const route = useRoute();
+const router = useRouter()
 
 const emit = defineEmits(['verticalNavClicked']);
+const props = defineProps(['verticalNavOn'])
 
 const verticalNavClickedHandler = () => {
     emit('verticalNavClicked');
@@ -20,11 +22,6 @@ const verticalNavClickedHandler = () => {
 
 //SECTION - auth handler
 const isLoggedIn = ref(false)
-if(localStorage.getItem('token') === null) {
-    isLoggedIn.value = false
-} else {
-    isLoggedIn.value = true
-};
 
 const isAdmin = ref(localStorage.getItem('userType') === '1')
 console.log(isAdmin.value);
@@ -119,17 +116,26 @@ watch(() => currentSelection.value, () => {
 });
 
 onMounted(() => {
-    adminSelectionStore.setSelection(currentSelection.value.value, currentSpecificSelect.value)
-    fetchRegionAndCenterList()
+    if(localStorage.getItem('token') === null) {
+        isLoggedIn.value = false
+    } else {
+        isLoggedIn.value = true
+    }
+    if(isLoggedIn.value === false) {
+        router.push('/log-and-reg/login')
+    } else {
+        adminSelectionStore.setSelection(currentSelection.value.value, currentSpecificSelect.value)
+        fetchRegionAndCenterList()
+    }
 });
 
 </script>
 
 <template>
-    <nav class="bg-[#2acc97] border-gray-200 dark:bg-gray-900 py-4 w-full">
+    <nav class="bg-[#2acc97] max-[732px]:bg-[#f5f7fb] transition-all duration-200 border-gray-200 dark:bg-gray-900 py-4 w-full">
         <div class="flex flex-wrap justify-between items-center mx-auto w-full px-4 md:px-6 ">
             <router-link to="/" >
-                <div class="text-3xl font-bold text-white cursor-pointer">RegistryTotal</div>
+                <div class="text-3xl font-bold text-white cursor-pointer max-[732px]:text-[#2acc97] transition-all duration-200">RegistryTotal</div>
             </router-link>
             <div class="flex items-center">
                 <div class="flex items-center pt-[2px] cursor-pointer mr-6 text-[16px] font-semibold text-white dark:text-white hover:underline max-[732px]:hidden">2812-0810-2001</div>
@@ -140,8 +146,8 @@ onMounted(() => {
                     <ProfileDropdown />
                 </div>
                 <div v-show="route.path !== '/'" class="min-[732px]:hidden flex items-center">
-                    <div class="p-1 px-2 rounded-md duration-150 hover:bg-white/50 cursor-pointer" @click="verticalNavClickedHandler">
-                        <i class="fa-solid fa-bars text-white"></i>
+                    <div :class="verticalNavOn ? ' text-white hover:bg-white/30' : 'text-[#2acc97] hover:bg-[#2acc97]/10'" class="p-1 px-2 relative z-40 rounded-md duration-150 cursor-pointer" @click="verticalNavClickedHandler">
+                        <i :class="verticalNavOn ? ' text-white' : 'text-[#2acc97]'" class="fa-solid fa-bars duration-200 ease-in-out transition-all"></i>
                     </div>
                 </div>
             </div>

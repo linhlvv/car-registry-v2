@@ -110,7 +110,7 @@ const closeModal = () => {
 </script>
 
 <template>
-    <div class="bg-[#1d1d1d]/40 top-0 left-0 w-full h-screen blur-xl fixed z-10 backdrop-animation"></div>
+    <div class="bg-[#1d1d1d]/40 top-0 left-0 w-full h-screen blur-xl fixed z-50 backdrop-animation"></div>
     <!-- <div class="bg-transparent fixed top-[16vh] left-[33.3333333%] w-1/3 z-50 flex items-end justify-end">
         <i class="fa-solid fa-circle-xmark text-[#cc3d2a]"></i>
     </div> -->

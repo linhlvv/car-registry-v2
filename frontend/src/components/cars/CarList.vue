@@ -16,6 +16,7 @@ const props = defineProps([
     'time',
     'carType',
     'sortOrder',
+    'timeSortOrder',
     'specificLicense',
     'reloaded'
 ])
@@ -205,7 +206,7 @@ const fetchCarDataWithSpecificTime = async () => {
                 year: props.time.year,
                 quarter: props.time.quarter,
                 month: props.time.month,
-                order: 'desc'
+                order: props.timeSortOrder
             }
         ),
     })
@@ -378,10 +379,10 @@ watch(() => props.brand, async(newBrand, oldBrand) => {
 // logic - owner watcher
 watch(() => props.owner, async(newOwner, oldOwner) => {
     // console.log(props.pageNumber, newPageNumber, oldPageNumber);
-    if(newOwner !== oldOwner) {
-        console.log(`owner has changed to: ${props.owner}`);
+    console.log(`owner has changed to: ${props.owner}`);
+    if(props.owner !== null && props.owner !== '') {
         fetchCarByOwnerCode()
-    } 
+    }
 });
 
 // logic - time watcher
@@ -402,9 +403,9 @@ watch(() => props.carType, async(newCarType, oldCarType) => {
 });
 
 // logic - license id watcher
-watch(() => props.specificLicense, async(newLicense, oldLicense) => {
-    if(newLicense !== oldLicense) {
-        console.log(`license: ${newLicense}`);
+watch(() => props.specificLicense, () => {
+    console.log(`license: ${props.specificLicense}`);
+    if(props.specificLicense !== null && props.specificLicense !== '') {
         fetchCarByLicense()
     }
 });
@@ -417,10 +418,16 @@ watch(() => props.reloaded, async(newReloaded, oldReloaded) => {
         fetchCarData()
     }
 });
+
+// logic - time sort order watcher
+watch(() => props.timeSortOrder, () => {
+    console.log(`time order: ${props.timeSortOrder}`);
+    fetchCarDataWithSpecificTime()
+});
 </script>
 
 <template>
-    <div class="w-full flex flex-col">
+    <div id="table" class="w-full flex flex-col overflow-x-scroll">
         <RootRow :carType="props.carType"/>
         <!-- <div>{{ reloaded }}</div> -->
         <div class="flex flex-col items-center w-full" style="{overflow-wrap: 'anywhere';}">
@@ -446,3 +453,22 @@ watch(() => props.reloaded, async(newReloaded, oldReloaded) => {
         </div>
     </div>
 </template>
+
+<style scoped>
+    #table::-webkit-scrollbar {
+        height: 6px;
+    }
+    
+    #table::-webkit-scrollbar-track {
+        border-radius: 12px;
+    }
+    
+    #table::-webkit-scrollbar-thumb {
+        background-color: #2acc97;
+        outline: none;
+        border-radius: 12px;
+    }
+    #table::-webkit-scrollbar-thumb:hover {
+        background-color: #0ce29b;
+    }
+</style>
