@@ -29,8 +29,7 @@ let adminFilterOwner = async (req, res) => {
       from vehicles v
     left join registry re
       on re.licenseId = v.licenseId
-    where centreId = ` + req.session.userid +
-  `  group by re.licenseId)  
+    group by re.licenseId)  
   and expire` + type + `current_date()
   and ssn = ?
           union all 
@@ -47,12 +46,10 @@ let adminFilterOwner = async (req, res) => {
       from vehicles v
     left join registry re
       on re.licenseId = v.licenseId
-    where centreId = ` + req.session.userid +
-  `  group by re.licenseId)  
+     group by re.licenseId)  
   and expire` + type + `current_date()
   and taxnum = ?
     order by license`
-  // bug - đã test call api ngon lành ko vấn đề gì
   const [rows, fields] = await pool.query(query, [code, code])
   return res.send({data: rows})
 }

@@ -3,9 +3,9 @@ import pool from "../../../configs/connectDB"
 let adminFilterTime = async (req, res) => {
   let resPerPage = parseInt(req.body.resPerPage)
   let page = parseInt(req.body.page) 
-  if (resPerPage === undefined)
+  if (req.body.resPerPage === undefined)
     resPerPage = 10
-  if (page === undefined)
+  if (req.body.page === undefined)
     page = 1
 
   let carType = req.body.carType
@@ -13,7 +13,10 @@ let adminFilterTime = async (req, res) => {
   let month = parseInt(req.body.month)
   let quarter = parseInt(req.body.quarter)
   
-  if (carType === undefined || year === undefined || month === undefined || quarter === undefined || resPerPage === undefined || page === undefined) {
+  if (carType === undefined || 
+      year === undefined || 
+      month === undefined || 
+      quarter === undefined) {
     return res.status(422).send({message: 'Missing parameter!'})
   }
   
@@ -43,11 +46,10 @@ let adminFilterTime = async (req, res) => {
   from vehicles v
   left join registry re
   on re.licenseId = v.licenseId
-  where centreId = ?
   group by v.licenseId)  
   and expire` + type + `current_date()`
   + match
-  const [countRows, countFields] = await pool.query(count, [req.session.userid])
+  const [countRows, countFields] = await pool.query(count)
   
   let queryType = carType === 'registed' 
                               ? 're.date as registryDate'
@@ -67,8 +69,7 @@ let adminFilterTime = async (req, res) => {
       from vehicles v
     left join registry re
       on re.licenseId = v.licenseId
-    where centreId = ` + req.session.userid +
-  `  group by re.licenseId)  
+    group by re.licenseId)  
   and expire` + type + `current_date()`
     + match +
           `\nunion all 
@@ -85,14 +86,12 @@ let adminFilterTime = async (req, res) => {
       from vehicles v
     left join registry re
       on re.licenseId = v.licenseId
-    where centreId = ` + req.session.userid +
-  `  group by re.licenseId)  
+    group by re.licenseId)  
   and expire` + type + `current_date()`
     + match +
     `\norder by ` + sort + ` 
     limit ? offset ?`
   
-  // bug - đã gọi được api kết quả trả về chính xác
   const [rows, fields] = await pool.query(query, [resPerPage, 
                                                   resPerPage * (page - 1)])
   return res.send({data: rows, count: Math.ceil(countRows[0].total / resPerPage)})

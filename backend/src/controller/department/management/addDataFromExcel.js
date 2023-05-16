@@ -82,7 +82,7 @@ let addDataFromExcel = async (req, res) => {
               }
               //Thêm vào company
               else if (ownerType == 0) {
-                addOwner = `insert into owner (type) VALUES (0);`
+                let addOwner = `insert into owner (type) VALUES (0);`
                 let addCompany = 
                 `insert into company (id, name, address, phone, taxnum, ownership) 
                 values ((SELECT MAX(ID) FROM owner), ?, ?, ?, ?, ?);`

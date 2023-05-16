@@ -1,5 +1,6 @@
 import express from 'express'
 import { verifyToken } from '../controller/verifyToken'
+import { verifyAdmin } from '../controller/verifyAdmin'
 import homeController from '../controller/homeController'
 let router = express.Router()
 
@@ -73,6 +74,12 @@ const initWebRoute = (app) => {
   router.post('/remove-centre', verifyToken, homeController.removeCentre)
   // logic - đọc dữ liệu từ file excel thêm vào db
   router.post('/read-excel', verifyToken, homeController.addDataFromExcel)
+  // logic - hiển thị dữ liệu xem trước của centre
+  router.get('/preview-centre-info', verifyToken, homeController.previewCentreInfo)
+  // logic - update thông tin của centre
+  router.put('/update-centre-info', verifyToken, homeController.updateCentreInfo)
+  // logic - tìm centre bằng tên
+  router.post('/search-centre', verifyToken, homeController.searchCentreByName)
                                                                                     
                                                                                     
   // logic - tạo đăng kiểm mới
@@ -82,7 +89,7 @@ const initWebRoute = (app) => {
   router.post('/preview-regist', verifyToken, homeController.previewRegist)
                                                                                     
   // logic - check và update modification date của đăng kiểm
-  router.post('/update-modify', verifyToken, homeController.updateModify)
+  router.put('/update-modify', verifyToken, homeController.updateModify)
                                                                                     
   // logic - trả về info xe đăng kiểm
   router.post('/preview-info', verifyToken, homeController.previewInfo)
@@ -112,49 +119,49 @@ const initWebRoute = (app) => {
                                                                                     
   // section - department
   // logic - admin xem tất cả các centre
-  router.get('/centre/all', verifyToken, homeController.viewAllCentres)
+  router.get('/centre/all', verifyToken, verifyAdmin, homeController.viewAllCentres)
                                                                                     
   // logic - admin xem tất cả các xe toàn cục
-  router.post('/vehicles/admin/all', verifyToken, homeController.viewAllVehicles)
+  router.post('/vehicles/admin/all', verifyToken, verifyAdmin, homeController.viewAllVehicles)
                                                                                     
   // logic - admin xem tất cả các xe đã đăng kiểm toàn cục
-  router.post('/vehicles/admin/registed', verifyToken, homeController.viewRegistedVehicles)
+  router.post('/vehicles/admin/registed', verifyToken, verifyAdmin, homeController.viewRegistedVehicles)
                                                                                     
   // logic - admin xem tất cả các xe đã hết hạn toàn cục
-  router.post('/vehicles/admin/expired', verifyToken, homeController.viewExpiredVehicles)
+  router.post('/vehicles/admin/expired', verifyToken, verifyAdmin, homeController.viewExpiredVehicles)
                                                                                     
   // logic - admin xem tất cả các xe chưa đăng kiểm toàn cục
-  router.post('/vehicles/admin/unregisted', verifyToken, homeController.viewUnregistedVehicles)
+  router.post('/vehicles/admin/unregisted', verifyToken, verifyAdmin, homeController.viewUnregistedVehicles)
                                                                                     
   // logic - admin xem tất cả dự đoán
-  router.post('/forecast/admin/all', verifyToken, homeController.forecastAll)
+  router.post('/forecast/admin/all', verifyToken, verifyAdmin, homeController.forecastAll)
   // logic - admin xem tất cả dự đoán theo khu vực
-  router.post('/forecast/admin/area', verifyToken, homeController.forecastByArea)
+  router.post('/forecast/admin/area', verifyToken, verifyAdmin, homeController.forecastByArea)
   // logic - admin xem tất cả dự đoán theo trung tâm
-  router.post('/forecast/admin/centre', verifyToken, homeController.forecastByCentre)
+  router.post('/forecast/admin/centre', verifyToken, verifyAdmin, homeController.forecastByCentre)
 
   
     // section - filter cho vehicles dùng cho admin
   // logic - gửi code có thể là ssn hoặc taxnum 
-  router.post('/filter/admin/owner', verifyToken, homeController.adminFilterOwner)
+  router.post('/filter/admin/owner', verifyToken, verifyAdmin, homeController.adminFilterOwner)
                                                                                     
   // logic - gửi order là asc hay desc để sort result theo brand
-  router.post('/filter/admin/brand', verifyToken, homeController.adminFilterBrand)
+  router.post('/filter/admin/brand', verifyToken, verifyAdmin, homeController.adminFilterBrand)
                                                                                     
   // logic - trả về tất cả các brand của centre này
-  router.post('/filter/admin/brand/all', verifyToken, homeController.adminViewAllBrand)
+  router.post('/filter/admin/brand/all', verifyToken, verifyAdmin, homeController.adminViewAllBrand)
                                                                                     
   // logic - trả về tất cả xe có brand khớp với brand gửi lên
-  router.post('/filter/admin/brand/exact', verifyToken, homeController.adminViewExactBrand)
+  router.post('/filter/admin/brand/exact', verifyToken, verifyAdmin, homeController.adminViewExactBrand)
                                                                                     
   // logic - filter theo thời gian regist hoặc expire
-  router.post('/filter/admin/time', verifyToken, homeController.adminFilterTime)
+  router.post('/filter/admin/time', verifyToken, verifyAdmin, homeController.adminFilterTime)
                                                                                     
   // logic - trả về tất cả các city của centre này
-  router.post('/filter/admin/city/all', verifyToken, homeController.adminViewAllCity)
+  router.post('/filter/admin/city/all', verifyAdmin, verifyToken, homeController.adminViewAllCity)
                                                                                     
   // logic - trả về tất cả xe có city khớp với city gửi lên
-  router.post('/filter/admin/city/exact', verifyToken, homeController.adminViewExactCity)
+  router.post('/filter/admin/city/exact', verifyAdmin, verifyToken, homeController.adminViewExactCity)
 
   // logic - tất cả các thành phố kèm mã vùng
   router.get('/stats/area', verifyToken, homeController.allArea)

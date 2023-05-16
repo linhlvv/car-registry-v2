@@ -3,18 +3,16 @@ import pool from "../../../configs/connectDB"
 let adminFilterBrand = async (req, res) => {
   let resPerPage = parseInt(req.body.resPerPage)
   let page = parseInt(req.body.page) 
-  if (resPerPage === undefined)
+  if (req.body.resPerPage === undefined)
     resPerPage = 10
-  if (page === undefined)
+  if (req.body.page === undefined)
     page = 1
 
   let carType = req.body.carType
   let order = req.body.order
   
   if (carType === undefined || 
-      order === undefined || 
-      resPerPage === undefined || 
-      page === undefined) {
+      order === undefined) {
     return res.status(422).send({message: 'Missing parameter!'})
   }
 
@@ -27,10 +25,9 @@ let adminFilterBrand = async (req, res) => {
   from vehicles v
   left join registry re
   on re.licenseId = v.licenseId
-  where centreId = ?
   group by v.licenseId)  
   and expire` + type + `current_date()`
-  const [countRows, countFields] = await pool.query(count, [req.session.userid])
+  const [countRows, countFields] = await pool.query(count)
   
   let queryType = carType === 'registed' 
                               ? 're.date as registryDate'
@@ -50,8 +47,7 @@ let adminFilterBrand = async (req, res) => {
       from vehicles v
     left join registry re
       on re.licenseId = v.licenseId
-    where centreId = ` + req.session.userid +
-  `  group by re.licenseId)  
+    group by re.licenseId)  
   and expire` + type + `current_date()
           union all 
   select re.licenseId as license, v.brand, v.model, v.version, ` + queryType + `, re.expire, c.name

@@ -1,7 +1,7 @@
 require("dotenv").config();
 
 import { verifyToken } from "./verifyToken";
-
+import { verifyAdmin } from "./verifyAdmin";
 // section - user
   // section - authenticate
 import { authenticate } from "./user/authenticate/authenticate";
@@ -67,6 +67,10 @@ import { forecastByArea } from "./department/forecast/forecastByArea.js";
 import { addDataFromExcel } from "./department/management/addDataFromExcel";
 import { insertCentre } from "./department/management/insertCentre";
 import { removeCentre } from "./department/management/removeCentre";
+import { previewCentreInfo } from "./department/management/previewCentreInfo";
+import { updateCentreInfo } from "./department/management/updateCentreInfo";
+import { searchCentreByName } from "./department/management/searchCentreByName";
+
   // section - vehicles
 import { viewAllCentres } from "./department/vehicles/viewAllCentres";
 import { viewAllVehicles } from "./department/vehicles/viewAllVehicles";
@@ -98,7 +102,7 @@ let homepage = async (req, res) => {
 };
 
 module.exports = {
-  homepage, verifyToken,
+  homepage, verifyToken, verifyAdmin,
 
   authenticate, logout, changePassword,
   centreInfo, getDataForChart, detailModal, previewInfo,
@@ -114,7 +118,7 @@ module.exports = {
   expired, findByLicense, registed, vehicles,
   
   forecastAll, forecastByCentre, forecastByArea,
-  addDataFromExcel, insertCentre, removeCentre,
+  addDataFromExcel, insertCentre, removeCentre, previewCentreInfo, updateCentreInfo, searchCentreByName,
   viewAllCentres, viewAllVehicles, viewRegistedVehicles, viewExpiredVehicles, viewUnregistedVehicles,
   adminFilterBrand, adminFilterOwner, adminFilterTime, adminViewAllBrand, adminViewAllCity, adminViewExactBrand, adminViewExactCity
 };

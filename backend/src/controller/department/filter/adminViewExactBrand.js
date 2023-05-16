@@ -3,15 +3,16 @@ import pool from "../../../configs/connectDB"
 let adminViewExactBrand = async (req, res) => {
   let resPerPage = parseInt(req.body.resPerPage)
   let page = parseInt(req.body.page) 
-  if (resPerPage === undefined)
+  if (req.body.resPerPage === undefined)
     resPerPage = 10
-  if (page === undefined)
+  if (req.body.page === undefined)
     page = 1
 
   let carType = req.body.carType
   let brand = req.body.brand
   
-  if (carType === undefined || brand === undefined || resPerPage === undefined || page === undefined) {
+  if (carType === undefined || 
+      brand === undefined) {
     return res.status(422).send({message: 'Missing parameter!'})
   }
 
@@ -26,11 +27,10 @@ on re.licenseId = v.licenseId
   from vehicles v
   left join registry re
   on re.licenseId = v.licenseId
-  where centreId = ?
   group by v.licenseId)  
   and expire` + type + `current_date()
   and brand = ?`
-  const [countRows, countFields] = await pool.query(count, [req.session.userid, brand])
+  const [countRows, countFields] = await pool.query(count, [ brand])
   
   let queryType = carType === 'registed' 
                               ? 're.date as registryDate'
@@ -50,8 +50,7 @@ on re.licenseId = v.licenseId
       from vehicles v
     left join registry re
       on re.licenseId = v.licenseId
-    where centreId = ` + req.session.userid +
-  `  group by re.licenseId)  
+    group by re.licenseId)  
   and expire` + type + `current_date()
   and brand = "` + brand + `"
           union all 
@@ -68,8 +67,7 @@ on re.licenseId = v.licenseId
       from vehicles v
     left join registry re
       on re.licenseId = v.licenseId
-    where centreId = ` + req.session.userid +
-  `  group by re.licenseId)  
+    group by re.licenseId)  
   and expire` + type + `current_date()
   and brand = "` + brand + `"
     order by license

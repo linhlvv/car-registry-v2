@@ -3,9 +3,9 @@ import pool from "../../../configs/connectDB"
 let adminViewExactCity = async (req, res) => {
   let resPerPage = parseInt(req.body.resPerPage)
   let page = parseInt(req.body.page) 
-  if (resPerPage === undefined)
+  if (req.body.resPerPage === undefined)
     resPerPage = 10
-  if (page === undefined)
+  if (req.body.page === undefined)
     page = 1
 
   let carType = req.body.carType
@@ -28,11 +28,10 @@ on r.id = v.regionId
   from vehicles v
   left join registry re
   on re.licenseId = v.licenseId
-  where centreId = ?
   group by v.licenseId)  
   and expire` + type + `current_date()
   and name = ?`
-  const [countRows, countFields] = await pool.query(count, [req.session.userid, city])
+  const [countRows, countFields] = await pool.query(count, [city])
   
   let queryType = carType === 'registed' 
                               ? 're.date as registryDate'
@@ -54,8 +53,7 @@ on r.id = v.regionId
       from vehicles v
     left join registry re
       on re.licenseId = v.licenseId
-    where centreId = ` + req.session.userid +
-  `  group by re.licenseId)  
+    group by re.licenseId)  
   and expire` + type + `current_date()
   and r.name = "` + city + `"
           union all 
@@ -74,8 +72,7 @@ on r.id = v.regionId
       from vehicles v
     left join registry re
       on re.licenseId = v.licenseId
-    where centreId = ` + req.session.userid +
-  `  group by re.licenseId)  
+    group by re.licenseId)  
   and expire` + type + `current_date()
   and r.name = "` + city + `"
     order by license
