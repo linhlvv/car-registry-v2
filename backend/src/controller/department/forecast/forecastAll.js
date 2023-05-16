@@ -16,10 +16,8 @@ let forecastAll = async (req, res) => {
     let year = new Date().getFullYear();
     let month = new Date().getMonth() + 1
     let match =
-      `\nand year(expire) = ` +
-      year +
-      `\nand month(expire) = ` +
-      month +
+      `\nand year(expire) = ` + year +
+      `\nand month(expire) = ` + month +
       `\nand expire >= CURRENT_DATE()`
   
     count = `
