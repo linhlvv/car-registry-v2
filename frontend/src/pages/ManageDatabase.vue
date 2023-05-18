@@ -23,6 +23,7 @@ const removeFile = () => {
 		hasFile.value = false
 		selectedFile.value = null
 		ownerTypePicked.value = null
+		file.value.value = null
 	}
 };
 
