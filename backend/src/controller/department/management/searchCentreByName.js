@@ -11,8 +11,8 @@ let searchCentreByName = async (req, res) => {
         return res.status(422).send({ message: "Missing parameter!" });
     }
     
-    let query = `select * from centre where name like '%${name}%'`;
-    const [rows, fields] = await pool.query(query);
+    let query = `select * from centre where name like ?`;
+    const [rows, fields] = await pool.query(query, '%'+name+'%');
     return res.send(rows);
 }
 
