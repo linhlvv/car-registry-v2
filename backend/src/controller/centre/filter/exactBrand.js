@@ -11,8 +11,8 @@ let exactBrand = async (req, res) => {
   let carType = req.body.carType
   let brand = req.body.brand
   
-  if (carType === undefined || brand === undefined || resPerPage === undefined || page === undefined) {
-    return res.status(422).send({message: 'Missing parameter!'})
+  if (carType === undefined || brand === undefined) {
+    return res.status(422).send({ErrorCode: 'ER_MISSING_PARAM'})
   }
 
   let type = carType === 'registed' ? ' >= ' : ' < '

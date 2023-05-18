@@ -15,9 +15,8 @@ let time = async (req, res) => {
   let quarter = parseInt(req.body.quarter)
   
   if (carType === undefined || order === undefined 
-    || year === undefined || month === undefined || quarter === undefined 
-    || resPerPage === undefined || page === undefined) {
-    return res.status(422).send({message: 'Missing parameter!'})
+    || year === undefined || month === undefined || quarter === undefined) {
+      return res.status(422).send({ErrorCode: 'ER_MISSING_PARAM'})
   }
   
   let type = carType === 'registed' ? ' >= ' : ' < '

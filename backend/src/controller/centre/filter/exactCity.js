@@ -11,11 +11,8 @@ let exactCity = async (req, res) => {
   let carType = req.body.carType
   let city = req.body.city
   
-  if (carType === undefined || 
-      city === undefined || 
-      resPerPage === undefined || 
-      page === undefined) {
-    return res.status(422).send({message: 'Missing parameter!'})
+  if (carType === undefined || city === undefined) {
+    return res.status(422).send({ErrorCode: 'ER_MISSING_PARAM'})
   }
   
   let type = carType === 'registed' ? ' >= ' : ' < '

@@ -4,7 +4,7 @@ let allCity = async (req, res) => {
   let carType = req.body.carType
   
   if (carType === undefined) {
-    return res.status(422).send({message: 'Missing parameter!'})
+    return res.status(422).send({ErrorCode: 'ER_MISSING_PARAM'})
   }
   let type = carType === 'registed' ? ' >= ' : ' < '
 

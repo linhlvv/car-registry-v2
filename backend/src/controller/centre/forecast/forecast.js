@@ -8,10 +8,6 @@ let forecast = async (req, res) => {
   if (req.body.page === undefined)
     page = 1
 
-  if (resPerPage === undefined || page === undefined) {
-    return res.status(422).send({ message: "Missing parameter!" });
-  }
-
   let year = new Date().getFullYear();
   let month = new Date().getMonth() + 1;
   let match =

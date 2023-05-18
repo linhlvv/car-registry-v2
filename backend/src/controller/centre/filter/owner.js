@@ -5,7 +5,7 @@ let owner = async (req, res) => {
   let code = req.body.code
 
   if (carType === undefined || code === undefined) {
-    return res.status(422).send({message: 'Missing parameter!'})
+    return res.status(422).send({ErrorCode: 'ER_MISSING_PARAM'})
   }
   
   // logic - dùng code thay cho ssn vì có cả taxnum nữa

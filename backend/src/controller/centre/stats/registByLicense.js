@@ -8,6 +8,9 @@ let registByLicense = async (req, res) => {
   if (req.body.page === undefined)
     page = 1
 
+	if (req.body.licenseId === undefined || req.session.userid === undefined)
+		return res.status(422).send({ErrorCode: 'ER_MISSING_PARAM'})
+
   let licenseId = req.body.licenseId
   let centreId = req.session.userid
 
