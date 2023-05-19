@@ -1,7 +1,9 @@
 <script setup>
-import { onMounted, ref } from 'vue';
+import { ref } from 'vue';
 import bg from '../../assets/bg6.png'
 import CategoryCard from './CategoryCard.vue';
+
+const isAdmin = ref(localStorage.getItem('userType') == 1)
 
 const about = ref(null)
 const terms = ref(null)
@@ -90,29 +92,29 @@ const scrollToServices = () => {
         <div ref="terms" class="w-full pt-24 pb-10 px-10">
             <p class="text-center text-3xl font-semibold mb-8"><span class="text-[#2acc97] text-5xl">T</span>erms</p>
             <div class="grid grid-cols-4 gap-4 max-sm:grid-cols-1 max-md:grid-cols-2">
-                <div class="w-full flex flex-col bg-white items-center gap-4 py-10 shadow rounded-lg">
+                <div class="w-full overflow-hidden flex flex-col text-[#1d1d1d] bg-white items-center gap-4 py-10 shadow rounded-lg relative z-[1] hover:text-white duration-700 ease-in-out after:absolute after:contents-[''] after:z-[-2] after:h-full after:-left-[35%] after:top-0 after:skew-x-[25deg] after:duration-700 after:origin-top-left after:w-0 after:bg-red-500/20 hover:after:h-full hover:after:w-[200%]">
                     <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.75" stroke="currentColor" class="w-8 h-8 p-1 bg-red-500/20 text-red-500 rounded-[50%]">
                         <path stroke-linecap="round" stroke-linejoin="round" d="M6 18L18 6M6 6l12 12" />
                     </svg>
-                    <p class="text-center">Do not violate the system</p>
+                    <p class="text-center text-base font-semibold">Do not violate the system</p>
                 </div>
-                <div class="w-full flex flex-col bg-white items-center gap-4 py-10 shadow rounded-lg">
+                <div class="w-full overflow-hidden flex flex-col text-[#1d1d1d] bg-white items-center gap-4 py-10 shadow rounded-lg relative z-[1] hover:text-white duration-700 ease-in-out after:absolute after:contents-[''] after:z-[-2] after:h-full after:-left-[35%] after:top-0 after:skew-x-[25deg] after:duration-700 after:origin-top-left after:w-0 after:bg-red-500/20 hover:after:h-full hover:after:w-[200%]">
                     <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.75" stroke="currentColor" class="w-8 h-8 p-1 bg-red-500/20 text-red-500 rounded-[50%]">
                         <path stroke-linecap="round" stroke-linejoin="round" d="M6 18L18 6M6 6l12 12" />
                     </svg>
-                    <p class="text-center">Do not violate the system</p>
+                    <p class="text-center text-base font-semibold">Do not violate the system</p>
                 </div>
-                <div class="w-full flex flex-col bg-white items-center gap-4 py-10 shadow rounded-lg">
+                <div class="w-full overflow-hidden flex flex-col text-[#1d1d1d] bg-white items-center gap-4 py-10 shadow rounded-lg relative z-[1] hover:text-white duration-700 ease-in-out after:absolute after:contents-[''] after:z-[-2] after:h-full after:-left-[35%] after:top-0 after:skew-x-[25deg] after:duration-700 after:origin-top-left after:w-0 after:bg-red-500/20 hover:after:h-full hover:after:w-[200%]">
                     <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.75" stroke="currentColor" class="w-8 h-8 p-1 bg-red-500/20 text-red-500 rounded-[50%]">
                         <path stroke-linecap="round" stroke-linejoin="round" d="M6 18L18 6M6 6l12 12" />
                     </svg>
-                    <p class="text-center">Do not violate the system</p>
+                    <p class="text-center text-base font-semibold">Do not violate the system</p>
                 </div>
-                <div class="w-full flex flex-col bg-white items-center gap-4 py-10 shadow rounded-lg">
+                <div class="w-full overflow-hidden flex flex-col text-[#1d1d1d] bg-white items-center gap-4 py-10 shadow rounded-lg relative z-[1] hover:text-white duration-700 ease-in-out after:absolute after:contents-[''] after:z-[-2] after:h-full after:-left-[35%] after:top-0 after:skew-x-[25deg] after:duration-700 after:origin-top-left after:w-0 after:bg-red-500/20 hover:after:h-full hover:after:w-[200%]">
                     <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.75" stroke="currentColor" class="w-8 h-8 p-1 bg-red-500/20 text-red-500 rounded-[50%]">
                         <path stroke-linecap="round" stroke-linejoin="round" d="M6 18L18 6M6 6l12 12" />
                     </svg>
-                    <p class="text-center">Do not violate the system</p>
+                    <p class="text-center text-base font-semibold">Do not violate the system</p>
                 </div>
             </div>
         </div>
@@ -123,11 +125,11 @@ const scrollToServices = () => {
             </div>
             <div class="grid grid-cols-2 gap-2 mt-5">
                 <CategoryCard icon="fa-solid fa-car" category="Cars" link="/cars" class="w-full"/>
-                <CategoryCard icon="fa-solid fa-circle-plus" category="Regist" link="/regist-new-car" class="w-full"/>
+                <CategoryCard v-if="!isAdmin" icon="fa-solid fa-circle-plus" category="Regist" link="/regist-new-car" class="w-full"/>
                 <CategoryCard icon="fa-solid fa-lightbulb" category="Forecast" link="/forecast" class="w-full"/> 
                 <CategoryCard icon="fa-solid fa-chart-simple" category="Statistics" link="/statistics" class="w-full"/> 
-                <CategoryCard icon="fa-sharp fa-solid fa-users" category="Account management" link="/account-management" class="w-full"/> 
-                <CategoryCard icon="fa-sharp fa-solid fa-database" category="Manage database" link="/manage-database" class="w-full"/> 
+                <CategoryCard v-if="isAdmin" icon="fa-sharp fa-solid fa-users" category="Account management" link="/account-management" class="w-full"/> 
+                <CategoryCard v-if="isAdmin" icon="fa-sharp fa-solid fa-database" category="Manage database" link="/manage-database" class="w-full"/> 
             </div>
         </div>
     </div>
