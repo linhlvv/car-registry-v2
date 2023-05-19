@@ -10,7 +10,7 @@ const changePage = (link) => {
 </script>
 
 <template>
-    <div class="w-[25%] h-36 flex flex-col rounded-xl bg-transparent p-3 px-4 cursor-pointer hover:bg-white hover:shadow-lg duration-300" @click="changePage(link)">
+    <div class="h-36 flex flex-col rounded-xl items-center bg-white shadow p-3 px-4 cursor-pointer hover:bg-white hover:shadow-lg duration-300" @click="changePage(link)">
         <div class="h-3/5 flex items-start justify-start pt-1 max-[904px]:justify-center max-[904px]:items-center">
             <i :class="icon" class="text-5xl text-[#1d1d1d] text-opacity-70"></i>
         </div>
