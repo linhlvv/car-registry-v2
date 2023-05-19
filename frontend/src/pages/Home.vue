@@ -22,11 +22,7 @@ onMounted(() => {
 
 <template>
   <div class="w-full">
-    <div v-if="!type" class="flex flex-col w-full min-h-screen">
-        <Introduction />
-        <Categories />
-    </div>
-    <div v-else class="flex flex-col transition-all duration-300 ease-out relative">
+    <div class="flex flex-col transition-all duration-300 ease-out relative">
       <AdminIntro />
       <!-- <div class="w-full px-7 py-4">
         <hr class="h-[2px] bg-[#2acc97]">
