@@ -8,26 +8,32 @@ let updateCentreInfo = async (req, res) => {
     let centreId = req.body.centreId;
     let city = req.body.city;
     let district = req.body.district;
-    let password = crypto.createHash('sha256').update(req.body.password).digest('hex');
+    let password = undefined;
+    if (req.body.password !== undefined) {
+        password = crypto.createHash('sha256').update(req.body.password).digest('hex');
+    }
 
-    if (centreId === undefined || city === undefined || district === undefined || password === undefined) {
+    if (centreId === undefined || city === undefined || district === undefined) {
         return res.status(422).send({message: 'Missing parameter!'})
     }
+    
     let updateCentre = 
     `
     UPDATE centre 
-    SET city = '${city}', 
-    district = '${district}'
-    WHERE id = '${centreId}'
+    SET city = ?, 
+    district = ?
+    WHERE id = ?
     `;
     let updateAccount = 
     `
     UPDATE account
-    SET password = '${password}'
-    WHERE id = '${centreId}'
+    SET password = ?
+    WHERE id = ?
     `;
-    await pool.query(updateCentre);
-    await pool.query(updateAccount);
+    await pool.query(updateCentre, [city, district, centreId]);
+    if (password !== undefined) {
+        await pool.query(updateAccount, [password, centreId]);
+    }
     return res.status(200).send({message: 'Update successfully!'});
 }
 
