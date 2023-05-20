@@ -71,7 +71,6 @@ watch(() => errorMessageTime.value, () => {
 </script>
 
 <template>
-    <div>{{ accountInfo }}</div>
     <div class="flex flex-col gap-3 p-4 px-6 bg-white rounded-lg w-3/4 mt-2">
         <div class="flex flex-col w-full">
             <AccountInput v-model="accountInfo.name" title="Name" type="text" class="w-full"/>

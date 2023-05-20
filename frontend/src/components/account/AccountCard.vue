@@ -8,7 +8,7 @@ const openModModal = () => {
 </script>
 
 <template>
-    <Transition name="slide-fade">
+    <Transition name="slide-fade" appear>
         <div class="bg-white rounded-lg py-3 flex min-w-[800px] text-[11px]">
             <div class="font-bold text-[#4f555a] flex items-center ml-5 w-[25%]">
                 {{ item.name }}

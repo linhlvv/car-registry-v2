@@ -11,13 +11,7 @@ const openModModal = (item) => {
     emit('openModificationModal', item)
 }
 
-const accountList = ref([
-    {id: 1, email: 'tuandeptrai@gmail.com', password: '123456'},
-    {id: 2, email: 'tuandeptrai@gmail.com', password: '123456'},
-    {id: 3, email: 'tuandeptrai@gmail.com', password: '123456'},
-    {id: 4, email: 'tuandeptrai@gmail.com', password: '123456'},
-    {id: 5, email: 'tuandeptrai@gmail.com', password: '123456'},
-]);
+const accountList = ref([]);
 const loading = ref(false)
 
 const fetchAvailableCenters = async () => {
@@ -53,12 +47,12 @@ watch(() => props.isRefetched, (newStatus, oldStatus) => {
 <template>
     <div id="table" class="flex flex-col items-center w-3/4 overflow-x-scroll mb-8">
         <div class="w-full mb-1">
-            <div class=" flex flex-col gap-[6px] items-center w-full">
-                <div class="w-full">
-                    <AccountManagementRootRow />
-                </div>
+            <div class=" flex flex-col-reverse gap-[6px] items-center w-full">
                 <div v-for="item in accountList" :key="item.id" class="w-full">
                     <AccountCard :item="item" @open-modification-modal="openModModal"/>
+                </div>
+                <div class="w-full">
+                    <AccountManagementRootRow />
                 </div>
             </div>
         </div>
