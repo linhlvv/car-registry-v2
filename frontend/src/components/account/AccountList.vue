@@ -29,6 +29,7 @@ const fetchAvailableCenters = async () => {
     const dataFetched = JSON.parse(await res.text())
     accountList.value = [...dataFetched.data]
     console.log(`centers: ${JSON.stringify(accountList.value)}`);
+    emit('stopRefetch')
     loading.value = false
 };
 

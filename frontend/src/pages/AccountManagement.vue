@@ -38,7 +38,6 @@ const changeRefetchStatus = () => {
                 <span class="text-3xl font-semibold text-[#2acc97] whitespace-nowrap">Available account list</span>
                 <hr class="w-full border-[1.25px] border-slate-300">
             </div>
-            <div>{{ refetchAccountList }}</div>
             <AccountList 
                 :is-refetched="refetchAccountList" 
                 @stopRefetch="changeRefetchStatus"
