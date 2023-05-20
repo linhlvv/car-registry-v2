@@ -51,10 +51,12 @@ watch(() => props.isRefetched, (newStatus, oldStatus) => {
 </script>
 
 <template>
-    <div class="flex flex-col items-center w-3/4">
-        <AccountManagementRootRow />
-        <div class="mb-8 w-full">
+    <div id="table" class="flex flex-col items-center w-3/4 overflow-x-scroll mb-8">
+        <div class="w-full mb-1">
             <div class=" flex flex-col gap-[6px] items-center w-full">
+                <div class="w-full">
+                    <AccountManagementRootRow />
+                </div>
                 <div v-for="item in accountList" :key="item.id" class="w-full">
                     <AccountCard :item="item" @open-modification-modal="openModModal"/>
                 </div>
@@ -64,5 +66,20 @@ watch(() => props.isRefetched, (newStatus, oldStatus) => {
 </template>
 
 <style scoped>
-
+    #table::-webkit-scrollbar {
+        height: 7px;
+    }
+    
+    #table::-webkit-scrollbar-track {
+        border-radius: 12px;
+    }
+    
+    #table::-webkit-scrollbar-thumb {
+        background-color: #2acc97;
+        outline: none;
+        border-radius: 12px;
+    }
+    #table::-webkit-scrollbar-thumb:hover {
+        background-color: #0ce29b;
+    }
 </style>
