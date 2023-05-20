@@ -5,7 +5,6 @@ import { useAccountStore } from '../stores/AccountStore';
 import { ref, watch } from 'vue';
 import { useRouter } from 'vue-router';
 
-const accountStore = useAccountStore()
 const router = useRouter()
 
 //SECTION - details
@@ -67,7 +66,7 @@ const fetchCarAndOwnerDataDetails = async () => {
             credentials: "include",
             headers: {
                 'Content-Type': 'application/json',
-                'Authorization': `${accountStore.getToken}`
+                'Authorization': `${localStorage.getItem('token')}`
             },
             body: JSON.stringify(
                 {
@@ -104,6 +103,7 @@ const fetchRegistryInfo = async () => {
         credentials: "include",
         headers: {
             'Content-Type': 'application/json',
+            'Authorization': `${localStorage.getItem('token')}`
         },
         body: JSON.stringify({licenseId: info.value.licenseId}),
     })
@@ -137,7 +137,7 @@ const handleRegist = async () => {
             credentials: "include",
             headers: {
                 'Content-Type': 'application/json',
-                'Authorization': `${accountStore.getToken}`
+                'Authorization': `${localStorage.getItem('token')}`
             },
             body: JSON.stringify({
                 id: registryInfo.value.id,
