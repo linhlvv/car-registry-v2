@@ -5,12 +5,10 @@ import AccountManagementRootRow from './AccountManagementRootRow.vue';
 import { useAccountStore } from '../../stores/AccountStore';
 
 const props = defineProps(['isRefetched'])
-const emit = defineEmits(['openModificationModal', 'stopRefetch'])
+const emit = defineEmits(['openModificationModal', 'stopRefetch', 'bindId'])
 
-const accountStore = useAccountStore()
-
-const openModModal = () => {
-    emit('openModificationModal')
+const openModModal = (item) => {
+    emit('openModificationModal', item)
 }
 
 const accountList = ref([
@@ -28,7 +26,7 @@ const fetchAvailableCenters = async () => {
         credentials: "include",
         headers: {
             'Content-Type': 'application/json',
-            'Authorization': `${accountStore.getToken}`
+            'Authorization': `${localStorage.getItem('token')}`
         },
     })
     if(res.error) {

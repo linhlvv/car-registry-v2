@@ -3,7 +3,7 @@ const props = defineProps(['item']);
 const emit = defineEmits(['openModificationModal']);
 
 const openModModal = () => {
-    emit('openModificationModal')
+    emit('openModificationModal', props.item)
 };
 </script>
 

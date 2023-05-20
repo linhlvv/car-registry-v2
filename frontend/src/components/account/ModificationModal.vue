@@ -1,10 +1,14 @@
 <script setup>
+import { ref } from 'vue';
+
 const props = defineProps(['info']);
 const emit = defineEmits(['exit']);
 
 const exit = () => {
     emit('exit')
 };
+
+const modifiedInfo = ref({...props.info});
 </script>
 
 <template>
@@ -18,10 +22,12 @@ const exit = () => {
         <span class="w-full p-4 text-center text-lg font-semibold text-[#3c3c3c]">
             Account Modification
         </span>
+        <div>{{ modifiedInfo }}</div>
         <div class="w-full p-4 flex flex-col gap-4">
             <div class="w-full flex flex-col">
                 <span class="font-bold text-[12px] text-[#1d1d1d] text-opacity-80">Name</span>
-                <input 
+                <input
+                    v-model="modifiedInfo.name"
                     class="w-full px-2 py-[2px] border-b border-solid border-[#1d1d1d] text-[14px] font-medium text-[#1d1d1d]"
                 >
             </div>
@@ -34,12 +40,14 @@ const exit = () => {
             <div class="w-full flex flex-col">
                 <span class="font-bold text-[12px] text-[#1d1d1d] text-opacity-80">City</span>
                 <input 
+                    v-model="modifiedInfo.city"
                     class="w-full px-2 py-[2px] border-b border-solid border-[#1d1d1d] text-[14px] font-medium text-[#1d1d1d]"
                 >
             </div>
             <div class="w-full flex flex-col">
                 <span class="font-bold text-[12px] text-[#1d1d1d] text-opacity-80">District</span>
                 <input 
+                    v-model="modifiedInfo.district"
                     class="w-full px-2 py-[2px] border-b border-solid border-[#1d1d1d] text-[14px] font-medium text-[#1d1d1d]"
                 >
             </div>

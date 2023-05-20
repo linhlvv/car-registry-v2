@@ -6,7 +6,9 @@ import { ref } from 'vue';
 
 const modalOn = ref(false);
 
-const openModal = () => {
+const modalItem = ref(null)
+const openModal = (item) => {
+    modalItem.value = item
     modalOn.value = true
 }
 
@@ -18,7 +20,7 @@ const refetchAccountList = ref(false);
 
 const changeRefetchStatus = () => {
     refetchAccountList.value = !refetchAccountList.value
-}
+};
 
 </script>
 
@@ -44,7 +46,7 @@ const changeRefetchStatus = () => {
             />
         </div>
         <div v-if="modalOn">
-            <ModificationModal @exit="exitModal"/>
+            <ModificationModal :info="modalItem" @exit="exitModal"/>
         </div>
     </div>
 </template>
