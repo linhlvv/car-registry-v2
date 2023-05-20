@@ -1,5 +1,5 @@
 <script setup>
-import { ref, watch } from 'vue';
+import { computed, ref, watch } from 'vue';
 import { useAccountStore } from '../../stores/AccountStore';
 import Button from '../UI/Button.vue';
 import AccountInput from './AccountInput.vue';
@@ -16,6 +16,13 @@ const defaultInfo = {
 }
 
 const accountInfo = ref({...defaultInfo});
+
+const emailIsValid = computed(() => {
+    return accountInfo.value.email.toLowerCase()
+            .match(
+                /^(([^<>()[\]\\.,;:\s@"]+(\.[^<>()[\]\\.,;:\s@"]+)*)|.(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/
+            );
+})
 
 const messageTime = 3
 const errorMessageOn = ref(false)
@@ -58,6 +65,7 @@ const handleAddAccount = async () => {
         }
     }
 };
+console.log(emailIsValid.value);
 
 //SECTION - watchers
 watch(() => errorMessageTime.value, () => {
@@ -90,6 +98,14 @@ watch(() => errorMessageTime.value, () => {
                     <path stroke-linecap="round" stroke-linejoin="round" d="M12 9v3.75m-9.303 3.376c-.866 1.5.217 3.374 1.948 3.374h14.71c1.73 0 2.813-1.874 1.948-3.374L13.949 3.378c-.866-1.5-3.032-1.5-3.898 0L2.697 16.126zM12 15.75h.007v.008H12v-.008z" />
                 </svg>
                 <p class="text-base font-medium">Please fill all the fields</p>
+            </div>
+        </Transition>
+        <Transition name="slide-fade">
+            <div v-if="!emailIsValid && accountInfo.email !== ''" class="flex items-center gap-2 text-[#d54f16]">
+                <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="w-6 h-6">
+                    <path stroke-linecap="round" stroke-linejoin="round" d="M12 9v3.75m-9.303 3.376c-.866 1.5.217 3.374 1.948 3.374h14.71c1.73 0 2.813-1.874 1.948-3.374L13.949 3.378c-.866-1.5-3.032-1.5-3.898 0L2.697 16.126zM12 15.75h.007v.008H12v-.008z" />
+                </svg>
+                <p class="text-base font-medium">Email is invalid!</p>
             </div>
         </Transition>
         <div class="w-full flex items-end justify-end py-2">
