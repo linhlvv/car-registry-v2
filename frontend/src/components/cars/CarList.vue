@@ -5,6 +5,7 @@ import { useAccountStore } from '../../stores/AccountStore';
 import CarCard from './CarCard.vue';
 
 const accountStore = useAccountStore();
+const isAdmin = localStorage.getItem('userType') == 1
 
 const emit = defineEmits(['openCarInfo', 'openCarRegistration', 'totalPageNum']);
 const props = defineProps([
@@ -44,21 +45,22 @@ const loading = ref(false)
 //TODO
 const fetchCarData = async() => {
     loading.value = true
-    let fetchRoute = `http://localhost:1111/vehicles/${props.carType}`;
+    let fetchRoute;
     let fetchBody;
-    if(accountStore.isAdmin) {
+    if(isAdmin) {
 
     } else {
-
+        fetchRoute = `http://localhost:1111/vehicles/${props.carType}`
+        fetchBody = {page: props.pageNumber, resPerPage: 7}
     }
     const res = await fetch(fetchRoute, {
         method: 'POST',
         credentials: "include",
         headers: {
             'Content-Type': 'application/json',
-            'Authorization': `${accountStore.getToken}`
+            'Authorization': `${localStorage.getItem('token')}`
         },
-        body: JSON.stringify({page: props.pageNumber, resPerPage: 7}),
+        body: JSON.stringify(fetchBody),
     })
     if(res.error) {
         console.log(res.error);
@@ -77,20 +79,21 @@ fetchCarData()
 const fetchCarByOwnerCode = async () => {
     let fetchRoute;
     let fetchBody;
-    if(accountStore.isAdmin) {
-
+    if(isAdmin) {
+        
     } else {
-
+        fetchRoute = `http://localhost:1111/filter/owner`
+        fetchBody = {carType: props.carType, code: props.owner}
     }
     loading.value = true
-    const res = await fetch(`http://localhost:1111/filter/owner`, {
+    const res = await fetch(fetchRoute, {
         method: 'POST',
         credentials: "include",
         headers: {
             'Content-Type': 'application/json',
-            'Authorization': `${accountStore.getToken}`
+            'Authorization': `${localStorage.getItem('token')}`
         },
-        body: JSON.stringify({carType: props.carType, code: props.owner}),
+        body: JSON.stringify(fetchBody),
     })
     if(res.error) {
         console.log(res.error);
@@ -109,27 +112,26 @@ const fetchCarByOwnerCode = async () => {
 const fetchDataSortedByBrand = async () => {
     let fetchRoute;
     let fetchBody;
-    if(accountStore.isAdmin) {
+    if(isAdmin) {
 
     } else {
-
+        fetchRoute = `http://localhost:1111/filter/brand`
+        fetchBody = {
+            resPerPage: 7,
+            page: props.pageNumber,
+            carType: props.carType,
+            order: props.sortOrder,
+        }
     }
     loading.value = true
-    const res = await fetch(`http://localhost:1111/filter/brand`, {
+    const res = await fetch(fetchRoute, {
         method: 'POST',
         credentials: "include",
         headers: {
             'Content-Type': 'application/json',
-            'Authorization': `${accountStore.getToken}`
+            'Authorization': `${localStorage.getItem('token')}`
         },
-        body: JSON.stringify(
-            {
-                resPerPage: 7,
-                page: props.pageNumber,
-                carType: props.carType,
-                order: props.sortOrder,
-            }
-        ),
+        body: JSON.stringify(fetchBody),
     })
     if(res.error) {
         console.log(res.error);
@@ -147,27 +149,26 @@ const fetchDataSortedByBrand = async () => {
 const fetchCarDataWithSpecificBrand = async () => {
     let fetchRoute;
     let fetchBody;
-    if(accountStore.isAdmin) {
+    if(isAdmin) {
 
     } else {
-
+        fetchRoute = `http://localhost:1111/filter/brand/exact`
+        fetchBody = {
+            resPerPage: 7,
+            page: props.pageNumber,
+            carType: props.carType,
+            brand: props.brand,
+        }
     }
     loading.value = true
-    const res = await fetch(`http://localhost:1111/filter/brand/exact`, {
+    const res = await fetch(fetchRoute, {
         method: 'POST',
         credentials: "include",
         headers: {
             'Content-Type': 'application/json',
-            'Authorization': `${accountStore.getToken}`
+            'Authorization': `${localStorage.getItem('token')}`
         },
-        body: JSON.stringify(
-            {
-                resPerPage: 7,
-                page: props.pageNumber,
-                carType: props.carType,
-                brand: props.brand,
-            }
-        ),
+        body: JSON.stringify(fetchBody),
     })
     if(res.error) {
         console.log(res.error);
@@ -185,30 +186,29 @@ const fetchCarDataWithSpecificBrand = async () => {
 const fetchCarDataWithSpecificTime = async () => {
     let fetchRoute;
     let fetchBody;
-    if(accountStore.isAdmin) {
+    if(isAdmin) {
 
     } else {
-
+        fetchRoute = `http://localhost:1111/filter/time`
+        fetchBody = {
+            resPerPage: 7,
+            page: props.pageNumber,
+            carType: props.carType,
+            year: props.time.year,
+            quarter: props.time.quarter,
+            month: props.time.month,
+            order: props.timeSortOrder
+        }
     }
     loading.value = true
-    const res = await fetch(`http://localhost:1111/filter/time`, {
+    const res = await fetch(fetchRoute, {
         method: 'POST',
         credentials: "include",
         headers: {
             'Content-Type': 'application/json',
-            'Authorization': `${accountStore.getToken}`
+            'Authorization': `${localStorage.getItem('token')}`
         },
-        body: JSON.stringify(
-            {
-                resPerPage: 7,
-                page: props.pageNumber,
-                carType: props.carType,
-                year: props.time.year,
-                quarter: props.time.quarter,
-                month: props.time.month,
-                order: props.timeSortOrder
-            }
-        ),
+        body: JSON.stringify(fetchBody),
     })
     if(res.error) {
         console.log(res.error);
@@ -226,27 +226,26 @@ const fetchCarDataWithSpecificTime = async () => {
 const fetchCarDataWithSpecificCity = async () => {
     let fetchRoute;
     let fetchBody;
-    if(accountStore.isAdmin) {
+    if(isAdmin) {
 
     } else {
-
+        fetchRoute = `http://localhost:1111/filter/city/exact`
+        fetchBody = {
+            resPerPage: 7,
+            page: props.pageNumber,
+            carType: props.carType,
+            city: props.city
+        }
     }
     loading.value = true
-    const res = await fetch(`http://localhost:1111/filter/city/exact`, {
+    const res = await fetch(fetchRoute, {
         method: 'POST',
         credentials: "include",
         headers: {
             'Content-Type': 'application/json',
-            'Authorization': `${accountStore.getToken}`
+            'Authorization': `${localStorage.getItem('token')}`
         },
-        body: JSON.stringify(
-            {
-                resPerPage: 7,
-                page: props.pageNumber,
-                carType: props.carType,
-                city: props.city
-            }
-        ),
+        body: JSON.stringify(fetchBody),
     })
     if(res.error) {
         console.log(res.error);
@@ -264,25 +263,24 @@ const fetchCarDataWithSpecificCity = async () => {
 const fetchCarByLicense = async () => {
     let fetchRoute;
     let fetchBody;
-    if(accountStore.isAdmin) {
+    if(isAdmin) {
 
     } else {
-
+        fetchRoute = `http://localhost:1111/vehicles/find`
+        fetchBody = {
+            license: props.specificLicense,
+            carType: props.carType,
+        }
     }
     loading.value = true
-    const res = await fetch(`http://localhost:1111/vehicles/find`, {
+    const res = await fetch(fetchRoute, {
         method: 'POST',
         credentials: "include",
         headers: {
             'Content-Type': 'application/json',
-            'Authorization': `${accountStore.getToken}`
+            'Authorization': `${localStorage.getItem('token')}`
         },
-        body: JSON.stringify(
-            {
-                license: props.specificLicense,
-                carType: props.carType,
-            }
-        ),
+        body: JSON.stringify(fetchBody),
     })
     if(res.error) {
         console.log(res.error);

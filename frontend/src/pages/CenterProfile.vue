@@ -1,19 +1,45 @@
 <script setup>
 import Information from '../components/profile/Information.vue';
-import Chart from '../components/profile/Chart.vue';
-import { ref } from 'vue';
+import { useRoute } from 'vue-router';
+import { onMounted, ref } from 'vue';
+
+const route = useRoute()
+const isAdmin = localStorage.getItem('userType') == 1
 
 const centerInfo = ref({});
 const fetchCenterInfoData = async() => {
-    const res = await fetch(`http://localhost:1111/centre-info`, {
-        credentials: "include",
-        'Authorization': `${localStorage.getItem('token')}`,
-    })
-    const dataList = JSON.parse(await res.text())[0]
-    console.log(`center info: ${JSON.stringify(dataList)}`);
-    centerInfo.value = dataList
+    if(isAdmin) {
+        const res = await fetch(`http://localhost:1111/preview-centre-info`, {
+            method: 'POST',
+            credentials: "include",
+            headers: {
+                'Content-Type': 'application/json',
+				'Authorization': `${localStorage.getItem('token')}`
+			},
+            body: JSON.stringify({ centreId: route.params.id })
+        })
+        const dataList = JSON.parse(await res.text())[0]
+        console.log(`center info: ${JSON.stringify(dataList)}`);
+        centerInfo.value = dataList
+    } else {
+        const res = await fetch(`http://localhost:1111/centre-info`, {
+            credentials: "include",
+            headers: {
+                'Content-Type': 'application/json',
+				'Authorization': `${localStorage.getItem('token')}`
+			},
+        })
+        const dataList = JSON.parse(await res.text())[0]
+        console.log(`center info: ${JSON.stringify(dataList)}`);
+        centerInfo.value = dataList
+    }
+    
 };
-fetchCenterInfoData();
+
+
+onMounted(() => {
+    fetchCenterInfoData();
+});
 
 </script>
 

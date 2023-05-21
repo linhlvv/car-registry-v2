@@ -8,6 +8,7 @@ const emit = defineEmits(['selectedTimeClicked', 'openCertInfoModal'])
 const props = defineProps(['time'])
 
 const accountStore = useAccountStore()
+const isAdmin = localStorage.getItem('userType') == 1
 
 //SECTION - modal handler
 const openModal = (license) => {
@@ -86,19 +87,23 @@ const loading = ref(false)
 const registCardList = ref([])
 const fetchData = async () => {
     loading.value = true
-    const res = await fetch(`http://localhost:1111/regist/all`, {
+    let fetchRoute
+    let fetchBody
+    if(isAdmin) {
+
+    } else {
+        fetchRoute = `http://localhost:1111/regist/all`
+        fetchBody = { resPerPage: 7, page: pageNumber.value }
+    }
+
+    const res = await fetch(fetchRoute, {
         method: 'POST',
         credentials: "include",
         headers: {
             'Content-Type': 'application/json',
-            'Authorization': `${accountStore.getToken}`
+            'Authorization': `${localStorage.getItem('token')}`
         },
-        body: JSON.stringify(
-            {
-                resPerPage: 7,
-                page: pageNumber.value,
-            }
-        ),
+        body: JSON.stringify(fetchBody),
     })
     if(res.error) {
         console.log(res.error);
@@ -113,22 +118,28 @@ const fetchData = async () => {
 
 const fetchDataWithSpecificTime = async () => {
     loading.value = true
-    const res = await fetch(`http://localhost:1111/regist/time`, {
+    let fetchRoute
+    let fetchBody
+    if(isAdmin) {
+
+    } else {
+        fetchRoute = `http://localhost:1111/regist/time`
+        fetchBody = {
+            resPerPage: 7,
+            page: pageNumber.value,
+            year: props.time.year,
+            quarter: props.time.quarter,
+            month: props.time.month
+        }
+    }
+    const res = await fetch(fetchRoute, {
         method: 'POST',
         credentials: "include",
         headers: {
             'Content-Type': 'application/json',
-            'Authorization': `${accountStore.getToken}`
+            'Authorization': `${localStorage.getItem('token')}`
         },
-        body: JSON.stringify(
-            {
-                resPerPage: 7,
-                page: pageNumber.value,
-                year: props.time.year,
-                quarter: props.time.quarter,
-                month: props.time.month
-            }
-        ),
+        body: JSON.stringify(fetchBody),
     })
     if(res.error) {
         console.log(res.error);
@@ -141,7 +152,7 @@ const fetchDataWithSpecificTime = async () => {
 }
 
 //SECTION - watcher
-watch(pageNumber, (newPage, oldPage) => {
+watch(pageNumber, () => {
     if(props.time.year === 'All') {
         fetchData()
     } else {
