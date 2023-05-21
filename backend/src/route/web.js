@@ -186,11 +186,11 @@ const initWebRoute = (app) => {
   // logic - trả về dữ liệu toàn hệ thống cho biểu đồ
   router.get('/admin/chart', verifyToken, verifyAdmin, homeController.adminGetDataForChart)
   // logic - trả về thứ hạng và tổng số đăng kiểm của trung tâm
-  router.post('/admin/centre/rank')
+  router.post('/admin/centre/rank', verifyToken, verifyAdmin, homeController.getRankByRegist)
   // logic - trả về năm có nhiều đăng kiểm nhất của trung tâm và số đăng kiểm trong năm đó
-  router.post('/admin/centre/productive-year')
+  router.post('/admin/centre/productive-year', verifyToken, verifyAdmin, homeController.getProductiveYear)
   // logic - trả về tháng có nhiều đăng kiểm nhất của trung tâm và số đăng kiểm trong tháng đó
-  router.post('/admin/centre/bursty-month')
+  router.post('/admin/centre/bursty-month', verifyToken, verifyAdmin, homeController.getBurstyMonth)
 
     // section - statistic
   // logic - trả về tất cả đăng kiểm toàn hệ thống

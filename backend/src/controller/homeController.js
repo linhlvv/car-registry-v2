@@ -83,7 +83,7 @@ import { viewUnregistedVehicles } from "./department/vehicles/viewUnregistedVehi
 
   // section - info
 import { adminGetDataForChart } from "./department/info/adminGetDataForChart";
-import { getRankbyRegist } from "./department/info/getRankByRegist";
+import { getRankByRegist } from "./department/info/getRankByRegist";
 import { getProductiveYear } from "./department/info/getProductiveYear";
 import { getBurstyMonth } from "./department/info/getBurstyMonth";
 
@@ -131,5 +131,5 @@ module.exports = {
   adminAllRegist, adminRegistByLicense, adminRegistByTime,
   viewAllCentres, viewAllVehicles, viewRegistedVehicles, viewExpiredVehicles, viewUnregistedVehicles,
   adminFilterBrand, adminFilterOwner, adminFilterTime, adminViewAllBrand, adminViewAllCity, adminViewExactBrand, adminViewExactCity,
-  adminGetDataForChart, getRankbyRegist, getProductiveYear, getBurstyMonth
+  adminGetDataForChart, getRankByRegist, getProductiveYear, getBurstyMonth
 };
