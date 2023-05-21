@@ -78,6 +78,9 @@ import { viewExpiredVehicles } from "./department/vehicles/viewExpiredVehicles";
 import { viewRegistedVehicles } from "./department/vehicles/viewRegistedVehicles";
 import { viewUnregistedVehicles } from "./department/vehicles/viewUnregistedVehicles";
 
+  // section - info
+import { adminGetDataForChart } from "./department/info/adminGetDataForChart";
+
 let homepage = async (req, res) => {
   console.log(
     req.session.id === undefined ? `Session: ` : `\x1b[4mSession\x1b[0m: `,
@@ -120,5 +123,6 @@ module.exports = {
   forecastAll, forecastByCentre, forecastByArea,
   addDataFromExcel, insertCentre, removeCentre, previewCentreInfo, updateCentreInfo, searchCentreByName,
   viewAllCentres, viewAllVehicles, viewRegistedVehicles, viewExpiredVehicles, viewUnregistedVehicles,
-  adminFilterBrand, adminFilterOwner, adminFilterTime, adminViewAllBrand, adminViewAllCity, adminViewExactBrand, adminViewExactCity
+  adminFilterBrand, adminFilterOwner, adminFilterTime, adminViewAllBrand, adminViewAllCity, adminViewExactBrand, adminViewExactCity,
+  adminGetDataForChart
 };

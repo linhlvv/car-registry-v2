@@ -75,7 +75,7 @@ const initWebRoute = (app) => {
   // logic - đọc dữ liệu từ file excel thêm vào db
   router.post('/read-excel', verifyToken, homeController.addDataFromExcel)
   // logic - hiển thị dữ liệu xem trước của centre
-  router.push('/preview-centre-info', verifyToken, homeController.previewCentreInfo)
+  router.post('/preview-centre-info', verifyToken, homeController.previewCentreInfo)
   // logic - update thông tin của centre
   router.put('/update-centre-info', verifyToken, homeController.updateCentreInfo)
   // logic - tìm centre bằng tên
@@ -182,6 +182,9 @@ const initWebRoute = (app) => {
   // logic - tất cả các trung tâm
   router.get('/stats/centre', verifyToken, homeController.allCentre)
 
+    // section - info
+  // logic - trả về dữ liệu toàn hệ thống cho biểu đồ
+  router.get('/admin/chart', verifyToken, verifyAdmin, homeController.adminGetDataForChart)
 
   return app.use('/', router)
 }
