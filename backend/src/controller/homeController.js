@@ -70,7 +70,10 @@ import { removeCentre } from "./department/management/removeCentre";
 import { previewCentreInfo } from "./department/management/previewCentreInfo";
 import { updateCentreInfo } from "./department/management/updateCentreInfo";
 import { searchCentreByName } from "./department/management/searchCentreByName";
-
+// section - stats
+import { adminAllRegist } from "./department/stats/adminAllRegist";
+import { adminRegistByLicense } from "./department/stats/adminRegistByLicense";
+import { adminRegistByTime } from "./department/stats/adminRegistByTime";
   // section - vehicles
 import { viewAllCentres } from "./department/vehicles/viewAllCentres";
 import { viewAllVehicles } from "./department/vehicles/viewAllVehicles";
@@ -125,6 +128,7 @@ module.exports = {
   
   forecastAll, forecastByCentre, forecastByArea,
   addDataFromExcel, insertCentre, removeCentre, previewCentreInfo, updateCentreInfo, searchCentreByName,
+  adminAllRegist, adminRegistByLicense, adminRegistByTime,
   viewAllCentres, viewAllVehicles, viewRegistedVehicles, viewExpiredVehicles, viewUnregistedVehicles,
   adminFilterBrand, adminFilterOwner, adminFilterTime, adminViewAllBrand, adminViewAllCity, adminViewExactBrand, adminViewExactCity,
   adminGetDataForChart, getRankbyRegist, getProductiveYear, getBurstyMonth

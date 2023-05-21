@@ -108,7 +108,7 @@ const initWebRoute = (app) => {
   // logic - gửi biển số xe, lọc các đăng kiểm của xe này
   router.post('/regist/find', verifyToken, homeController.registByLicense)
                                                                                     
-  // logic - gửi biển số xe, lọc các đăng kiểm của xe này
+  // logic - gửi id của đăng kiểm, trả về thông tin đăng kiểm
   router.post('/regist/detail', verifyToken, homeController.registModal)
                                                                                     
                                                                                     
@@ -191,6 +191,15 @@ const initWebRoute = (app) => {
   router.post('/admin/centre/productive-year')
   // logic - trả về tháng có nhiều đăng kiểm nhất của trung tâm và số đăng kiểm trong tháng đó
   router.post('/admin/centre/bursty-month')
+
+    // section - statistic
+  // logic - trả về tất cả đăng kiểm toàn hệ thống
+  router.post('/admin/regist/all', verifyToken, verifyAdmin, homeController.adminAllRegist)
+  // logic - trả về tất cả đăng kiểm của xe có biển số khớp với biển số gửi lên
+  router.post('/admin/regist/find', verifyToken, verifyAdmin, homeController.adminRegistByLicense)
+  // logic - trả về tất cả đăng kiểm của xe có thời gian khớp với thời gian gửi lên
+  router.post('/admin/regist/time', verifyToken, verifyAdmin, homeController.adminRegistByTime)
+  
   return app.use('/', router)
 }
 
