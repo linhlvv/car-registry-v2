@@ -8,16 +8,16 @@ let adminRegistByTime = async (req, res) => {
   if (req.body.page === undefined)
     page = 1
 
+  if (req.body.year === undefined || req.body.month === undefined 
+    || req.body.quarter === undefined || req.body.order === undefined) {
+    return res.status(422).send({ErrorCode: 'ER_MISSING_PARAM'})
+  }
+
   let year = parseInt(req.body.year)
   let month = parseInt(req.body.month)
   let quarter = parseInt(req.body.quarter)
-
   let order = req.body.order === "asc" ? "asc" : "desc"
 
-  if (year === undefined || month === undefined || quarter === undefined || order === undefined) {
-    return res.status(422).send({message: 'Missing parameter!'})
-  }
-  
   let match = ''
   if(req.body.year !== "All") {
     match += `\nand year(date) = ` + year
@@ -33,9 +33,8 @@ let adminRegistByTime = async (req, res) => {
   let count = `
   select count(*) as total
     from registry re
-  where centreId = ` + req.session.userid + match + `
-  `
-  const [countRows, countFields] = await pool.query(count, [req.session.userid])
+  where 1 = 1` + match
+  const [countRows, countFields] = await pool.query(count)
 
   let query = `
   select r.id, r.licenseId, brand, model, version, date, expire, 
@@ -45,7 +44,7 @@ let adminRegistByTime = async (req, res) => {
     on r.licenseId = v.licenseId
   join personal p 
     on v.ownerId = p.id
-  where centreId = ` + req.session.userid + match + ` 
+  where 1 = 1` + match + ` 
         union all
   select r.id, r.licenseId, brand, model, version, date, expire, 
     c.name as name, (expire < CURRENT_DATE()) as status
@@ -54,7 +53,7 @@ let adminRegistByTime = async (req, res) => {
     on r.licenseId = v.licenseId
   join company c 
     on v.ownerId = c.id
-  where centreId = ` + req.session.userid + match + ` 
+  where 1 = 1` + match + ` 
   order by date ` + order + `
     limit ? offset ?`
   
