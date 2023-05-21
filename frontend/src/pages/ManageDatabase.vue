@@ -55,7 +55,7 @@ const upload = async () => {
 			method: 'POST',
 			credentials: "include",
 			headers: {
-				'Authorization': `${accountStore.getToken}`
+				'Authorization': `${localStorage.getItem('token')}`
 			},
 			body: formData
 		})
