@@ -125,42 +125,55 @@ const initWebRoute = (app) => {
   router.post('/vehicles/admin/all', verifyToken, verifyAdmin, homeController.viewAllVehicles)
                                                                                     
   // logic - admin xem tất cả các xe đã đăng kiểm toàn cục
+  // input - resPerPage, page
   router.post('/vehicles/admin/registed', verifyToken, verifyAdmin, homeController.viewRegistedVehicles)
                                                                                     
   // logic - admin xem tất cả các xe đã hết hạn toàn cục
+  // input - resPerPage, page
   router.post('/vehicles/admin/expired', verifyToken, verifyAdmin, homeController.viewExpiredVehicles)
                                                                                     
   // logic - admin xem tất cả các xe chưa đăng kiểm toàn cục
+  // input - resPerPage, page
   router.post('/vehicles/admin/unregisted', verifyToken, verifyAdmin, homeController.viewUnregistedVehicles)
                                                                                     
   // logic - admin xem tất cả dự đoán
+  // input - resPerPage, page, type(renew, new)
   router.post('/forecast/admin/all', verifyToken, verifyAdmin, homeController.forecastAll)
   // logic - admin xem tất cả dự đoán theo khu vực
+  // input - resPerPage, page, type(renew, new), area
   router.post('/forecast/admin/area', verifyToken, verifyAdmin, homeController.forecastByArea)
   // logic - admin xem tất cả dự đoán theo trung tâm
+  // input - resPerPage, page, type(renew, new), centre
   router.post('/forecast/admin/centre', verifyToken, verifyAdmin, homeController.forecastByCentre)
 
   
     // section - filter cho vehicles dùng cho admin
   // logic - gửi code có thể là ssn hoặc taxnum 
+  // input - carType(registed, expired) , code
   router.post('/filter/admin/owner', verifyToken, verifyAdmin, homeController.adminFilterOwner)
                                                                                     
   // logic - gửi order là asc hay desc để sort result theo brand
+  // input - resPerPage, page, carType(registed, expired), order
   router.post('/filter/admin/brand', verifyToken, verifyAdmin, homeController.adminFilterBrand)
                                                                                     
   // logic - trả về tất cả các brand của centre này
+  // input - carType(registed, expired)
   router.post('/filter/admin/brand/all', verifyToken, verifyAdmin, homeController.adminViewAllBrand)
                                                                                     
   // logic - trả về tất cả xe có brand khớp với brand gửi lên
+  // input - resPerPage, page, carType(registed, expired), brand
   router.post('/filter/admin/brand/exact', verifyToken, verifyAdmin, homeController.adminViewExactBrand)
                                                                                     
   // logic - filter theo thời gian regist hoặc expire
+  // input - resPerPage, page, carType(registed, expired), year, month, quarter
   router.post('/filter/admin/time', verifyToken, verifyAdmin, homeController.adminFilterTime)
                                                                                     
   // logic - trả về tất cả các city của centre này
+  // input - carType(registed, expired)
   router.post('/filter/admin/city/all', verifyAdmin, verifyToken, homeController.adminViewAllCity)
                                                                                     
   // logic - trả về tất cả xe có city khớp với city gửi lên
+  // input - resPerPage, page, carType(registed, expired), city
   router.post('/filter/admin/city/exact', verifyAdmin, verifyToken, homeController.adminViewExactCity)
 
   // logic - tất cả các thành phố kèm mã vùng
