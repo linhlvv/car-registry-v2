@@ -194,12 +194,12 @@ const initWebRoute = (app) => {
 
     // section - statistic
   // logic - trả về tất cả đăng kiểm toàn hệ thống
-  router.post('/admin/regist/all', verifyToken, verifyAdmin, homeController.adminAllRegist)
+  router.post('/stats/all', verifyToken, verifyAdmin, homeController.adminAllRegist)
   // logic - trả về tất cả đăng kiểm của xe có biển số khớp với biển số gửi lên
-  router.post('/admin/regist/find', verifyToken, verifyAdmin, homeController.adminRegistByLicense)
+  router.post('/stats/find', verifyToken, verifyAdmin, homeController.adminRegistByLicense)
   // logic - trả về tất cả đăng kiểm của xe có thời gian khớp với thời gian gửi lên
-  router.post('/admin/regist/time', verifyToken, verifyAdmin, homeController.adminRegistByTime)
-  
+  router.post('/stats/time', verifyToken, verifyAdmin, homeController.adminRegistByTime)
+
   return app.use('/', router)
 }
 
