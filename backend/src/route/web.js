@@ -185,7 +185,12 @@ const initWebRoute = (app) => {
     // section - info
   // logic - trả về dữ liệu toàn hệ thống cho biểu đồ
   router.get('/admin/chart', verifyToken, verifyAdmin, homeController.adminGetDataForChart)
-
+  // logic - trả về thứ hạng và tổng số đăng kiểm của trung tâm
+  router.post('/admin/centre/rank')
+  // logic - trả về năm có nhiều đăng kiểm nhất của trung tâm và số đăng kiểm trong năm đó
+  router.post('/admin/centre/productive-year')
+  // logic - trả về tháng có nhiều đăng kiểm nhất của trung tâm và số đăng kiểm trong tháng đó
+  router.post('/admin/centre/bursty-month')
   return app.use('/', router)
 }
 

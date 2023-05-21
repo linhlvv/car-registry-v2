@@ -80,6 +80,9 @@ import { viewUnregistedVehicles } from "./department/vehicles/viewUnregistedVehi
 
   // section - info
 import { adminGetDataForChart } from "./department/info/adminGetDataForChart";
+import { getRankbyRegist } from "./department/info/getRankByRegist";
+import { getProductiveYear } from "./department/info/getProductiveYear";
+import { getBurstyMonth } from "./department/info/getBurstyMonth";
 
 let homepage = async (req, res) => {
   console.log(
@@ -124,5 +127,5 @@ module.exports = {
   addDataFromExcel, insertCentre, removeCentre, previewCentreInfo, updateCentreInfo, searchCentreByName,
   viewAllCentres, viewAllVehicles, viewRegistedVehicles, viewExpiredVehicles, viewUnregistedVehicles,
   adminFilterBrand, adminFilterOwner, adminFilterTime, adminViewAllBrand, adminViewAllCity, adminViewExactBrand, adminViewExactCity,
-  adminGetDataForChart
+  adminGetDataForChart, getRankbyRegist, getProductiveYear, getBurstyMonth
 };
