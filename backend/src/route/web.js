@@ -75,7 +75,7 @@ const initWebRoute = (app) => {
   // logic - đọc dữ liệu từ file excel thêm vào db
   router.post('/read-excel', verifyToken, homeController.addDataFromExcel)
   // logic - hiển thị dữ liệu xem trước của centre
-  router.get('/preview-centre-info', verifyToken, homeController.previewCentreInfo)
+  router.push('/preview-centre-info', verifyToken, homeController.previewCentreInfo)
   // logic - update thông tin của centre
   router.put('/update-centre-info', verifyToken, homeController.updateCentreInfo)
   // logic - tìm centre bằng tên
