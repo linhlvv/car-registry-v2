@@ -31,6 +31,7 @@ const messageTime = 5
 const errorMessageTime = ref(messageTime)
 const errorMessageOn = ref(false)
 const ownerTypeErrorMessageOn = ref(false)
+const successfullyAdded = ref(false)
 let errorMessageInterval;
 const upload = async () => {
 	if(!hasFile.value) {
@@ -62,6 +63,12 @@ const upload = async () => {
 			console.log(res.error);
 		}
 		console.log(res);
+		if(res.status === 200) {
+			successfullyAdded.value = true
+			setTimeout(() => {
+				location.reload()
+			}, 1);
+		}
 		// const dataFetched = JSON.parse(await res.text())
 		// console.log(JSON.stringify(dataFetched));
 	}
@@ -148,6 +155,14 @@ watch(() => ownerTypePicked.value, (newType, oldType) => {
 					<path fill-rule="evenodd" d="M9.401 3.003c1.155-2 4.043-2 5.197 0l7.355 12.748c1.154 2-.29 4.5-2.599 4.5H4.645c-2.309 0-3.752-2.5-2.598-4.5L9.4 3.003zM12 8.25a.75.75 0 01.75.75v3.75a.75.75 0 01-1.5 0V9a.75.75 0 01.75-.75zm0 8.25a.75.75 0 100-1.5.75.75 0 000 1.5z" clip-rule="evenodd" />
 				</svg>
 				<p class="text-base font-medium">Please choose an owner type of the uploaded file!</p>
+			</div>
+		</Transition>
+		<Transition name="fade">
+			<div v-if="successfullyAdded" class="w-full flex items-center p-3 gap-2 text-[#2acc97]">
+				<svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="w-6 h-6">
+					<path stroke-linecap="round" stroke-linejoin="round" d="M10.125 2.25h-4.5c-.621 0-1.125.504-1.125 1.125v17.25c0 .621.504 1.125 1.125 1.125h12.75c.621 0 1.125-.504 1.125-1.125v-9M10.125 2.25h.375a9 9 0 019 9v.375M10.125 2.25A3.375 3.375 0 0113.5 5.625v1.5c0 .621.504 1.125 1.125 1.125h1.5a3.375 3.375 0 013.375 3.375M9 15l2.25 2.25L15 12" />
+				</svg>
+				<p class="text-base font-medium">Add data to database successfully!</p>
 			</div>
 		</Transition>
 		<button @click="upload" class="py-2 px-3 rounded-lg bg-[#2acc97]/80 font-semibold text-white text-[14px] flex items-center gap-1 hover:bg-[#2acc97]/90 active:bg-[#2acc97]">
