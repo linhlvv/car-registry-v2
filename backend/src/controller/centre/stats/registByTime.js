@@ -19,13 +19,13 @@ let registByTime = async (req, res) => {
   }
   
   let match = ''
-  if(req.body.year !== "All") {
+  if(!isNaN(year)) {
     match += `\nand year(date) = ` + year
   }
-  if(req.body.month !== "All") {
+  if(!isNaN(month)) {
     match += `\nand month(date) = ` + month
   }
-  else if(req.body.quarter !== "All") {
+  else if(!isNaN(quarter)) {
     match += `\nand month(date) > ` + (quarter - 1) * 3 +
             `\nand month(date) <= ` + quarter * 3 
   }
