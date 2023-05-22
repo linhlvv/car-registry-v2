@@ -15,7 +15,7 @@ let registByTime = async (req, res) => {
   let order = req.body.order === "asc" ? "asc" : "desc"
 
   if (year === undefined || month === undefined || quarter === undefined || order === undefined) {
-    return res.status(422).send({message: 'Missing parameter!'})
+    return res.status(422).send({ErrorCode: 'ER_MISSING_PARAM'})
   }
   
   let match = ''
