@@ -70,13 +70,22 @@ import { removeCentre } from "./department/management/removeCentre";
 import { previewCentreInfo } from "./department/management/previewCentreInfo";
 import { updateCentreInfo } from "./department/management/updateCentreInfo";
 import { searchCentreByName } from "./department/management/searchCentreByName";
-
+// section - stats
+import { adminAllRegist } from "./department/stats/adminAllRegist";
+import { adminRegistByLicense } from "./department/stats/adminRegistByLicense";
+import { adminRegistByTime } from "./department/stats/adminRegistByTime";
   // section - vehicles
 import { viewAllCentres } from "./department/vehicles/viewAllCentres";
 import { viewAllVehicles } from "./department/vehicles/viewAllVehicles";
 import { viewExpiredVehicles } from "./department/vehicles/viewExpiredVehicles";
 import { viewRegistedVehicles } from "./department/vehicles/viewRegistedVehicles";
 import { viewUnregistedVehicles } from "./department/vehicles/viewUnregistedVehicles";
+
+  // section - info
+import { adminGetDataForChart } from "./department/info/adminGetDataForChart";
+import { getRankByRegist } from "./department/info/getRankByRegist";
+import { getProductiveYear } from "./department/info/getProductiveYear";
+import { getBurstyMonth } from "./department/info/getBurstyMonth";
 
 let homepage = async (req, res) => {
   console.log(
@@ -119,6 +128,8 @@ module.exports = {
   
   forecastAll, forecastByCentre, forecastByArea,
   addDataFromExcel, insertCentre, removeCentre, previewCentreInfo, updateCentreInfo, searchCentreByName,
+  adminAllRegist, adminRegistByLicense, adminRegistByTime,
   viewAllCentres, viewAllVehicles, viewRegistedVehicles, viewExpiredVehicles, viewUnregistedVehicles,
-  adminFilterBrand, adminFilterOwner, adminFilterTime, adminViewAllBrand, adminViewAllCity, adminViewExactBrand, adminViewExactCity
+  adminFilterBrand, adminFilterOwner, adminFilterTime, adminViewAllBrand, adminViewAllCity, adminViewExactBrand, adminViewExactCity,
+  adminGetDataForChart, getRankByRegist, getProductiveYear, getBurstyMonth
 };

@@ -75,7 +75,7 @@ const initWebRoute = (app) => {
   // logic - đọc dữ liệu từ file excel thêm vào db
   router.post('/read-excel', verifyToken, homeController.addDataFromExcel)
   // logic - hiển thị dữ liệu xem trước của centre
-  router.get('/preview-centre-info', verifyToken, homeController.previewCentreInfo)
+  router.post('/preview-centre-info', verifyToken, homeController.previewCentreInfo)
   // logic - update thông tin của centre
   router.put('/update-centre-info', verifyToken, homeController.updateCentreInfo)
   // logic - tìm centre bằng tên
@@ -108,7 +108,7 @@ const initWebRoute = (app) => {
   // logic - gửi biển số xe, lọc các đăng kiểm của xe này
   router.post('/regist/find', verifyToken, homeController.registByLicense)
                                                                                     
-  // logic - gửi biển số xe, lọc các đăng kiểm của xe này
+  // logic - gửi id của đăng kiểm, trả về thông tin đăng kiểm
   router.post('/regist/detail', verifyToken, homeController.registModal)
                                                                                     
                                                                                     
@@ -125,42 +125,55 @@ const initWebRoute = (app) => {
   router.post('/vehicles/admin/all', verifyToken, verifyAdmin, homeController.viewAllVehicles)
                                                                                     
   // logic - admin xem tất cả các xe đã đăng kiểm toàn cục
+  // input - resPerPage, page
   router.post('/vehicles/admin/registed', verifyToken, verifyAdmin, homeController.viewRegistedVehicles)
                                                                                     
   // logic - admin xem tất cả các xe đã hết hạn toàn cục
+  // input - resPerPage, page
   router.post('/vehicles/admin/expired', verifyToken, verifyAdmin, homeController.viewExpiredVehicles)
                                                                                     
   // logic - admin xem tất cả các xe chưa đăng kiểm toàn cục
+  // input - resPerPage, page
   router.post('/vehicles/admin/unregisted', verifyToken, verifyAdmin, homeController.viewUnregistedVehicles)
                                                                                     
   // logic - admin xem tất cả dự đoán
+  // input - resPerPage, page, type(renew, new)
   router.post('/forecast/admin/all', verifyToken, verifyAdmin, homeController.forecastAll)
   // logic - admin xem tất cả dự đoán theo khu vực
+  // input - resPerPage, page, type(renew, new), area
   router.post('/forecast/admin/area', verifyToken, verifyAdmin, homeController.forecastByArea)
   // logic - admin xem tất cả dự đoán theo trung tâm
+  // input - resPerPage, page, type(renew, new), centre
   router.post('/forecast/admin/centre', verifyToken, verifyAdmin, homeController.forecastByCentre)
 
   
     // section - filter cho vehicles dùng cho admin
   // logic - gửi code có thể là ssn hoặc taxnum 
+  // input - carType(registed, expired) , code
   router.post('/filter/admin/owner', verifyToken, verifyAdmin, homeController.adminFilterOwner)
                                                                                     
   // logic - gửi order là asc hay desc để sort result theo brand
+  // input - resPerPage, page, carType(registed, expired), order
   router.post('/filter/admin/brand', verifyToken, verifyAdmin, homeController.adminFilterBrand)
                                                                                     
   // logic - trả về tất cả các brand của centre này
+  // input - carType(registed, expired)
   router.post('/filter/admin/brand/all', verifyToken, verifyAdmin, homeController.adminViewAllBrand)
                                                                                     
   // logic - trả về tất cả xe có brand khớp với brand gửi lên
+  // input - resPerPage, page, carType(registed, expired), brand
   router.post('/filter/admin/brand/exact', verifyToken, verifyAdmin, homeController.adminViewExactBrand)
                                                                                     
   // logic - filter theo thời gian regist hoặc expire
+  // input - resPerPage, page, carType(registed, expired), year, month, quarter
   router.post('/filter/admin/time', verifyToken, verifyAdmin, homeController.adminFilterTime)
                                                                                     
   // logic - trả về tất cả các city của centre này
+  // input - carType(registed, expired)
   router.post('/filter/admin/city/all', verifyAdmin, verifyToken, homeController.adminViewAllCity)
                                                                                     
   // logic - trả về tất cả xe có city khớp với city gửi lên
+  // input - resPerPage, page, carType(registed, expired), city
   router.post('/filter/admin/city/exact', verifyAdmin, verifyToken, homeController.adminViewExactCity)
 
   // logic - tất cả các thành phố kèm mã vùng
@@ -169,7 +182,24 @@ const initWebRoute = (app) => {
   // logic - tất cả các trung tâm
   router.get('/stats/centre', verifyToken, homeController.allCentre)
 
+    // section - info
+  // logic - trả về dữ liệu toàn hệ thống cho biểu đồ
+  router.get('/admin/chart', verifyToken, verifyAdmin, homeController.adminGetDataForChart)
+  // logic - trả về thứ hạng và tổng số đăng kiểm của trung tâm
+  router.post('/admin/centre/rank', verifyToken, verifyAdmin, homeController.getRankByRegist)
+  // logic - trả về năm có nhiều đăng kiểm nhất của trung tâm và số đăng kiểm trong năm đó
+  router.post('/admin/centre/productive-year', verifyToken, verifyAdmin, homeController.getProductiveYear)
+  // logic - trả về tháng có nhiều đăng kiểm nhất của trung tâm và số đăng kiểm trong tháng đó
+  router.post('/admin/centre/bursty-month', verifyToken, verifyAdmin, homeController.getBurstyMonth)
 
+    // section - statistic
+  // logic - trả về tất cả đăng kiểm toàn hệ thống
+  router.post('/admin/regist/all', verifyToken, verifyAdmin, homeController.adminAllRegist)
+  // logic - trả về tất cả đăng kiểm của xe có biển số khớp với biển số gửi lên
+  router.post('/admin/regist/find', verifyToken, verifyAdmin, homeController.adminRegistByLicense)
+  // logic - trả về tất cả đăng kiểm của xe có thời gian khớp với thời gian gửi lên
+  router.post('/admin/regist/time', verifyToken, verifyAdmin, homeController.adminRegistByTime)
+  
   return app.use('/', router)
 }
 
