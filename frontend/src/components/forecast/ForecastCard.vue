@@ -21,7 +21,10 @@ const regist = (license) => {
 </script>
 
 <template>
-    <div class="w-full rounded-[3px] p-2 flex items-center min-w-[800px] min-h-[50px]" :class="isRootRow ? '' : 'bg-white'">
+    <div class="w-full rounded-[3px] p-2 flex items-center min-w-[800px] min-h-[50px]" :class="isRootRow ? '' : 'bg-white group relative'">
+        <svg v-if="!isRootRow" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" class="w-4 h-4 text-[#2acc97] absolute transition-transform duration-200 -translate-x-7 group-hover:translate-x-2">
+            <path stroke-linecap="round" stroke-linejoin="round" d="M8.25 4.5l7.5 7.5-7.5 7.5" />
+        </svg>
         <p class="text-center font-medium text-[#1d1d1d] w-1/5" :class="isRootRow ? 'text-[14px]' : 'text-[12px]'">
             {{ isRootRow ? 'License ID' : info.licenseId }}
         </p>

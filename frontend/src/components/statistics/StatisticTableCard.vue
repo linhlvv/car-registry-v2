@@ -9,7 +9,10 @@ const openInfo = () => {
 </script>
 
 <template>
-    <div class="p-2 flex min-w-[800px] mt-[2px]" :class="isRootRow ? 'bg-[#f5f7fb] h-9' : 'bg-white min-h-[50px]'">
+    <div class="p-2 flex items-center min-w-[800px] mt-[2px]" :class="isRootRow ? 'bg-[#f5f7fb] h-9' : 'bg-white min-h-[50px] group relative'">
+        <svg v-if="!isRootRow" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" class="w-4 h-4 text-[#2acc97] absolute transition-transform duration-200 -translate-x-7 group-hover:translate-x-1  ">
+            <path stroke-linecap="round" stroke-linejoin="round" d="M8.25 4.5l7.5 7.5-7.5 7.5" />
+        </svg>
         <div class="font-semibold text-[#616367] flex justify-center items-center w-[14%]" :class="isRootRow ? 'text-[12px]' : 'text-[11px]'">
             {{ isRootRow ? 'License' : car.licenseId }}
         </div>
