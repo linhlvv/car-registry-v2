@@ -22,7 +22,7 @@ let getRankByRegist = async (req, res) => {
       WHEN RANK() OVER (ORDER BY COUNT(*) DESC) % 10 = 3 AND RANK() OVER (ORDER BY COUNT(*) DESC) % 100 != 13 THEN 'rd'
       ELSE 'th'
     END
-    ) AS rank,
+    ) AS 'rank',
     centreId,
     COUNT(*) AS count
     FROM registry
