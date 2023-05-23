@@ -9,6 +9,7 @@ import { computed, onMounted, ref, watch } from 'vue';
 import { useAccountStore } from '../stores/AccountStore';
 
 const accountStore = useAccountStore()
+const isAdmin = localStorage.getItem('userType') == 1
 const adminSelectionStore = useAdminSelectionStore()
 
 //SECTION - response per page
@@ -59,7 +60,7 @@ const totalRes = ref(0);
 const fetchForecastList = async () => {
     let fetchRoute;
     let fetchBody;
-    if(accountStore.isAdmin) {
+    if(isAdmin) {
         if(adminSelectionStore.getSelected === 'all') {
             fetchRoute = `http://localhost:1111/forecast/admin/all`
             fetchBody = {
