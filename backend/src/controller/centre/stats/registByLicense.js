@@ -55,7 +55,7 @@ let registByLicense = async (req, res) => {
 		const [rows, fields] = await pool.query(query, [centreId, licenseId, 
 																										centreId, licenseId,
 																										resPerPage, resPerPage * (page - 1)])
-		return res.send({data: rows, count: Math.ceil(countRows[0].total / resPerPage)})
+		return res.send({data: rows, countPage: Math.ceil(countRows[0].total / resPerPage)})
 	}
 	catch (err) {
 		return res.status(500).send({ErrorCode: err.code, ErrorNo: err.errno})

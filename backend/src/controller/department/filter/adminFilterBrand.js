@@ -92,7 +92,7 @@ let adminFilterBrand = async (req, res) => {
   ]);
   return res.send({
     data: rows,
-    count: Math.ceil(countRows[0].total / resPerPage),
+    countPage: Math.ceil(countRows[0].total / resPerPage),
   });
 };
 
