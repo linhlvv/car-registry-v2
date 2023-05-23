@@ -12,10 +12,10 @@ let allRegist = async (req, res) => {
   if (req.body.page === undefined)
     page = 1
 
-	let [countRows, countFields] = await pool.query('select count(*) as total from registry where centreId = ?', req.session.userid)
+	let count = `
+	select count(*) as total from registry where centreId = ?`
 
 	let centreId = req.session.userid
-	// query lấy về licenseId, Tên xe bao gồm brand, model, version ; regist date, expire date, và tên chủ sở hữu(tên công ty nếu type = 0, tên cá nhân nếu type = 1 )
 	let query = `
 	select r.id, r.licenseId, brand, model, version, date, expire, 
 			p.name as name, (expire < CURRENT_DATE()) as status
@@ -37,9 +37,15 @@ let allRegist = async (req, res) => {
 	order by licenseId
 			limit ? offset ?`
 
-	const [rows, fields] = await pool.query(query, [resPerPage, 
-																									resPerPage * (page - 1)])
-	return res.send({data: rows, count: Math.ceil(countRows[0].total / resPerPage)})
+	try {
+		let [countRows, countFields] = await pool.query(count, req.session.userid)
+		const [rows, fields] = await pool.query(query, [resPerPage, 
+			resPerPage * (page - 1)])
+		return res.send({data: rows, count: Math.ceil(countRows[0].total / resPerPage)})
+	}
+	catch (err) {
+		return res.status(500).send({ErrorCode: err.code, ErrorNo: err.errno})
+	}
 }
 
 module.exports = {

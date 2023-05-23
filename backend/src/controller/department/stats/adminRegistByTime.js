@@ -19,13 +19,13 @@ let adminRegistByTime = async (req, res) => {
   let order = req.body.order === "asc" ? "asc" : "desc"
 
   let match = ''
-  if(req.body.year !== "All") {
+  if(!isNaN(year)) {
     match += `\nand year(date) = ` + year
   }
-  if(req.body.month !== "All") {
+  if(!isNaN(month)) {
     match += `\nand month(date) = ` + month
   }
-  else if(req.body.quarter !== "All") {
+  else if(!isNaN(quarter)) {
     match += `\nand month(date) > ` + (quarter - 1) * 3 +
             `\nand month(date) <= ` + quarter * 3 
   }
@@ -34,7 +34,6 @@ let adminRegistByTime = async (req, res) => {
   select count(*) as total
     from registry re
   where 1 = 1` + match
-  const [countRows, countFields] = await pool.query(count)
 
   let query = `
   select r.id, r.licenseId, brand, model, version, date, expire, 
@@ -58,9 +57,16 @@ let adminRegistByTime = async (req, res) => {
     limit ? offset ?`
   
   // bug - đã gọi được api kết quả trả về chính xác
-  const [rows, fields] = await pool.query(query, [resPerPage, 
+  try {
+    console.log(query);
+    const [countRows, countFields] = await pool.query(count)
+    const [rows, fields] = await pool.query(query, [resPerPage, 
                                                   resPerPage * (page - 1)])
-  return res.send({data: rows, count: Math.ceil(countRows[0].total / resPerPage)})
+    return res.send({data: rows, count: Math.ceil(countRows[0].total / resPerPage)})
+  }
+  catch (err) {
+		return res.status(500).send({ErrorCode: err.code, ErrorNo: err.errno})
+	}
 }
 
 module.exports = {

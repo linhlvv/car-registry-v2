@@ -24,7 +24,6 @@ let adminRegistByLicense = async (req, res) => {
   select count(*) as total 
     from registry 
   where licenseId = ?`
-	let [countRows, countFields] = await pool.query(find, [licenseId])
 
 	let query = `
 	select r.id, r.licenseId, brand, model, version, date, expire, 
@@ -47,9 +46,16 @@ let adminRegistByLicense = async (req, res) => {
 	order by expire desc
 			limit ? offset ?`
 
-	const [rows, fields] = await pool.query(query, [licenseId, licenseId,
+
+	try {
+		let [countRows, countFields] = await pool.query(find, [licenseId])
+		const [rows, fields] = await pool.query(query, [licenseId, licenseId,
                                                   resPerPage, resPerPage * (page - 1)])
-	return res.send({data: rows, count: Math.ceil(countRows[0].total / resPerPage)})
+		return res.send({data: rows, count: Math.ceil(countRows[0].total / resPerPage)})
+	}
+	catch (err) {
+		return res.status(500).send({ErrorCode: err.code, ErrorNo: err.errno})
+	}
 }
 
 module.exports = {

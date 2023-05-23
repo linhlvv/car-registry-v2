@@ -1,23 +1,27 @@
-import pool from "../../../configs/connectDB"
+import pool from "../../../configs/connectDB";
 
 let adminViewExactCity = async (req, res) => {
-  let resPerPage = parseInt(req.body.resPerPage)
-  let page = parseInt(req.body.page) 
-  if (req.body.resPerPage === undefined)
-    resPerPage = 10
-  if (req.body.page === undefined)
-    page = 1
+  let resPerPage = parseInt(req.body.resPerPage);
+  let page = parseInt(req.body.page);
+  if (req.body.resPerPage === undefined) resPerPage = 10;
+  if (req.body.page === undefined) page = 1;
 
-  let carType = req.body.carType
-  let city = req.body.city
-  
-  if (carType === undefined || city === undefined || resPerPage === undefined || page === undefined) {
-    return res.status(422).send({message: 'Missing parameter!'})
+  let carType = req.body.carType;
+  let city = req.body.city;
+
+  if (
+    carType === undefined ||
+    city === undefined ||
+    resPerPage === undefined ||
+    page === undefined
+  ) {
+    return res.status(422).send({ ErrorCode: "ER_MISSING_PARAM" });
   }
-  
-  let type = carType === 'registed' ? ' >= ' : ' < '
-  
-  let count = `
+
+  let type = carType === "registed" ? " >= " : " < ";
+
+  let count =
+    `
   select count(*) as total from registry re
 join vehicles v
 on re.licenseId = v.licenseId
@@ -29,16 +33,22 @@ on r.id = v.regionId
   left join registry re
   on re.licenseId = v.licenseId
   group by v.licenseId)  
-  and expire` + type + `current_date()
-  and name = ?`
-  const [countRows, countFields] = await pool.query(count, [city])
-  
-  let queryType = carType === 'registed' 
-                              ? 're.date as registryDate'
-                              : 'timestampdiff(month, re.date, re.expire) as duration'
+  and expire` +
+    type +
+    `current_date()
+  and name = ?`;
+  const [countRows, countFields] = await pool.query(count, [city]);
 
-  let query = `
-  select re.licenseId as license, v.brand, v.model, v.version, ` + queryType + `, re.expire, p.name
+  let queryType =
+    carType === "registed"
+      ? "re.date as registryDate"
+      : "timestampdiff(month, re.date, re.expire) as duration";
+
+  let query =
+    `
+  select re.licenseId as license, v.brand, v.model, v.version, ` +
+    queryType +
+    `, re.expire, p.name
     from registry re
   join vehicles v 
     on v.licenseId = re.licenseId
@@ -54,10 +64,16 @@ on r.id = v.regionId
     left join registry re
       on re.licenseId = v.licenseId
     group by re.licenseId)  
-  and expire` + type + `current_date()
-  and r.name = "` + city + `"
+  and expire` +
+    type +
+    `current_date()
+  and r.name = "` +
+    city +
+    `"
           union all 
-  select re.licenseId as license, v.brand, v.model, v.version, ` + queryType + `, re.expire, c.name
+  select re.licenseId as license, v.brand, v.model, v.version, ` +
+    queryType +
+    `, re.expire, c.name
     from registry re
   join vehicles v 
     on v.licenseId = re.licenseId
@@ -73,19 +89,27 @@ on r.id = v.regionId
     left join registry re
       on re.licenseId = v.licenseId
     group by re.licenseId)  
-  and expire` + type + `current_date()
-  and r.name = "` + city + `"
+  and expire` +
+    type +
+    `current_date()
+  and r.name = "` +
+    city +
+    `"
     order by license
-    limit ? offset ?`
-  
-  // bug - đã gọi được api kết quả trả về chính xác
-  const [rows, fields] = await pool.query(query, [resPerPage, 
-                                                  resPerPage * (page - 1)])
-  console.log(count)
-  return res.send({data: rows, count: Math.ceil(countRows[0].total / resPerPage)})
+    limit ? offset ?`;
 
-}
+  // bug - đã gọi được api kết quả trả về chính xác
+  const [rows, fields] = await pool.query(query, [
+    resPerPage,
+    resPerPage * (page - 1),
+  ]);
+  console.log(count);
+  return res.send({
+    data: rows,
+    count: Math.ceil(countRows[0].total / resPerPage),
+  });
+};
 
 module.exports = {
-  adminViewExactCity
-}
+  adminViewExactCity,
+};
