@@ -1,8 +1,33 @@
 <script setup>
+import { useRoute } from 'vue-router';
 import CenterStatisticCard from './CenterStatisticCard.vue';
 import InformationDetailedCard from './InformationDetailedCard.vue';
+import { onMounted } from 'vue';
 
+const route = useRoute()
 const props = defineProps(['center']);
+
+const fetchTotalRegistCardData = async () => {
+    const res = await fetch('http://localhost:1111/admin/centre/rank', {
+        method: 'POST',
+        credentials: "include",
+        headers: {
+            'Content-Type': 'application/json',
+            'Authorization': `${localStorage.getItem('token')}`
+        },
+        body: JSON.stringify({ centreId: route.params.id })
+    })
+    if(res.error) {
+        console.log(res.error);
+    }
+    const data = JSON.parse(await res.text())
+    console.log(data);
+};
+
+onMounted(() => {
+    console.log(route.params.id);
+    fetchTotalRegistCardData()
+});
 </script>
 
 <template>
