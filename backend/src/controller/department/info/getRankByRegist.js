@@ -3,9 +3,13 @@ import pool from "../../../configs/connectDB";
 // task - trả về tổng regist từng centre
 
 let getRankByRegist = async (req, res) => {
-  let centreId = req.body.centreId;
+  let centreId = parseInt(req.body.centreId);
+
   if (centreId === undefined) {
     return res.status(422).send({ ErrorCode: "ER_MISSING_PARAM" });
+  }
+  if (isNaN(centreId)) {
+    return res.status(422).send({ ErrorCode: "ER_INVALID_PARAM" });
   }
 
   let getAllCentreId = `select id from centre`;
@@ -42,7 +46,6 @@ let getRankByRegist = async (req, res) => {
       };
     }
   }
-
   return res.status(200).send({ data: result });
 };
 
