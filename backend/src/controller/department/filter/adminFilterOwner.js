@@ -1,22 +1,26 @@
-import pool from "../../../configs/connectDB"
+import pool from "../../../configs/connectDB";
 
 let adminFilterOwner = async (req, res) => {
-  let carType = req.body.carType
-  let code = req.body.code
+  let carType = req.body.carType;
+  let code = req.body.code;
 
   if (carType === undefined || code === undefined) {
-    return res.status(422).send({message: 'Missing parameter!'})
+    return res.status(422).send({ ErrorCode: "ER_MISSING_PARAM" });
   }
-  
-  // logic - dùng code thay cho ssn vì có cả taxnum nữa
-  let type = carType === 'registed' ? ' >= ' : ' < '
 
-  let queryType = carType === 'registed' 
-                              ? 're.date as registryDate'
-                              : 'timestampdiff(month, re.date, re.expire) as duration'
-  
-  let query = `
-  select re.licenseId as license, v.brand, v.model, v.version, ` + queryType + `, re.expire, p.name
+  // logic - dùng code thay cho ssn vì có cả taxnum nữa
+  let type = carType === "registed" ? " >= " : " < ";
+
+  let queryType =
+    carType === "registed"
+      ? "re.date as registryDate"
+      : "timestampdiff(month, re.date, re.expire) as duration";
+
+  let query =
+    `
+  select re.licenseId as license, v.brand, v.model, v.version, ` +
+    queryType +
+    `, re.expire, p.name
     from registry re
   join vehicles v 
     on v.licenseId = re.licenseId
@@ -30,10 +34,14 @@ let adminFilterOwner = async (req, res) => {
     left join registry re
       on re.licenseId = v.licenseId
     group by re.licenseId)  
-  and expire` + type + `current_date()
+  and expire` +
+    type +
+    `current_date()
   and ssn = ?
           union all 
-  select re.licenseId as license, v.brand, v.model, v.version, ` + queryType + `, re.expire, c.name
+  select re.licenseId as license, v.brand, v.model, v.version, ` +
+    queryType +
+    `, re.expire, c.name
     from registry re
   join vehicles v 
     on v.licenseId = re.licenseId
@@ -47,13 +55,15 @@ let adminFilterOwner = async (req, res) => {
     left join registry re
       on re.licenseId = v.licenseId
      group by re.licenseId)  
-  and expire` + type + `current_date()
+  and expire` +
+    type +
+    `current_date()
   and taxnum = ?
-    order by license`
-  const [rows, fields] = await pool.query(query, [code, code])
-  return res.send({data: rows})
-}
+    order by license`;
+  const [rows, fields] = await pool.query(query, [code, code]);
+  return res.send({ data: rows });
+};
 
 module.exports = {
-  adminFilterOwner
-}
+  adminFilterOwner,
+};

@@ -186,20 +186,20 @@ const initWebRoute = (app) => {
   // logic - trả về dữ liệu toàn hệ thống cho biểu đồ
   router.get('/admin/chart', verifyToken, verifyAdmin, homeController.adminGetDataForChart)
   // logic - trả về thứ hạng và tổng số đăng kiểm của trung tâm
-  router.post('/admin/centre/rank', verifyToken, verifyAdmin, homeController.getRankByRegist)
+  router.post('/admin/centre/rank', verifyToken, homeController.getRankByRegist)
   // logic - trả về năm có nhiều đăng kiểm nhất của trung tâm và số đăng kiểm trong năm đó
-  router.post('/admin/centre/productive-year', verifyToken, verifyAdmin, homeController.getProductiveYear)
+  router.post('/admin/centre/productive-year', verifyToken, homeController.getProductiveYear)
   // logic - trả về tháng có nhiều đăng kiểm nhất của trung tâm và số đăng kiểm trong tháng đó
-  router.post('/admin/centre/bursty-month', verifyToken, verifyAdmin, homeController.getBurstyMonth)
+  router.post('/admin/centre/bursty-month', verifyToken, homeController.getBurstyMonth)
 
     // section - statistic
   // logic - trả về tất cả đăng kiểm toàn hệ thống
-  router.post('/admin/regist/all', verifyToken, verifyAdmin, homeController.adminAllRegist)
+  router.post('/stats/all', verifyToken, verifyAdmin, homeController.adminAllRegist)
   // logic - trả về tất cả đăng kiểm của xe có biển số khớp với biển số gửi lên
-  router.post('/admin/regist/find', verifyToken, verifyAdmin, homeController.adminRegistByLicense)
+  router.post('/stats/find', verifyToken, verifyAdmin, homeController.adminRegistByLicense)
   // logic - trả về tất cả đăng kiểm của xe có thời gian khớp với thời gian gửi lên
-  router.post('/admin/regist/time', verifyToken, verifyAdmin, homeController.adminRegistByTime)
-  
+  router.post('/stats/time', verifyToken, verifyAdmin, homeController.adminRegistByTime)
+
   return app.use('/', router)
 }
 

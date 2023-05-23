@@ -1,5 +1,10 @@
 import pool from "../../../configs/connectDB"
 
+let validateLicense = (licenseId) => {
+	let regex = /^[0-9]\d[A-Z]\-\d\d\d\.\d\d$/gm
+	return regex.test(licenseId)
+}
+
 let registByLicense = async (req, res) => {
   let resPerPage = parseInt(req.body.resPerPage)
 	let page = parseInt(req.body.page) 
@@ -8,8 +13,10 @@ let registByLicense = async (req, res) => {
   if (req.body.page === undefined)
     page = 1
 
-	if (req.body.licenseId === undefined || req.session.userid === undefined)
+	if (req.body.licenseId === undefined)
 		return res.status(422).send({ErrorCode: 'ER_MISSING_PARAM'})
+	if (!validateLicense(req.body.licenseId))
+		return res.status(422).send({ErrorCode: 'ER_INVALID_LICENSE'})
 
   let licenseId = req.body.licenseId
   let centreId = req.session.userid
@@ -19,7 +26,6 @@ let registByLicense = async (req, res) => {
     from registry 
   where centreId = ?
     and licenseId = ?`
-	let [countRows, countFields] = await pool.query(find, [centreId, licenseId])
 
 	let query = `
 	select r.id, r.licenseId, brand, model, version, date, expire, 
@@ -44,10 +50,18 @@ let registByLicense = async (req, res) => {
 	order by expire desc
 			limit ? offset ?`
 
-	const [rows, fields] = await pool.query(query, [centreId, licenseId, 
-                                                  centreId, licenseId,
-                                                  resPerPage, resPerPage * (page - 1)])
-	return res.send({data: rows, count: Math.ceil(countRows[0].total / resPerPage)})
+	try {
+		let [countRows, countFields] = await pool.query(find, [centreId, licenseId])
+		const [rows, fields] = await pool.query(query, [centreId, licenseId, 
+																										centreId, licenseId,
+																										resPerPage, resPerPage * (page - 1)])
+		return res.send({data: rows, count: Math.ceil(countRows[0].total / resPerPage)})
+	}
+	catch (err) {
+		return res.status(500).send({ErrorCode: err.code, ErrorNo: err.errno})
+	}
+	
+
 }
 
 module.exports = {
