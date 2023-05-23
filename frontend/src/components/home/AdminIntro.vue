@@ -50,9 +50,9 @@ const scrollToTop = () => {
                 <p class="text-[10px] md:text-xs lg:text-sm xl:text-base font-medium mb-4">
                     With this application, registry management can be much easier and enjoyable than ever with modern interface and extremely convenient functions.
                 </p>
-                <button @click="scrollToServices" class="flex items-center bg-[#2acc97]/80 hover:bg-[#2acc97] transition-all ease-in-out duration-200 px-3 py-3 gap-2 mb-10 font-semibold rounded-lg">
+                <button @click="scrollToServices" class="flex group items-center bg-[#2acc97]/80 hover:bg-[#2acc97] hover:-translate-y-1 transition-all ease-in-out duration-200 px-3 py-3 gap-2 mb-10 font-semibold rounded-lg">
                     Get to work
-                    <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.75" stroke="currentColor" class="w-6 h-6">
+                    <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.75" stroke="currentColor" class="w-6 h-6 transition-transform duration-200 group-hover:rotate-90">
                         <path stroke-linecap="round" stroke-linejoin="round" d="M13.5 4.5L21 12m0 0l-7.5 7.5M21 12H3" />
                     </svg>
                 </button>
@@ -96,26 +96,26 @@ const scrollToTop = () => {
         <div ref="terms" class="w-full pt-24 pb-10 px-10">
             <p class="text-center text-3xl font-semibold mb-8"><span class="text-[#2acc97] text-5xl">T</span>erms</p>
             <div class="grid grid-cols-4 gap-4 max-sm:grid-cols-1 max-md:grid-cols-2">
-                <div class="w-full overflow-hidden flex flex-col text-[#1d1d1d] bg-white items-center gap-4 py-10 shadow rounded-lg relative z-[1] hover:text-white duration-700 ease-in-out after:absolute after:contents-[''] after:z-[-2] after:h-full after:-left-[35%] after:top-0 after:skew-x-[25deg] after:duration-700 after:origin-top-left after:w-0 after:bg-red-500/20 hover:after:h-full hover:after:w-[200%]">
-                    <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.75" stroke="currentColor" class="w-8 h-8 p-1 bg-red-500/20 text-red-500 rounded-[50%]">
+                <div class="w-full overflow-hidden flex flex-col text-[#1d1d1d] bg-white items-center gap-4 py-10 shadow rounded-lg relative z-[1] hover:text-white duration-700 ease-in-out hover:-translate-y-1 hover:shadow-md group after:absolute after:contents-[''] after:z-[-2] after:h-full after:-left-[35%] after:top-0 after:skew-x-[25deg] after:duration-700 after:origin-top-left after:w-0 after:bg-red-500/30 hover:after:h-full hover:after:w-[200%]">
+                    <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.75" stroke="currentColor" class="w-8 h-8 p-1 bg-red-500/20 text-red-500 rounded-[50%] transition-transform duration-500 group-hover:[transform:rotateY(180deg)]">
                         <path stroke-linecap="round" stroke-linejoin="round" d="M6 18L18 6M6 6l12 12" />
                     </svg>
                     <p class="text-center text-base font-semibold">Do not violate the system</p>
                 </div>
-                <div class="w-full overflow-hidden flex flex-col text-[#1d1d1d] bg-white items-center gap-4 py-10 shadow rounded-lg relative z-[1] hover:text-white duration-700 ease-in-out after:absolute after:contents-[''] after:z-[-2] after:h-full after:-left-[35%] after:top-0 after:skew-x-[25deg] after:duration-700 after:origin-top-left after:w-0 after:bg-red-500/20 hover:after:h-full hover:after:w-[200%]">
-                    <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.75" stroke="currentColor" class="w-8 h-8 p-1 bg-red-500/20 text-red-500 rounded-[50%]">
+                <div class="w-full overflow-hidden flex flex-col text-[#1d1d1d] bg-white items-center gap-4 py-10 shadow rounded-lg relative z-[1] hover:text-white duration-700 ease-in-out hover:-translate-y-1 hover:shadow-md group after:absolute after:contents-[''] after:z-[-2] after:h-full after:-left-[35%] after:top-0 after:skew-x-[25deg] after:duration-700 after:origin-top-left after:w-0 after:bg-red-500/30 hover:after:h-full hover:after:w-[200%]">
+                    <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.75" stroke="currentColor" class="w-8 h-8 p-1 bg-red-500/20 text-red-500 rounded-[50%] transition-transform duration-500 group-hover:[transform:rotateY(180deg)]">
                         <path stroke-linecap="round" stroke-linejoin="round" d="M6 18L18 6M6 6l12 12" />
                     </svg>
                     <p class="text-center text-base font-semibold">Do not violate the system</p>
                 </div>
-                <div class="w-full overflow-hidden flex flex-col text-[#1d1d1d] bg-white items-center gap-4 py-10 shadow rounded-lg relative z-[1] hover:text-white duration-700 ease-in-out after:absolute after:contents-[''] after:z-[-2] after:h-full after:-left-[35%] after:top-0 after:skew-x-[25deg] after:duration-700 after:origin-top-left after:w-0 after:bg-red-500/20 hover:after:h-full hover:after:w-[200%]">
-                    <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.75" stroke="currentColor" class="w-8 h-8 p-1 bg-red-500/20 text-red-500 rounded-[50%]">
+                <div class="w-full overflow-hidden flex flex-col text-[#1d1d1d] bg-white items-center gap-4 py-10 shadow rounded-lg relative z-[1] hover:text-white duration-700 ease-in-out hover:-translate-y-1 hover:shadow-md group after:absolute after:contents-[''] after:z-[-2] after:h-full after:-left-[35%] after:top-0 after:skew-x-[25deg] after:duration-700 after:origin-top-left after:w-0 after:bg-red-500/30 hover:after:h-full hover:after:w-[200%]">
+                    <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.75" stroke="currentColor" class="w-8 h-8 p-1 bg-red-500/20 text-red-500 rounded-[50%] transition-transform duration-500 group-hover:[transform:rotateY(180deg)]">
                         <path stroke-linecap="round" stroke-linejoin="round" d="M6 18L18 6M6 6l12 12" />
                     </svg>
                     <p class="text-center text-base font-semibold">Do not violate the system</p>
                 </div>
-                <div class="w-full overflow-hidden flex flex-col text-[#1d1d1d] bg-white items-center gap-4 py-10 shadow rounded-lg relative z-[1] hover:text-white duration-700 ease-in-out after:absolute after:contents-[''] after:z-[-2] after:h-full after:-left-[35%] after:top-0 after:skew-x-[25deg] after:duration-700 after:origin-top-left after:w-0 after:bg-red-500/20 hover:after:h-full hover:after:w-[200%]">
-                    <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.75" stroke="currentColor" class="w-8 h-8 p-1 bg-red-500/20 text-red-500 rounded-[50%]">
+                <div class="w-full overflow-hidden flex flex-col text-[#1d1d1d] bg-white items-center gap-4 py-10 shadow rounded-lg relative z-[1] hover:text-white duration-700 ease-in-out hover:-translate-y-1 hover:shadow-md group after:absolute after:contents-[''] after:z-[-2] after:h-full after:-left-[35%] after:top-0 after:skew-x-[25deg] after:duration-700 after:origin-top-left after:w-0 after:bg-red-500/30 hover:after:h-full hover:after:w-[200%]">
+                    <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.75" stroke="currentColor" class="w-8 h-8 p-1 bg-red-500/20 text-red-500 rounded-[50%] transition-transform duration-500 group-hover:[transform:rotateY(180deg)]">
                         <path stroke-linecap="round" stroke-linejoin="round" d="M6 18L18 6M6 6l12 12" />
                     </svg>
                     <p class="text-center text-base font-semibold">Do not violate the system</p>
