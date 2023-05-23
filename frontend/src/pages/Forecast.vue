@@ -150,7 +150,7 @@ watch(() => adminSelectionStore.getSelected, () => {
             <div v-if="!adminSelectionStore.getVerified" class="w-full flex items-center">
                 <NoSpecificSelect />
             </div>
-            <div v-else>
+            <div v-else class="w-full">
                 <div>{{ adminSelectionStore.getOptionSelected }}</div>
                 <div v-if="registModalOn">
                     <RegistrationFormModal :license="modalLicense" @exit-modal="handleRegistModal"/>
@@ -158,8 +158,8 @@ watch(() => adminSelectionStore.getSelected, () => {
                 <div v-if="infoModalOn">
                     <CarInfoModal :license-id="modalLicense" @exit-modal="handleInfoModal"/>
                 </div>
-                <div class="my-6">
-                    <div class="flex justify-center">
+                <div class="my-6 w-full">
+                    <div class="flex justify-center w-full">
                         <div class="flex items-center flex-col w-[90vw]">
                             <div class="flex justify-end items-center w-full gap-8">
                                 <div class="flex items-center gap-2">
