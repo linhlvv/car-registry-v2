@@ -2,9 +2,11 @@
 import RootRow from './RootRow.vue';
 import { watch, ref } from 'vue';
 import { useAccountStore } from '../../stores/AccountStore';
+import { useAdminSelectionStore } from '../../stores/AdminSelectionStore';
 import CarCard from './CarCard.vue';
 
-const accountStore = useAccountStore();
+
+const adminSelectionStore = useAdminSelectionStore()
 const isAdmin = localStorage.getItem('userType') == 1
 
 const emit = defineEmits(['openCarInfo', 'openCarRegistration', 'totalPageNum']);
@@ -48,10 +50,15 @@ const fetchCarData = async() => {
     let fetchRoute;
     let fetchBody;
     if(isAdmin) {
-
+        if(adminSelectionStore.getSelected === 'all') {
+            fetchRoute = `http://localhost:1111/vehicles/admin/all`
+            fetchBody = { page: props.pageNumber, resPerPage: 7 }
+        } else {
+            
+        }
     } else {
         fetchRoute = `http://localhost:1111/vehicles/${props.carType}`
-        fetchBody = {page: props.pageNumber, resPerPage: 7}
+        fetchBody = { page: props.pageNumber, resPerPage: 7 }
     }
     const res = await fetch(fetchRoute, {
         method: 'POST',
@@ -421,6 +428,15 @@ watch(() => props.reloaded, async(newReloaded, oldReloaded) => {
 watch(() => props.timeSortOrder, () => {
     console.log(`time order: ${props.timeSortOrder}`);
     fetchCarDataWithSpecificTime()
+});
+
+// logic - admin option watcher
+watch(() => adminSelectionStore.getOptionSelected, () => {
+    fetchCarData()
+});
+
+watch(() => adminSelectionStore.getSelected, () => {
+    fetchCarData()
 });
 </script>
 
