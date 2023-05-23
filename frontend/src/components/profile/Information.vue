@@ -6,8 +6,8 @@ const props = defineProps(['center']);
 </script>
 
 <template>
-    <div class="w-full flex items-start">
-        <div class="bg-white min-w-[500px] h-[550px] rounded-md flex flex-col items-center text-[#1d1d1d] px-4 py-6 shadow-md">
+    <div class="w-full flex items-start max-lg:flex-col max-lg:items-center">
+        <div class="bg-white w-full min-w-[500px] h-[550px] max-[1480px]:h-[702px] max-[1180px]:h-[896px] max-lg:h-[550px] duration-200 rounded-md flex flex-col items-center text-[#1d1d1d] px-4 py-6 shadow-md">
             <i class="fa-solid fa-building-user text-6xl border-[3px] border-solid text-[#2acc97] border-[#2acc97] rounded-[50%] p-6 py-7"></i>
             <div class="flex flex-col items-center justify-center gap-1">
                 <h1 class="text-2xl font-semibold mt-2 text-center flex items-center justify-center">{{ center.name }}</h1>
@@ -20,13 +20,13 @@ const props = defineProps(['center']);
                 <InformationDetailedCard description="District" :detail="center.district"/>
             </div>
         </div>
-        <div class="flex flex-col h-[550px] justify-between">
-            <div class="pl-6 w-full">
+        <div class="flex flex-col min-h-[550px] justify-between max-lg:mt-6">
+            <div class="lg:pl-6 w-full">
                 <div class="flex items-center gap-2 mb-2">
                     <p class="text-[#2acc97] text-3xl font-semibold">Highlight</p>
                     <hr class="w-full border border-solid border-gray-300">
                 </div>
-                <div class="grid grid-cols-3 gap-6">
+                <div class="grid grid-cols-3 gap-6 max-[1480px]:grid-cols-2 max-[1180px]:grid-cols-1">
                     <CenterStatisticCard
                         title="Total regist"
                         content="10,523"
@@ -82,7 +82,7 @@ const props = defineProps(['center']);
                     </CenterStatisticCard>
                 </div>
             </div>
-            <div class="pl-6 w-full flex flex-col justify-between gap-2">
+            <div class="lg:pl-6 w-full flex flex-col justify-between gap-2 max-lg:mt-6">
                 <div class="flex items-center gap-2">
                     <p class="text-[#2acc97] text-3xl font-semibold">About</p>
                     <hr class="w-full border border-solid border-gray-300">
