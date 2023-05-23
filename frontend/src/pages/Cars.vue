@@ -8,6 +8,7 @@ import { useAdminSelectionStore } from '../stores/AdminSelectionStore';
 import { reactive, ref } from 'vue';
 
 const adminSelectionStore = useAdminSelectionStore()
+const isAdmin = ref(localStorage.getItem('userType') == 1)
 
 //SECTION - page handler
 const pageNumber = ref(1);
@@ -185,19 +186,28 @@ const openSelectHandler = () => {
                 <div class="my-6">
                     <div class="flex items-center flex-col gap-5 justify-center">
                         <!-- default car type filter -->
-                        <div class="flex custom-shadow w-[70vw] rounded-2xl overflow-hidden bg-white max-[732px]:hidden">
+                        <div class="flex custom-shadow rounded-2xl overflow-hidden bg-white max-[732px]:hidden" :class="isAdmin ? 'w-[90vw]' : 'w-[70vw]'">
                             <div 
                                 @click="carTypeHandler('registed')"
-                                class="w-1/2 text-base font-medium gap-1 flex items-center justify-center text-center duration-200 cursor-pointer p-2 py-4 max-[997px]:text-sm max-[738px]:text-xs max-[625px]:text-[10px]"
-                                :class="carTypeMatched('registed') ? 'bg-[#2acc97] text-white' : 'hover:text-[#2acc97]'"
+                                class="text-base font-medium gap-1 flex items-center justify-center text-center duration-200 cursor-pointer p-2 py-4 max-[997px]:text-sm max-[738px]:text-xs max-[625px]:text-[10px]"
+                                :class="carTypeMatched('registed') ? 'bg-[#2acc97] text-white' : 'hover:text-[#2acc97]', isAdmin ? 'w-1/3' : 'w-1/2'"
                             >
                                 <i class="fa-solid fa-car-on"></i>
                                 <div>Registed cars</div>
                             </div>
                             <div 
+                                v-if="isAdmin"
+                                @click="carTypeHandler('unregisted')"
+                                class="w-1/3 text-base font-medium gap-1 flex items-center justify-center text-center duration-200 cursor-pointer p-2 py-4 max-[997px]:text-sm max-[738px]:text-xs max-[625px]:text-[10px]"
+                                :class="carTypeMatched('unregisted') ? 'bg-red-500 text-white' : 'hover:text-red-500'"
+                            >
+                                <i class="fa-solid fa-car-tunnel"></i>
+                                <div>Unregisted cars</div>
+                            </div>
+                            <div 
                                 @click="carTypeHandler('expired')"
-                                class="w-1/2 text-base font-medium gap-1 flex items-center justify-center text-center duration-200 cursor-pointer p-2 py-4 max-[997px]:text-sm max-[738px]:text-xs max-[625px]:text-[10px]"
-                                :class="carTypeMatched('expired') ? 'bg-[#93a3e6] text-white' : 'hover:text-[#93a3e6]'"
+                                class="text-base font-medium gap-1 flex items-center justify-center text-center duration-200 cursor-pointer p-2 py-4 max-[997px]:text-sm max-[738px]:text-xs max-[625px]:text-[10px]"
+                                :class="carTypeMatched('expired') ? 'bg-[#93a3e6] text-white' : 'hover:text-[#93a3e6]', isAdmin ? 'w-1/3' : 'w-1/2'"
                             >
                                 <i class="fa-solid fa-car-burst"></i>
                                 <div>Expired cars</div>
@@ -217,6 +227,11 @@ const openSelectHandler = () => {
                                         <div class="flex items-center">
                                             <input @click="carTypeHandler('registed')" id="default-radio-2" type="radio" value="registed" v-model="carType" name="registed" class="w-4 h-4">
                                             <label for="default-radio-2" class="ml-2 text-sm font-medium text-gray-900 dark:text-gray-300">Registed cars</label>
+                                        </div>
+
+                                        <div class="flex items-center" v-if="isAdmin">
+                                            <input @click="carTypeHandler('unregisted')" id="default-radio-2" type="radio" value="registed" v-model="carType" name="registed" class="w-4 h-4">
+                                            <label for="default-radio-2" class="ml-2 text-sm font-medium text-gray-900 dark:text-gray-300">Unregisted cars</label>
                                         </div>
                                     
                                         <div class="flex items-center">
