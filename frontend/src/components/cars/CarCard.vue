@@ -16,13 +16,16 @@ const regist = () => {
 
 const isAdmin = ref(false)
 onMounted(() => {
-    isAdmin.value = accountStore.isAdmin
+    isAdmin.value = localStorage.getItem('userType') == 1
 });
 
 </script>
 
 <template>
-    <div class="bg-white p-2 flex min-w-[800px] w-full mt-[2px] min-h-[50px]">
+    <div class="bg-white p-2 flex overflow-hidden items-center min-w-[800px] w-full mt-[2px] min-h-[50px] relative group">
+        <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" class="w-4 h-4 text-[#2acc97] absolute transition-transform duration-200 -translate-x-7 group-hover:-translate-x-0">
+            <path stroke-linecap="round" stroke-linejoin="round" d="M8.25 4.5l7.5 7.5-7.5 7.5" />
+        </svg>
         <div class="font-semibold text-[#616367] text-[11px] flex justify-center items-center w-[14%]">
             {{ car.license }}
         </div>
