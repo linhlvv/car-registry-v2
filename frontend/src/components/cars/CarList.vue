@@ -75,7 +75,7 @@ const fetchCarData = async() => {
     const dataFetched = JSON.parse(await res.text())
     console.log(`car list: ${JSON.stringify(dataFetched)}`);
     list.value = dataFetched.data
-    totalPage.value = dataFetched.count
+    totalPage.value = dataFetched.countPage
     postTotalPage()
     loading.value = false
 }
@@ -146,7 +146,7 @@ const fetchDataSortedByBrand = async () => {
     const dataFetched = JSON.parse(await res.text())
     // console.log(`cars by brands: ${JSON.stringify(dataFetched)}`);
     list.value = dataFetched.data
-    totalPage.value = dataFetched.count
+    totalPage.value = dataFetched.countPage
     postTotalPage()
     loading.value = false
 }
@@ -183,7 +183,7 @@ const fetchCarDataWithSpecificBrand = async () => {
     const dataFetched = JSON.parse(await res.text())
     console.log(`car brand: ${JSON.stringify(dataFetched)}`);
     list.value = dataFetched.data
-    totalPage.value = dataFetched.count
+    totalPage.value = dataFetched.countPage
     postTotalPage()
     loading.value = false
 }
@@ -223,7 +223,7 @@ const fetchCarDataWithSpecificTime = async () => {
     const dataFetched = JSON.parse(await res.text())
     console.log(`car time: ${JSON.stringify(dataFetched)}`);
     list.value = dataFetched.data
-    totalPage.value = dataFetched.count
+    totalPage.value = dataFetched.countPage
     postTotalPage()
     loading.value = false
 }
@@ -260,7 +260,7 @@ const fetchCarDataWithSpecificCity = async () => {
     const dataFetched = JSON.parse(await res.text())
     console.log(`car brand: ${JSON.stringify(dataFetched)}`);
     list.value = dataFetched.data
-    totalPage.value = dataFetched.count
+    totalPage.value = dataFetched.countPage
     postTotalPage()
     loading.value = false
 }

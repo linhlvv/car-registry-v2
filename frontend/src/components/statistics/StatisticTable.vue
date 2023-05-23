@@ -110,7 +110,7 @@ const fetchData = async () => {
     }
     const dataFetched = JSON.parse(await res.text())
     console.log(`registries: ${JSON.stringify(dataFetched)}`);
-    totalPage.value = dataFetched.count
+    totalPage.value = dataFetched.countPage
     registCardList.value = dataFetched.data
     loading.value = false
 };
@@ -146,7 +146,7 @@ const fetchDataWithSpecificTime = async () => {
     }
     const dataFetched = JSON.parse(await res.text())
     console.log(`spec time: ${JSON.stringify(dataFetched)}`);
-    totalPage.value = dataFetched.count
+    totalPage.value = dataFetched.countPage
     registCardList.value = dataFetched.data
     loading.value = false
 }
