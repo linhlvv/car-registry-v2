@@ -85,7 +85,7 @@ on r.id = v.regionId
     const [countRows, countFields] = await pool.query(count, [req.session.userid, city])
     const [rows, fields] = await pool.query(query, [resPerPage, 
       resPerPage * (page - 1)])
-    return res.send({data: rows, count: Math.ceil(countRows[0].total / resPerPage)})
+    return res.send({data: rows, countPage: Math.ceil(countRows[0].total / resPerPage)})
   }
   catch (err) {
     return res.status(500).send({ErrorCode: err.code, ErrorNo: err.errno})

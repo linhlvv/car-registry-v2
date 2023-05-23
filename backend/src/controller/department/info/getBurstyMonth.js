@@ -8,7 +8,7 @@ let getBurstyMonth = async (req, res) => {
   }
 
   let query = `
-    SELECT UPPER(DATE_FORMAT(date, '%b')) as month, YEAR(date) as year, COUNT(*) as cnt
+    SELECT (DATE_FORMAT(date, '%b')) as month, YEAR(date) as year, COUNT(*) as cnt
     FROM registry
     WHERE centreId = 453
     GROUP BY MONTH(date)
