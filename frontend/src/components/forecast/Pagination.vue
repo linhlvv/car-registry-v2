@@ -32,10 +32,6 @@ const pageQuantity = computed(() => {
     }
 })
 
-watch(screenW, () => {
-    console.log(screenW.value);
-})
-
 const pageArray = computed(() => {
     const currentPagePosition = Math.floor((props.currentPage - 1)/pageQuantity.value)
     const startPoint = currentPagePosition*pageQuantity.value + 1
