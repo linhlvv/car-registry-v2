@@ -132,7 +132,7 @@ onMounted(() => {
 </script>
 
 <template>
-    <div class="sticky top-0">
+    <div :class="route.path !== '/' ? 'sticky' : ''" class="top-0 z-50">
         <nav class="bg-[#2acc97] max-[732px]:bg-[#f5f7fb] transition-all duration-200 border-gray-200 py-4 w-full">
             <div class="flex flex-wrap justify-between items-center mx-auto w-full px-4 md:px-6 ">
                 <router-link to="/" >
