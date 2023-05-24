@@ -6,6 +6,7 @@ const accountStore = useAccountStore()
 defineProps({
     isRootRow: Boolean,
     info: Object,
+    status: String,
 });
 
 const emit = defineEmits(['openInfo', 'regist']);
@@ -28,11 +29,14 @@ const regist = (license) => {
         <p class="text-center font-medium text-[#1d1d1d] w-1/5" :class="isRootRow ? 'text-[14px]' : 'text-[12px]'">
             {{ isRootRow ? 'License ID' : info.licenseId }}
         </p>
-        <p class="text-left font-medium text-[#1d1d1d] w-[35%]" :class="isRootRow ? 'text-[14px]' : 'text-[12px]'">
+        <p class="text-left font-medium text-[#1d1d1d] w-1/5" :class="isRootRow ? 'text-[14px]' : 'text-[12px]'">
             {{ isRootRow ? 'Car' : `${info.brand} ${info.model} ${info.version}` }}
         </p>
-        <p class="text-center font-medium text-[#1d1d1d] w-1/5" :class="isRootRow ? 'text-[14px]' : 'text-[12px]'">
-            {{ isRootRow ? 'Expired date' : info.expire }}
+        <p class="text-center font-medium w-1/5" :class="isRootRow ? 'text-[14px]' : 'text-[12px]', status === 'new' ? 'text-red-500' : 'text-[#1d1d1d]'">
+            {{ isRootRow ? 'Expired date' : (info.expire === undefined ? 'None' : info.expire) }}
+        </p>
+        <p class="text-center font-medium text-[#1d1d1d] w-[15%]" :class="isRootRow ? 'text-[14px]' : 'text-[12px]', status === 'new' ? 'text-[#2acc97]' : 'text-[#1d1d1d]'">
+            {{ isRootRow ? 'Status' : (info.expire === undefined ? 'New' : 'Re-regist') }}
         </p>
         <div v-if="!isRootRow" class="w-1/4 flex justify-evenly">
             <button class="flex items-center justify-center gap-1 rounded-full text-[11px] bg-[#f5f7fb] px-3 py-1 mt-[2px] cursor-pointer duration-200 hover:bg-[#2acc97] text-[#293241] hover:text-white" @click="openInfo(info.licenseId)">
