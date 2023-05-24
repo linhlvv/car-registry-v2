@@ -133,15 +133,15 @@ onMounted(() => {
 
 <template>
     <div class="sticky top-0">
-        <nav class="bg-[#2acc97] max-[732px]:bg-[#f5f7fb] transition-all duration-200 border-gray-200 dark:bg-gray-900 py-4 w-full">
+        <nav class="bg-[#2acc97] max-[732px]:bg-[#f5f7fb] transition-all duration-200 border-gray-200 py-4 w-full">
             <div class="flex flex-wrap justify-between items-center mx-auto w-full px-4 md:px-6 ">
                 <router-link to="/" >
                     <div class="text-3xl font-bold text-white cursor-pointer max-[732px]:text-[#2acc97] transition-all duration-200">RegistryTotal</div>
                 </router-link>
                 <div class="flex items-center">
-                    <div class="flex items-center pt-[2px] cursor-pointer mr-6 text-[16px] font-semibold text-white dark:text-white hover:underline max-[732px]:hidden">2812-0810-2001</div>
+                    <div class="flex items-center pt-[2px] cursor-pointer mr-6 text-[16px] font-semibold text-white hover:underline max-[732px]:hidden">2812-0810-2001</div>
                     <div v-if="!isLoggedIn">
-                        <router-link to="/log-and-reg/login" class="text-[16px] text-slate-700 font-medium p-2 px-4 bg-white dark:text-blue-500 hover:text-[#2acc97] rounded-lg">Login</router-link>
+                        <router-link to="/log-and-reg/login" class="text-[16px] text-slate-700 font-medium p-2 px-4 bg-white hover:text-[#2acc97] rounded-lg">Login</router-link>
                     </div>
                     <div v-else>
                         <ProfileDropdown />
@@ -155,7 +155,7 @@ onMounted(() => {
             </div>
         </nav>
         <div v-show="route.path !== '/'" class="max-[732px]:hidden w-full">
-            <nav class="bg-white dark:bg-gray-700">
+            <nav class="bg-white">
                 <div class="max-w-screen-xl px-4 mx-auto md:px-6">
                     <div class="flex items-center justify-center">
                         <ul class="flex flex-row mt-0 mr-6 text-sm font-medium">
@@ -186,7 +186,7 @@ onMounted(() => {
             </nav>
         </div>
         <div v-show="(route.path === '/forecast' || route.path === '/cars' || route.path === '/statistics') && isAdmin" class="max-[732px]:hidden w-full">
-            <nav class="bg-white dark:bg-gray-700">
+            <nav class="bg-white">
                 <div class="max-w-screen-xl mx-auto">
                     <div class="flex items-center justify-between">
                         <button @click="moveSelection('left')" class="flex justify-center items-center cursor-pointer w-[10%] py-6 text-[#2acc97] duration-200 hover:text-white hover:bg-[#2acc97]/90 active:bg-[#2acc97]">
