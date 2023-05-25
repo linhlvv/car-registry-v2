@@ -2,12 +2,13 @@
 import StatisticTableCard from './StatisticTableCard.vue';
 import SearchBar from '../UI/SearchBar.vue';
 import { useAccountStore } from '../../stores/AccountStore';
+import { useAdminSelectionStore } from '../../stores/AdminSelectionStore';
 import { ref, watch } from 'vue';
 
 const emit = defineEmits(['selectedTimeClicked', 'openCertInfoModal'])
 const props = defineProps(['time'])
 
-const accountStore = useAccountStore()
+const adminSelectionStore = useAdminSelectionStore()
 const isAdmin = localStorage.getItem('userType') == 1
 
 //SECTION - modal handler
@@ -91,7 +92,27 @@ const fetchData = async () => {
     let fetchRoute
     let fetchBody
     if(isAdmin) {
-
+        if(adminSelectionStore.getSelected === 'all') {
+            fetchRoute = `http://localhost:1111/stats/all`
+            fetchBody = {
+                resPerPage: 7,
+                page: pageNumber.value,
+            }
+        } else if(adminSelectionStore.getSelected === 'region') {
+            fetchRoute = `http://localhost:1111/stats/area`
+            fetchBody = {
+                resPerPage: 7,
+                page: pageNumber.value,
+                area: adminSelectionStore.getOptionSelected,
+            }
+        } else {
+            fetchRoute = `http://localhost:1111/stats/centre`
+            fetchBody = {
+                resPerPage: 7,
+                page: pageNumber.value,
+                centre: adminSelectionStore.getOptionSelected,
+            }
+        } 
     } else {
         fetchRoute = `http://localhost:1111/regist/all`
         fetchBody = { resPerPage: 7, page: pageNumber.value }
@@ -209,6 +230,14 @@ watch([pageNumber], () => {
 
 watch(() => props.time, async () => {
     fetchDataWithSpecificTime()
+});
+
+watch(() => adminSelectionStore.getOptionSelected, () => {
+    fetchData()
+});
+
+watch(() => adminSelectionStore.getSelected, () => {
+    fetchData()
 });
 
 const scrollToChart = () => {
