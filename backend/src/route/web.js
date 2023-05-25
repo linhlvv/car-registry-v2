@@ -199,6 +199,8 @@ const initWebRoute = (app) => {
   router.post('/stats/find', verifyToken, verifyAdmin, homeController.adminRegistByLicense)
   // logic - trả về tất cả đăng kiểm của xe có thời gian khớp với thời gian gửi lên
   router.post('/stats/time', verifyToken, verifyAdmin, homeController.adminRegistByTime)
+  // logic - trả về tất cả đăng kiểm của trung tâm có tên khớp với tên gửi lên
+  router.post('/stats/centre', verifyToken, verifyAdmin, homeController.adminRegistByCentre)
 
   return app.use('/', router)
 }
