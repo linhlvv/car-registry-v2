@@ -34,8 +34,8 @@ watch(screenW, () => {
 
 <template>
     <Navbar :vertical-nav-on="verticalNavOpened" @vertical-nav-clicked="verticalNavHandler"/>
-    <Transition name="fade">
-        <div v-if="verticalNavOpened">
+    <Transition name="nav-slide-fade">
+        <div v-if="verticalNavOpened" class="fixed w-full top-0 z-50 h-screen">
             <VerticalNavbar :nav-on="verticalNavOpened" @turn-off-nav="verticalNavHandler"/>
         </div>
     </Transition>
@@ -67,6 +67,20 @@ watch(screenW, () => {
     .slide-fade-enter-from,
     .slide-fade-leave-to {
         transform: translateX(20px);
+        opacity: 0;
+    }
+
+    .nav-slide-fade-enter-active {
+        transition: all 0.5s ease-in-out;
+    }
+
+    .nav-slide-fade-leave-active {
+        transition: all 0.3s cubic-bezier(1, 0.5, 0.8, 1);
+    }
+
+    .nav-slide-fade-enter-from,
+    .nav-slide-fade-leave-to {
+        transform: translateX(100px);
         opacity: 0;
     }
 
