@@ -58,7 +58,6 @@ let adminRegistByTime = async (req, res) => {
   
   // bug - đã gọi được api kết quả trả về chính xác
   try {
-    console.log(query);
     const [countRows, countFields] = await pool.query(count)
     const [rows, fields] = await pool.query(query, [resPerPage, 
                                                   resPerPage * (page - 1)])
