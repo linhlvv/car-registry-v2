@@ -58,8 +58,6 @@ let viewAllVehicles = async (req, res) => {
     order by license
     limit ? offset ?`
 
-    console.log(query);
-
   const [rows, fields] = await pool.query(query, [resPerPage, 
                                                   resPerPage * (page - 1)])
   return res.send({data: rows, countData: countRows[0].total, 

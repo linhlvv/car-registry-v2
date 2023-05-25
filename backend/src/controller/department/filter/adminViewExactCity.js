@@ -103,7 +103,6 @@ on r.id = v.regionId
     resPerPage,
     resPerPage * (page - 1),
   ]);
-  console.log(count);
   return res.send({
     data: rows,
     countPage: Math.ceil(countRows[0].total / resPerPage),

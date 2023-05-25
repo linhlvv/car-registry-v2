@@ -55,7 +55,6 @@ let addDataFromExcel = async (req, res) => {
         workbook.Sheets[sheet_name_list[0]]
       );
       ownerType = req.body.ownerType;
-      console.log(ownerType);
       // Thêm dữ liệu vào db
       for (let i = 0; i < data.length; i++) {
         //Thêm vào personal
