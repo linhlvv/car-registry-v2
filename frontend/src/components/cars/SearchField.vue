@@ -244,7 +244,7 @@ const reload = async () => {
         <div class="w-full flex items-center justify-between max-[535px]:items-start max-[535px]:flex-col-reverse max-[535px]:gap-y-2">
             <div class="flex items-center w-1/2 gap-3 max-[535px]:w-full">
                 <SearchBar @search-entered="licenseSearch" width="w-full" placeholder="Enter a license plate..."/>
-                <i @click="reload" class="fa-solid fa-rotate text-[#292929] p-[6px] rounded-[50%] hover:text-[#2acc97] active:bg-[#2acc97]/10 cursor-pointer"></i>
+                <i @click="reload" class="fa-solid fa-rotate text-[#292929] p-[6px] rounded-[50%] hover:text-[#2acc97] active:bg-[#2acc97]/10 cursor-pointer duration-300 ease-in-out transition-transform hover:rotate-180"></i>
             </div>
 
             <!-- Pagination -->
