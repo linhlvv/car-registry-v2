@@ -22,12 +22,10 @@ const pageHandler = (direction) => {
     if(direction === 'left') {
         if (pageNumber.value > 1) {
             pageNumber.value -= +1;
-            emit('prevPage');
         }
     } else {
-        if (pageNumber.value < 100) {
+        if (pageNumber.value < totalPage.value) {
             pageNumber.value += +1;
-            emit('nextPage');
         }
     }
 };
@@ -82,6 +80,9 @@ const timeClicked = (value, type) => {
     pageNumber.value = 1
     emit('selectedTimeClicked', {year: props.time.year, quarter: props.time.quarter, month: props.time.month})
 };
+
+const isSpecificLicense = ref(false)
+let searchedLicense = ref('')
 
 const loading = ref(false)
 const registCardList = ref([])
@@ -151,17 +152,62 @@ const fetchDataWithSpecificTime = async () => {
     loading.value = false
 }
 
-//SECTION - watcher
-watch(pageNumber, () => {
-    if(props.time.year === 'All') {
-        fetchData()
+const fetchDataWithSpecificLicense = async (license) => {
+    loading.value = true
+    if(searchedLicense.value !== license && license !== undefined) {
+        searchedLicense.value = license
+    }
+    if(isSpecificLicense.value === false) {
+        isSpecificLicense.value = true
+        pageNumber.value = 1
+    }
+    let fetchRoute
+    let fetchBody
+    if(isAdmin) {
+
     } else {
-        fetchDataWithSpecificTime()
+        fetchRoute = `http://localhost:1111/regist/find`
+        fetchBody = {
+            resPerPage: 7,
+            page: pageNumber.value,
+            licenseId: searchedLicense.value,
+        }
+    }
+    const res = await fetch(fetchRoute, {
+        method: 'POST',
+        credentials: "include",
+        headers: {
+            'Content-Type': 'application/json',
+            'Authorization': `${localStorage.getItem('token')}`
+        },
+        body: JSON.stringify(fetchBody),
+    })
+    if(res.error) {
+        console.log(res.error);
+    }
+    const dataFetched = JSON.parse(await res.text())
+    console.log(`spec license: ${JSON.stringify(dataFetched)}`);
+    totalPage.value = dataFetched.countPage
+    registCardList.value = [...dataFetched.data]
+    console.log(registCardList.value.length);
+    loading.value = false
+}
+
+//SECTION - watcher
+watch([pageNumber], () => {
+    if(isSpecificLicense.value) {
+        fetchDataWithSpecificLicense()
+    } else {
+        if(props.time.year === 'All') {
+            fetchData()
+        } else {
+            fetchDataWithSpecificTime()
+        }
     }
     
 }, { immediate: true });
 
-watch(() => props.time, async (newTime, oldTime) => {
+watch(() => props.time, async () => {
     fetchDataWithSpecificTime()
 });
 
@@ -176,7 +222,16 @@ const scrollToChart = () => {
         <div class="w-full flex flex-col bg-white p-4 gap-3">
             <div class="w-full flex items-center justify-between">
                 <div class="w-3/4 flex items-center gap-2">
-                    <SearchBar width="w-3/4 min-[732px]:w-3/5" placeholder="Enter a license ID..."/>
+                    <SearchBar @search-entered="fetchDataWithSpecificLicense" width="w-3/4 min-[732px]:w-3/5" placeholder="Enter a license ID..."/>
+                    <div 
+                        v-if="searchedLicense !== '' && searchedLicense !== null && searchedLicense !== undefined"
+                        class="text-white text-sm font-medium rounded-3xl bg-red-300 py-1 px-2 flex items-center space-x-1"
+                    >
+                        <p class="">{{ searchedLicense }}</p>
+                        <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="w-4 h-4 cursor-pointer text-red-500">
+                            <path stroke-linecap="round" stroke-linejoin="round" d="M6 18L18 6M6 6l12 12" />
+                        </svg>
+                    </div>
                     <button v-if="time.year !== 'All'" @click="scrollToChart" class="text-[12px] text-white flex items-center gap-1 font-semibold bg-[#2acc97]/90 active:bg-[#2acc97] p-2 rounded-md">
                         View chart 
                         <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" fill="currentColor" class="w-5 h-5">
@@ -226,6 +281,7 @@ const scrollToChart = () => {
 </template>
 
 <style scoped>
+
     textarea:focus, input:focus{
         outline: none;
     }
