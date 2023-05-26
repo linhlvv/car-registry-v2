@@ -21,5 +21,11 @@ defineEmits(['update:modelValue']);
         outline: none;
     }
 
-    
+    input:-webkit-autofill,
+    input:-webkit-autofill:hover,
+    input:-webkit-autofill:focus,
+    input:-webkit-autofill:active {
+        transition: background-color 5000s ease-in-out 0s;
+        -webkit-text-fill-color: #1d1d1d !important;
+    }
 </style>
