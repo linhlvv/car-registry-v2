@@ -214,6 +214,20 @@ const fetchDataWithSpecificLicense = async (license) => {
     loading.value = false
 }
 
+const handleRemoveLicenseSearch = () => {
+    isSpecificLicense.value = false
+    searchedLicense.value = ''
+    if(pageNumber.value === 1) {
+        if(props.time.year === 'All') {
+            fetchData()
+        } else {
+            fetchDataWithSpecificTime()
+        }
+    } else {
+        pageNumber.value = 1
+    }
+}
+
 //SECTION - watcher
 watch([pageNumber], () => {
     if(isSpecificLicense.value) {
@@ -257,7 +271,7 @@ const scrollToChart = () => {
                         class="text-white text-sm font-medium rounded-3xl bg-red-300 py-1 px-2 flex items-center space-x-1"
                     >
                         <p class="">{{ searchedLicense }}</p>
-                        <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="w-4 h-4 cursor-pointer text-red-500">
+                        <svg @click="handleRemoveLicenseSearch" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="w-4 h-4 cursor-pointer text-red-500">
                             <path stroke-linecap="round" stroke-linejoin="round" d="M6 18L18 6M6 6l12 12" />
                         </svg>
                     </div>
