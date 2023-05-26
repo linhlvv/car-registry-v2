@@ -92,25 +92,25 @@ const fetchData = async () => {
     let fetchRoute
     let fetchBody
     if(isAdmin) {
+        fetchRoute = `http://localhost:1111/stats/all`
         if(adminSelectionStore.getSelected === 'all') {
-            fetchRoute = `http://localhost:1111/stats/all`
             fetchBody = {
                 resPerPage: 7,
                 page: pageNumber.value,
             }
         } else if(adminSelectionStore.getSelected === 'region') {
-            fetchRoute = `http://localhost:1111/stats/area`
             fetchBody = {
                 resPerPage: 7,
                 page: pageNumber.value,
-                area: adminSelectionStore.getOptionSelected,
+                filter: 'region',
+                name: adminSelectionStore.getOptionSelected,
             }
         } else {
-            fetchRoute = `http://localhost:1111/stats/centre`
             fetchBody = {
                 resPerPage: 7,
                 page: pageNumber.value,
-                centre: adminSelectionStore.getOptionSelected,
+                filter: 'centre',
+                name: adminSelectionStore.getOptionSelected,
             }
         } 
     } else {
