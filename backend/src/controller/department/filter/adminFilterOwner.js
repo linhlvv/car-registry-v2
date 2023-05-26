@@ -1,11 +1,35 @@
 import pool from "../../../configs/connectDB";
 
 let adminFilterOwner = async (req, res) => {
+
+  let filter = req.body.filter;
+  let name = req.body.name;
+
   let carType = req.body.carType;
   let code = req.body.code;
 
   if (carType === undefined || code === undefined) {
     return res.status(422).send({ ErrorCode: "ER_MISSING_PARAM" });
+  }
+
+  let sub = "";
+  if (filter === "region") {
+    sub = 
+    `
+    LEFT JOIN region r ON
+    r.id = v.regionId 
+    WHERE r.name = 
+    `
+    sub = sub + "'" + name + "'"
+  }
+  else if (filter === "centre") {
+    sub = 
+    `
+    LEFT JOIN centre c ON
+    c.id = re.centreId 
+    WHERE c.name = 
+    `
+    sub = sub + "'" + name + "'"
   }
 
   // logic - dùng code thay cho ssn vì có cả taxnum nữa
@@ -33,6 +57,11 @@ let adminFilterOwner = async (req, res) => {
       from vehicles v
     left join registry re
       on re.licenseId = v.licenseId
+      `
+      +
+      sub
+      + 
+      `
     group by re.licenseId)  
   and expire` +
     type +
@@ -54,6 +83,11 @@ let adminFilterOwner = async (req, res) => {
       from vehicles v
     left join registry re
       on re.licenseId = v.licenseId
+      `
+      +
+      sub
+      + 
+      `
      group by re.licenseId)  
   and expire` +
     type +

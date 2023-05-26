@@ -119,7 +119,6 @@ let adminFilterBrand = async (req, res) => {
     `, version ` +
     order +
     ` limit ? offset ?`;
-  console.log(query)
   // bug - đã gọi được api kết quả trả về chính xác
   const [rows, fields] = await pool.query(query, [
     resPerPage,
