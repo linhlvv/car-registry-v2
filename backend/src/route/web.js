@@ -1,7 +1,7 @@
 import express from 'express'
-import { verifyToken } from '../controller/verifyToken'
-import { verifyAdmin } from '../controller/verifyAdmin'
 import homeController from '../controller/homeController'
+import { verifyAdmin } from '../controller/verifyAdmin'
+import { verifyToken } from '../controller/verifyToken'
 let router = express.Router()
 
 const initWebRoute = (app) => {
@@ -194,11 +194,15 @@ const initWebRoute = (app) => {
 
     // section - statistic
   // logic - trả về tất cả đăng kiểm toàn hệ thống
+  // input - resPerPage, page, filter(centre/region), name(tên 1 trong 2 cái kia)
   router.post('/stats/all', verifyToken, verifyAdmin, homeController.adminAllRegist)
   // logic - trả về tất cả đăng kiểm của xe có biển số khớp với biển số gửi lên
+  // input - resPerPage, page, license, filter(centre/region), name(tên 1 trong 2 cái kia)
   router.post('/stats/find', verifyToken, verifyAdmin, homeController.adminRegistByLicense)
   // logic - trả về tất cả đăng kiểm của xe có thời gian khớp với thời gian gửi lên
+  // input - resPerPage, page, year, month, quarter, filter(centre/region), name(tên 1 tron 2 cái kia)
   router.post('/stats/time', verifyToken, verifyAdmin, homeController.adminRegistByTime)
+  // bug - 2 file dưới này bỏ đi
   // logic - trả về tất cả đăng kiểm của trung tâm có tên khớp với tên gửi lên
   router.post('/stats/centre', verifyToken, verifyAdmin, homeController.adminRegistByCentre)
   // logic - trả về tất cả đăng kiểm của xe có khu vực khớp với khu vực gửi lên

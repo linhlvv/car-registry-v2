@@ -12,6 +12,23 @@ let adminRegistByTime = async (req, res) => {
     || req.body.quarter === undefined || req.body.order === undefined) {
     return res.status(422).send({ErrorCode: 'ER_MISSING_PARAM'})
   }
+  
+  let placeholder = [req.body.name, req.body.name, resPerPage, resPerPage * (page - 1)]
+  let filter = ``
+  let join = ``
+
+  if (req.body.filter === 'centre') {
+    join = `\njoin centre ce
+            on r.centreId = ce.id\n`
+    filter = `\nand ce.name = ?`
+  }
+  else if (req.body.filter === 'region') {
+    join = `\njoin region re
+            on v.regionId = re.id\n`
+    filter = `\nand re.name = ?`
+  }
+  else
+    placeholder = [resPerPage, resPerPage * (page - 1)]
 
   let year = parseInt(req.body.year)
   let month = parseInt(req.body.month)
@@ -32,35 +49,40 @@ let adminRegistByTime = async (req, res) => {
 
   let count = `
   select count(*) as total
-    from registry re
-  where 1 = 1` + match
+    from registry r
+  join vehicles v
+    on r.licenseId = v.licenseId`
+    + join + `
+  where 1 = 1` + match + filter
 
   let query = `
   select r.id, r.licenseId, brand, model, version, date, expire, 
     p.name as name, (expire < CURRENT_DATE()) as status
   from registry r
   join vehicles v 
-    on r.licenseId = v.licenseId
+    on r.licenseId = v.licenseId`
+  + join + `
   join personal p 
     on v.ownerId = p.id
-  where 1 = 1` + match + ` 
+  where 1 = 1` + match + filter + ` 
         union all
   select r.id, r.licenseId, brand, model, version, date, expire, 
     c.name as name, (expire < CURRENT_DATE()) as status
   from registry r
   join vehicles v 
-    on r.licenseId = v.licenseId
+    on r.licenseId = v.licenseId`
+  + join + `
   join company c 
     on v.ownerId = c.id
-  where 1 = 1` + match + ` 
+  where 1 = 1` + match + filter + ` 
   order by date ` + order + `
     limit ? offset ?`
   
   // bug - đã gọi được api kết quả trả về chính xác
   try {
-    const [countRows, countFields] = await pool.query(count)
-    const [rows, fields] = await pool.query(query, [resPerPage, 
-                                                  resPerPage * (page - 1)])
+    
+    const [countRows, countFields] = await pool.query(count, req.body.name)
+    const [rows, fields] = await pool.query(query, placeholder)
     return res.send({data: rows, countPage: Math.ceil(countRows[0].total / resPerPage)})
   }
   catch (err) {
