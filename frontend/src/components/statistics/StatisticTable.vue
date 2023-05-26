@@ -137,13 +137,42 @@ const fetchData = async () => {
     loading.value = false
 };
 // fetchData()
-
+//FIXME - admin failed
 const fetchDataWithSpecificTime = async () => {
     loading.value = true
     let fetchRoute
     let fetchBody
     if(isAdmin) {
-
+        fetchRoute = `http://localhost:1111/stats/time`
+        if(adminSelectionStore.getSelected === 'all') {
+            fetchBody = {
+                resPerPage: 7,
+                page: pageNumber.value,
+                year: props.time.year,
+                quarter: props.time.quarter,
+                month: props.time.month
+            }
+        } else if (adminSelectionStore.getSelected === 'region') {
+            fetchBody = {
+                resPerPage: 7,
+                page: pageNumber.value,
+                filter: 'region',
+                name: adminSelectionStore.getOptionSelected,
+                year: props.time.year,
+                quarter: props.time.quarter,
+                month: props.time.month
+            }
+        } else {
+            fetchBody = {
+                resPerPage: 7,
+                page: pageNumber.value,
+                filter: 'centre',
+                name: adminSelectionStore.getOptionSelected,
+                year: props.time.year,
+                quarter: props.time.quarter,
+                month: props.time.month
+            }
+        }
     } else {
         fetchRoute = `http://localhost:1111/regist/time`
         fetchBody = {
@@ -185,7 +214,30 @@ const fetchDataWithSpecificLicense = async (license) => {
     let fetchRoute
     let fetchBody
     if(isAdmin) {
-
+        fetchRoute = `http://localhost:1111/stats/find`
+        if(adminSelectionStore.getSelected === 'all') {
+            fetchBody = {
+                resPerPage: 7,
+                page: pageNumber.value,
+                licenseId: searchedLicense.value
+            }
+        } else if(adminSelectionStore.getSelected === 'region') {
+            fetchBody = {
+                resPerPage: 7,
+                page: pageNumber.value,
+                filter: 'region',
+                name: adminSelectionStore.getOptionSelected,
+                licenseId: searchedLicense.value
+            }
+        } else {
+            fetchBody = {
+                resPerPage: 7,
+                page: pageNumber.value,
+                filter: 'centre',
+                name: adminSelectionStore.getOptionSelected,
+                licenseId: searchedLicense.value
+            }
+        }
     } else {
         fetchRoute = `http://localhost:1111/regist/find`
         fetchBody = {
@@ -247,11 +299,31 @@ watch(() => props.time, async () => {
 });
 
 watch(() => adminSelectionStore.getOptionSelected, () => {
-    fetchData()
+    isSpecificLicense.value = false
+    searchedLicense.value = ''
+    if(pageNumber.value === 1) {
+        if(props.time.year === 'All') {
+            fetchData()
+        } else {
+            fetchDataWithSpecificTime()
+        }
+    } else {
+        pageNumber.value = 1
+    }
 });
 
 watch(() => adminSelectionStore.getSelected, () => {
-    fetchData()
+    isSpecificLicense.value = false
+    searchedLicense.value = ''
+    if(pageNumber.value === 1) {
+        if(props.time.year === 'All') {
+            fetchData()
+        } else {
+            fetchDataWithSpecificTime()
+        }
+    } else {
+        pageNumber.value = 1
+    }
 });
 
 const scrollToChart = () => {
