@@ -1,6 +1,11 @@
 import pool from "../../../configs/connectDB";
 
 let adminViewExactBrand = async (req, res) => {
+
+  let filter = req.body.filter;
+  let name = req.body.name;
+
+
   let resPerPage = parseInt(req.body.resPerPage);
   let page = parseInt(req.body.page);
   if (req.body.resPerPage === undefined) resPerPage = 10;
@@ -11,6 +16,26 @@ let adminViewExactBrand = async (req, res) => {
 
   if (carType === undefined || brand === undefined) {
     return res.status(422).send({ ErrorCode: "ER_MISSING_PARAM" });
+  }
+
+  let sub = "";
+  if (filter === "region") {
+    sub = 
+    `
+    LEFT JOIN region r ON
+    r.id = v.regionId 
+    WHERE r.name = 
+    `
+    sub = sub + "'" + name + "'"
+  }
+  else if (filter === "centre") {
+    sub = 
+    `
+    LEFT JOIN centre c ON
+    c.id = re.centreId 
+    WHERE c.name = 
+    `
+    sub = sub + "'" + name + "'"
   }
 
   let type = carType === "registed" ? " >= " : " < ";
@@ -54,6 +79,11 @@ on re.licenseId = v.licenseId
       from vehicles v
     left join registry re
       on re.licenseId = v.licenseId
+      `
+  +
+  sub
+  +
+  `
     group by re.licenseId)  
   and expire` +
     type +
@@ -77,6 +107,11 @@ on re.licenseId = v.licenseId
       from vehicles v
     left join registry re
       on re.licenseId = v.licenseId
+      `
+      +
+      sub
+      +
+      `
     group by re.licenseId)  
   and expire` +
     type +

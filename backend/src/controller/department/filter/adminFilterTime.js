@@ -1,6 +1,10 @@
 import pool from "../../../configs/connectDB";
 // task - đang làm dở đừng động vào
 let adminFilterTime = async (req, res) => {
+
+  let filter = req.body.filter;
+  let name = req.body.name;
+
   let resPerPage = parseInt(req.body.resPerPage);
   let page = parseInt(req.body.page);
   if (req.body.resPerPage === undefined) resPerPage = 10;
@@ -18,6 +22,26 @@ let adminFilterTime = async (req, res) => {
     quarter === undefined
   ) {
     return res.status(422).send({ ErrorCode: "ER_MISSING_PARAM" });
+  }
+
+  let sub = "";
+  if (filter === "region") {
+    sub = 
+    `
+    LEFT JOIN region r ON
+    r.id = v.regionId 
+    WHERE r.name = 
+    `
+    sub = sub + "'" + name + "'"
+  }
+  else if (filter === "centre") {
+    sub = 
+    `
+    LEFT JOIN centre c ON
+    c.id = re.centreId 
+    WHERE c.name = 
+    `
+    sub = sub + "'" + name + "'"
   }
 
   let type = carType === "registed" ? " >= " : " < ";
@@ -53,6 +77,11 @@ let adminFilterTime = async (req, res) => {
   from vehicles v
   left join registry re
   on re.licenseId = v.licenseId
+  `
+  +
+  sub
+  +
+  `
   group by v.licenseId)  
   and expire` +
     type +
@@ -82,6 +111,11 @@ let adminFilterTime = async (req, res) => {
       from vehicles v
     left join registry re
       on re.licenseId = v.licenseId
+      `
+      +
+      sub
+      + 
+      `
     group by re.licenseId)  
   and expire` +
     type +
@@ -103,6 +137,11 @@ let adminFilterTime = async (req, res) => {
       from vehicles v
     left join registry re
       on re.licenseId = v.licenseId
+      `
+      +
+      sub
+      + 
+      `
     group by re.licenseId)  
   and expire` +
     type +
