@@ -56,7 +56,7 @@ let adminFilterBrand = async (req, res) => {
   and expire` +
     type +
     `current_date()` ;
-  const [countRows, countFields] = await pool.query(count, name);
+  const [countRows, countFields] = await pool.query(count);
 
   let queryType =
     carType === "registed"
