@@ -1,6 +1,9 @@
 import pool from "../../../configs/connectDB";
 
 let adminFilterBrand = async (req, res) => {
+
+  let filter = req.body.filter;
+  let name = req.body.name;
   let resPerPage = parseInt(req.body.resPerPage);
   let page = parseInt(req.body.page);
   if (req.body.resPerPage === undefined) resPerPage = 10;
@@ -12,6 +15,27 @@ let adminFilterBrand = async (req, res) => {
   if (carType === undefined || order === undefined) {
     return res.status(422).send({ ErrorCode: "ER_MISSING_PARAM" });
   }
+  let sub = "";
+  if (filter === "region") {
+    sub = 
+    `
+    LEFT JOIN region r ON
+    r.id = v.regionId 
+    WHERE r.name = 
+    `
+    sub = sub + "'" + name + "'"
+  }
+  else if (filter === "centre") {
+    sub = 
+    `
+    LEFT JOIN centre c ON
+    c.id = re.centreId 
+    WHERE c.name = 
+    `
+    sub = sub + "'" + name + "'"
+  }
+
+  
 
   let type = carType === "registed" ? " >= " : " < ";
 
@@ -23,11 +47,16 @@ let adminFilterBrand = async (req, res) => {
   from vehicles v
   left join registry re
   on re.licenseId = v.licenseId
+  `
+  +
+  sub
+  + 
+  `
   group by v.licenseId)  
   and expire` +
     type +
-    `current_date()`;
-  const [countRows, countFields] = await pool.query(count);
+    `current_date()` ;
+  const [countRows, countFields] = await pool.query(count, name);
 
   let queryType =
     carType === "registed"
@@ -46,11 +75,15 @@ let adminFilterBrand = async (req, res) => {
     on v.ownerId = o.id
   join personal p
     on p.id = o.id
+    
   where (re.licenseId, expire) in
     (select v.licenseId as license, max(expire) as expire
       from vehicles v
     left join registry re
       on re.licenseId = v.licenseId
+      ` +
+    sub +
+    `
     group by re.licenseId)  
   and expire` +
     type +
@@ -66,14 +99,16 @@ let adminFilterBrand = async (req, res) => {
     on v.ownerId = o.id
   join company c 
     on c.id = o.id
+    
   where (re.licenseId, expire) in
     (select v.licenseId as license, max(expire) as expire
       from vehicles v
     left join registry re
       on re.licenseId = v.licenseId
-    where centreId = ` +
-    req.session.userid +
-    `  group by re.licenseId)  
+      ` +
+    sub +
+    `
+    group by re.licenseId)  
   and expire` +
     type +
     `current_date()
@@ -84,7 +119,7 @@ let adminFilterBrand = async (req, res) => {
     `, version ` +
     order +
     ` limit ? offset ?`;
-
+  console.log(query)
   // bug - đã gọi được api kết quả trả về chính xác
   const [rows, fields] = await pool.query(query, [
     resPerPage,
