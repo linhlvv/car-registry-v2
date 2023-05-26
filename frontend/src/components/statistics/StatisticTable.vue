@@ -150,7 +150,8 @@ const fetchDataWithSpecificTime = async () => {
                 page: pageNumber.value,
                 year: props.time.year,
                 quarter: props.time.quarter,
-                month: props.time.month
+                month: props.time.month,
+                order: 'asc',
             }
         } else if (adminSelectionStore.getSelected === 'region') {
             fetchBody = {
@@ -160,7 +161,8 @@ const fetchDataWithSpecificTime = async () => {
                 name: adminSelectionStore.getOptionSelected,
                 year: props.time.year,
                 quarter: props.time.quarter,
-                month: props.time.month
+                month: props.time.month,
+                order: 'asc',
             }
         } else {
             fetchBody = {
@@ -170,7 +172,8 @@ const fetchDataWithSpecificTime = async () => {
                 name: adminSelectionStore.getOptionSelected,
                 year: props.time.year,
                 quarter: props.time.quarter,
-                month: props.time.month
+                month: props.time.month,
+                order: 'asc',
             }
         }
     } else {
