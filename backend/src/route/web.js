@@ -194,6 +194,7 @@ const initWebRoute = (app) => {
 
     // section - statistic
   // logic - trả về tất cả đăng kiểm toàn hệ thống
+  // input - resPerPage, page, filter(centre/region), name(tên 1 trong 2 cái kia)
   router.post('/stats/all', verifyToken, verifyAdmin, homeController.adminAllRegist)
   // logic - trả về tất cả đăng kiểm của xe có biển số khớp với biển số gửi lên
   // input - resPerPage, page, license, filter(centre/region), name(tên 1 trong 2 cái kia)
