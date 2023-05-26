@@ -8,11 +8,45 @@ let adminGetDataForChart = async (req, res) => {
     return res.redirect("/");
   }
 
+  let filter = req.body.filter;
+  let name = req.body.name;
+
+  let sub = "where";
+  if (filter === "region") {
+    sub = 
+    `
+    LEFT JOIN region r ON
+    r.id = v.regionId 
+    WHERE r.name = 
+    `
+    sub = sub + "'" + name + "'" + "and "
+  }
+  else if (filter === "centre") {
+    sub = 
+    `
+    LEFT JOIN centre c ON
+    c.id = re.centreId 
+    WHERE c.name = 
+    `
+    sub = sub + "'" + name + "'" + "and "
+  }
   
   let regist_base =
-    "select count(*) as Registed from registry where date like ?";
+    `
+    select count(*) as Registed 
+    from registry re 
+    LEFT JOIN vehicles v
+    on re.licenseId = v.licenseId
+    ` + sub + `
+     date like ?`;
   let expire_base =
-    "select count(*) as Expired from registry where expire like ?";
+    `select count(*) as Expired
+     from registry re
+     LEFT JOIN vehicles v
+     on re.licenseId = v.licenseId
+     ` + sub + `
+     expire like ?
+     `;
 
   let getStart = "select MIN(YEAR(activation)) as year from centre";
   let [start, fields2] = await pool.query(getStart);
