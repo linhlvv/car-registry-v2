@@ -16,12 +16,7 @@ const handleTimeChange = (timeValue) => {
     time.value = timeValue
 };
 
-const scrollUp = () => {
-    document.documentElement.scrollTop = screen.height/5
-};
-
 const chart = ref(null);
-
 
 //SECTION - cert modal handler
 const modalOn = ref(false)
