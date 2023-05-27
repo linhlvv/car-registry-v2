@@ -178,7 +178,6 @@ watch(() => adminSelectionStore.getSelected, () => {
                 <NoSpecificSelect />
             </div>
             <div v-else class="w-full">
-                <div>{{ adminSelectionStore.getOptionSelected }}</div>
                 <div v-if="registModalOn">
                     <RegistrationFormModal :license="modalLicense" @exit-modal="handleRegistModal"/>
                 </div>
