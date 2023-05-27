@@ -106,7 +106,7 @@ const fetchForecastList = async () => {
         credentials: "include",
         headers: {
             'Content-Type': 'application/json',
-            'Authorization': `${accountStore.getToken}`
+            'Authorization': `${localStorage.getItem('token')}`
         },
         body: JSON.stringify(fetchBody)
     })
