@@ -228,6 +228,9 @@ watch(() => adminSelectionStore.getSelected, () => {
                                         @regist="handleRegistModal"
                                     />
                                 </div>
+                                <div v-if="forecastList.length === 0" class="bg-white min-w-[800px] h-7 py-7 text-center flex items-center justify-center text-red-500 font-semibold text-lg rounded-md">
+                                    No expired car yet!
+                                </div>
                             </div>
                             <Pagination 
                                 :total-page="totalPage" 
