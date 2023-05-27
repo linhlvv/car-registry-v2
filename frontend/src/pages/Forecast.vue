@@ -5,7 +5,7 @@ import CarInfoModal from '../components/modal/CarInfoModal.vue';
 import RegistrationFormModal from '../components/modal/RegistrationFormModal.vue';
 import { useAdminSelectionStore } from '../stores/AdminSelectionStore';
 import NoSpecificSelect from '../components/UI/NoSpecificSelect.vue';
-import { computed, onMounted, ref, watch } from 'vue';
+import { computed, onBeforeMount, onMounted, ref, watch } from 'vue';
 import { useAccountStore } from '../stores/AccountStore';
 
 const accountStore = useAccountStore()
@@ -64,7 +64,7 @@ const changeStatus = (value) => {
 }
 
 //SECTION - data fetcher
-const forecastList = ref();
+const forecastList = ref([]);
 const totalRes = ref(0);
 const fetchForecastList = async () => {
     let fetchRoute;
@@ -122,6 +122,7 @@ const fetchForecastList = async () => {
 
 onMounted(() => {
     fetchForecastList()
+    // console.log(forecastList.value);
 });
 
 // watch(() => pageNumber.value, () => {
