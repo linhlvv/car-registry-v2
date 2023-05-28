@@ -40,7 +40,10 @@ let previewRegist = async (req, res) => {
   // logic - lấy tên trung tâm đăng kiểm hiện tạiSELECT (MAX(id) + 1) FROM 'registry'
   let getCentreName = "select name from centre where id = ?";
   let centreName = await pool.query(getCentreName, [centreId]);
-  centreName = centreName[0][0].name;
+  if (centreName.length > 0) {
+    centreName = centreName[0][0].name;
+  }
+  
 
   return res.send({ id, registDate, expireDate, centreName });
 };
