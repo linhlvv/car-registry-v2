@@ -59,6 +59,8 @@ let forecastByCentre = async (req, res) => {
 
   // bug - đã gọi được api kết quả trả về chính xác
   try {
+    if (req.body.type === 'new')
+      return res.send({data: [], countData: 0, countPage: 0})
     const [countRows, countFields] = await pool.query(count, [
       req.session.userid,
     ])
