@@ -2,9 +2,10 @@
 import RegistrationCarAndOwner from '../components/modal/RegistrationCarAndOwner.vue';
 import RegistrationCert from '../components/modal/RegistrationCert.vue';
 import { useAccountStore } from '../stores/AccountStore';
-import { ref, watch } from 'vue';
+import { onBeforeMount, ref, watch } from 'vue';
 import { useRouter } from 'vue-router';
 
+const isAdmin = localStorage.getItem('userType') == 1
 const router = useRouter()
 
 //SECTION - details
@@ -196,6 +197,12 @@ watch(() => second.value, () => {
         window.open(route.href)
         window.location.reload()
         clearInterval(loadingInterval)
+    }
+});
+
+onBeforeMount(() => {
+    if(isAdmin) {
+        router.push('/not-found')
     }
 });
 

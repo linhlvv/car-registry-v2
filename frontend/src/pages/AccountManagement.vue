@@ -2,9 +2,12 @@
 import AddAccountForm from '../components/account/AddAccountForm.vue';
 import AccountList from '../components/account/AccountList.vue';
 import ModificationModal from '../components/account/ModificationModal.vue';
-import { ref } from 'vue';
+import { onBeforeMount, ref } from 'vue';
+import { useRouter } from 'vue-router';
 
 const modalOn = ref(false);
+const router = useRouter()
+const isAdmin = localStorage.getItem('userType') == 1
 
 const modalItem = ref(null)
 const openModal = (item) => {
@@ -21,6 +24,12 @@ const refetchAccountList = ref(false);
 const changeRefetchStatus = () => {
     refetchAccountList.value = !refetchAccountList.value
 };
+
+onBeforeMount(() => {
+    if(!isAdmin) {
+        router.push('/not-found')
+    }
+});
 
 </script>
 
