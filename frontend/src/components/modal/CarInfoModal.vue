@@ -44,7 +44,7 @@ findCarInfo()
 <template>
     <div class="flex w-full h-screen items-center justify-center fixed z-50 top-0">
         <div class="bg-black/40 top-0 left-0 w-full h-full blur-xl fixed z-50" @click="exitModal"></div>
-        <div class="bg-white rounded-[8px] fixed w-3/5 max-xl:w-4/5 max-lg:w-full overflow-x-scroll z-50 flex max-md:flex-col max-md:max-h-[500px] max-md:overflow-y-scroll modal-animation overflow-hidden">
+        <div id="modal" class="bg-white rounded-lg max-md:rounded-[3px] fixed w-3/5 max-xl:w-4/5 max-lg:w-full z-50 flex max-md:flex-col max-md:max-h-[500px] max-md:overflow-y-scroll modal-animation overflow-hidden">
             <div class="w-3/5 min-w-[450px] max-md:w-full max-md:min-w-full border-r text-[#1d1d1d] mb-3">
                 <div class="w-full flex justify-end md:hidden">
                     <svg @click="exitModal" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor" class="w-6 h-6 text-red-500 mt-2 mr-2">
@@ -107,5 +107,22 @@ findCarInfo()
             opacity: 1;
             transform: translateY(0);
         }
+    }
+
+    #modal::-webkit-scrollbar {
+        width: 6px;
+    }
+    
+    #modal::-webkit-scrollbar-track {
+        border-radius: 12px;
+    }
+    
+    #modal::-webkit-scrollbar-thumb {
+        background-color: #2acc97;
+        outline: none;
+        border-radius: 12px;
+    }
+    #modal::-webkit-scrollbar-thumb:hover {
+        background-color: #0ce29b;
     }
 </style>
