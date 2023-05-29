@@ -24,6 +24,13 @@ let adminFilterTime = async (req, res) => {
     return res.status(422).send({ ErrorCode: "ER_MISSING_PARAM" });
   }
 
+  if (carType === "unregisted") {
+    return res.send({
+    data: [],
+    countPage: 0,
+  });
+  }
+
   let sub = "";
   if (filter === "region") {
     sub = 

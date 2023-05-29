@@ -40,7 +40,35 @@ let adminFilterOwner = async (req, res) => {
       ? "re.date as registryDate"
       : "timestampdiff(month, re.date, re.expire) as duration";
 
-  let query =
+  let query = carType === "unregisted" ? 
+    `
+    select v.licenseId as license, v.brand, v.model, v.version, p.name 
+  FROM vehicles v
+  join owner o 
+      on v.ownerId = o.id
+  join personal p
+      on p.id = o.id
+    `
+  + sub + (sub === "" ? `where` : `and`) +
+    `
+    v.licenseId NOT IN 
+  (SELECT registry.licenseId  FROM registry)
+  and ssn = ?
+  UNION ALL
+  select v.licenseId as license, v.brand, v.model, v.version, c.name 
+  FROM vehicles v
+  join owner o 
+      on v.ownerId = o.id
+  join company c
+      on c.id = o.id
+    ` 
+      + sub + (sub === "" ? `where` : `and`) +
+    `
+    v.licenseId NOT IN 
+  (SELECT registry.licenseId  FROM registry)
+  and taxnum = ?
+    `
+    :
     `
   select re.licenseId as license, v.brand, v.model, v.version, ` +
     queryType +
@@ -86,7 +114,7 @@ let adminFilterOwner = async (req, res) => {
       `
       +
       sub
-      + 
+      +
       `
      group by re.licenseId)  
   and expire` +
