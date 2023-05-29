@@ -15,7 +15,7 @@ let viewUnregistedVehicles = async (req, res) => {
   const [countRows, countFields] = await pool.query(count)
   
   let query = `
-  SELECT licenseId, brand, model, version, 
+  SELECT licenseId as license, brand, model, version, 
     modified, manafractureDate as manufracture, p.name 
     FROM vehicles v 
   JOIN owner o 
@@ -25,7 +25,7 @@ let viewUnregistedVehicles = async (req, res) => {
   WHERE v.licenseId NOT IN 
     (SELECT registry.licenseId FROM registry)
     UNION ALL
-  SELECT licenseId, brand, model, version, 
+  SELECT licenseId as license, brand, model, version, 
     modified, manafractureDate as manufracture, c.name 
     FROM vehicles v 
   JOIN owner o 
