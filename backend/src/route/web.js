@@ -176,11 +176,13 @@ const initWebRoute = (app) => {
   // input - resPerPage, page, carType(registed, expired), city
   router.post('/filter/admin/city/exact', verifyAdmin, verifyToken, homeController.adminViewExactCity)
 
+    // section - info dùng all
   // logic - tất cả các thành phố kèm mã vùng
   router.get('/stats/area', verifyToken, homeController.allArea)
-
   // logic - tất cả các trung tâm
   router.get('/stats/centre', verifyToken, homeController.allCentre)
+  // logic - tất cả các brand
+  router.get('/stats/brand', verifyToken, homeController.allCarBrand)
 
     // section - info
   // logic - trả về dữ liệu toàn hệ thống cho biểu đồ
