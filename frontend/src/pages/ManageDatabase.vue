@@ -36,6 +36,9 @@ const errorMessageTime = ref(messageTime)
 const errorMessageOn = ref(false)
 const ownerTypeErrorMessageOn = ref(false)
 const successfullyAdded = ref(false)
+const addFailed = ref(false)
+let addFailedInterval
+const addFailedTime = ref(messageTime)
 let errorMessageInterval;
 const upload = async () => {
 	if(!hasFile.value) {
@@ -72,6 +75,13 @@ const upload = async () => {
 			setTimeout(() => {
 				location.reload()
 			}, 1);
+		} else {
+			clearInterval(addFailedInterval)
+			addFailedTime.value = messageTime
+			addFailed.value = true
+			addFailedInterval = setInterval(() => {
+				addFailedTime.value -= 1
+			}, 1000);
 		}
 		// const dataFetched = JSON.parse(await res.text())
 		// console.log(JSON.stringify(dataFetched));
@@ -95,6 +105,14 @@ watch(() => ownerTypePicked.value, (newType, oldType) => {
 		ownerTypeErrorMessageOn.value = false
 	}
 });
+
+watch(addFailedTime, () => {
+	if(addFailedTime.value === 0) {
+		addFailed.value = false
+		clearInterval(addFailedInterval)
+		addFailedTime.value = messageTime
+	}
+})
 
 onBeforeMount(() => {
 	if(!isAdmin) {
@@ -173,6 +191,14 @@ onBeforeMount(() => {
 					<path stroke-linecap="round" stroke-linejoin="round" d="M10.125 2.25h-4.5c-.621 0-1.125.504-1.125 1.125v17.25c0 .621.504 1.125 1.125 1.125h12.75c.621 0 1.125-.504 1.125-1.125v-9M10.125 2.25h.375a9 9 0 019 9v.375M10.125 2.25A3.375 3.375 0 0113.5 5.625v1.5c0 .621.504 1.125 1.125 1.125h1.5a3.375 3.375 0 013.375 3.375M9 15l2.25 2.25L15 12" />
 				</svg>
 				<p class="text-base font-medium">Add data to database successfully!</p>
+			</div>
+		</Transition>
+		<Transition name="fade">
+			<div v-if="addFailed" class="w-full flex items-center p-3 gap-2 text-red-500">
+				<svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="w-6 h-6">
+					<path stroke-linecap="round" stroke-linejoin="round" d="M6 18L18 6M6 6l12 12" />
+				</svg>
+				<p class="text-base font-medium">Failed to add data to database! Please try again!</p>
 			</div>
 		</Transition>
 		<button @click="upload" class="py-2 px-3 rounded-lg bg-[#2acc97]/80 font-semibold text-white text-[14px] flex items-center gap-1 hover:bg-[#2acc97]/90 active:bg-[#2acc97]">
