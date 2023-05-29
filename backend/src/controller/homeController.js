@@ -17,6 +17,7 @@ import { ownerInfo } from "./user/owner/ownerInfo";
   // section - stats
 import { allArea } from "./user/stats/allArea";
 import { allCentre } from "./user/stats/allCentre";
+import { allCarBrand } from "./user/stats/allCarBrand";
 
 // section - centre
   // section - filter
@@ -118,7 +119,7 @@ module.exports = {
   authenticate, logout, changePassword,
   centreInfo, getDataForChart, detailModal, previewInfo,
   ownerInfo,
-  allArea, allCentre,
+  allArea, allCentre, allCarBrand,
   
   allBrand, allCity, brand, exactBrand, exactCity, owner, time,
   forecast,
