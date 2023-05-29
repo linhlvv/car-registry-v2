@@ -85,44 +85,38 @@ const licenseSearch = (content) => {
 //SECTION - fetch all available brands
 const fetchAllAvailableBrands = async () => {
     // console.log(`cartype: ${props.carType}`);
-    let fetchRoute
-    let fetchBody
     if(isAdmin) {
-        if(adminSelectionStore.getSelected === 'all') {
-            fetchRoute = ``
-            fetchBody = {
-                
-            }
-        } else if(adminSelectionStore.getSelected === 'region') {
-            fetchRoute = ``
-            fetchBody = {
-                
-            }
-        } else {
-            fetchRoute = ``
-            fetchBody = {
-                
-            }
+        const res = await fetch(`http://localhost:1111/stats/brand`, {
+            credentials: "include",
+            headers: {
+                'Content-Type': 'application/json',
+                'Authorization': `${localStorage.getItem('token')}`
+            },
+        })
+        if(res.error) {
+            console.log(res.error);
         }
+        const dataFetched = JSON.parse(await res.text())
+        console.log(dataFetched);
+        brandList.value = ['All', ...dataFetched.data]
     } else {
-        fetchRoute = `http://localhost:1111/filter/brand/all`
-        fetchBody = {carType: props.carType}
+        const res = await fetch(`http://localhost:1111/filter/brand/all`, {
+            method: 'POST',
+            credentials: "include",
+            headers: {
+                'Content-Type': 'application/json',
+                'Authorization': `${localStorage.getItem('token')}`
+            },
+            body: JSON.stringify({carType: props.carType}),
+        })
+        if(res.error) {
+            console.log(res.error);
+        }
+        const dataFetched = JSON.parse(await res.text())
+        brandList.value = ['All', ...dataFetched.data]
+        // console.log(`all available brands: ${JSON.stringify(brandList.value)}`);
     }
-    const res = await fetch(fetchRoute, {
-        method: 'POST',
-        credentials: "include",
-        headers: {
-            'Content-Type': 'application/json',
-            'Authorization': `${localStorage.getItem('token')}`
-        },
-        body: JSON.stringify(fetchBody),
-    })
-    if(res.error) {
-        console.log(res.error);
-    }
-    const dataFetched = JSON.parse(await res.text())
-    brandList.value = ['All', ...dataFetched.data]
-    // console.log(`all available brands: ${JSON.stringify(brandList.value)}`);
+    
 };
 
 //SECTION - fetch all available cities
