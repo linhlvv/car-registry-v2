@@ -1,8 +1,5 @@
 <template>
-    <div class="h-screen flex flex-col mt-20">
-        <div class="text-[#1d1d1d] text-center mb-[3rem] text-5xl font-semibold duration-300 hover:text-[#2acc97] max-[768px]:hidden">
-            Welcome to RegistryTotal
-        </div>
+    <div class="h-screen w-full flex flex-col justify-center items-end bg-[url('../assets/loginBg.png')] bg-contain bg-no-repeat bg-left">
         <router-view />
     </div>
 </template>

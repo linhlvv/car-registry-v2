@@ -1,8 +1,12 @@
 <script setup>
-import { computed, onMounted, ref, watch } from 'vue';
+import { computed, onBeforeMount, onMounted, ref, watch } from 'vue';
+import { useRouter } from 'vue-router';
 import { useAccountStore } from '../stores/AccountStore';
 
 const accountStore = useAccountStore()
+const isAdmin = localStorage.getItem('userType') == 1
+
+const router = useRouter()
 
 //SECTION - file upload handler
 const file = ref()
@@ -89,6 +93,12 @@ watch(() => errorMessageTime.value, () => {
 watch(() => ownerTypePicked.value, (newType, oldType) => {
 	if(hasFile.value && oldType === null) {
 		ownerTypeErrorMessageOn.value = false
+	}
+});
+
+onBeforeMount(() => {
+	if(!isAdmin) {
+		router.push('/not-found')
 	}
 });
 

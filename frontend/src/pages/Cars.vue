@@ -5,7 +5,7 @@ import CarList from '../components/cars/CarList.vue';
 import SearchField from '../components/cars/SearchField.vue';
 import NoSpecificSelect from '../components/UI/NoSpecificSelect.vue';
 import { useAdminSelectionStore } from '../stores/AdminSelectionStore';
-import { reactive, ref } from 'vue';
+import { onMounted, reactive, ref } from 'vue';
 
 const adminSelectionStore = useAdminSelectionStore()
 const isAdmin = ref(localStorage.getItem('userType') == 1)
@@ -164,6 +164,10 @@ const selectionOpened = ref(false)
 const openSelectHandler = () => {
     selectionOpened.value = !selectionOpened.value
 };
+
+onMounted(() => {
+    document.documentElement.scrollTop = 0
+});
 
 </script>
 

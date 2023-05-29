@@ -185,17 +185,17 @@ onMounted(() => {
                 </div>
             </nav>
         </div>
-        <div v-show="(route.path === '/forecast' || route.path === '/cars' || route.path === '/statistics') && isAdmin" class="max-[732px]:hidden w-full">
-            <nav class="bg-white">
-                <div class="max-w-screen-xl mx-auto">
-                    <div class="flex items-center justify-between">
-                        <button @click="moveSelection('left')" class="flex justify-center items-center cursor-pointer w-[10%] py-6 text-[#2acc97] duration-200 hover:text-white hover:bg-[#2acc97]/90 active:bg-[#2acc97]">
+        <div v-show="(route.path === '/forecast' || route.path === '/cars' || route.path === '/statistics') && isAdmin" class="w-full">
+            <nav class="bg-white max-[732px]:bg-[#f5f7fb]">
+                <div class="">
+                    <div class="flex items-center justify-between w-full">
+                        <button @click="moveSelection('left')" class="flex justify-center items-center cursor-pointer p-8 text-[#2acc97] duration-200 hover:text-white hover:bg-[#2acc97]/90 active:bg-[#2acc97]">
                             <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="w-7 h-7">
                                 <path stroke-linecap="round" stroke-linejoin="round" d="M11.25 9l-3 3m0 0l3 3m-3-3h7.5M21 12a9 9 0 11-18 0 9 9 0 0118 0z" />
                             </svg>
                         </button>
                         <Transition>
-                            <div class="py-3 w-4/5 flex flex-col items-center justify-center gap-2">
+                            <div class="py-3 w-3/5 flex flex-col items-center justify-center gap-2">
                                 <div class="flex items-center gap-1">
                                     <svg v-if="currentSelection.value === selection.all" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor" class="w-5 h-4 p-1 text-[#eded4a] bg-red-400">
                                         <path fill-rule="evenodd" d="M10.788 3.21c.448-1.077 1.976-1.077 2.424 0l2.082 5.007 5.404.433c1.164.093 1.636 1.545.749 2.305l-4.117 3.527 1.257 5.273c.271 1.136-.964 2.033-1.96 1.425L12 18.354 7.373 21.18c-.996.608-2.231-.29-1.96-1.425l1.257-5.273-4.117-3.527c-.887-.76-.415-2.212.749-2.305l5.404-.433 2.082-5.006z" clip-rule="evenodd" />
@@ -210,7 +210,7 @@ onMounted(() => {
                             </div>
                         </Transition>
                         
-                        <button @click="moveSelection('right')" class="flex justify-center items-center cursor-pointer w-[10%] py-6 text-[#2acc97] duration-200 hover:text-white hover:bg-[#2acc97]/90 active:bg-[#2acc97]">
+                        <button @click="moveSelection('right')" class="flex justify-center items-center cursor-pointer p-8 text-[#2acc97] duration-200 hover:text-white hover:bg-[#2acc97]/90 active:bg-[#2acc97]">
                             <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="w-7 h-7">
                                 <path stroke-linecap="round" stroke-linejoin="round" d="M12.75 15l3-3m0 0l-3-3m3 3h-7.5M21 12a9 9 0 11-18 0 9 9 0 0118 0z" />
                             </svg>

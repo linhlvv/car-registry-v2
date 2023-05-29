@@ -2,12 +2,13 @@
 import StatisticTableCard from './StatisticTableCard.vue';
 import SearchBar from '../UI/SearchBar.vue';
 import { useAccountStore } from '../../stores/AccountStore';
+import { useAdminSelectionStore } from '../../stores/AdminSelectionStore';
 import { ref, watch } from 'vue';
 
 const emit = defineEmits(['selectedTimeClicked', 'openCertInfoModal'])
 const props = defineProps(['time'])
 
-const accountStore = useAccountStore()
+const adminSelectionStore = useAdminSelectionStore()
 const isAdmin = localStorage.getItem('userType') == 1
 
 //SECTION - modal handler
@@ -91,7 +92,27 @@ const fetchData = async () => {
     let fetchRoute
     let fetchBody
     if(isAdmin) {
-
+        fetchRoute = `http://localhost:1111/stats/all`
+        if(adminSelectionStore.getSelected === 'all') {
+            fetchBody = {
+                resPerPage: 7,
+                page: pageNumber.value,
+            }
+        } else if(adminSelectionStore.getSelected === 'region') {
+            fetchBody = {
+                resPerPage: 7,
+                page: pageNumber.value,
+                filter: 'region',
+                name: adminSelectionStore.getOptionSelected,
+            }
+        } else {
+            fetchBody = {
+                resPerPage: 7,
+                page: pageNumber.value,
+                filter: 'centre',
+                name: adminSelectionStore.getOptionSelected,
+            }
+        } 
     } else {
         fetchRoute = `http://localhost:1111/regist/all`
         fetchBody = { resPerPage: 7, page: pageNumber.value }
@@ -116,13 +137,45 @@ const fetchData = async () => {
     loading.value = false
 };
 // fetchData()
-
+//FIXME - admin failed
 const fetchDataWithSpecificTime = async () => {
     loading.value = true
     let fetchRoute
     let fetchBody
     if(isAdmin) {
-
+        fetchRoute = `http://localhost:1111/stats/time`
+        if(adminSelectionStore.getSelected === 'all') {
+            fetchBody = {
+                resPerPage: 7,
+                page: pageNumber.value,
+                year: props.time.year,
+                quarter: props.time.quarter,
+                month: props.time.month,
+                order: 'asc',
+            }
+        } else if (adminSelectionStore.getSelected === 'region') {
+            fetchBody = {
+                resPerPage: 7,
+                page: pageNumber.value,
+                filter: 'region',
+                name: adminSelectionStore.getOptionSelected,
+                year: props.time.year,
+                quarter: props.time.quarter,
+                month: props.time.month,
+                order: 'asc',
+            }
+        } else {
+            fetchBody = {
+                resPerPage: 7,
+                page: pageNumber.value,
+                filter: 'centre',
+                name: adminSelectionStore.getOptionSelected,
+                year: props.time.year,
+                quarter: props.time.quarter,
+                month: props.time.month,
+                order: 'asc',
+            }
+        }
     } else {
         fetchRoute = `http://localhost:1111/regist/time`
         fetchBody = {
@@ -164,7 +217,30 @@ const fetchDataWithSpecificLicense = async (license) => {
     let fetchRoute
     let fetchBody
     if(isAdmin) {
-
+        fetchRoute = `http://localhost:1111/stats/find`
+        if(adminSelectionStore.getSelected === 'all') {
+            fetchBody = {
+                resPerPage: 7,
+                page: pageNumber.value,
+                licenseId: searchedLicense.value
+            }
+        } else if(adminSelectionStore.getSelected === 'region') {
+            fetchBody = {
+                resPerPage: 7,
+                page: pageNumber.value,
+                filter: 'region',
+                name: adminSelectionStore.getOptionSelected,
+                licenseId: searchedLicense.value
+            }
+        } else {
+            fetchBody = {
+                resPerPage: 7,
+                page: pageNumber.value,
+                filter: 'centre',
+                name: adminSelectionStore.getOptionSelected,
+                licenseId: searchedLicense.value
+            }
+        }
     } else {
         fetchRoute = `http://localhost:1111/regist/find`
         fetchBody = {
@@ -193,6 +269,20 @@ const fetchDataWithSpecificLicense = async (license) => {
     loading.value = false
 }
 
+const handleRemoveLicenseSearch = () => {
+    isSpecificLicense.value = false
+    searchedLicense.value = ''
+    if(pageNumber.value === 1) {
+        if(props.time.year === 'All') {
+            fetchData()
+        } else {
+            fetchDataWithSpecificTime()
+        }
+    } else {
+        pageNumber.value = 1
+    }
+}
+
 //SECTION - watcher
 watch([pageNumber], () => {
     if(isSpecificLicense.value) {
@@ -209,6 +299,34 @@ watch([pageNumber], () => {
 
 watch(() => props.time, async () => {
     fetchDataWithSpecificTime()
+});
+
+watch(() => adminSelectionStore.getOptionSelected, () => {
+    isSpecificLicense.value = false
+    searchedLicense.value = ''
+    if(pageNumber.value === 1) {
+        if(props.time.year === 'All') {
+            fetchData()
+        } else {
+            fetchDataWithSpecificTime()
+        }
+    } else {
+        pageNumber.value = 1
+    }
+});
+
+watch(() => adminSelectionStore.getSelected, () => {
+    isSpecificLicense.value = false
+    searchedLicense.value = ''
+    if(pageNumber.value === 1) {
+        if(props.time.year === 'All') {
+            fetchData()
+        } else {
+            fetchDataWithSpecificTime()
+        }
+    } else {
+        pageNumber.value = 1
+    }
 });
 
 const scrollToChart = () => {
@@ -228,7 +346,7 @@ const scrollToChart = () => {
                         class="text-white text-sm font-medium rounded-3xl bg-red-300 py-1 px-2 flex items-center space-x-1"
                     >
                         <p class="">{{ searchedLicense }}</p>
-                        <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="w-4 h-4 cursor-pointer text-red-500">
+                        <svg @click="handleRemoveLicenseSearch" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="w-4 h-4 cursor-pointer text-red-500">
                             <path stroke-linecap="round" stroke-linejoin="round" d="M6 18L18 6M6 6l12 12" />
                         </svg>
                     </div>

@@ -1,10 +1,12 @@
 <script setup>
 import { ref } from 'vue';
-import avatar from '../../assets/haphuong.png';
 import { useAccountStore } from "../../stores/AccountStore";
 import ChangePasswordModal from '../modal/ChangePasswordModal.vue';
 
 const accountStore = useAccountStore();
+
+const isAdmin = ref(localStorage.getItem('userType') == 1)
+const id = ref(localStorage.getItem('id'))
 
 const dropdownHidden = ref(true);
 const dropdownHandler = () => {
@@ -35,9 +37,9 @@ const passwordManagementModalHandler = () => {
             <div v-if="!dropdownHidden" id="dropdown" class="bg-white divide-y z-50 divide-gray-100 rounded-lg shadow w-44 dark:bg-gray-700 absolute right-2">
                 <div class="py-2 text-sm text-gray-700 dark:text-gray-200" aria-labelledby="dropdownDefaultButton">
                     <div @click="dropdownHandler"> 
-                        <router-link :to="`/center/${accountStore.ID}`" class="flex gap-2 items-center px-4 py-2 text-[#1d1d1d] font-medium hover:bg-gray-100 dark:hover:bg-gray-600 dark:hover:text-white">
+                        <router-link :to="`/center/${id}`" class="flex gap-2 items-center px-4 py-2 text-[#1d1d1d] font-medium hover:bg-gray-100 dark:hover:bg-gray-600 dark:hover:text-white">
                             <i class="fa-sharp fa-solid fa-user text-[#2acc97]"></i>
-                            Profile 
+                            Profile
                         </router-link>
                     </div>
                     <div @click="dropdownHandler">
