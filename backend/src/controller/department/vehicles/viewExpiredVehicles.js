@@ -21,7 +21,7 @@ let viewExpiredVehicles = async (req, res) => {
   
   let query = `
   select re.licenseId as license, v.brand, v.model, v.version, 
-    re.date as registryDate, timestampdiff(month, re.date, re.expire) as duration, 
+    re.expire as expire, timestampdiff(month, re.date, re.expire) as duration, 
     p.name, (re.expire >= current_date()) as status
     from registry re
   join vehicles v 
@@ -39,7 +39,7 @@ let viewExpiredVehicles = async (req, res) => {
   and expire < current_date()
           union all 
   select re.licenseId as license, v.brand, v.model, v.version,
-    re.date as registryDate, timestampdiff(month, re.date, re.expire) as duration, 
+    re.expire as expire, timestampdiff(month, re.date, re.expire) as duration, 
     c.name, (re.expire >= current_date()) as status
     from registry re
   join vehicles v 
