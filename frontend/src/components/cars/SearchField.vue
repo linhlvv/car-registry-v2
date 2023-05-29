@@ -3,7 +3,7 @@ import { ref, watch } from 'vue';
 import SearchBar from '../UI/SearchBar.vue';
 import { useAccountStore } from '../../stores/AccountStore';
 
-const accountStore = useAccountStore()
+const isAdmin = localStorage.getItem('userType') == 1
 
 const props = defineProps(['pageNum', 'totalPage', 'carType']);
 const emit = defineEmits([
@@ -22,7 +22,10 @@ const emit = defineEmits([
 ]);
 
 //SECTION - Filter list
-const filterList = ['No filter', 'City', 'Owner', 'Brand', 'Time']
+let filterList = ['No filter', 'City', 'Owner', 'Brand', 'Time']
+if(isAdmin) {
+    filterList = ['No filter', 'Owner', 'Brand', 'Time']
+}
 const cityList = ref(['All'])
 const brandList = ref(['All'])
 const yearList = ['All', '2021', '2022', '2023']
@@ -82,14 +85,37 @@ const licenseSearch = (content) => {
 //SECTION - fetch all available brands
 const fetchAllAvailableBrands = async () => {
     // console.log(`cartype: ${props.carType}`);
-    const res = await fetch(`http://localhost:1111/filter/brand/all`, {
+    let fetchRoute
+    let fetchBody
+    if(isAdmin) {
+        if(adminSelectionStore.getSelected === 'all') {
+            fetchRoute = ``
+            fetchBody = {
+                
+            }
+        } else if(adminSelectionStore.getSelected === 'region') {
+            fetchRoute = ``
+            fetchBody = {
+                
+            }
+        } else {
+            fetchRoute = ``
+            fetchBody = {
+                
+            }
+        }
+    } else {
+        fetchRoute = `http://localhost:1111/filter/brand/all`
+        fetchBody = {carType: props.carType}
+    }
+    const res = await fetch(fetchRoute, {
         method: 'POST',
         credentials: "include",
         headers: {
             'Content-Type': 'application/json',
-            'Authorization': `${accountStore.getToken}`
+            'Authorization': `${localStorage.getItem('token')}`
         },
-        body: JSON.stringify({carType: props.carType}),
+        body: JSON.stringify(fetchBody),
     })
     if(res.error) {
         console.log(res.error);
@@ -106,7 +132,7 @@ const fetchAllAvailableCities = async () => {
         credentials: "include",
         headers: {
             'Content-Type': 'application/json',
-            'Authorization': `${accountStore.getToken}`
+            'Authorization': `${localStorage.getItem('token')}`
         },
         body: JSON.stringify({carType: props.carType}),
     })

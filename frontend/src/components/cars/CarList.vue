@@ -51,7 +51,7 @@ const fetchCarData = async() => {
     let fetchBody;
     if(isAdmin) {
         if(adminSelectionStore.getSelected === 'all') {
-            fetchRoute = `http://localhost:1111/vehicles/admin/all`
+            fetchRoute = `http://localhost:1111/vehicles/admin/${props.carType}`
             fetchBody = { page: props.pageNumber, resPerPage: 7 }
         } else {
             
@@ -87,7 +87,22 @@ const fetchCarByOwnerCode = async () => {
     let fetchRoute;
     let fetchBody;
     if(isAdmin) {
-        
+        if(adminSelectionStore.getSelected === 'all') {
+            fetchRoute = ``
+            fetchBody = {
+                
+            }
+        } else if(adminSelectionStore.getSelected === 'region') {
+            fetchRoute = ``
+            fetchBody = {
+                
+            }
+        } else {
+            fetchRoute = ``
+            fetchBody = {
+                
+            }
+        }
     } else {
         fetchRoute = `http://localhost:1111/filter/owner`
         fetchBody = {carType: props.carType, code: props.owner}
@@ -120,7 +135,22 @@ const fetchDataSortedByBrand = async () => {
     let fetchRoute;
     let fetchBody;
     if(isAdmin) {
-
+        if(adminSelectionStore.getSelected === 'all') {
+            fetchRoute = ``
+            fetchBody = {
+                
+            }
+        } else if(adminSelectionStore.getSelected === 'region') {
+            fetchRoute = ``
+            fetchBody = {
+                
+            }
+        } else {
+            fetchRoute = ``
+            fetchBody = {
+                
+            }
+        }
     } else {
         fetchRoute = `http://localhost:1111/filter/brand`
         fetchBody = {
@@ -157,7 +187,22 @@ const fetchCarDataWithSpecificBrand = async () => {
     let fetchRoute;
     let fetchBody;
     if(isAdmin) {
-
+        if(adminSelectionStore.getSelected === 'all') {
+            fetchRoute = ``
+            fetchBody = {
+                
+            }
+        } else if(adminSelectionStore.getSelected === 'region') {
+            fetchRoute = ``
+            fetchBody = {
+                
+            }
+        } else {
+            fetchRoute = ``
+            fetchBody = {
+                
+            }
+        }
     } else {
         fetchRoute = `http://localhost:1111/filter/brand/exact`
         fetchBody = {
@@ -194,7 +239,22 @@ const fetchCarDataWithSpecificTime = async () => {
     let fetchRoute;
     let fetchBody;
     if(isAdmin) {
-
+        if(adminSelectionStore.getSelected === 'all') {
+            fetchRoute = ``
+            fetchBody = {
+                
+            }
+        } else if(adminSelectionStore.getSelected === 'region') {
+            fetchRoute = ``
+            fetchBody = {
+                
+            }
+        } else {
+            fetchRoute = ``
+            fetchBody = {
+                
+            }
+        }
     } else {
         fetchRoute = `http://localhost:1111/filter/time`
         fetchBody = {
@@ -234,7 +294,22 @@ const fetchCarDataWithSpecificCity = async () => {
     let fetchRoute;
     let fetchBody;
     if(isAdmin) {
-
+        if(adminSelectionStore.getSelected === 'all') {
+            fetchRoute = ``
+            fetchBody = {
+                
+            }
+        } else if(adminSelectionStore.getSelected === 'region') {
+            fetchRoute = ``
+            fetchBody = {
+                
+            }
+        } else {
+            fetchRoute = ``
+            fetchBody = {
+                
+            }
+        }
     } else {
         fetchRoute = `http://localhost:1111/filter/city/exact`
         fetchBody = {
@@ -271,7 +346,22 @@ const fetchCarByLicense = async () => {
     let fetchRoute;
     let fetchBody;
     if(isAdmin) {
-
+        if(adminSelectionStore.getSelected === 'all') {
+            fetchRoute = ``
+            fetchBody = {
+                
+            }
+        } else if(adminSelectionStore.getSelected === 'region') {
+            fetchRoute = ``
+            fetchBody = {
+                
+            }
+        } else {
+            fetchRoute = ``
+            fetchBody = {
+                
+            }
+        }
     } else {
         fetchRoute = `http://localhost:1111/vehicles/find`
         fetchBody = {
