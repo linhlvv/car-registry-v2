@@ -2,8 +2,7 @@ import pool from "../../../configs/connectDB"
 
 let allCarBrand = async (req, res) => {
   let query = `
-  select distinct concat(brand, ' ', model, ' ', version) 
-    as name 
+  select distinct brand as name
   from vehicles
     order by name
   `
@@ -14,7 +13,7 @@ let allCarBrand = async (req, res) => {
   for(let i = 0; i < rows.length; i++) {
     brands.push(rows[i].name)
   }
-  return res.send({areas: brands})
+  return res.send({brands: brands})
 
 }
 
