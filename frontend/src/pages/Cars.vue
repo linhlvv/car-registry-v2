@@ -203,7 +203,7 @@ onMounted(() => {
                                 v-if="isAdmin"
                                 @click="carTypeHandler('unregisted')"
                                 class="w-1/3 text-base font-medium gap-1 flex items-center justify-center text-center duration-200 cursor-pointer p-2 py-4 max-[997px]:text-sm max-[738px]:text-xs max-[625px]:text-[10px]"
-                                :class="carTypeMatched('unregisted') ? 'bg-red-500 text-white' : 'hover:text-red-500'"
+                                :class="carTypeMatched('unregisted') ? 'bg-[#93a3e6] text-white' : 'hover:text-[#93a3e6]'"
                             >
                                 <i class="fa-solid fa-car-tunnel"></i>
                                 <div>Unregisted cars</div>
@@ -211,7 +211,7 @@ onMounted(() => {
                             <div 
                                 @click="carTypeHandler('expired')"
                                 class="text-base font-medium gap-1 flex items-center justify-center text-center duration-200 cursor-pointer p-2 py-4 max-[997px]:text-sm max-[738px]:text-xs max-[625px]:text-[10px]"
-                                :class="carTypeMatched('expired') ? 'bg-[#93a3e6] text-white' : 'hover:text-[#93a3e6]', isAdmin ? 'w-1/3' : 'w-1/2'"
+                                :class="carTypeMatched('expired') ? 'bg-red-500 text-white' : 'hover:text-red-500', isAdmin ? 'w-1/3' : 'w-1/2'"
                             >
                                 <i class="fa-solid fa-car-burst"></i>
                                 <div>Expired cars</div>
