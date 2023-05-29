@@ -98,7 +98,7 @@ const fetchAllAvailableBrands = async () => {
         }
         const dataFetched = JSON.parse(await res.text())
         console.log(dataFetched);
-        brandList.value = ['All', ...dataFetched.data]
+        brandList.value = ['All', ...dataFetched.brands]
     } else {
         const res = await fetch(`http://localhost:1111/filter/brand/all`, {
             method: 'POST',
