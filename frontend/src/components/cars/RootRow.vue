@@ -18,9 +18,17 @@ const props = defineProps(['carType']);
                 Expired date
             </div>
         </div>
-        <div v-else class="w-[26%] flex items-center">
+        <div v-else-if="carType === 'expired'" class="w-[26%] flex items-center">
             <div class="font-bold text-[12px] text-[#4f555a] flex items-center text-center justify-center w-1/2">
                 Duration
+            </div>
+            <div class="font-bold text-[12px] text-[#4f555a] flex items-center text-center justify-center w-1/2">
+                Expired date
+            </div>
+        </div>
+        <div v-else class="w-[26%] flex items-center">
+            <div class="font-bold text-[12px] text-[#4f555a] flex items-center text-center justify-center w-1/2">
+                Registry date
             </div>
             <div class="font-bold text-[12px] text-[#4f555a] flex items-center text-center justify-center w-1/2">
                 Expired date

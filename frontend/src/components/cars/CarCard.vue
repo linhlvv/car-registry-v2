@@ -41,12 +41,24 @@ onMounted(() => {
                 {{ car.expire }}
             </div>
         </div>
-        <div v-else class="font-bold text-[11px] flex justify-center items-center w-[26%]">
+        <div v-else-if="carTypeSelection === 'expired'" class="font-bold text-[11px] flex justify-center items-center w-[26%]">
             <div class="font-semibold text-[#616367] text-[11px] flex justify-center items-center w-1/2">
                 {{ car.duration }}
             </div>
             <div class="font-semibold text-[#616367] text-[11px] flex justify-center items-center w-1/2">
                 {{ car.expire }}
+            </div>
+        </div>
+        <div v-else class="font-bold text-[11px] flex justify-center items-center w-[26%]">
+            <div class="font-semibold text-red-500 text-[11px] flex justify-center items-center w-1/2">
+                <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="w-5 h-5">
+                    <path stroke-linecap="round" stroke-linejoin="round" d="M6 18L18 6M6 6l12 12" />
+                </svg>
+            </div>
+            <div class="font-semibold text-red-500 text-[11px] flex justify-center items-center w-1/2">
+                <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="w-5 h-5">
+                    <path stroke-linecap="round" stroke-linejoin="round" d="M6 18L18 6M6 6l12 12" />
+                </svg>
             </div>
         </div>
 
