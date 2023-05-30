@@ -85,7 +85,7 @@ const fetchCarData = async() => {
         console.log(res.error);
     }
     const dataFetched = JSON.parse(await res.text())
-    console.log(`car list: ${JSON.stringify(dataFetched)}`);
+
     list.value = dataFetched.data
     totalPage.value = dataFetched.countPage
     postTotalPage()
@@ -585,6 +585,7 @@ watch(() => props.timeSortOrder, () => {
 // logic - admin option watcher
 watch(() => adminSelectionStore.getOptionSelected, () => {
     if(props.filter === 'No filter' || props.filter === 'Owner') {
+        console.log(adminSelectionStore.getOptionSelected);
         fetchCarData()
     }
     if(props.filter === 'Brand') {
@@ -593,12 +594,16 @@ watch(() => adminSelectionStore.getOptionSelected, () => {
         } else {
             fetchCarDataWithSpecificBrand()
         }
+    }
+    if(props.filter === 'Time') {
+        fetchCarDataWithSpecificTime()
     }
 });
 
 watch(() => adminSelectionStore.getSelected, () => {
     // fetchCarData()
     if(props.filter === 'No filter' || props.filter === 'Owner') {
+        console.log(adminSelectionStore.getSelected);
         fetchCarData()
     }
     if(props.filter === 'Brand') {
@@ -607,6 +612,9 @@ watch(() => adminSelectionStore.getSelected, () => {
         } else {
             fetchCarDataWithSpecificBrand()
         }
+    }
+    if(props.filter === 'Time') {
+        fetchCarDataWithSpecificTime()
     }
 });
 </script>
