@@ -278,18 +278,40 @@ const fetchCarDataWithSpecificTime = async () => {
     let fetchRoute;
     let fetchBody;
     if(isAdmin) {
-        fetchRoute = ``
+        fetchRoute = `http://localhost:1111/filter/admin/time`
         if(adminSelectionStore.getSelected === 'all') {
             fetchBody = {
-                
+                resPerPage: 7,
+                page: props.pageNumber,
+                carType: props.carType,
+                year: props.time.year,
+                quarter: props.time.quarter,
+                month: props.time.month,
+                order: props.timeSortOrder,
             }
         } else if(adminSelectionStore.getSelected === 'region') {
             fetchBody = {
-                
+                resPerPage: 7,
+                page: props.pageNumber,
+                carType: props.carType,
+                year: props.time.year,
+                quarter: props.time.quarter,
+                month: props.time.month,
+                order: props.timeSortOrder,
+                filter: 'region',
+                name: adminSelectionStore.getOptionSelected,
             }
         } else {
             fetchBody = {
-                
+                resPerPage: 7,
+                page: props.pageNumber,
+                carType: props.carType,
+                year: props.time.year,
+                quarter: props.time.quarter,
+                month: props.time.month,
+                order: props.timeSortOrder,
+                filter: 'centre',
+                name: adminSelectionStore.getOptionSelected,
             }
         }
     } else {
