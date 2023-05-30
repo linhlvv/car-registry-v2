@@ -5,7 +5,7 @@ import CarList from '../components/cars/CarList.vue';
 import SearchField from '../components/cars/SearchField.vue';
 import NoSpecificSelect from '../components/UI/NoSpecificSelect.vue';
 import { useAdminSelectionStore } from '../stores/AdminSelectionStore';
-import { onMounted, reactive, ref } from 'vue';
+import { onMounted, reactive, ref, watch } from 'vue';
 
 const adminSelectionStore = useAdminSelectionStore()
 const isAdmin = ref(localStorage.getItem('userType') == 1)
@@ -79,6 +79,7 @@ const licenseSearchEntered = (content) => {
 const reloaded = ref(false)
 const reload = () => {
     filter.value = 'No filter'
+    pageNumber.value = 1
     city.value = 'All'
     brand.value = 'All'
     owner.value = null
@@ -167,6 +168,14 @@ const openSelectHandler = () => {
 
 onMounted(() => {
     document.documentElement.scrollTop = 0
+});
+
+watch(() => adminSelectionStore.getOptionSelected, () => {
+    pageNumber.value = 1
+});
+
+watch(() => adminSelectionStore.getSelected, () => {
+    pageNumber.value = 1
 });
 
 </script>

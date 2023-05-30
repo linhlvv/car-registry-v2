@@ -140,18 +140,14 @@ const fetchAllAvailableCities = async () => {
 
 //SECTION - handle pagination
 // logic - pagination with previous and next button
-const pageNumber = ref(props.pageNum);
 const pageHandler = (direction) => {
     console.log(direction);
     if(direction === 'left') {
-        if (pageNumber.value > 1) {
-            pageNumber.value -= +1;
+        if (props.pageNum > 1) {
             emit('prevPage');
         }
     } else {
-        console.log(pageNumber.value, props.totalPage);
-        if (pageNumber.value < props.totalPage) {
-            pageNumber.value += +1;
+        if (props.pageNum < props.totalPage) {
             emit('nextPage');
         }
     }
@@ -160,7 +156,6 @@ const pageHandler = (direction) => {
 // logic - navigate to exact page when enter is pressed
 const enterHandler = (number) => {
     if(1 <= number && number <= props.totalPage) {
-        pageNumber.value = +number;
         emit('specifiedPage', +number);
     }
 };
@@ -176,7 +171,6 @@ const time = ref({
 
 // logic - general filter
 const filterClickedHandler = (value) => {
-    pageNumber.value = 1
     brand.value = 'All'
     time.value = {
         year: 'All', quarter: 'All', month: 'All',
@@ -193,14 +187,12 @@ const filterClickedHandler = (value) => {
 
 // logic - city filter
 const cityClicked = (value) => {
-    pageNumber.value = 1
     console.log(`city ${city.value}`);
     emit('selectedCityClicked', value)
 }
 
 // logic - owner filter
 const ownerClicked = (value) => {
-    pageNumber.value = 1
     owner.value = value
     console.log(`owner ${owner.value}`);
     emit('selectedOwnerClicked', value)
@@ -208,14 +200,12 @@ const ownerClicked = (value) => {
 
 // logic - brand filter
 const brandClicked = (value) => {
-    pageNumber.value = 1
     console.log(`brand changes to ${brand.value}`);
     emit('selectedBrandClicked', value)
 }
 
 // logic - time filter with year + quarter or year + month
 const timeClicked = (value, type) => {
-    pageNumber.value = 1
     if(type === 'year') {
         time.value.year = value;
         time.value.month = 'All'
@@ -234,7 +224,6 @@ const timeClicked = (value, type) => {
 //SECTION - watcher
 // logic - reset filter after car type change event
 watch(() => props.carType, (newCarType, oldCarType) => {
-    pageNumber.value = 1
     if(newCarType !== oldCarType) {
         
         selected.value = 'No filter'
@@ -249,7 +238,6 @@ watch(() => props.carType, (newCarType, oldCarType) => {
 
 //SECTION - reload data
 const reload = async () => {
-    pageNumber.value = 1
     selected.value = 'No filter'
     brand.value = 'All'
     city.value = 'All'
@@ -273,7 +261,6 @@ const reload = async () => {
                 <div class="flex items-center">
                     <input type="number" min="1" :max="totalPage" :value="props.pageNum" @keyup.enter="enterHandler($event.target.value)" class="border border-[#1d1d1d] border-opacity-10 p-[2px] w-10 text-[14px] text-[#1d1d1d] font-semibold">
                     <div class="text-[14px] text-[#1d1d1d] font-semibold">/{{ totalPage }}</div>
-                    <!-- <div class="text-green-400">{{ typeof pageNumber }}</div> -->
                 </div>
                 <i class="fa-solid fa-circle-arrow-right text-[#1d1d1d] text-base cursor-pointer hover:text-[#2acc97]" @click="pageHandler('right')"></i>
             </div>
