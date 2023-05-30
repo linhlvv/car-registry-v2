@@ -122,7 +122,7 @@ let searchByLicense = async (req, res) => {
   
   try {
     const [rows, fields] = await pool.query(query, [licenseId, licenseId]);
-    return res.send({ data: rows });
+    return res.send({ car: rows });
   }
   catch (err) {
     console.log(err);
