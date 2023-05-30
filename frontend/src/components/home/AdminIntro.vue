@@ -97,28 +97,37 @@ const scrollToTop = () => {
             <p class="text-center text-3xl font-semibold mb-8"><span class="text-[#2acc97] text-5xl">T</span>erms</p>
             <div class="grid grid-cols-4 gap-4 max-sm:grid-cols-1 max-md:grid-cols-2">
                 <div class="w-full overflow-hidden flex flex-col text-[#1d1d1d] bg-white items-center gap-4 py-10 shadow rounded-lg relative z-[1] hover:text-white duration-700 ease-in-out hover:-translate-y-1 hover:shadow-md group after:absolute after:contents-[''] after:z-[-2] after:h-full after:-left-[35%] after:top-0 after:skew-x-[15deg] after:duration-500 after:origin-top-left after:w-0 after:bg-red-500/30 hover:after:h-full hover:after:w-[200%]">
-                    <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.75" stroke="currentColor" class="w-8 h-8 p-1 bg-red-500/20 text-red-500 rounded-[50%] transition-transform duration-500 group-hover:[transform:rotateY(180deg)]">
+                    <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.75" stroke="currentColor" class="w-8 h-8 p-1 bg-red-500/20 group-hover:bg-transparent text-red-500 rounded-[50%] transition-all duration-500 group-hover:[transform:rotateY(180deg)]">
                         <path stroke-linecap="round" stroke-linejoin="round" d="M6 18L18 6M6 6l12 12" />
                     </svg>
                     <p class="text-center text-base font-semibold">Do not violate the system</p>
                 </div>
-                <div class="w-full overflow-hidden flex flex-col text-[#1d1d1d] bg-white items-center gap-4 py-10 shadow rounded-lg relative z-[1] hover:text-white duration-700 ease-in-out hover:-translate-y-1 hover:shadow-md group after:absolute after:contents-[''] after:z-[-2] after:h-full after:-left-[35%] after:top-0 after:skew-x-[15deg] after:duration-500 after:origin-top-left after:w-0 after:bg-red-500/30 hover:after:h-full hover:after:w-[200%]">
-                    <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.75" stroke="currentColor" class="w-8 h-8 p-1 bg-red-500/20 text-red-500 rounded-[50%] transition-transform duration-500 group-hover:[transform:rotateY(180deg)]">
-                        <path stroke-linecap="round" stroke-linejoin="round" d="M6 18L18 6M6 6l12 12" />
+                <div class="w-full overflow-hidden flex flex-col text-[#1d1d1d] bg-white items-center gap-4 py-10 shadow rounded-lg relative z-[1] hover:text-white duration-700 ease-in-out hover:-translate-y-1 hover:shadow-md group after:absolute after:contents-[''] after:z-[-2] after:h-full after:-left-[35%] after:top-0 after:skew-x-[15deg] after:duration-500 after:origin-top-left after:w-0 after:bg-[#93a3e6]/30 hover:after:h-full hover:after:w-[200%]">
+                    <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="w-8 h-8 p-1 bg-[#93a3e6]/20 group-hover:bg-transparent text-[#93a3e6] rounded-[50%] transition-all duration-500 group-hover:[transform:rotateY(180deg)]">
+                        <path stroke-linecap="round" stroke-linejoin="round" d="M12 3v17.25m0 0c-1.472 0-2.882.265-4.185.75M12 20.25c1.472 0 2.882.265 4.185.75M18.75 4.97A48.416 48.416 0 0012 4.5c-2.291 0-4.545.16-6.75.47m13.5 0c1.01.143 2.01.317 3 .52m-3-.52l2.62 10.726c.122.499-.106 1.028-.589 1.202a5.988 5.988 0 01-2.031.352 5.988 5.988 0 01-2.031-.352c-.483-.174-.711-.703-.59-1.202L18.75 4.971zm-16.5.52c.99-.203 1.99-.377 3-.52m0 0l2.62 10.726c.122.499-.106 1.028-.589 1.202a5.989 5.989 0 01-2.031.352 5.989 5.989 0 01-2.031-.352c-.483-.174-.711-.703-.59-1.202L5.25 4.971z" />
                     </svg>
-                    <p class="text-center text-base font-semibold">Do not violate the system</p>
+                    <p class="text-center text-base font-semibold">Be fair</p>
                 </div>
-                <div class="w-full overflow-hidden flex flex-col text-[#1d1d1d] bg-white items-center gap-4 py-10 shadow rounded-lg relative z-[1] hover:text-white duration-700 ease-in-out hover:-translate-y-1 hover:shadow-md group after:absolute after:contents-[''] after:z-[-2] after:h-full after:-left-[35%] after:top-0 after:skew-x-[15deg] after:duration-500 after:origin-top-left after:w-0 after:bg-red-500/30 hover:after:h-full hover:after:w-[200%]">
-                    <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.75" stroke="currentColor" class="w-8 h-8 p-1 bg-red-500/20 text-red-500 rounded-[50%] transition-transform duration-500 group-hover:[transform:rotateY(180deg)]">
-                        <path stroke-linecap="round" stroke-linejoin="round" d="M6 18L18 6M6 6l12 12" />
+                <div class="w-full overflow-hidden flex flex-col text-[#1d1d1d] bg-white items-center gap-4 py-10 shadow rounded-lg relative z-[1] hover:text-white duration-700 ease-in-out hover:-translate-y-1 hover:shadow-md group after:absolute after:contents-[''] after:z-[-2] after:h-full after:-left-[35%] after:top-0 after:skew-x-[15deg] after:duration-500 after:origin-top-left after:w-0 after:bg-[#2acc97]/30 hover:after:h-full hover:after:w-[200%]">
+                    <svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-bong-off w-8 h-8 p-1 bg-[#2acc97]/20 group-hover:bg-transparent text-[#2acc97] rounded-[50%] transition-all duration-500 group-hover:[transform:rotateY(180deg)]" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round">
+                        <path stroke="none" d="M0 0h24v24H0z" fill="none"></path>
+                        <path d="M9 5v-2h4v6m1.5 1.5l2.5 -2.5l2 2l-2.5 2.5m-.5 3.505a5 5 0 1 1 -7 -4.589v-2.416"></path>
+                        <path d="M8 3h6"></path>
+                        <path d="M6.1 17h9.8"></path>
+                        <path d="M3 3l18 18"></path>
                     </svg>
-                    <p class="text-center text-base font-semibold">Do not violate the system</p>
+                    <p class="text-center text-base font-semibold">No drugs</p>
                 </div>
-                <div class="w-full overflow-hidden flex flex-col text-[#1d1d1d] bg-white items-center gap-4 py-10 shadow rounded-lg relative z-[1] hover:text-white duration-700 ease-in-out hover:-translate-y-1 hover:shadow-md group after:absolute after:contents-[''] after:z-[-2] after:h-full after:-left-[35%] after:top-0 after:skew-x-[15deg] after:duration-500 after:origin-top-left after:w-0 after:bg-red-500/30 hover:after:h-full hover:after:w-[200%]">
-                    <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.75" stroke="currentColor" class="w-8 h-8 p-1 bg-red-500/20 text-red-500 rounded-[50%] transition-transform duration-500 group-hover:[transform:rotateY(180deg)]">
-                        <path stroke-linecap="round" stroke-linejoin="round" d="M6 18L18 6M6 6l12 12" />
+                <div class="w-full overflow-hidden flex flex-col text-[#1d1d1d] bg-white items-center gap-4 py-10 shadow rounded-lg relative z-[1] hover:text-white duration-700 ease-in-out hover:-translate-y-1 hover:shadow-md group after:absolute after:contents-[''] after:z-[-2] after:h-full after:-left-[35%] after:top-0 after:skew-x-[15deg] after:duration-500 after:origin-top-left after:w-0 after:bg-orange-400/30 hover:after:h-full hover:after:w-[200%]">
+                    <svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-cash-banknote-off w-8 h-8 p-1 bg-orange-400/20 group-hover:bg-transparent text-orange-400 rounded-[50%] transition-all duration-500 group-hover:[transform:rotateY(180deg)]" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round">
+                        <path stroke="none" d="M0 0h24v24H0z" fill="none"></path>
+                        <path d="M9.88 9.878a3 3 0 1 0 4.242 4.243m.58 -3.425a3.012 3.012 0 0 0 -1.412 -1.405"></path>
+                        <path d="M10 6h9a2 2 0 0 1 2 2v8c0 .294 -.064 .574 -.178 .825m-2.822 1.175h-13a2 2 0 0 1 -2 -2v-8a2 2 0 0 1 2 -2h1"></path>
+                        <path d="M18 12l.01 0"></path>
+                        <path d="M6 12l.01 0"></path>
+                        <path d="M3 3l18 18"></path>
                     </svg>
-                    <p class="text-center text-base font-semibold">Do not violate the system</p>
+                    <p class="text-center text-base font-semibold">No bribe</p>
                 </div>
             </div>
         </div>
