@@ -20,7 +20,8 @@ let forecastByArea = async (req, res) => {
   let match =
     `\nand year(expire) = ` + year +
     `\nand month(expire) = ` + month +
-    `\nand expire >= CURRENT_DATE()` +
+    `` +
+    // `\nand expire >= CURRENT_DATE()` +
     `\nand re.name = '` + req.body.area + `'`
 
   count = `
@@ -59,7 +60,7 @@ let forecastByArea = async (req, res) => {
     match +
     ` 
   group by licenseId
-  order by licenseId asc
+  order by licenseId asc, expire desc
     limit ? offset ?`
   } else {
     count = `

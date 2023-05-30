@@ -16,7 +16,8 @@ let forecastByCentre = async (req, res) => {
   let match =
     `\nand year(expire) = ` + year +
     `\nand month(expire) = ` + month +
-    `\nand expire >= CURRENT_DATE()` +
+    `` +
+    // `\nand expire >= CURRENT_DATE()` +
     `\nand ce.name = '` + req.body.centre + `'`;
 
   let count = `
@@ -54,7 +55,7 @@ let forecastByCentre = async (req, res) => {
   join centre ce
     on ce.id = r.centreId` + match + ` 
   group by licenseId
-  order by licenseId asc
+  order by expire desc, licenseId asc
     limit ? offset ?`;
 
   // bug - đã gọi được api kết quả trả về chính xác

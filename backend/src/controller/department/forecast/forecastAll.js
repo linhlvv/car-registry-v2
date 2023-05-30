@@ -16,9 +16,10 @@ let forecastAll = async (req, res) => {
     let year = new Date().getFullYear();
     let month = new Date().getMonth() + 1
     let match =
-      `\nand year(expire) = ` + year +
-      `\nand month(expire) = ` + month +
-      `\nand expire >= CURRENT_DATE()`
+      `\nand year(expire) <= ` + year +
+      `\nand month(expire) <= ` + month +
+      ``
+      // `\nand expire >= CURRENT_DATE()`
   
     count = `
     select count(*) as total
@@ -41,7 +42,7 @@ let forecastAll = async (req, res) => {
     join company c 
       on v.ownerId = c.id` + match + ` 
     group by licenseId
-    order by expire asc, licenseId
+    order by expire desc, licenseId
       limit ? offset ?`
   } else {
     count = `

@@ -11,11 +11,12 @@ let forecast = async (req, res) => {
   let year = new Date().getFullYear();
   let month = new Date().getMonth() + 1;
   let match =
-    `\nand year(expire) = ` +
+    `\nand year(expire) <= ` +
     year +
-    `\nand month(expire) = ` +
+    `\nand month(expire) <= ` +
     month +
-    `\nand expire >= CURRENT_DATE()`;
+    ``
+    // `\nand expire >= CURRENT_DATE()`;
 
   let count =
     `
@@ -47,7 +48,7 @@ let forecast = async (req, res) => {
     req.session.userid + match +
     ` 
   group by licenseId
-  order by expire asc
+  order by expire desc
     limit ? offset ?`;
 
   // bug - đã gọi được api kết quả trả về chính xác
