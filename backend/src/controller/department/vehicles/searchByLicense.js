@@ -22,18 +22,16 @@ let searchByLicense = async (req, res) => {
     `
     LEFT JOIN region r ON
     r.id = v.regionId 
-    WHERE r.name = 
+    WHERE r.name = ?
     `
-    sub = sub + "'" + name + "'"
   }
   else if (filter === "centre") {
     sub = 
     `
     LEFT JOIN centre c ON
     c.id = re.centreId 
-    WHERE c.name = 
+    WHERE c.name = ?
     `
-    sub = sub + "'" + name + "'"
   }
 
   // logic - dùng code thay cho ssn vì có cả taxnum nữa
@@ -121,7 +119,7 @@ let searchByLicense = async (req, res) => {
   and re.licenseId = ?`;
   
   try {
-    const [rows, fields] = await pool.query(query, [licenseId, licenseId]);
+    const [rows, fields] = await pool.query(query, [name, licenseId, name, licenseId]);
     return res.send({ car: rows });
   }
   catch (err) {
