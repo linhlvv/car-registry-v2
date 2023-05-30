@@ -145,7 +145,9 @@ const initWebRoute = (app) => {
   // logic - admin xem tất cả dự đoán theo trung tâm
   // input - resPerPage, page, type(renew, new), centre
   router.post('/forecast/admin/centre', verifyToken, verifyAdmin, homeController.forecastByCentre)
-
+  // logic - admin search xe theo biển số
+  // input - license, carType(registed, expired, unregisted), filter(centre, region), name
+  router.post('/vehicles/admin/find', verifyToken, verifyAdmin, homeController.searchByLicense)
   
     // section - filter cho vehicles dùng cho admin
   // logic - gửi code có thể là ssn hoặc taxnum 

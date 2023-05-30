@@ -1,7 +1,7 @@
 import pool from "../../../configs/connectDB";
 // task - đang làm dở đừng động vào
 let adminFilterTime = async (req, res) => {
-
+  let order = req.body.order === "desc" ? " desc" : " asc";
   let filter = req.body.filter;
   let name = req.body.name;
 
@@ -155,7 +155,7 @@ let adminFilterTime = async (req, res) => {
     `current_date()` +
     match +
     `\norder by ` +
-    sort +
+    sort + order +
     ` 
     limit ? offset ?`;
 
