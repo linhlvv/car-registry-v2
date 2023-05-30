@@ -149,11 +149,11 @@ const initWebRoute = (app) => {
   
     // section - filter cho vehicles dùng cho admin
   // logic - gửi code có thể là ssn hoặc taxnum 
-  // input - carType(registed, expired) , code
+  // input - filter, name, carType(registed, expired) , code, order
   router.post('/filter/admin/owner', verifyToken, verifyAdmin, homeController.adminFilterOwner)
                                                                                     
   // logic - gửi order là asc hay desc để sort result theo brand
-  // input - resPerPage, page, carType(registed, expired), order
+  // input - filter, name, resPerPage, page, carType(registed, expired), order
   router.post('/filter/admin/brand', verifyToken, verifyAdmin, homeController.adminFilterBrand)
                                                                                     
   // logic - trả về tất cả các brand của centre này
@@ -161,7 +161,7 @@ const initWebRoute = (app) => {
   router.post('/filter/admin/brand/all', verifyToken, verifyAdmin, homeController.adminViewAllBrand)
                                                                                     
   // logic - trả về tất cả xe có brand khớp với brand gửi lên
-  // input - resPerPage, page, carType(registed, expired), brand
+  // input - filter, name, resPerPage, page, carType(registed, expired), brand
   router.post('/filter/admin/brand/exact', verifyToken, verifyAdmin, homeController.adminViewExactBrand)
                                                                                     
   // logic - filter theo thời gian regist hoặc expire

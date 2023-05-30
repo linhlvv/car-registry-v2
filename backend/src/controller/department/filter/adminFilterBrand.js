@@ -40,7 +40,19 @@ let adminFilterBrand = async (req, res) => {
   let type = carType === "registed" ? " >= " : " < ";
 
   let count =
-    `
+  carType === "unregisted" ?
+  `
+  select count(*) as total from vehicles v
+  `
+  + sub + (sub === "" ? `where` : `and`) +
+  `
+   v.licenseId 
+  NOT IN 
+  (SELECT registry.licenseId  FROM registry)
+
+  `
+  :
+  `
   select count(*) as total from registry
   where (licenseId, expire) in
   (select v.licenseId as license, max(expire) as expire
@@ -55,7 +67,8 @@ let adminFilterBrand = async (req, res) => {
   group by v.licenseId)  
   and expire` +
     type +
-    `current_date()` ;
+    `current_date()` 
+    ;
   const [countRows, countFields] = await pool.query(count);
 
   let queryType =
@@ -64,6 +77,40 @@ let adminFilterBrand = async (req, res) => {
       : "timestampdiff(month, re.date, re.expire) as duration";
 
   let query =
+  carType === "unregisted" ?
+  `
+  select v.licenseId as license, v.brand, v.model, v.version, p.name 
+  FROM vehicles v
+  join owner o 
+      on v.ownerId = o.id
+  join personal p
+      on p.id = o.id
+      `
+  + sub + (sub === "" ? `where` : `and`) +
+    `
+    v.licenseId NOT IN 
+  (SELECT registry.licenseId  FROM registry)
+  UNION ALL
+  select v.licenseId as license, v.brand, v.model, v.version, c.name 
+  FROM vehicles v
+  join owner o 
+      on v.ownerId = o.id
+  join company c
+      on c.id = o.id
+    ` 
+      + sub + (sub === "" ? `where` : `and`) +
+    `
+    v.licenseId NOT IN 
+  (SELECT registry.licenseId  FROM registry)
+  order by brand ` +
+    order +
+    `, model ` +
+    order +
+    `, version ` +
+    order +
+    ` limit ? offset ?`
+  
+  :
     `
   select re.licenseId as license, v.brand, v.model, v.version, ` +
     queryType +
