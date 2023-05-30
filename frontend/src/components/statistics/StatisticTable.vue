@@ -358,12 +358,16 @@ const scrollToChart = () => {
                     </button>
                 </div>
                 <div class="flex items-center gap-2 w-fit">
-                    <i class="fa-solid fa-circle-arrow-left text-[#1d1d1d] text-base cursor-pointer hover:text-[#2acc97]" @click="pageHandler('left')"></i>
+                    <svg @click="pageHandler('left')" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor" class="w-6 h-6 text-[#1d1d1d] cursor-pointer duration-200 hover:text-[#2acc97]">
+                        <path fill-rule="evenodd" d="M12 2.25c-5.385 0-9.75 4.365-9.75 9.75s4.365 9.75 9.75 9.75 9.75-4.365 9.75-9.75S17.385 2.25 12 2.25zm-4.28 9.22a.75.75 0 000 1.06l3 3a.75.75 0 101.06-1.06l-1.72-1.72h5.69a.75.75 0 000-1.5h-5.69l1.72-1.72a.75.75 0 00-1.06-1.06l-3 3z" clip-rule="evenodd" />
+                    </svg>
                     <div class="flex items-center">
                         <input type="number" min="1" :max="100" @keyup.enter="pageEnteredHandler($event.target.value)" :value="pageNumber" class="w-[30px] border border-solid border-[#1d1d1d]/50 text-[14px] text-[#1d1d1d] font-semibold text-opacity-80"/>
                         <div class="text-[14px] text-[#1d1d1d] font-semibold text-opacity-80">/{{ totalPage }}</div>
                     </div>
-                    <i class="fa-solid fa-circle-arrow-right text-[#1d1d1d] text-base cursor-pointer hover:text-[#2acc97]" @click="pageHandler('right')"></i>
+                    <svg @click="pageHandler('right')" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor" class="w-6 h-6 text-[#1d1d1d] cursor-pointer duration-200 hover:text-[#2acc97]">
+                        <path fill-rule="evenodd" d="M12 2.25c-5.385 0-9.75 4.365-9.75 9.75s4.365 9.75 9.75 9.75 9.75-4.365 9.75-9.75S17.385 2.25 12 2.25zm4.28 10.28a.75.75 0 000-1.06l-3-3a.75.75 0 10-1.06 1.06l1.72 1.72H8.25a.75.75 0 000 1.5h5.69l-1.72 1.72a.75.75 0 101.06 1.06l3-3z" clip-rule="evenodd" />
+                    </svg>
                 </div>
             </div>
             <div class="flex flex-col min-[732px]:flex-row items-center gap-2 w-full">

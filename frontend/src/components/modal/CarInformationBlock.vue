@@ -1,5 +1,5 @@
 <script setup>
-const props = defineProps(['description', 'detail', 'icon']);
+const props = defineProps(['description', 'detail']);
 </script>
 
 <template>
@@ -8,7 +8,9 @@ const props = defineProps(['description', 'detail', 'icon']);
             {{ description }}
         </div>
         <div class="flex items-center justify-center h-[55%]">
-            <i :class="icon" class="text-4xl text-[#1d1d1d] text-opacity-80"></i>
+            <slot name="i">
+
+            </slot>
         </div>
         <div class="w-full h-[30%] flex justify-center items-center text-center font-medium text-[13px]">
             {{ detail }}

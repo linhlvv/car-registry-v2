@@ -75,7 +75,10 @@ onMounted(() => {
 <template>
     <div class="w-full flex items-start max-lg:flex-col max-lg:items-center">
         <div class="bg-white w-full min-w-[500px] h-[550px] max-[1480px]:h-[702px] max-[1180px]:h-[896px] max-lg:h-[550px] duration-200 rounded-md flex flex-col items-center text-[#1d1d1d] px-4 py-6 shadow-md">
-            <i class="fa-solid fa-building-user text-6xl border-[3px] border-solid text-[#2acc97] border-[#2acc97] rounded-[50%] p-6 py-7"></i>
+            <!-- <i class="fa-solid fa-building-user text-6xl"></i> -->
+            <svg xmlns="http://www.w3.org/2000/svg" class="w-28 h-28 text-[#2acc97] pb-4 border-b-4 border-dashed border-[#2acc97]" viewBox="0 0 384 512">
+                <path fill="currentColor" d="M48 0C21.5 0 0 21.5 0 48v416c0 26.5 21.5 48 48 48h96v-80c0-26.5 21.5-48 48-48s48 21.5 48 48v80h96c26.5 0 48-21.5 48-48V48c0-26.5-21.5-48-48-48H48zm16 240c0-8.8 7.2-16 16-16h32c8.8 0 16 7.2 16 16v32c0 8.8-7.2 16-16 16H80c-8.8 0-16-7.2-16-16v-32zm112-16h32c8.8 0 16 7.2 16 16v32c0 8.8-7.2 16-16 16h-32c-8.8 0-16-7.2-16-16v-32c0-8.8 7.2-16 16-16zm80 16c0-8.8 7.2-16 16-16h32c8.8 0 16 7.2 16 16v32c0 8.8-7.2 16-16 16h-32c-8.8 0-16-7.2-16-16v-32zM80 96h32c8.8 0 16 7.2 16 16v32c0 8.8-7.2 16-16 16H80c-8.8 0-16-7.2-16-16v-32c0-8.8 7.2-16 16-16zm80 16c0-8.8 7.2-16 16-16h32c8.8 0 16 7.2 16 16v32c0 8.8-7.2 16-16 16h-32c-8.8 0-16-7.2-16-16v-32zm112-16h32c8.8 0 16 7.2 16 16v32c0 8.8-7.2 16-16 16h-32c-8.8 0-16-7.2-16-16v-32c0-8.8 7.2-16 16-16z"/>
+            </svg>
             <div class="flex flex-col items-center justify-center gap-1">
                 <h1 class="text-2xl font-semibold mt-2 text-center flex items-center justify-center">{{ center.name }}</h1>
                 <h4 class="text-[#2acc97] bg-[#cdfcec]/40 text-xs font-medium rounded-xl p-1 px-4 flex items-center justify-center">Id: {{ center.id }}</h4>

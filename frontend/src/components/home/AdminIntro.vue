@@ -58,15 +58,23 @@ const scrollToTop = () => {
                 </button>
                 <div class="flex items-center gap-16 max-sm:hidden">
                     <div class="flex flex-col justify-around items-center h-32 w-28 border-2 rounded-2xl p-2 pb-3 bg-white shadow-sm">
-                        <i class="fa-solid fa-check text-3xl text-[#eded4a]"></i>
+                        <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" class="w-9 h-9 text-[#eded4a]">
+                            <path stroke-linecap="round" stroke-linejoin="round" d="M4.5 12.75l6 6 9-13.5" />
+                        </svg>
                         <div class="text-center flex items-center text-base text-[#1d1d1d] text-opacity-90 font-semibold">Convenient</div>
                     </div>
                     <div class="flex flex-col justify-around items-center h-32 w-28 border-2 rounded-2xl p-2 pb-3 bg-white shadow-sm">
-                        <i class="fa-solid fa-bolt-lightning text-3xl text-[#eded4a]"></i>
+                        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor" class="w-9 h-9 text-[#eded4a]">
+                            <path fill-rule="evenodd" d="M14.615 1.595a.75.75 0 01.359.852L12.982 9.75h7.268a.75.75 0 01.548 1.262l-10.5 11.25a.75.75 0 01-1.272-.71l1.992-7.302H3.75a.75.75 0 01-.548-1.262l10.5-11.25a.75.75 0 01.913-.143z" clip-rule="evenodd" />
+                        </svg>
                         <div class="text-center flex items-center text-base text-[#1d1d1d] text-opacity-90 font-semibold">Fast</div>
                     </div>
                     <div class="flex flex-col justify-around items-center h-32 w-28 border-2 rounded-2xl p-2 pb-3 bg-white shadow-sm">
-                        <i class="fa-solid fa-1 text-3xl text-[#eded4a]"></i>
+                        <svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-circle-number-1 w-9 h-9 text-[#eded4a]" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round">
+                            <path stroke="none" d="M0 0h24v24H0z" fill="none"></path>
+                            <path d="M12 12m-9 0a9 9 0 1 0 18 0a9 9 0 1 0 -18 0"></path>
+                            <path d="M10 10l2 -2v8"></path>
+                        </svg>
                         <div class="text-center flex items-center text-base text-[#1d1d1d] text-opacity-90 font-semibold">SPA</div>
                     </div>
                 </div>
@@ -95,7 +103,7 @@ const scrollToTop = () => {
         </div>
         <div ref="terms" class="w-full pt-24 pb-10 px-10">
             <p class="text-center text-3xl font-semibold mb-8"><span class="text-[#2acc97] text-5xl">T</span>erms</p>
-            <div class="grid grid-cols-4 gap-4 max-sm:grid-cols-1 max-md:grid-cols-2">
+            <div class="grid grid-cols-4 grid-rows-[repeat(x,max-content),1fr] gap-4 max-sm:grid-cols-1 max-md:grid-cols-2">
                 <div class="w-full overflow-hidden flex flex-col text-[#1d1d1d] bg-white items-center gap-4 py-10 shadow rounded-lg relative z-[1] hover:text-white duration-700 ease-in-out hover:-translate-y-1 hover:shadow-md group after:absolute after:contents-[''] after:z-[-2] after:h-full after:-left-[35%] after:top-0 after:skew-x-[15deg] after:duration-500 after:origin-top-left after:w-0 after:bg-red-500/30 hover:after:h-full hover:after:w-[200%]">
                     <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.75" stroke="currentColor" class="w-8 h-8 p-1 bg-red-500/20 group-hover:bg-transparent text-red-500 rounded-[50%] transition-all duration-500 group-hover:[transform:rotateY(180deg)]">
                         <path stroke-linecap="round" stroke-linejoin="round" d="M6 18L18 6M6 6l12 12" />
@@ -131,18 +139,54 @@ const scrollToTop = () => {
                 </div>
             </div>
         </div>
-        <div ref="services" class="w-full grid grid-cols-2 items-center pt-24  pb-10 bg-[#2acc97]/10 px-10">
+        <div ref="services" class="w-full grid grid-cols-2 max-sm:grid-cols-1 grid-rows-[repeat(x,max-content),1fr] items-center pt-24 pb-10 bg-[#2acc97]/10 px-10">
             <div class="text-center p-20">
                 <p class="text-3xl font-semibold text-left"><span class="text-[#2acc97] text-5xl">S</span>ervices</p>
                 <p class="text-lg font-medium text-left">With these functions, management will be easier than ever</p>
             </div>
-            <div class="grid grid-cols-2 gap-2 mt-5">
-                <CategoryCard icon="fa-solid fa-car" category="Cars" link="/cars" class="w-full"/>
-                <CategoryCard v-if="!isAdmin" icon="fa-solid fa-circle-plus" category="Regist" link="/regist-new-car" class="w-full"/>
-                <CategoryCard icon="fa-solid fa-lightbulb" category="Forecast" link="/forecast" class="w-full"/> 
-                <CategoryCard icon="fa-solid fa-chart-simple" category="Statistics" link="/statistics" class="w-full"/> 
-                <CategoryCard v-if="isAdmin" icon="fa-sharp fa-solid fa-users" category="Account management" link="/account-management" class="w-full"/> 
-                <CategoryCard v-if="isAdmin" icon="fa-sharp fa-solid fa-database" category="Manage database" link="/manage-database" class="w-full"/> 
+            <div class="grid grid-cols-2 max-[500px]:grid-cols-1 grid-rows-[repeat(x,max-content),1fr] gap-2 mt-5">
+                <CategoryCard icon="fa-solid fa-car" category="Cars" link="/cars" class="w-full">
+                    <template #i>
+                        <svg xmlns="http://www.w3.org/2000/svg" class="w-12 h-12" viewBox="0 0 512 512">
+                            <path fill="currentColor" d="M135.2 117.4L109.1 192h293.8l-26.1-74.6c-4.5-12.8-16.6-21.4-30.2-21.4H165.4c-13.6 0-25.7 8.6-30.2 21.4zm-95.6 79.4L74.8 96.3C88.3 57.8 124.6 32 165.4 32h181.2c40.8 0 77.1 25.8 90.6 64.3l35.2 100.5c23.2 9.6 39.6 32.5 39.6 59.2v192c0 17.7-14.3 32-32 32h-32c-17.7 0-32-14.3-32-32v-48H96v48c0 17.7-14.3 32-32 32H32c-17.7 0-32-14.3-32-32V256c0-26.7 16.4-49.6 39.6-59.2zM128 288a32 32 0 1 0-64 0a32 32 0 1 0 64 0zm288 32a32 32 0 1 0 0-64a32 32 0 1 0 0 64z"/>
+                        </svg>
+                    </template>
+                </CategoryCard>
+                <CategoryCard v-if="!isAdmin" icon="fa-solid fa-circle-plus" category="Regist" link="/regist-new-car" class="w-full">
+                    <template #i>
+                        <svg xmlns="http://www.w3.org/2000/svg" class="w-10 h-10" viewBox="0 0 512 512">
+                            <path fill="currentColor" d="M256 512a256 256 0 1 0 0-512a256 256 0 1 0 0 512zm-24-168v-64h-64c-13.3 0-24-10.7-24-24s10.7-24 24-24h64v-64c0-13.3 10.7-24 24-24s24 10.7 24 24v64h64c13.3 0 24 10.7 24 24s-10.7 24-24 24h-64v64c0 13.3-10.7 24-24 24s-24-10.7-24-24z"/>
+                        </svg>
+                    </template>
+                </CategoryCard>
+                <CategoryCard icon="fa-solid fa-lightbulb" category="Forecast" link="/forecast" class="w-full">
+                    <template #i>
+                        <svg xmlns="http://www.w3.org/2000/svg" class="w-12 h-12" viewBox="0 0 384 512">
+                            <path fill="currentColor" d="M272 384c9.6-31.9 29.5-59.1 49.2-86.2c5.2-7.1 10.4-14.2 15.4-21.4c19.8-28.5 31.4-63 31.4-100.3C368 78.8 289.2 0 192 0S16 78.8 16 176c0 37.3 11.6 71.9 31.4 100.3c5 7.2 10.2 14.3 15.4 21.4c19.8 27.1 39.7 54.4 49.2 86.2h160zm-80 128c44.2 0 80-35.8 80-80v-16H112v16c0 44.2 35.8 80 80 80zm-80-336c0 8.8-7.2 16-16 16s-16-7.2-16-16c0-61.9 50.1-112 112-112c8.8 0 16 7.2 16 16s-7.2 16-16 16c-44.2 0-80 35.8-80 80z"/>
+                        </svg>
+                    </template>
+                </CategoryCard>
+                <CategoryCard icon="fa-solid fa-chart-simple" category="Statistics" link="/statistics" class="w-full">
+                    <template #i>
+                        <svg xmlns="http://www.w3.org/2000/svg" class="w-12 h-12" viewBox="0 0 448 512">
+                            <path fill="currentColor" d="M160 80c0-26.5 21.5-48 48-48h32c26.5 0 48 21.5 48 48v352c0 26.5-21.5 48-48 48h-32c-26.5 0-48-21.5-48-48V80zM0 272c0-26.5 21.5-48 48-48h32c26.5 0 48 21.5 48 48v160c0 26.5-21.5 48-48 48H48c-26.5 0-48-21.5-48-48V272zM368 96h32c26.5 0 48 21.5 48 48v288c0 26.5-21.5 48-48 48h-32c-26.5 0-48-21.5-48-48V144c0-26.5 21.5-48 48-48z"/>
+                        </svg>
+                    </template>
+                </CategoryCard>
+                <CategoryCard v-if="isAdmin" icon="fa-sharp fa-solid fa-users" category="Account management" link="/account-management" class="w-full">
+                    <template #i>
+                        <svg xmlns="http://www.w3.org/2000/svg" class="w-12 h-12" viewBox="0 0 640 512">
+                            <path fill="currentColor" d="M144 0a80 80 0 1 1 0 160a80 80 0 1 1 0-160zm368 0a80 80 0 1 1 0 160a80 80 0 1 1 0-160zM0 298.7C0 239.8 47.8 192 106.7 192h42.7c15.9 0 31 3.5 44.6 9.7c-1.3 7.2-1.9 14.7-1.9 22.3c0 38.2 16.8 72.5 43.3 96H21.3C9.6 320 0 310.4 0 298.7zM405.3 320h-.7c26.6-23.5 43.3-57.8 43.3-96c0-7.6-.7-15-1.9-22.3c13.6-6.3 28.7-9.7 44.6-9.7h42.7c58.9 0 106.7 47.8 106.7 106.7c0 11.8-9.6 21.3-21.3 21.3H405.3zM224 224a96 96 0 1 1 192 0a96 96 0 1 1-192 0zm-96 261.3c0-73.6 59.7-133.3 133.3-133.3h117.4c73.6 0 133.3 59.7 133.3 133.3c0 14.7-11.9 26.7-26.7 26.7H154.7c-14.7 0-26.7-11.9-26.7-26.7z"/>
+                        </svg>
+                    </template>
+                </CategoryCard> 
+                <CategoryCard v-if="isAdmin" icon="fa-sharp fa-solid fa-database" category="Manage database" link="/manage-database" class="w-full">
+                    <template #i>
+                        <svg xmlns="http://www.w3.org/2000/svg" class="w-12 h-12" viewBox="0 0 448 512">
+                            <path fill="currentColor" d="M448 80v48c0 44.2-100.3 80-224 80S0 172.2 0 128V80C0 35.8 100.3 0 224 0s224 35.8 224 80zm-54.8 134.7c20.8-7.4 39.9-16.9 54.8-28.6V288c0 44.2-100.3 80-224 80S0 332.2 0 288V186.1c14.9 11.8 34 21.2 54.8 28.6C99.7 230.7 159.5 240 224 240s124.3-9.3 169.2-25.3zM0 346.1c14.9 11.8 34 21.2 54.8 28.6C99.7 390.7 159.5 400 224 400s124.3-9.3 169.2-25.3c20.8-7.4 39.9-16.9 54.8-28.6V432c0 44.2-100.3 80-224 80S0 476.2 0 432v-85.9z"/>
+                        </svg>
+                    </template>
+                </CategoryCard>
             </div>
         </div>
         <div class="fixed z-10 bottom-4 right-4">

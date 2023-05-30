@@ -252,17 +252,25 @@ const reload = async () => {
         <div class="w-full flex items-center justify-between max-[535px]:items-start max-[535px]:flex-col-reverse max-[535px]:gap-y-2">
             <div class="flex items-center w-1/2 gap-3 max-[535px]:w-full">
                 <SearchBar @search-entered="licenseSearch" width="w-full" placeholder="Enter a license plate..."/>
-                <i @click="reload" class="fa-solid fa-rotate text-[#292929] p-[6px] rounded-[50%] hover:text-[#2acc97] active:bg-[#2acc97]/10 cursor-pointer duration-300 ease-in-out transition-transform hover:rotate-180"></i>
+                <svg @click="reload" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="w-8 h-8 text-[#292929] p-[6px] rounded-[50%] hover:text-[#2acc97] active:bg-[#2acc97]/10 cursor-pointer duration-300 ease-in-out transition-transform hover:rotate-180">
+                    <path stroke-linecap="round" stroke-linejoin="round" d="M16.023 9.348h4.992v-.001M2.985 19.644v-4.992m0 0h4.992m-4.993 0l3.181 3.183a8.25 8.25 0 0013.803-3.7M4.031 9.865a8.25 8.25 0 0113.803-3.7l3.181 3.182m0-4.991v4.99" />
+                </svg>
             </div>
 
             <!-- Pagination -->
             <div class="flex items-center gap-2 w-[20%] justify-end max-[535px]:w-full">
-                <i class="fa-solid fa-circle-arrow-left text-[#1d1d1d] text-base cursor-pointer hover:text-[#2acc97]" @click="pageHandler('left')"></i>
+                
+                <svg @click="pageHandler('left')" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor" class="w-6 h-6 text-[#1d1d1d] cursor-pointer duration-200 hover:text-[#2acc97]">
+                    <path fill-rule="evenodd" d="M12 2.25c-5.385 0-9.75 4.365-9.75 9.75s4.365 9.75 9.75 9.75 9.75-4.365 9.75-9.75S17.385 2.25 12 2.25zm-4.28 9.22a.75.75 0 000 1.06l3 3a.75.75 0 101.06-1.06l-1.72-1.72h5.69a.75.75 0 000-1.5h-5.69l1.72-1.72a.75.75 0 00-1.06-1.06l-3 3z" clip-rule="evenodd" />
+                </svg>
                 <div class="flex items-center">
                     <input type="number" min="1" :max="totalPage" :value="props.pageNum" @keyup.enter="enterHandler($event.target.value)" class="border border-[#1d1d1d] border-opacity-10 p-[2px] w-10 text-[14px] text-[#1d1d1d] font-semibold">
                     <div class="text-[14px] text-[#1d1d1d] font-semibold">/{{ totalPage }}</div>
                 </div>
-                <i class="fa-solid fa-circle-arrow-right text-[#1d1d1d] text-base cursor-pointer hover:text-[#2acc97]" @click="pageHandler('right')"></i>
+                <svg @click="pageHandler('right')" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor" class="w-6 h-6 text-[#1d1d1d] cursor-pointer duration-200 hover:text-[#2acc97]">
+                    <path fill-rule="evenodd" d="M12 2.25c-5.385 0-9.75 4.365-9.75 9.75s4.365 9.75 9.75 9.75 9.75-4.365 9.75-9.75S17.385 2.25 12 2.25zm4.28 10.28a.75.75 0 000-1.06l-3-3a.75.75 0 10-1.06 1.06l1.72 1.72H8.25a.75.75 0 000 1.5h5.69l-1.72 1.72a.75.75 0 101.06 1.06l3-3z" clip-rule="evenodd" />
+                </svg>
+                
             </div>
         </div>
         <div class="w-full min-[732px]:flex-row flex flex-col gap-y-2 min-[732px]:items-center">
@@ -277,13 +285,25 @@ const reload = async () => {
                 </select>
 
                 <!-- Ordering -->
-                <div v-if="selected !== 'No filter' && selected !== 'Time' && city === 'All' && brand === 'All'" class="flex flex-col gap-1">
-                    <i @click="fromAtoZClicked" class="fa-solid fa-arrow-up-z-a text-[#1d1d1d] cursor-pointer" :class="fromAtoZ === 'asc' ? 'text-[#2acc97]' : ''"></i>
-                    <i @click="fromZtoAClicked" class="fa-solid fa-arrow-up-a-z text-[#1d1d1d] cursor-pointer" :class="fromAtoZ === 'desc' ? 'text-[#2acc97]' : ''"></i>
+                <div v-if="selected !== 'No filter' && selected === 'Brand' && brand === 'All'" class="flex flex-col gap-1">
+                    <svg @click="fromAtoZClicked" xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-arrow-big-up-filled w-5 h-5 cursor-pointer" :class="fromAtoZ === 'asc' ? 'text-[#2acc97]' : ''" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round">
+                        <path stroke="none" d="M0 0h24v24H0z" fill="none"></path>
+                        <path d="M10.586 3l-6.586 6.586a2 2 0 0 0 -.434 2.18l.068 .145a2 2 0 0 0 1.78 1.089h2.586v7a2 2 0 0 0 2 2h4l.15 -.005a2 2 0 0 0 1.85 -1.995l-.001 -7h2.587a2 2 0 0 0 1.414 -3.414l-6.586 -6.586a2 2 0 0 0 -2.828 0z" stroke-width="0" fill="currentColor"></path>
+                    </svg>
+                    <svg @click="fromZtoAClicked" xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-arrow-big-down-filled w-5 h-5 cursor-pointer" :class="fromAtoZ === 'desc' ? 'text-[#2acc97]' : ''" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round">
+                        <path stroke="none" d="M0 0h24v24H0z" fill="none"></path>
+                        <path d="M10 2l-.15 .005a2 2 0 0 0 -1.85 1.995v6.999l-2.586 .001a2 2 0 0 0 -1.414 3.414l6.586 6.586a2 2 0 0 0 2.828 0l6.586 -6.586a2 2 0 0 0 .434 -2.18l-.068 -.145a2 2 0 0 0 -1.78 -1.089l-2.586 -.001v-6.999a2 2 0 0 0 -2 -2h-4z" stroke-width="0" fill="currentColor"></path>
+                    </svg>
                 </div>
-                <div v-else-if="selected === 'Time'" class="flex flex-col gap-1">
-                    <i @click="timeAscendingClicked" class="fa-solid fa-arrow-up text-[#1d1d1d] cursor-pointer duration-100" :class="timeAscending === 'asc' ? 'text-[#2acc97]' : ''"></i>
-                    <i @click="timeDescendingClicked" class="fa-solid fa-arrow-down text-[#1d1d1d] cursor-pointer duration-100" :class="timeAscending === 'desc' ? 'text-[#2acc97]' : ''"></i>
+                <div v-else-if="selected === 'Time'" class="flex flex-col">
+                    <svg @click="timeAscendingClicked" xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-arrow-badge-up-filled w-5 h-5 cursor-pointer" :class="timeAscending === 'asc' ? 'text-[#2acc97]' : ''" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round">
+                        <path stroke="none" d="M0 0h24v24H0z" fill="none"></path>
+                        <path d="M11.375 6.22l-5 4a1 1 0 0 0 -.375 .78v6l.006 .112a1 1 0 0 0 1.619 .669l4.375 -3.501l4.375 3.5a1 1 0 0 0 1.625 -.78v-6a1 1 0 0 0 -.375 -.78l-5 -4a1 1 0 0 0 -1.25 0z" stroke-width="0" fill="currentColor"></path>
+                    </svg>
+                    <svg @click="timeDescendingClicked" xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-arrow-badge-down-filled w-5 h-5 cursor-pointer" :class="timeAscending === 'desc' ? 'text-[#2acc97]' : ''" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round">
+                        <path stroke="none" d="M0 0h24v24H0z" fill="none"></path>
+                        <path d="M16.375 6.22l-4.375 3.498l-4.375 -3.5a1 1 0 0 0 -1.625 .782v6a1 1 0 0 0 .375 .78l5 4a1 1 0 0 0 1.25 0l5 -4a1 1 0 0 0 .375 -.78v-6a1 1 0 0 0 -1.625 -.78z" stroke-width="0" fill="currentColor"></path>
+                    </svg>
                 </div>
             </div>
             <div class="w-full min-[732px]:w-[70%] flex items-center max-[731px]:justify-end min-[732px]:ml-3">

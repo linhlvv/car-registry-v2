@@ -53,7 +53,7 @@ onMounted(() => {
                 </svg>
                 <p class="text-2xl text-[#1d1d1d] font-medium">Vietnam Register</p>
             </div>
-            <div class="w-full max-w-5xl grid grid-cols-2 grid-rows-[repeat(x,max-content),1fr] gap-4">
+            <div class="w-full max-w-5xl grid grid-cols-2 max-sm:grid-cols-1 grid-rows-[repeat(x,max-content),1fr] gap-4">
                 <div class="w-full rounded-xl shadow bg-white flex flex-col space-y-1 items-center py-4 max-sm:px-4 px-10 group transition-all duration-300 hover:-translate-x-1 hover:-translate-y-1 hover:shadow-md">
                     <p class="text-lg font-semibold text-[#1d1d1d]">Address</p>
                     <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="w-12 h-12 p-2 rounded-full text-red-500 bg-red-500/20 transition-all duration-500 group-hover:[transform:rotateY(180deg)]">
