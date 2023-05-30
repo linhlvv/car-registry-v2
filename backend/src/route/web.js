@@ -212,6 +212,10 @@ const initWebRoute = (app) => {
   // logic - trả về tất cả đăng kiểm của xe có khu vực khớp với khu vực gửi lên
   router.post('/stats/area', verifyToken, verifyAdmin, homeController.adminRegistByArea)
 
+    // section - owner cho admin
+  // logic - trả về lịch sử đăng kiểm của owner
+  router.post('/owner/admin/history', verifyToken, verifyAdmin, homeController.ownerHistory)
+
   return app.use('/', router)
 }
 
