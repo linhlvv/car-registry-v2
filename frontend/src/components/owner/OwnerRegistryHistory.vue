@@ -6,7 +6,7 @@ import { useAccountStore } from '../../stores/AccountStore';
 import { useRoute } from "vue-router";
 
 const props = defineProps(['id']);
-const accountStore = useAccountStore()
+const isAdmin = localStorage.getItem('userType') == 1
 
 const registedTag = ref(true);
 const changeTagHandler = (value) => {
@@ -17,12 +17,18 @@ const registedList = ref([]);
 const expiredList = ref([]);
 
 const fetchOwnerRegistryHistory = async () => {
-    const res = await fetch(`http://localhost:1111/owner/history`, {
+    let fetchRoute
+    if (isAdmin) {
+        fetchRoute = `http://localhost:1111/owner/admin/history`
+    } else {
+        fetchRoute = `http://localhost:1111/owner/history`
+    }
+    const res = await fetch(fetchRoute, {
         method: 'POST',
         credentials: "include",
         headers: {
             'Content-Type': 'application/json',
-            'Authorization': `${accountStore.getToken}`
+            'Authorization': `${localStorage.getItem('token')}`
         },
         body: JSON.stringify({ ownerid: props.id }),
     })
