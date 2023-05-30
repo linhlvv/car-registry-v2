@@ -6,129 +6,60 @@ let registHistory = async (req, res) => {
   if (ownerid === undefined) {
     return res.status(422).send({ErrorCode: 'ER_MISSING_PARAM'})
   }
-  
-  let carType = "registed";
-
-  let type = "";
-  let queryType = "";
+  let carType = ""
+  let type = ""
+  let queryType = ""
+  let query = ""
 
   let convert = () => {
     type = carType === "expired" ? " < " : " >= ";
-    queryType =
-      carType === "registed"
+    queryType = carType === "registed"
         ? "re.date as registryDate"
-        : "timestampdiff(month, re.date, re.expire) as duration";
-  };
+        : "timestampdiff(month, re.date, re.expire) as duration"
+    query = `
+    select re.licenseId as license, v.brand, v.model, v.version, ` +
+      queryType + `, re.expire, p.name, ce.name
+      from registry re
+    join vehicles v on v.licenseId = re.licenseId
+    join owner o on v.ownerId = o.id
+    join personal p on p.id = o.id
+    join centre ce on ce.id = re.centreId
+      where centreId = ` + req.session.userid +
+      ` and ownerId = ?
+    and expire` + type +
+      `current_date()
+            union all 
+    select re.licenseId as license, v.brand, v.model, v.version, ` +
+      queryType + `, re.expire, c.name, ce.name
+      from registry re
+    join vehicles v on v.licenseId = re.licenseId
+    join owner o on v.ownerId = o.id
+    join company c on c.id = o.id
+    join centre ce on ce.id = re.centreId
+      where centreId = ` + req.session.userid +
+      ` and ownerId = ?
+    and expire` + type +
+      `current_date()`
+  }
+  try {
+    carType = "registed";
+    convert()
+    const [registRows, fields1] = await pool.query(query, [ownerid, ownerid])
 
-  convert();
-  let query =
-    `
-  select re.licenseId as license, v.brand, v.model, v.version, ` +
-    queryType +
-    `, re.expire, p.name, ce.name
-    from registry re
-  join vehicles v 
-    on v.licenseId = re.licenseId
-  join owner o 
-    on v.ownerId = o.id
-  join personal p
-    on p.id = o.id
-  join centre ce
-    on ce.id = re.centreId
-  where (re.licenseId, expire) in
-    (select v.licenseId as license, max(expire) as expire
-      from vehicles v
-    left join registry re
-      on re.licenseId = v.licenseId
-    where centreId = ` +
-    req.session.userid +
-    ` and ownerId = ` +
-    ownerid +
-    `  group by re.licenseId)  
-  and expire` +
-    type +
-    `current_date()
-          union all 
-  select re.licenseId as license, v.brand, v.model, v.version, ` +
-    queryType +
-    `, re.expire, c.name, ce.name
-    from registry re
-  join vehicles v 
-    on v.licenseId = re.licenseId
-  join owner o 
-    on v.ownerId = o.id
-  join company c 
-    on c.id = o.id
-  join centre ce
-    on ce.id = re.centreId
-  where (re.licenseId, expire) in
-    (select v.licenseId as license, max(expire) as expire
-      from vehicles v
-    left join registry re
-      on re.licenseId = v.licenseId
-    where centreId = ` +
-    req.session.userid +
-    ` and ownerId = ` +
-    ownerid +
-    `  group by re.licenseId)  
-  and expire` +
-    type +
-    `current_date()`;
-
-  const [registRows, fields1] = await pool.query(query);
-
-  carType = "expired";
-  convert();
-  query =
-    `
-  select re.licenseId as license, v.brand, v.model, v.version, ` +
-    queryType +
-    `, re.expire, p.name, ce.name
-    from registry re
-  join vehicles v 
-    on v.licenseId = re.licenseId
-  join owner o 
-    on v.ownerId = o.id
-  join personal p
-    on p.id = o.id
-  join centre ce
-    on ce.id = re.centreId
-    where centreId = ` +
-    req.session.userid +
-    ` and ownerId = ` +
-    ownerid +
-    ` and expire` +
-    type +
-    `current_date()
-          union all 
-  select re.licenseId as license, v.brand, v.model, v.version, ` +
-    queryType +
-    `, re.expire, c.name, ce.name
-    from registry re
-  join vehicles v 
-    on v.licenseId = re.licenseId
-  join owner o 
-    on v.ownerId = o.id
-  join company c 
-    on c.id = o.id
-  join centre ce
-    on ce.id = re.centreId
-    where centreId = ` +
-    req.session.userid +
-    ` and ownerId = ` +
-    ownerid +
-    ` and expire` +
-    type +
-    `current_date()`;
-
-  const [expireRows, fields2] = await pool.query(query);
-
-  return res.send({ registed: registRows, expired: expireRows });
-};
+    carType = "expired"
+    convert()
+    const [expireRows, fields2] = await pool.query(query, [ownerid, ownerid])
+  return res.send({ registed: registRows, expired: expireRows })
+  }
+  catch (err) {
+    console.log(err)
+    return res.status(500).send({ErrorCode: err.code, ErrorNo: err.errno})
+  }
+}
 
 module.exports = {
   registHistory,
-};
+}
 
 /* bug - 
 
