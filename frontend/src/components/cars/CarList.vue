@@ -50,11 +50,23 @@ const fetchCarData = async() => {
     let fetchRoute;
     let fetchBody;
     if(isAdmin) {
-        if(adminSelectionStore.getSelected === 'all') {
-            fetchRoute = `http://localhost:1111/vehicles/admin/${props.carType}`
+        fetchRoute = `http://localhost:1111/vehicles/admin/${props.carType}`
+        if (adminSelectionStore.getSelected === 'all') {
             fetchBody = { page: props.pageNumber, resPerPage: 7 }
+        } else if (adminSelectionStore.getSelected === 'region') {
+            fetchBody = {
+                page: props.pageNumber,
+                resPerPage: 7,
+                filter: 'region',
+                name: adminSelectionStore.getOptionSelected,
+            }
         } else {
-            
+            fetchBody = {
+                page: props.pageNumber,
+                resPerPage: 7,
+                filter: 'centre',
+                name: adminSelectionStore.getOptionSelected,
+            }
         }
     } else {
         fetchRoute = `http://localhost:1111/vehicles/${props.carType}`
@@ -87,20 +99,25 @@ const fetchCarByOwnerCode = async () => {
     let fetchRoute;
     let fetchBody;
     if(isAdmin) {
+        fetchRoute = `http://localhost:1111/filter/admin/owner`
         if(adminSelectionStore.getSelected === 'all') {
-            fetchRoute = ``
             fetchBody = {
-                
+                carType: props.carType,
+                code: props.owner
             }
         } else if(adminSelectionStore.getSelected === 'region') {
-            fetchRoute = ``
             fetchBody = {
-                
+                carType: props.carType,
+                code: props.owner,
+                filter: 'region',
+                name: adminSelectionStore.getOptionSelected,
             }
         } else {
-            fetchRoute = ``
             fetchBody = {
-                
+                carType: props.carType,
+                code: props.owner,
+                filter: 'centre',
+                name: adminSelectionStore.getOptionSelected,
             }
         }
     } else {
@@ -135,20 +152,31 @@ const fetchDataSortedByBrand = async () => {
     let fetchRoute;
     let fetchBody;
     if(isAdmin) {
+        fetchRoute = `http://localhost:1111/filter/admin/brand`
         if(adminSelectionStore.getSelected === 'all') {
-            fetchRoute = ``
             fetchBody = {
-                
+                resPerPage: 7,
+                page: props.pageNumber,
+                carType: props.carType,
+                order: props.sortOrder,
             }
         } else if(adminSelectionStore.getSelected === 'region') {
-            fetchRoute = ``
             fetchBody = {
-                
+                resPerPage: 7,
+                page: props.pageNumber,
+                carType: props.carType,
+                order: props.sortOrder,
+                filter: 'region',
+                name: adminSelectionStore.getOptionSelected,
             }
         } else {
-            fetchRoute = ``
             fetchBody = {
-                
+                resPerPage: 7,
+                page: props.pageNumber,
+                carType: props.carType,
+                order: props.sortOrder,
+                filter: 'centre',
+                name: adminSelectionStore.getOptionSelected,
             }
         }
     } else {
@@ -187,20 +215,31 @@ const fetchCarDataWithSpecificBrand = async () => {
     let fetchRoute;
     let fetchBody;
     if(isAdmin) {
+        fetchRoute = `http://localhost:1111/filter/admin/brand/exact`
         if(adminSelectionStore.getSelected === 'all') {
-            fetchRoute = ``
             fetchBody = {
-                
+                resPerPage: 7,
+                page: props.pageNumber,
+                carType: props.carType,
+                brand: props.brand,
             }
         } else if(adminSelectionStore.getSelected === 'region') {
-            fetchRoute = ``
             fetchBody = {
-                
+                resPerPage: 7,
+                page: props.pageNumber,
+                carType: props.carType,
+                brand: props.brand,
+                filter: 'region',
+                name: adminSelectionStore.getOptionSelected,
             }
         } else {
-            fetchRoute = ``
             fetchBody = {
-                
+                resPerPage: 7,
+                page: props.pageNumber,
+                carType: props.carType,
+                brand: props.brand,
+                filter: 'centre',
+                name: adminSelectionStore.getOptionSelected,
             }
         }
     } else {
@@ -239,18 +278,16 @@ const fetchCarDataWithSpecificTime = async () => {
     let fetchRoute;
     let fetchBody;
     if(isAdmin) {
+        fetchRoute = ``
         if(adminSelectionStore.getSelected === 'all') {
-            fetchRoute = ``
             fetchBody = {
                 
             }
         } else if(adminSelectionStore.getSelected === 'region') {
-            fetchRoute = ``
             fetchBody = {
                 
             }
         } else {
-            fetchRoute = ``
             fetchBody = {
                 
             }
@@ -420,17 +457,15 @@ watch(() => props.pageNumber, async(newPageNumber, oldPageNumber) => {
 // logic - general filter watcher
 watch(() => props.filter, async(newFilter, oldFilter) => {
     // console.log(props.pageNumber, newPageNumber, oldPageNumber);
-    if(newFilter !== oldFilter) {
-        console.log(`filter has changed to: ${props.filter}`);
-        if(newFilter === 'No filter' || newFilter === 'Owner') {
-            fetchCarData()
-        }
-        if(newFilter === 'Brand') {
-            fetchDataSortedByBrand()
-        }
-        if(newFilter === 'Time') {
-            fetchCarDataWithSpecificTime()
-        }
+    console.log(`filter has changed to: ${props.filter}`);
+    if(newFilter === 'No filter' || newFilter === 'Owner') {
+        fetchCarData()
+    }
+    if(newFilter === 'Brand') {
+        fetchDataSortedByBrand()
+    }
+    if(newFilter === 'Time') {
+        fetchCarDataWithSpecificTime()
     }
     
 });
@@ -522,11 +557,30 @@ watch(() => props.timeSortOrder, () => {
 
 // logic - admin option watcher
 watch(() => adminSelectionStore.getOptionSelected, () => {
-    fetchCarData()
+    if(props.filter === 'No filter' || props.filter === 'Owner') {
+        fetchCarData()
+    }
+    if(props.filter === 'Brand') {
+        if(props.brand === 'All') {
+            fetchDataSortedByBrand()
+        } else {
+            fetchCarDataWithSpecificBrand()
+        }
+    }
 });
 
 watch(() => adminSelectionStore.getSelected, () => {
-    fetchCarData()
+    // fetchCarData()
+    if(props.filter === 'No filter' || props.filter === 'Owner') {
+        fetchCarData()
+    }
+    if(props.filter === 'Brand') {
+        if(props.brand === 'All') {
+            fetchDataSortedByBrand()
+        } else {
+            fetchCarDataWithSpecificBrand()
+        }
+    }
 });
 </script>
 
