@@ -54,16 +54,13 @@ const fetchLatestRegist = async () => {
     registCertInfo.value = dataFetched
 }
 
-//TODO
-const print = () => {
-    window.print()
-};
-
 //TODO - add fetch function, param id and license
 onMounted(() => {
     fetchCarAndOwnerInfo()
     fetchLatestRegist()
-    
+    setTimeout(() => {
+        window.print()
+    }, 1000);
 });
 
 </script>
