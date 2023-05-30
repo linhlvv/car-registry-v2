@@ -158,13 +158,22 @@ let adminFilterTime = async (req, res) => {
   try
   {  
   const [countRows, countFields] = await pool.query(count, [name]);
-
-  const [rows, fields] = await pool.query(query, [
+  let rows = []
+  let fields = []
+  if (sub === "") {
+    [rows, fields] = await pool.query(query, [
+    resPerPage,
+    resPerPage * (page - 1),
+  ]);
+  }
+  else {
+    [rows, fields] = await pool.query(query, [
     name,
     name,
     resPerPage,
     resPerPage * (page - 1),
   ]);
+  }
   return res.send({
     data: rows,
     countPage: Math.ceil(countRows[0].total / resPerPage),
