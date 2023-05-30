@@ -120,13 +120,24 @@ let adminFilterOwner = async (req, res) => {
     `current_date()
   and taxnum = ?
     order by license`;
+    
+  let rows = []
+  let fields = []
   try {
-    const [rows, fields] = await pool.query(query, 
+    if (sub === "") {
+      const [rows, fields] = await pool.query(query, 
+    [
+      code,
+      code]);
+    }
+    else {
+      const [rows, fields] = await pool.query(query, 
     [
       name,
       code,
       name,
       code]);
+    }
   return res.send({ data: rows });
 }
   catch (err) {

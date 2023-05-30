@@ -118,8 +118,14 @@ let searchByLicense = async (req, res) => {
     `current_date()
   and re.licenseId = ?`;
   
+  let rows, fields;
   try {
-    const [rows, fields] = await pool.query(query, [name, licenseId, name, licenseId]);
+    if (sub === "") {
+          [rows, fields] = await pool.query(query, [licenseId, licenseId]);
+    }
+    else {
+          [rows, fields] = await pool.query(query, [name, licenseId, name, licenseId]);
+    }
     return res.send({ car: rows });
   }
   catch (err) {

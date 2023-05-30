@@ -167,16 +167,26 @@ let adminFilterBrand = async (req, res) => {
     ` limit ? offset ?`;
   // bug - đã gọi được api kết quả trả về chính xác  
   
+  let rows = []
+  let fields = []
   try
   {
   const [countRows, countFields] = await pool.query(count, [name]);
 
-  const [rows, fields] = await pool.query(query, [
+  if (sub === "") {
+    [rows, fields] = await pool.query(query, [
+    resPerPage,
+    resPerPage * (page - 1),
+  ]);
+  }
+  else {
+    [rows, fields] = await pool.query(query, [
     name,
     name,
     resPerPage,
     resPerPage * (page - 1),
   ]);
+  }
   return res.send({
     data: rows,
     countPage: Math.ceil(countRows[0].total / resPerPage),
