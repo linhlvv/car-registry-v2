@@ -21,18 +21,18 @@ let adminFilterBrand = async (req, res) => {
     `
     LEFT JOIN region r ON
     r.id = v.regionId 
-    WHERE r.name = 
+    WHERE r.name = ?
     `
-    sub = sub + "'" + name + "'"
+    
   }
   else if (filter === "centre") {
     sub = 
     `
     LEFT JOIN centre c ON
     c.id = re.centreId 
-    WHERE c.name = 
+    WHERE c.name = ?
     `
-    sub = sub + "'" + name + "'"
+  
   }
 
   
@@ -69,7 +69,6 @@ let adminFilterBrand = async (req, res) => {
     type +
     `current_date()` 
     ;
-  const [countRows, countFields] = await pool.query(count);
 
   let queryType =
     carType === "registed"
@@ -166,8 +165,15 @@ let adminFilterBrand = async (req, res) => {
     `, version ` +
     order +
     ` limit ? offset ?`;
-  // bug - đã gọi được api kết quả trả về chính xác
+  // bug - đã gọi được api kết quả trả về chính xác  
+  
+  try
+  {
+  const [countRows, countFields] = await pool.query(count, [name]);
+
   const [rows, fields] = await pool.query(query, [
+    name,
+    name,
     resPerPage,
     resPerPage * (page - 1),
   ]);
@@ -175,6 +181,11 @@ let adminFilterBrand = async (req, res) => {
     data: rows,
     countPage: Math.ceil(countRows[0].total / resPerPage),
   });
+}
+  catch (err) {
+    console.log(err);
+    return res.status(500).send({ErrorCode: err.code, ErrorNo: err.errno});
+  }
 };
 
 module.exports = {
