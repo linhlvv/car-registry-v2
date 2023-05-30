@@ -24,18 +24,17 @@ let adminViewExactBrand = async (req, res) => {
     `
     LEFT JOIN region r ON
     r.id = v.regionId 
-    WHERE r.name = 
+    WHERE r.name = ?
     `
-    sub = sub + "'" + name + "'"
   }
   else if (filter === "centre") {
     sub = 
     `
     LEFT JOIN centre c ON
     c.id = re.centreId 
-    WHERE c.name = 
+    WHERE c.name = ?
     `
-    sub = sub + "'" + name + "'"
+    
   }
 
   let type = carType === "registed" ? " >= " : " < ";
@@ -70,7 +69,6 @@ on re.licenseId = v.licenseId
     type +
     `current_date()
   and brand = ?`;
-  const [countRows, countFields] = await pool.query(count, [brand]);
 
   let queryType =
     carType === "registed"
@@ -86,14 +84,12 @@ on re.licenseId = v.licenseId
       on v.ownerId = o.id
   join personal p
       on p.id = o.id
-      `
+    `
   + sub + (sub === "" ? `where` : `and`) +
     `
     v.licenseId NOT IN 
   (SELECT registry.licenseId  FROM registry)
-  and brand = "` +
-    brand +
-    `"
+  and brand = ?
   UNION ALL
   select v.licenseId as license, v.brand, v.model, v.version, c.name 
   FROM vehicles v
@@ -106,9 +102,7 @@ on re.licenseId = v.licenseId
     `
     v.licenseId NOT IN 
   (SELECT registry.licenseId  FROM registry)
-  and brand = "` +
-    brand +
-    `"
+  and brand = ?
     order by license
     limit ? offset ?
   `
@@ -138,9 +132,7 @@ on re.licenseId = v.licenseId
   and expire` +
     type +
     `current_date()
-  and brand = "` +
-    brand +
-    `"
+  and brand = ?
           union all 
   select re.licenseId as license, v.brand, v.model, v.version, ` +
     queryType +
@@ -166,21 +158,45 @@ on re.licenseId = v.licenseId
   and expire` +
     type +
     `current_date()
-  and brand = "` +
-    brand +
-    `"
+  and brand = ?
     order by license
     limit ? offset ?`;
 
+let rows = [];
+let fields = []
+  try {
+    const [countRows, countFields] = await pool.query(count, [name, brand]);
+
   // bug - đã gọi được api kết quả trả về chính xác
-  const [rows, fields] = await pool.query(query, [
+  if (sub === "") {
+    [rows, fields] = await pool.query(query, 
+    [
+    brand,
+    brand,
     resPerPage,
     resPerPage * (page - 1),
   ]);
+  }
+  else {
+    [rows, fields] = await pool.query(query, 
+    [
+    name,
+    brand,
+    name,
+    brand,
+    resPerPage,
+    resPerPage * (page - 1),
+  ]);
+}
   return res.send({
     data: rows,
     countPage: Math.ceil(countRows[0].total / resPerPage),
   });
+  }
+  catch (err) {
+    console.log(err);
+    return res.status(500).send({ErrorCode: err.code, ErrorNo: err.errno});
+  }
 };
 
 module.exports = {

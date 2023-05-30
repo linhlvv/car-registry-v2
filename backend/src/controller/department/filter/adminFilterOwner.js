@@ -18,18 +18,16 @@ let adminFilterOwner = async (req, res) => {
     `
     LEFT JOIN region r ON
     r.id = v.regionId 
-    WHERE r.name = 
+    WHERE r.name = ?
     `
-    sub = sub + "'" + name + "'"
   }
   else if (filter === "centre") {
     sub = 
     `
     LEFT JOIN centre c ON
     c.id = re.centreId 
-    WHERE c.name = 
+    WHERE c.name = ?
     `
-    sub = sub + "'" + name + "'"
   }
 
   // logic - dùng code thay cho ssn vì có cả taxnum nữa
@@ -122,8 +120,19 @@ let adminFilterOwner = async (req, res) => {
     `current_date()
   and taxnum = ?
     order by license`;
-  const [rows, fields] = await pool.query(query, [code, code]);
+  try {
+    const [rows, fields] = await pool.query(query, 
+    [
+      name,
+      code,
+      name,
+      code]);
   return res.send({ data: rows });
+}
+  catch (err) {
+    console.log(err);
+    return res.status(500).send({ErrorCode: err.code, ErrorNo: err.errno});
+  }
 };
 
 module.exports = {
