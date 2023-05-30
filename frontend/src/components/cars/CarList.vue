@@ -383,20 +383,25 @@ const fetchCarByLicense = async () => {
     let fetchRoute;
     let fetchBody;
     if(isAdmin) {
+        fetchRoute = `http://localhost:1111/vehicles/admin/find`
         if(adminSelectionStore.getSelected === 'all') {
-            fetchRoute = ``
             fetchBody = {
-                
+                licenseId: props.specificLicense,
+                carType: props.carType,
             }
         } else if(adminSelectionStore.getSelected === 'region') {
-            fetchRoute = ``
             fetchBody = {
-                
+                licenseId: props.specificLicense,
+                carType: props.carType,
+                filter: 'region',
+                name: adminSelectionStore.getOptionSelected,
             }
         } else {
-            fetchRoute = ``
             fetchBody = {
-                
+                licenseId: props.specificLicense,
+                carType: props.carType,
+                filter: 'centre',
+                name: adminSelectionStore.getOptionSelected,
             }
         }
     } else {
