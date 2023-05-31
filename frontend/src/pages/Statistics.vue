@@ -24,7 +24,6 @@ const certId = ref(null)
 
 const openCertInfoModal = (id) => {
     modalOn.value = true
-    console.log(id);
     certId.value = id
 };
 

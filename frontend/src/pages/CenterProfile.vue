@@ -19,8 +19,10 @@ const fetchCenterInfoData = async() => {
 			},
             body: JSON.stringify({ centreId: route.params.id })
         })
+        if(res.error) {
+            console.log(res.error);
+        }
         const dataList = JSON.parse(await res.text())[0]
-        console.log(`center info: ${JSON.stringify(dataList)}`);
         centerInfo.value = dataList
     } else {
         const res = await fetch(`http://localhost:1111/centre-info`, {
@@ -30,8 +32,10 @@ const fetchCenterInfoData = async() => {
 				'Authorization': `${localStorage.getItem('token')}`
 			},
         })
+        if(res.error) {
+            console.log(res.error);
+        }
         const dataList = JSON.parse(await res.text())[0]
-        console.log(`center info: ${JSON.stringify(dataList)}`);
         centerInfo.value = dataList
     }
     

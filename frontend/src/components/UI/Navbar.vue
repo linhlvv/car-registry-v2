@@ -24,8 +24,6 @@ const verticalNavClickedHandler = () => {
 const isLoggedIn = ref(false)
 
 const isAdmin = ref(localStorage.getItem('userType') === '1')
-console.log(isAdmin.value);
-
 
 //SECTION - admin selection
 const selection = ref({

@@ -1,7 +1,7 @@
 <script setup>
 import OwnerInfoCard from './OwnerInfoCard.vue';
 import { useAccountStore } from '../../stores/AccountStore';
-import { ref } from 'vue';
+import { onMounted, ref } from 'vue';
 
 const props = defineProps(['id']);
 
@@ -27,9 +27,11 @@ const fetchOwnerInfo = async () => {
     ownerInfo.value = dataFetched.data[0]
     ownerInfo.value.address = ownerInfo.value.address.charAt(0).toUpperCase() + ownerInfo.value.address.slice(1)
     ownerType.value = dataFetched.type
-    console.log(JSON.stringify(dataFetched));
 };
-fetchOwnerInfo()
+
+onMounted(() => {
+    fetchOwnerInfo()
+});
 
 </script>
 

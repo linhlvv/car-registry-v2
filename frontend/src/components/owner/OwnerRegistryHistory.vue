@@ -1,5 +1,5 @@
 <script setup>
-import { ref } from 'vue';
+import { onMounted, ref } from 'vue';
 import OwnerCarsNav from './OwnerValidNav.vue';
 import OwnerRegistryCard from './OwnerRegistryCard.vue';
 import { useAccountStore } from '../../stores/AccountStore';
@@ -36,11 +36,13 @@ const fetchOwnerRegistryHistory = async () => {
         console.log(res.error);
     }
     const dataFetched = JSON.parse(await res.text())
-    console.log(JSON.stringify(dataFetched));
     registedList.value = dataFetched.registed
     expiredList.value = dataFetched.expired
 };
-fetchOwnerRegistryHistory()
+
+onMounted(() => {
+    fetchOwnerRegistryHistory()
+});
 
 
 </script>

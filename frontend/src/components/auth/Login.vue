@@ -13,7 +13,6 @@ const logout = () => {
     if(res.error) {
         console.log(res.error);
     }
-    console.log('log out');
 }
 
 const router = useRouter();
@@ -51,7 +50,6 @@ const loginHandler = async() => {
     }
     const data = JSON.parse(await res.text())
     // console.log(`account data login: ${JSON.stringify(data)}`);
-    console.log(`authToken login: ${JSON.stringify(data)}`);
     accountStore.authenticate(data.token, accountInfo.value.email, data.id, data.type);
     if(data !== undefined) {
         router.push('/')

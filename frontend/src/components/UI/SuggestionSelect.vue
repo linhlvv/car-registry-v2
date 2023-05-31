@@ -17,7 +17,6 @@ onMounted(() => {
 watch(() => props.modelValue, () => {
     cloneData.value = cloneData.value.filter((item) => searchResult(item) === true)
     shownData.value = [...cloneData.value]
-    // console.log(content.value, shownData.value);
     cloneData.value = [...props.data]
 });
 

@@ -114,7 +114,6 @@ const fetchForecastList = async () => {
         console.log(res.error);
     }
     const dataFetched = JSON.parse(await res.text())
-    console.log(dataFetched);
     forecastList.value = dataFetched.data
     totalPage.value = dataFetched.countPage
     totalRes.value = dataFetched.countData
@@ -122,7 +121,6 @@ const fetchForecastList = async () => {
 
 onMounted(() => {
     fetchForecastList()
-    // console.log(forecastList.value);
 });
 
 // watch(() => pageNumber.value, () => {

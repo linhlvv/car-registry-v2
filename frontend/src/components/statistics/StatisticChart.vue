@@ -81,7 +81,6 @@ const fetchData = async () => {
     dataList.value = JSON.parse(await res.text())
     yearList.value = dataList.value.Year
     chartData.value = dataList.value.Data[props.year - yearList.value[0]];
-    // console.log(`chart data: ${JSON.stringify(dataList.value)}`);
     
     totalRegist.value = dataList.value.Data[props.year - yearList.value[0]].regist.total
     totalExpire.value = dataList.value.Data[props.year - yearList.value[0]].expire.total
@@ -172,7 +171,6 @@ fetchData();
 
 watch(() => props.year, (newYear, oldYear) => {
     if(newYear !== oldYear) {
-        console.log('change');
         chartData.value = dataList.value.Data[newYear - yearList.value[0]];
         
         totalRegist.value = dataList.value.Data[props.year - yearList.value[0]].regist.total

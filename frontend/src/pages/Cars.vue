@@ -50,7 +50,6 @@ const carDetailModal = ref(false);
 const carInfoLicense = ref('')
 const openCarInfo = (license) => {
     carInfoLicense.value = license
-    console.log(`license: ${license}`);
     carDetailModal.value = true
 };
 
@@ -72,7 +71,6 @@ const turnOffModal = () => {
 const licenseSearchContent = ref('');
 const licenseSearchEntered = (content) => {
     licenseSearchContent.value = content
-    console.log(licenseSearchContent.value);
 };
 
 //SECTION - reload
@@ -86,7 +84,6 @@ const reload = () => {
     licenseSearchContent.value = null
     time.value = { year: 'All', quarter: 'All', month: 'All' }
     reloaded.value = !reloaded.value
-    // console.log(reloaded.value);
 }
 
 //SECTION - filter handler
@@ -104,35 +101,30 @@ const filterSelected = (value) => {
     if(filter.value !== 'Owner') {
         pageNumber.value = 1
     }
-    console.log(`filter value: ${filter.value}`);
 };
 
 // logic - city filter handler
 const citySelected = (value) => {
     city.value = value
     pageNumber.value = 1
-    console.log(`city value: ${city.value}`);
 }
 
 // logic - owner filter handler
 const ownerEntered = (value) => {
     pageNumber.value = 1
     owner.value = value
-    console.log(`owner value: ${owner.value}`);
 }
 
 // logic - brand filter handler
 const brandSelected = (value) => {
     brand.value = value
     pageNumber.value = 1
-    console.log(`brand value: ${brand.value}`);
 }
 
 // logic - time filter handler
 const timeSelected = (value) => {
     time.value = value
     pageNumber.value = 1
-    console.log(`time value: ${JSON.stringify(time.value)}`);
 };
 
 //SECTION - car type handler

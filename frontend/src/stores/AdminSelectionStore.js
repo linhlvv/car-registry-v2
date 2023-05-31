@@ -35,11 +35,9 @@ export const useAdminSelectionStore = defineStore('adminSelectionStore', {
             this.option = selectName
             const localStoreSelect = JSON.parse(localStorage.getItem('selection'))
             if((localStoreSelect.selection === 1 || localStoreSelect.selection === 2) && localStoreSelect.selectName === "") {
-                console.log('set false');
                 this.condition = false
                 localStorage.setItem('adminSelectionVerified', false)
             } else {
-                console.log('set true');
                 this.condition = true
                 localStorage.setItem('adminSelectionVerified', true)
             }

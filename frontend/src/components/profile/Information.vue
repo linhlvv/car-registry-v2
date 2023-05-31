@@ -27,7 +27,6 @@ const fetchTotalRegistCardData = async () => {
         console.log(res.error);
     }
     const data = JSON.parse(await res.text())
-    // console.log(data);
     cardDetail.value.totalRegist = {...data.data}
 };
 

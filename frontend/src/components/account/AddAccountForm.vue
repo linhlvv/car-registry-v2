@@ -65,7 +65,6 @@ const handleAddAccount = async () => {
         }
     }
 };
-console.log(emailIsValid.value);
 
 //SECTION - watchers
 watch(() => errorMessageTime.value, () => {

@@ -101,7 +101,6 @@ const licenseSearch = (content) => {
 
 //SECTION - fetch all available brands
 const fetchAllAvailableBrands = async () => {
-    // console.log(`cartype: ${props.carType}`);
     if(isAdmin) {
         const res = await fetch(`http://localhost:1111/stats/brand`, {
             credentials: "include",
@@ -114,7 +113,6 @@ const fetchAllAvailableBrands = async () => {
             console.log(res.error);
         }
         const dataFetched = JSON.parse(await res.text())
-        console.log(dataFetched);
         brandList.value = ['All', ...dataFetched.brands]
     } else {
         const res = await fetch(`http://localhost:1111/filter/brand/all`, {
@@ -131,7 +129,6 @@ const fetchAllAvailableBrands = async () => {
         }
         const dataFetched = JSON.parse(await res.text())
         brandList.value = ['All', ...dataFetched.data]
-        // console.log(`all available brands: ${JSON.stringify(brandList.value)}`);
     }
     
 };
@@ -152,13 +149,11 @@ const fetchAllAvailableCities = async () => {
     }
     const dataFetched = JSON.parse(await res.text())
     cityList.value = ['All', ...dataFetched.data]
-    // console.log(`all available citites: ${JSON.stringify(dataFetched.data)}`);
 }
 
 //SECTION - handle pagination
 // logic - pagination with previous and next button
 const pageHandler = (direction) => {
-    console.log(direction);
     if(direction === 'left') {
         if (props.pageNum > 1) {
             emit('prevPage');
@@ -192,7 +187,6 @@ const filterClickedHandler = (value) => {
     time.value = {
         year: 'All', quarter: 'All', month: 'All',
     }
-    console.log(`filter ${selected.value}`);
     if(selected.value === 'Brand') {
         fetchAllAvailableBrands()
     }
@@ -204,7 +198,6 @@ const filterClickedHandler = (value) => {
 
 // logic - city filter
 const cityClicked = (value) => {
-    console.log(`city ${city.value}`);
     emit('selectedCityClicked', value)
 }
 
@@ -224,14 +217,12 @@ const ownerClicked = (value) => {
         }, 1000);
     } else {
         owner.value = value
-        console.log(`owner ${owner.value}`);
         emit('selectedOwnerClicked', value)
     }
 }
 
 // logic - brand filter
 const brandClicked = (value) => {
-    console.log(`brand changes to ${brand.value}`);
     emit('selectedBrandClicked', value)
 }
 
@@ -248,7 +239,6 @@ const timeClicked = (value, type) => {
         time.value.month = value
         time.value.quarter = 'All'
     }
-    // console.log(`time changes to ${{year: time.value.year, quarter: time.value.quarter, month: time.value.month}}`);
     emit('selectedTimeClicked', {year: time.value.year, quarter: time.value.quarter, month: time.value.month})
 };
 

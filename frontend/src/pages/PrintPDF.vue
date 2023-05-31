@@ -30,11 +30,9 @@ const fetchCarAndOwnerInfo = async () => {
         console.log(res.error);
     }
     const dataFetched = JSON.parse(await res.text())
-    console.log(JSON.stringify(dataFetched));
     carAndOwnerInfo.value = dataFetched.data[0]
     ownerType.value = dataFetched.ownerType
     carAndOwnerInfo.value.address = carAndOwnerInfo.value.address.charAt(0).toUpperCase() + carAndOwnerInfo.value.address.slice(1)
-    console.log(ownerType.value);
 }
 
 const fetchLatestRegist = async () => {
@@ -50,7 +48,6 @@ const fetchLatestRegist = async () => {
         console.log(res.error);
     }
     const dataFetched = JSON.parse(await res.text())
-    console.log(JSON.stringify(dataFetched));
     registCertInfo.value = dataFetched
 }
 

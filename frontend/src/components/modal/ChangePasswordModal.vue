@@ -48,7 +48,6 @@ const confirmChange = async() => {
         }
         loadingOn.value = false
         const resData = JSON.parse(await res.text())
-        console.log(`password management message: ${JSON.stringify(resData)}`);
         if(resData.message === 'Password changed') {
             posted.value = true
             trigger()
