@@ -3,7 +3,7 @@ import Input from '@/components/UI/Input.vue';
 import Button from '../UI/Button.vue';
 import { useAccountStore } from '../../stores/AccountStore'
 import { useRouter } from 'vue-router';
-import { onMounted, ref } from 'vue';
+import { onMounted, ref, watch } from 'vue';
 
 const logout = () => {
     const res = fetch("http://localhost:1111/logout", {
@@ -18,10 +18,22 @@ const logout = () => {
 
 const router = useRouter();
 const accountStore = useAccountStore()
+const emailRegex = /^([A-Za-z]|[0-9])+@registrytotal\.com$/
+const wrongEmailFormat = ref(false)
+const errorTime = 5
+const wrongEmailMessageTime = ref(errorTime)
+let wrongEmailInterval
 const accountInfo = ref({email: '', password: ''});
 
 const loginHandler = async() => {
-    // console.log(`account info: ${JSON.stringify(accountInfo.value)}`);
+    if(accountInfo.value.email.match(emailRegex) === null) {
+        wrongEmailMessageTime.value = errorTime
+        clearInterval(wrongEmailInterval)
+        wrongEmailFormat.value = true
+        wrongEmailInterval = setInterval(() => {
+            wrongEmailMessageTime.value -= 1
+        }, 1000);
+    }
     const res = await fetch("http://localhost:1111/auth", {
         method: 'POST',
         credentials: "include",
@@ -34,7 +46,7 @@ const loginHandler = async() => {
         console.log(res.error);
     }
     if(res.status === 400) {
-        document.getElementById('loginFailedMessage').innerHTML = '<i class="fa-solid fa-ban"></i> Wrong email or password'
+        document.getElementById('loginFailedMessage').innerHTML = '<i class="fa-solid fa-ban text-sm ml-1 pr-1"></i> Wrong email or password'
         return
     }
     const data = JSON.parse(await res.text())
@@ -45,6 +57,14 @@ const loginHandler = async() => {
         router.push('/')
     }
 };
+
+watch(wrongEmailMessageTime, () => {
+    if(wrongEmailMessageTime.value === 0) {
+        wrongEmailFormat.value = false
+        wrongEmailMessageTime.value = errorTime
+        clearInterval(wrongEmailInterval)
+    }
+})
 
 onMounted(() => {
     localStorage.removeItem('token')
@@ -69,7 +89,7 @@ onMounted(() => {
             </div>
             <div class="flex rounded-md overflow-hidden w-96">
                 <div class="flex flex-col justify-center items-center space-y-6 p-4 bg-transparent w-full">
-                    <div class="w-full flex flex-col">
+                    <div class="w-full flex flex-col relative">
                         <Input placeholder="Email" type="email" v-model="accountInfo.email">
                             <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="w-6 h-6 text-[#1d1d1d] text-opacity-60">
                                 <path stroke-linecap="round" stroke-linejoin="round" d="M21.75 6.75v10.5a2.25 2.25 0 01-2.25 2.25h-15a2.25 2.25 0 01-2.25-2.25V6.75m19.5 0A2.25 2.25 0 0019.5 4.5h-15a2.25 2.25 0 00-2.25 2.25m19.5 0v.243a2.25 2.25 0 01-1.07 1.916l-7.5 4.615a2.25 2.25 0 01-2.36 0L3.32 8.91a2.25 2.25 0 01-1.07-1.916V6.75" />
@@ -83,7 +103,15 @@ onMounted(() => {
                             </svg>
                         </Input>
                     </div>
-                    <div id="loginFailedMessage" class="w-full text-red-400 text-sm font-semibold"></div>
+                    <div id="loginFailedMessage" class="w-full text-red-500 text-sm font-semibold"></div>
+                    <Transition>
+                        <div v-if="wrongEmailFormat" class="w-full flex items-center space-x-1 text-red-500">
+                            <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="w-6 h-6">
+                                <path stroke-linecap="round" stroke-linejoin="round" d="M6 18L18 6M6 6l12 12" />
+                            </svg>
+                            <p class="text-sm font-semibold">Wrong email format</p>
+                        </div>
+                    </Transition>
                     <!-- <div>{{ email }}</div> -->
                     <button @click="loginHandler" class="flex items-center justify-center bg-[#2acc97]/80 hover:bg-[#2acc97] w-fit text-white px-5 py-2 rounded-3xl relative overflow-hidden group">
                         <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.75" stroke="currentColor" class="w-6 h-6 ml-1 absolute -translate-x-20 transition-transform duration-300 group-hover:-translate-x-0">
@@ -102,4 +130,12 @@ onMounted(() => {
 </template>
 
 <style scoped>
+    .fade-enter-active,
+    .fade-leave-active {
+        transition: opacity 0.5s ease;
+    }
+    .fade-enter-from,
+    .fade-leave-to {
+        opacity: 0;
+    }
 </style>
