@@ -2,7 +2,18 @@ import crypto from 'crypto';
 import jwt from 'jsonwebtoken';
 import pool from '../../../configs/connectDB';
 
+let validateEmail = (email) => {
+  let regex = /^([A-Za-z]|[0-9])+@registrytotal\.com$/
+  return regex.test(email)
+}
+
 let authenticate = async (req, res) => {
+  if (req.body.email === undefined || req.body.password === undefined) {
+    return res.status(422).send({ErrorCode: 'ER_MISSING_PARAM'})
+  }
+  if (!validateEmail(req.body.email)) {
+    return res.status(422).send({ErrorCode: 'ER_INVALID_EMAIL'})
+  }
   let email = req.body.email;
   let password = crypto.createHash('sha256').update(req.body.password).digest('hex');
   if (email && password) {

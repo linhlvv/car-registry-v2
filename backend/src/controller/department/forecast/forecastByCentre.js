@@ -41,7 +41,14 @@ let forecastByCentre = async (req, res) => {
   join region re
     on v.regionId = re.id
   join centre ce
-    on ce.id = r.centreId` + match + `
+    on ce.id = r.centreId
+  where (r.licenseId, expire) in
+    (select v.licenseId as license, max(expire) as expire
+      from vehicles v
+    left join registry re
+      on re.licenseId = v.licenseId
+    group by re.licenseId)  
+    ` + match + `
   group by licenseId
         union all
   select r.licenseId, brand, model, version, max(expire) as expire, c.name as name
@@ -53,7 +60,14 @@ let forecastByCentre = async (req, res) => {
   join region re
     on v.regionId = re.id
   join centre ce
-    on ce.id = r.centreId` + match + ` 
+    on ce.id = r.centreId
+  where (r.licenseId, expire) in
+    (select v.licenseId as license, max(expire) as expire
+      from vehicles v
+    left join registry re
+      on re.licenseId = v.licenseId
+    group by re.licenseId)  
+    ` + match + ` 
   group by licenseId
   order by expire desc, licenseId asc
     limit ? offset ?`;

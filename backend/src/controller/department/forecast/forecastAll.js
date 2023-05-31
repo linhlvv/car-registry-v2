@@ -22,9 +22,14 @@ let forecastAll = async (req, res) => {
       // `\nand expire >= CURRENT_DATE()`
   
     count = `
-    select count(*) as total
-      from registry re 
-    where 1 = 1` + match
+    select count(expire) as total
+      from registry r 
+    where (r.licenseId, expire) in
+      (select v.licenseId as license, max(expire) as expire
+        from vehicles v
+      left join registry re
+        on re.licenseId = v.licenseId
+      group by re.licenseId)  ` + match
   
     query = `
     select r.licenseId, brand, model, version, max(expire) as expire, p.name as name
@@ -32,7 +37,14 @@ let forecastAll = async (req, res) => {
     join vehicles v 
       on r.licenseId = v.licenseId
     join personal p 
-      on v.ownerId = p.id` + match + ` 
+      on v.ownerId = p.id
+    where (r.licenseId, expire) in
+      (select v.licenseId as license, max(expire) as expire
+        from vehicles v
+      left join registry re
+        on re.licenseId = v.licenseId
+      group by re.licenseId)  
+      ` + match + ` 
     group by licenseId
           union all
     select r.licenseId, brand, model, version, max(expire) as expire, c.name as name
@@ -40,7 +52,14 @@ let forecastAll = async (req, res) => {
     join vehicles v 
       on r.licenseId = v.licenseId
     join company c 
-      on v.ownerId = c.id` + match + ` 
+      on v.ownerId = c.id
+    where (r.licenseId, expire) in
+      (select v.licenseId as license, max(expire) as expire
+        from vehicles v
+      left join registry re
+        on re.licenseId = v.licenseId
+      group by re.licenseId)  
+      ` + match + ` 
     group by licenseId
     order by expire desc, licenseId
       limit ? offset ?`
@@ -85,6 +104,7 @@ let forecastAll = async (req, res) => {
     })
   }
   catch (err) {
+    console.log(err);
     return res.status(500).send({ErrorCode: err.code, ErrorNo: err.errno})
   }
 }
