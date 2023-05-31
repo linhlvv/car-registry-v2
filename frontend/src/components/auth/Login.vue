@@ -19,10 +19,14 @@ const router = useRouter();
 const accountStore = useAccountStore()
 const emailRegex = /^([A-Za-z]|[0-9])+@registrytotal\.com$/
 const wrongEmailFormat = ref(false)
-const errorTime = 5
+const errorTime = 2
 const wrongEmailMessageTime = ref(errorTime)
 let wrongEmailInterval
 const accountInfo = ref({email: '', password: ''});
+
+const wrongInfo = ref(false)
+const wrongInfoMessageTime = ref(errorTime)
+let wrongInfoMessageInterval
 
 const loginHandler = async() => {
     if(accountInfo.value.email.match(emailRegex) === null) {
@@ -45,7 +49,12 @@ const loginHandler = async() => {
         console.log(res.error);
     }
     if(res.status === 400) {
-        document.getElementById('loginFailedMessage').innerHTML = '<i class="fa-solid fa-ban text-sm ml-1 pr-1"></i> Wrong email or password'
+        wrongInfoMessageTime.value = errorTime
+        clearInterval(wrongInfoMessageInterval)
+        wrongInfo.value = true
+        wrongInfoMessageInterval = setInterval(() => {
+            wrongInfoMessageTime.value -= 1
+        }, 1000);
         return
     }
     const data = JSON.parse(await res.text())
@@ -61,6 +70,14 @@ watch(wrongEmailMessageTime, () => {
         wrongEmailFormat.value = false
         wrongEmailMessageTime.value = errorTime
         clearInterval(wrongEmailInterval)
+    }
+})
+
+watch(wrongInfoMessageTime, () => {
+    if(wrongInfoMessageTime.value === 0) {
+        wrongInfo.value = false
+        wrongInfoMessageTime.value = errorTime
+        clearInterval(wrongInfoMessageInterval)
     }
 })
 
@@ -101,8 +118,15 @@ onMounted(() => {
                             </svg>
                         </Input>
                     </div>
-                    <div id="loginFailedMessage" class="w-full text-red-500 text-sm font-semibold"></div>
-                    <Transition>
+                    <Transition name="fade">
+                        <div v-if="wrongInfo" class="w-full flex items-center space-x-1 text-red-500">
+                            <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="w-6 h-6">
+                                <path stroke-linecap="round" stroke-linejoin="round" d="M6 18L18 6M6 6l12 12" />
+                            </svg>
+                            <p class="text-sm font-semibold">Wrong email or password! Please try again!</p>
+                        </div>
+                    </Transition>
+                    <Transition name="fade">
                         <div v-if="wrongEmailFormat" class="w-full flex items-center space-x-1 text-red-500">
                             <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="w-6 h-6">
                                 <path stroke-linecap="round" stroke-linejoin="round" d="M6 18L18 6M6 6l12 12" />
@@ -110,7 +134,6 @@ onMounted(() => {
                             <p class="text-sm font-semibold">Wrong email format</p>
                         </div>
                     </Transition>
-                    <!-- <div>{{ email }}</div> -->
                     <button @click="loginHandler" class="flex items-center justify-center bg-[#2acc97]/80 hover:bg-[#2acc97] w-fit text-white px-5 py-2 rounded-3xl relative overflow-hidden group">
                         <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.75" stroke="currentColor" class="w-6 h-6 ml-1 absolute -translate-x-20 transition-transform duration-300 group-hover:-translate-x-0">
                             <path stroke-linecap="round" stroke-linejoin="round" d="M15.75 9V5.25A2.25 2.25 0 0013.5 3h-6a2.25 2.25 0 00-2.25 2.25v13.5A2.25 2.25 0 007.5 21h6a2.25 2.25 0 002.25-2.25V15m3 0l3-3m0 0l-3-3m3 3H9" />
