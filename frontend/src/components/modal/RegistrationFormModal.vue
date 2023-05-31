@@ -36,13 +36,10 @@ const findCarInfo = async() => {
         console.log(res.error);
     }
     const dataFetched = JSON.parse(await res.text())
-    // console.log(`car info: ${JSON.stringify(dataFetched.data[0])}`);
     carDetailedInfo.value = dataFetched.data[0]
-    // console.log(dataFetched.ownerType);
     ownerType.value = dataFetched.ownerType
     registryCert.value.info = dataFetched.data2
     registryCert.value.valid = dataFetched.valid
-    console.log(`info: ${JSON.stringify(carDetailedInfo.value)}`);
     loading.value = false
 };
 
@@ -63,10 +60,7 @@ const fetchRegistrationInfo = async () => {
         console.log(res.error);
     }
     const dataFetched = JSON.parse(await res.text())
-    console.log(`car info: ${JSON.stringify(dataFetched)}`);
     registrationInfo.value = dataFetched
-    // console.log(dataFetched.ownerType);
-    console.log(`info: ${JSON.stringify(registrationInfo.value)}`);
     loading.value = false
 }
 
@@ -94,7 +88,6 @@ const submitFormHandler = async () => {
     if(res.error) {
         console.log(res.error);
     }
-    console.log(res.status);
     if(res.status === 200) {
         triggerInterval()
     }

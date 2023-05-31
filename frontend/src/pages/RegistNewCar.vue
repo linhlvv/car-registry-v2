@@ -79,7 +79,6 @@ const fetchCarAndOwnerDataDetails = async () => {
             console.log(res.error);
         }
         const dataFetched = JSON.parse(await res.text())
-        console.log(`car info: ${JSON.stringify(dataFetched)}`);
         if(dataFetched.data === null) {
             prevLicenseInput = info.value.licenseId
             noResultFound.value = true
@@ -112,10 +111,7 @@ const fetchRegistryInfo = async () => {
         console.log(res.error);
     }
     const dataFetched = JSON.parse(await res.text())
-    console.log(`car info: ${JSON.stringify(dataFetched)}`);
     registryInfo.value = dataFetched
-    // console.log(dataFetched.ownerType);
-    console.log(`info: ${JSON.stringify(registryInfo.value)}`);
     loading.value = false
 }
 
@@ -150,7 +146,6 @@ const handleRegist = async () => {
         if(res.error) {
             console.log(res.error);
         }
-        console.log(res.status);
         if(res.status === 200) {
             triggerInterval()
         }
@@ -173,7 +168,6 @@ const triggerInterval = () => {
 //SECTION - watchers
 // logic - watch license id input
 watch(() => info.value.licenseId, (newId, oldId) => {
-    console.log(info.value.licenseId);
     fetchData()
 });
 

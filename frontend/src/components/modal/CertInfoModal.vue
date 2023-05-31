@@ -26,7 +26,6 @@ const fetchCertData = async () => {
         console.log(res.error);
     }
     const dataFetched = JSON.parse(await res.text())
-    console.log(`cert: ${JSON.stringify(dataFetched)}`);
     certContent.value = {...dataFetched.data}
     loading.value = false
 }

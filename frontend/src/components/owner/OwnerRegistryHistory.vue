@@ -1,5 +1,5 @@
 <script setup>
-import { ref } from 'vue';
+import { onMounted, ref } from 'vue';
 import OwnerCarsNav from './OwnerValidNav.vue';
 import OwnerRegistryCard from './OwnerRegistryCard.vue';
 import { useAccountStore } from '../../stores/AccountStore';
@@ -36,11 +36,13 @@ const fetchOwnerRegistryHistory = async () => {
         console.log(res.error);
     }
     const dataFetched = JSON.parse(await res.text())
-    console.log(JSON.stringify(dataFetched));
     registedList.value = dataFetched.registed
     expiredList.value = dataFetched.expired
 };
-fetchOwnerRegistryHistory()
+
+onMounted(() => {
+    fetchOwnerRegistryHistory()
+});
 
 
 </script>
@@ -58,13 +60,13 @@ fetchOwnerRegistryHistory()
         <div id="table" class="flex flex-col w-full gap-[2px] overflow-x-scroll">
             <OwnerRegistryCard :is-root-row="true" license-plate="License plate" name="Name"/>
             <div v-if="registedTag && registedList.length > 0" v-for="card in registedList" :key="card.licensePlate" class="w-full">
-                <OwnerRegistryCard :is-root-row="false" :license-plate="card.license" :name="`${card.brand} ${card.model} ${card.version}`" :regist-date="card.registryDate" :expired-date="card.expire" :center="card.name"/>
+                <OwnerRegistryCard type="1" :is-root-row="false" :license-plate="card.license" :name="`${card.brand} ${card.model} ${card.version}`" :regist-date="card.registryDate" :expired-date="card.expire" :center="card.name"/>
             </div>
             <div v-else-if="registedTag && registedList.length === 0" class="slide-fade p-2 text-[#f5604c] text-base font-semibold w-full items-center justify-center text-center">
                 No valid car available
             </div>
             <div v-if="!registedTag && expiredList.length > 0" v-for="card in expiredList" :key="card.licensePlate" class="w-full">
-                <OwnerRegistryCard :is-root-row="false" :license-plate="card.license" :name="`${card.brand} ${card.model} ${card.version}`" :regist-date="card.registryDate" :expired-date="card.expire" :center="card.name"/>
+                <OwnerRegistryCard type="0" :is-root-row="false" :license-plate="card.license" :name="`${card.brand} ${card.model} ${card.version}`" :regist-date="card.registryDate" :expired-date="card.expire" :center="card.name" :duration="card.duration"/>
             </div>
             <div v-else-if="!registedTag && expiredList.length === 0" class="slide-fade p-2 text-[#f5604c] text-base font-semibold w-full items-center justify-center text-center">
                 No invalid car available

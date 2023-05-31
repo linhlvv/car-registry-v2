@@ -12,12 +12,8 @@ const router = useRouter()
 const file = ref()
 const hasFile = ref(false)
 const selectedFile = ref(null)
-// onMounted(() => {
-// 	console.log(file.value.files[0]);
-// })
-//FIXME - fix duplicate uploaded file
+
 const fileUploadHandler = () => {
-    console.log(file.value.files[0]);
 	selectedFile.value = file.value.files[0]
 	hasFile.value = true
 };
@@ -57,7 +53,6 @@ const upload = async () => {
 		const formData = new FormData()
 		formData.append("ownerType", ownerTypePicked.value)
 		formData.append("file", file.value.files[0])
-		console.log(formData);
 		const res = await fetch(`http://localhost:1111/read-excel`, {
 			method: 'POST',
 			credentials: "include",
@@ -69,7 +64,6 @@ const upload = async () => {
 		if(res.error) {
 			console.log(res.error);
 		}
-		console.log(res);
 		if(res.status === 200) {
 			successfullyAdded.value = true
 			setTimeout(() => {
@@ -83,8 +77,6 @@ const upload = async () => {
 				addFailedTime.value -= 1
 			}, 1000);
 		}
-		// const dataFetched = JSON.parse(await res.text())
-		// console.log(JSON.stringify(dataFetched));
 	}
 }
 

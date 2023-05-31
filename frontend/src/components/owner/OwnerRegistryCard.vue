@@ -1,5 +1,5 @@
 <script setup>
-const props = defineProps(['isRootRow', 'licensePlate', 'name', 'center', 'registDate', 'expiredDate']);
+const props = defineProps(['isRootRow', 'type', 'licensePlate', 'name', 'center', 'registDate', 'expiredDate', 'duration']);
 
 </script>
 
@@ -13,7 +13,7 @@ const props = defineProps(['isRootRow', 'licensePlate', 'name', 'center', 'regis
         </div>
         <div v-if="isRootRow" class="w-3/5 flex">
             <div class="w-1/3 flex items-center justify-center text-sm font-semibold text-center text-[#1d1d1d]">
-                Registry date
+                {{ type == 1 ? 'Registry date' : 'Duration' }}
             </div>
             <div class="w-1/3 flex items-center justify-center text-sm font-semibold text-center text-[#1d1d1d]">
                 Expired date
@@ -24,7 +24,7 @@ const props = defineProps(['isRootRow', 'licensePlate', 'name', 'center', 'regis
         </div>
         <div v-else class="w-3/5 flex">
             <div class="w-1/3 flex items-center justify-center text-xs font-semibold text-center text-[#1d1d1d]">
-                {{ registDate }}
+                {{ type == 1 ? registDate : duration }}
             </div>
             <div class="w-1/3 flex items-center justify-center text-xs font-semibold text-center text-[#1d1d1d]">
                 {{ expiredDate }}

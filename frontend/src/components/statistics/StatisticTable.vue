@@ -77,7 +77,6 @@ const timeClicked = (value, type) => {
         props.time.quarter = 'All'
         props.time.month = value
     }
-    // console.log(`time changes to ${{year: props.time.year, quarter: props.time.quarter, month: props.time.month}}`);
     pageNumber.value = 1
     emit('selectedTimeClicked', {year: props.time.year, quarter: props.time.quarter, month: props.time.month})
 };
@@ -131,7 +130,6 @@ const fetchData = async () => {
         console.log(res.error);
     }
     const dataFetched = JSON.parse(await res.text())
-    console.log(`registries: ${JSON.stringify(dataFetched)}`);
     totalPage.value = dataFetched.countPage
     registCardList.value = dataFetched.data
     loading.value = false
@@ -199,7 +197,6 @@ const fetchDataWithSpecificTime = async () => {
         console.log(res.error);
     }
     const dataFetched = JSON.parse(await res.text())
-    console.log(`spec time: ${JSON.stringify(dataFetched)}`);
     totalPage.value = dataFetched.countPage
     registCardList.value = dataFetched.data
     loading.value = false
@@ -262,10 +259,8 @@ const fetchDataWithSpecificLicense = async (license) => {
         console.log(res.error);
     }
     const dataFetched = JSON.parse(await res.text())
-    console.log(`spec license: ${JSON.stringify(dataFetched)}`);
     totalPage.value = dataFetched.countPage
     registCardList.value = [...dataFetched.data]
-    console.log(registCardList.value.length);
     loading.value = false
 }
 

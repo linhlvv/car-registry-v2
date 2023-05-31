@@ -138,7 +138,6 @@ const fetchCarByOwnerCode = async () => {
         console.log(res.error);
     }
     const dataFetched = JSON.parse(await res.text())
-    console.log(`owner cars: ${JSON.stringify(dataFetched)}`);
     list.value = dataFetched.data
     totalPage.value = 1
     postTotalPage()
@@ -202,7 +201,6 @@ const fetchDataSortedByBrand = async () => {
         console.log(res.error);
     }
     const dataFetched = JSON.parse(await res.text())
-    // console.log(`cars by brands: ${JSON.stringify(dataFetched)}`);
     list.value = dataFetched.data
     totalPage.value = dataFetched.countPage
     postTotalPage()
@@ -265,7 +263,6 @@ const fetchCarDataWithSpecificBrand = async () => {
         console.log(res.error);
     }
     const dataFetched = JSON.parse(await res.text())
-    console.log(`car brand: ${JSON.stringify(dataFetched)}`);
     list.value = dataFetched.data
     totalPage.value = dataFetched.countPage
     postTotalPage()
@@ -340,7 +337,6 @@ const fetchCarDataWithSpecificTime = async () => {
         console.log(res.error);
     }
     const dataFetched = JSON.parse(await res.text())
-    console.log(`car time: ${JSON.stringify(dataFetched)}`);
     list.value = dataFetched.data
     totalPage.value = dataFetched.countPage
     postTotalPage()
@@ -392,7 +388,6 @@ const fetchCarDataWithSpecificCity = async () => {
         console.log(res.error);
     }
     const dataFetched = JSON.parse(await res.text())
-    console.log(`car brand: ${JSON.stringify(dataFetched)}`);
     list.value = dataFetched.data
     totalPage.value = dataFetched.countPage
     postTotalPage()
@@ -447,9 +442,7 @@ const fetchCarByLicense = async () => {
         console.log(res.error);
     }
     const dataFetched = JSON.parse(await res.text())
-    console.log(`car license: ${JSON.stringify(dataFetched)}`);
     list.value = dataFetched.car
-    console.log(`car license: ${JSON.stringify(list.value)}`);
     // totalPage.value = 1
     loading.value = false
 }
@@ -457,8 +450,6 @@ const fetchCarByLicense = async () => {
 //SECTION - watchers
 // logic - page number watcher
 watch(() => props.pageNumber, async(newPageNumber, oldPageNumber) => {
-    console.log(`page number of carlist has changed to: ${props.pageNumber}`);
-        
     if(props.filter === 'No filter') {
         fetchCarData()
     }
@@ -471,7 +462,6 @@ watch(() => props.pageNumber, async(newPageNumber, oldPageNumber) => {
         fetchCarDataWithSpecificBrand()
     }
     if(props.filter === 'Time') {
-        console.log(props.pageNumber);
         fetchCarDataWithSpecificTime()
     }
     if(props.filter === 'City' && props.city !== 'All') {
@@ -483,8 +473,6 @@ watch(() => props.pageNumber, async(newPageNumber, oldPageNumber) => {
 
 // logic - general filter watcher
 watch(() => props.filter, async(newFilter, oldFilter) => {
-    // console.log(props.pageNumber, newPageNumber, oldPageNumber);
-    console.log(`filter has changed to: ${props.filter}`);
     if(newFilter === 'No filter' || newFilter === 'Owner') {
         fetchCarData()
     }
@@ -499,9 +487,7 @@ watch(() => props.filter, async(newFilter, oldFilter) => {
 
 // logic - city watcher
 watch(() => props.city, async(newCity, oldCity) => {
-    // console.log(props.pageNumber, newPageNumber, oldPageNumber);
     if(newCity !== oldCity) {
-        console.log(`city has changed to: ${props.city}`);
         if(newCity === 'All') {
             fetchCarData()
         } else {
@@ -522,9 +508,7 @@ watch(() => props.sortOrder, async(newOrder, oldOrder) => {
 
 // logic - brand watcher
 watch(() => props.brand, async(newBrand, oldBrand) => {
-    // console.log(props.pageNumber, newPageNumber, oldPageNumber);
     if(newBrand !== oldBrand) {
-        console.log(`brand has changed to: ${props.brand}`);
         if(newBrand === 'All') {
             fetchDataSortedByBrand()
         } else {
@@ -535,8 +519,6 @@ watch(() => props.brand, async(newBrand, oldBrand) => {
 
 // logic - owner watcher
 watch(() => props.owner, async(newOwner, oldOwner) => {
-    // console.log(props.pageNumber, newPageNumber, oldPageNumber);
-    console.log(`owner has changed to: ${props.owner}`);
     if(props.owner !== null && props.owner !== '') {
         fetchCarByOwnerCode()
     }
@@ -545,7 +527,6 @@ watch(() => props.owner, async(newOwner, oldOwner) => {
 // logic - time watcher
 watch(() => props.time, async(newTime, oldTime) => {
     if(newTime.year !== oldTime.year || newTime.month !== oldTime.month || newTime.quarter !== oldTime.quarter) {
-        console.log(`time has changed to: ${JSON.stringify(props.time)}`);
         fetchCarDataWithSpecificTime()
     }
 });
@@ -553,7 +534,6 @@ watch(() => props.time, async(newTime, oldTime) => {
 // logic - car type watcher
 watch(() => props.carType, async(newCarType, oldCarType) => {
     if(newCarType !== oldCarType) {
-        console.log('car type changed');
         fetchCarData()
     }
     
@@ -561,7 +541,6 @@ watch(() => props.carType, async(newCarType, oldCarType) => {
 
 // logic - license id watcher
 watch(() => props.specificLicense, () => {
-    console.log(`license: ${props.specificLicense}`);
     if(props.specificLicense !== null && props.specificLicense !== '') {
         fetchCarByLicense()
     }
@@ -569,23 +548,19 @@ watch(() => props.specificLicense, () => {
 
 // logic - reload watcher
 watch(() => props.reloaded, async(newReloaded, oldReloaded) => {
-    console.log(newReloaded, oldReloaded);
     if(newReloaded !== oldReloaded) {
-        console.log(newReloaded);
         fetchCarData()
     }
 });
 
 // logic - time sort order watcher
 watch(() => props.timeSortOrder, () => {
-    console.log(`time order: ${props.timeSortOrder}`);
     fetchCarDataWithSpecificTime()
 });
 
 // logic - admin option watcher
 watch(() => adminSelectionStore.getOptionSelected, () => {
     if(props.filter === 'No filter' || props.filter === 'Owner') {
-        console.log(adminSelectionStore.getOptionSelected);
         fetchCarData()
     }
     if(props.filter === 'Brand') {
@@ -603,7 +578,6 @@ watch(() => adminSelectionStore.getOptionSelected, () => {
 watch(() => adminSelectionStore.getSelected, () => {
     // fetchCarData()
     if(props.filter === 'No filter' || props.filter === 'Owner') {
-        console.log(adminSelectionStore.getSelected);
         fetchCarData()
     }
     if(props.filter === 'Brand') {
