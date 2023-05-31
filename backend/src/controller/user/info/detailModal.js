@@ -13,12 +13,14 @@ let detailModal = async (req, res) => {
   let regist = `SELECT r.id, r.date, r.expire as expire, c.name FROM vehicles v LEFT JOIN registry r ON r.licenseId = v.licenseId LEFT JOIN centre c ON r.centreId = c.id where r.licenseId = ?`;
   const [rows2, fields2] = await pool.query(regist, [licenseId]);
 
+  let unregist = `SELECT * FROM vehicles v WHERE v.licenseId NOT IN (SELECT registry.licenseId from registry) and v.licenseId = ?`
+  const [rows3, fields3] = await pool.query(unregist, [licenseId]);
   // Nếu trả về null
-  if (rows2.length <= 0) {
+  if (rows2.length <= 0 && rows3.length <= 0) {
     return res.status(400).send("No data received!");
   } else {
     let date = new Date().toISOString().slice(0, 10);
-    let expired = rows2[rows2.length - 1].expire > date;
+    let expired = rows2.length > 0 ? rows2[rows2.length - 1].expire > date : false;
 
     let type = `select type 
     from owner o 
@@ -34,7 +36,7 @@ let detailModal = async (req, res) => {
       const [rows, fields] = await pool.query(query, [licenseId]);
       return res.send({
         data: rows,
-        data2: rows2[rows2.length - 1],
+        data2: row2.length > 0 ? rows2[rows2.length - 1] : rows3[rows3.length - 1],
         valid: expired,
         ownerType: 1,
       });
