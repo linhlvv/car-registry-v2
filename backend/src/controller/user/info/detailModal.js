@@ -22,6 +22,13 @@ let detailModal = async (req, res) => {
     let date = new Date().toISOString().slice(0, 10);
     let expired = rows2.length > 0 ? rows2[rows2.length - 1].expire > date : false;
 
+    let nullptr = {
+      id: null,
+      date: null,
+      expire: null,
+      name: null,
+      
+    }
     let type = `select type 
     from owner o 
     join vehicles v 
@@ -36,7 +43,7 @@ let detailModal = async (req, res) => {
       const [rows, fields] = await pool.query(query, [licenseId]);
       return res.send({
         data: rows,
-        data2: rows2.length > 0 ? rows2[rows2.length - 1] : null,
+        data2: rows2.length > 0 ? rows2[rows2.length - 1] : nullptr,
         valid: expired,
         ownerType: 1,
       });
@@ -47,7 +54,7 @@ let detailModal = async (req, res) => {
       const [rows, fields] = await pool.query(query, [licenseId]);
       return res.send({
         data: rows,
-        data2: rows2.length > 0 ? rows2[rows2.length - 1] : null,
+        data2: rows2.length > 0 ? rows2[rows2.length - 1] : nullptr,
         valid: expired,
         ownerType: 0,
       });
