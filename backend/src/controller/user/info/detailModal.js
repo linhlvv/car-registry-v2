@@ -36,7 +36,7 @@ let detailModal = async (req, res) => {
       const [rows, fields] = await pool.query(query, [licenseId]);
       return res.send({
         data: rows,
-        data2: row2.length > 0 ? rows2[rows2.length - 1] : rows3[rows3.length - 1],
+        data2: rows2.length > 0 ? rows2[rows2.length - 1] : rows3[rows3.length - 1],
         valid: expired,
         ownerType: 1,
       });
@@ -47,7 +47,7 @@ let detailModal = async (req, res) => {
       const [rows, fields] = await pool.query(query, [licenseId]);
       return res.send({
         data: rows,
-        data2: rows2[rows2.length - 1],
+        data2: rows2.length > 0 ? rows2[rows2.length - 1] : rows3[rows3.length - 1],
         valid: expired,
         ownerType: 0,
       });
