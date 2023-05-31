@@ -78,8 +78,25 @@ const timeDescendingClicked = () => {
 
 
 //SECTION - find car by license
+const regex = /^\d\d[A-Z]\-\d\d\d\.\d\d$/g;
+const wrongLicenseFormat = ref(false)
+const errorTime = 5
+const wrongLicenseFormatMessageTime = ref(errorTime)
+let wrongLicenseFormatInterval
 const licenseSearch = (content) => {
-    emit('licenseSearch', content)
+    if(content.toUpperCase().match(regex) === null) {
+        wrongLicenseFormatMessageTime.value = errorTime
+        clearInterval(wrongLicenseFormatInterval)
+        wrongLicenseFormat.value = true
+        wrongLicenseFormatInterval = setInterval(() => {
+            wrongLicenseFormatMessageTime.value -= 1
+        }, 1000);
+    } else {
+        wrongLicenseFormatMessageTime.value = errorTime
+        clearInterval(wrongLicenseFormatInterval)
+        wrongLicenseFormat.value = false
+        emit('licenseSearch', content)
+    }
 };
 
 //SECTION - fetch all available brands
@@ -192,10 +209,24 @@ const cityClicked = (value) => {
 }
 
 // logic - owner filter
+const ssnRegex = /\d\d\d\d\-\d\d\d\d\-\d\d\d/gm
+const taxRegex = /\d\d\d\-\d\d\d\-\d\d\d/gm
+const ownerErrorMessageTime = ref(errorTime)
+const ownerError = ref(false)
+let ownerErrorMessageInterval
 const ownerClicked = (value) => {
-    owner.value = value
-    console.log(`owner ${owner.value}`);
-    emit('selectedOwnerClicked', value)
+    if(value.toUpperCase().match(ssnRegex) === null && value.toUpperCase().match(taxRegex) === null) {
+        ownerErrorMessageTime.value = errorTime
+        clearInterval(ownerErrorMessageInterval)
+        ownerError.value = true
+        ownerErrorMessageInterval = setInterval(() => {
+            ownerErrorMessageTime.value -= 1
+        }, 1000);
+    } else {
+        owner.value = value
+        console.log(`owner ${owner.value}`);
+        emit('selectedOwnerClicked', value)
+    }
 }
 
 // logic - brand filter
@@ -245,6 +276,21 @@ const reload = async () => {
     emit('reloadData')
 };
 
+watch(wrongLicenseFormatMessageTime, () => {
+    if(wrongLicenseFormatMessageTime.value === 0) {
+        wrongLicenseFormat.value = false
+        wrongLicenseFormatMessageTime.value = errorTime
+        clearInterval(wrongLicenseFormatInterval)
+    }
+});
+
+watch(ownerErrorMessageTime, () => {
+    if(ownerErrorMessageTime.value === 0) {
+        ownerError.value = false
+        ownerErrorMessageTime.value = errorTime
+        clearInterval(ownerErrorMessageInterval)
+    }
+});
 </script>
 
 <template>
@@ -273,6 +319,14 @@ const reload = async () => {
                 
             </div>
         </div>
+        <Transition name="slide-fade">
+            <div v-if="wrongLicenseFormat" class="w-full flex items-center space-x-1 text-red-500">
+                <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="w-6 h-6">
+                    <path stroke-linecap="round" stroke-linejoin="round" d="M12 9v3.75m9-.75a9 9 0 11-18 0 9 9 0 0118 0zm-9 3.75h.008v.008H12v-.008z" />
+                </svg>
+                <p class="text-sm font-semibold">Please enter the correct format (e.g. 29F-288.10)</p>
+            </div>
+        </Transition>
         <div class="w-full min-[732px]:flex-row flex flex-col gap-y-2 min-[732px]:items-center">
             <div class="w-full min-[732px]:w-[30%] flex items-center gap-2">
                 <div class="flex items-center">
@@ -368,6 +422,14 @@ const reload = async () => {
                 
             </div>
         </div>
+        <Transition name="slide-fade">
+            <div v-if="ownerError" class="w-full flex items-center space-x-1 text-red-500">
+                <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="w-6 h-6">
+                    <path stroke-linecap="round" stroke-linejoin="round" d="M12 9v3.75m9-.75a9 9 0 11-18 0 9 9 0 0118 0zm-9 3.75h.008v.008H12v-.008z" />
+                </svg>
+                <p class="text-sm font-semibold">Please enter the correct format of SSN or Tax-number</p>
+            </div>
+        </Transition>
     </div>
 </template>
 
