@@ -8,7 +8,7 @@ const props = defineProps(['registryCert']);
             Registry information
         </div>
         <div class="text-[#1d1d1d] text-opacity-70 h-[15%] flex items-center justify-center text-center font-bold text-xs">
-            #{{ registryCert.info.id }}
+            #{{ registryCert.info.id === null ? 'N/A' : registryCert.info.id }}
         </div>
         <div class="h-[70%] flex flex-col justify-center w-full p-3 gap-2">
             <div class="flex items-center w-full">
@@ -17,7 +17,7 @@ const props = defineProps(['registryCert']);
                         Registry date
                     </div>
                     <div class="text-[13px] font-medium">
-                        {{ registryCert.info.date }}
+                        {{ registryCert.info.date === null ? 'N/A' : registryCert.info.date }}
                     </div>
                 </div>
                 <div class="flex flex-col w-1/2">
@@ -25,7 +25,7 @@ const props = defineProps(['registryCert']);
                         Expired date
                     </div>
                     <div class="text-[13px] font-medium">
-                        {{ registryCert.info.expire }}
+                        {{ registryCert.info.expire === null ? 'N/A' : registryCert.info.expire }}
                     </div>
                 </div>
             </div>
@@ -34,7 +34,7 @@ const props = defineProps(['registryCert']);
                     Center
                 </div>
                 <div class="text-[13px] font-medium hover:underline cursor-pointer">
-                    {{ registryCert.info.name }}
+                    {{ registryCert.info.name  === null ? 'N/A' : registryCert.info.expire }}
                 </div>
             </div>
         </div>
