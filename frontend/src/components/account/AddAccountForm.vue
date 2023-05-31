@@ -110,7 +110,9 @@ watch(() => errorMessageTime.value, () => {
         </Transition>
         <div class="w-full flex items-end justify-end py-2">
             <button @click="handleAddAccount" class="flex text-[#1d1d1d] gap-1 rounded-lg items-center text-[13px] cursor-pointer duration-300 hover:text-[#16d592] active:bg-[#cdfcec]/40">
-                <i class="fa-sharp fa-solid fa-circle-plus flex items-center"></i>
+                <svg xmlns="http://www.w3.org/2000/svg" class="w-4 h-4" viewBox="0 0 512 512">
+                    <path fill="currentColor" d="M256 512a256 256 0 1 0 0-512a256 256 0 1 0 0 512zm-24-168v-64h-64c-13.3 0-24-10.7-24-24s10.7-24 24-24h64v-64c0-13.3 10.7-24 24-24s24 10.7 24 24v64h64c13.3 0 24 10.7 24 24s-10.7 24-24 24h-64v64c0 13.3-10.7 24-24 24s-24-10.7-24-24z"/>
+                </svg>
                 <div class="font-semibold">CREATE ACCOUNT</div>
             </button>
         </div>

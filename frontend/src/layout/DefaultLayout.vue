@@ -2,6 +2,7 @@
 import { nextTick, onBeforeUnmount, onMounted, ref, watch } from 'vue';
 import Navbar from '../components/UI/Navbar.vue';
 import VerticalNavbar from '../components/UI/VerticalNavbar.vue';
+import ChangePasswordModal from '../components/modal/ChangePasswordModal.vue';
 
 const verticalNavOpened = ref(false);
 const verticalNavHandler = () => {
@@ -30,13 +31,19 @@ watch(screenW, () => {
     }
 });
 
+const changePasswordModalOpened = ref(false);
+const handlePasswordModal = () => {
+    changePasswordModalOpened.value = !changePasswordModalOpened.value
+};
+
 </script>
 
 <template>
     <Navbar :vertical-nav-on="verticalNavOpened" @vertical-nav-clicked="verticalNavHandler"/>
+    <ChangePasswordModal v-if="changePasswordModalOpened" @close-modal="handlePasswordModal"/>
     <Transition name="nav-slide-fade">
         <div v-if="verticalNavOpened" class="fixed w-full top-0 z-50 h-screen">
-            <VerticalNavbar :nav-on="verticalNavOpened" @turn-off-nav="verticalNavHandler"/>
+            <VerticalNavbar :nav-on="verticalNavOpened" @openChangePasswordModal="handlePasswordModal" @turn-off-nav="verticalNavHandler"/>
         </div>
     </Transition>
     <router-view v-slot="{ Component, route }">
