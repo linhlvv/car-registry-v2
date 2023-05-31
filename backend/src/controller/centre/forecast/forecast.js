@@ -21,8 +21,14 @@ let forecast = async (req, res) => {
   let count =
     `
   select count(*) as total
-    from registry re
-  where centreId = ` +
+    from registry r
+  where (r.licenseId, expire) in
+    (select v.licenseId as license, max(expire) as expire
+      from vehicles v
+    left join registry re
+      on re.licenseId = v.licenseId
+    group by re.licenseId)  
+  and centreId = ` +
     req.session.userid + match
 
   let query =
@@ -33,7 +39,16 @@ let forecast = async (req, res) => {
     on r.licenseId = v.licenseId
   join personal p 
     on v.ownerId = p.id
-  where centreId = ` +
+    where (r.licenseId, expire) in
+    (select v.licenseId as license, max(expire) as expire
+      from vehicles v
+    left join registry re
+      on re.licenseId = v.licenseId
+    where centreId = ` +
+    req.session.userid + 
+    ` 
+      group by re.licenseId)
+    and centreId = ` +
     req.session.userid + match +
     `
   group by licenseId
@@ -44,12 +59,21 @@ let forecast = async (req, res) => {
     on r.licenseId = v.licenseId
   join company c 
     on v.ownerId = c.id
-  where centreId = ` +
+    where (r.licenseId, expire) in
+    (select v.licenseId as license, max(expire) as expire
+      from vehicles v
+    left join registry re
+      on re.licenseId = v.licenseId
+    where centreId = ` +
+    req.session.userid + 
+    ` 
+      group by re.licenseId)
+    and centreId = ` +
     req.session.userid + match +
     ` 
   group by licenseId
   order by expire desc
-    limit ? offset ?`;
+    limit ? offset ?`
 
   // bug - đã gọi được api kết quả trả về chính xác
   try {
