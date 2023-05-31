@@ -58,3 +58,5 @@ let detailModal = async (req, res) => {
 module.exports = {
   detailModal,
 };
+
+
