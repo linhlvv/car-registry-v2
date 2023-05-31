@@ -76,7 +76,7 @@ onMounted(() => {
 </script>
 
 <template>
-    <div class="w-full flex justify-end pr-[calc(30%-300px)]">
+    <div class="w-full flex justify-center lg:justify-end lg:pr-[calc(30%-300px)]">
         <div class="flex flex-col items-center justify-center">
             <div class="flex items-end mb-5 pr-6 overflow-hidden group transition-all">
                 <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor" class="w-6 h-6 -translate-y-56 group-hover:transition-all [scale:0] group-hover:duration-300 group-hover:[scale:1] group-hover:-translate-y-0">
