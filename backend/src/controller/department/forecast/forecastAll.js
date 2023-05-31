@@ -56,6 +56,8 @@ let forecastAll = async (req, res) => {
       from vehicles v 
     join personal p 
       on v.ownerId = p.id
+    where licenseId not in
+      (select licenseId from registry)
           union all
     select licenseId, brand, model, version, c.name as name
       from vehicles v 

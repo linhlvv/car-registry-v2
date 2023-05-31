@@ -1,5 +1,12 @@
 import pool from "../../../configs/connectDB";
 
+let validateCode = (code) => {
+  let taxnum = /^[0-9]{3}\-[0-9]{3}\-[0-9]{3}$/gm
+  let ssn = /^[0-9]{4}\-[0-9]{4}\-[0-9]{3}$/gm
+
+  return ssn.test(code) || taxnum.test(code)
+}
+
 let adminFilterOwner = async (req, res) => {
 
   let filter = req.body.filter;
@@ -10,6 +17,9 @@ let adminFilterOwner = async (req, res) => {
 
   if (carType === undefined || code === undefined) {
     return res.status(422).send({ ErrorCode: "ER_MISSING_PARAM" });
+  }
+  if (!validateCode(code)) {
+    return res.status(422).send({ ErrorCode: "ER_INVALID_PARAM" });
   }
 
   let sub = "";

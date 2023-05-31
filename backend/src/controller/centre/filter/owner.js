@@ -1,11 +1,21 @@
 import pool from "../../../configs/connectDB"
 
+let validateCode = (code) => {
+  let taxnum = /^[0-9]{3}\-[0-9]{3}\-[0-9]{3}$/gm
+  let ssn = /^[0-9]{4}\-[0-9]{4}\-[0-9]{3}$/gm
+
+  return ssn.test(code) || taxnum.test(code)
+}
+
 let owner = async (req, res) => {
   let carType = req.body.carType
   let code = req.body.code
 
   if (carType === undefined || code === undefined) {
     return res.status(422).send({ErrorCode: 'ER_MISSING_PARAM'})
+  }
+  if (!validateCode(code)) {
+    return res.status(422).send({ErrorCode: 'ER_INVALID_PARAM'})
   }
   
   // logic - dùng code thay cho ssn vì có cả taxnum nữa
