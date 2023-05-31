@@ -40,7 +40,7 @@ let adminFilterOwner = async (req, res) => {
 
   let query = carType === "unregisted" ? 
     `
-    select v.licenseId as license, v.brand, v.model, v.version, p.name 
+    select v.licenseId as license, v.brand, v.model, v.version, p.name, p.ssn
   FROM vehicles v
   join owner o 
       on v.ownerId = o.id
@@ -51,9 +51,9 @@ let adminFilterOwner = async (req, res) => {
     `
     v.licenseId NOT IN 
   (SELECT registry.licenseId  FROM registry)
-  and ssn = ?
+  and p.ssn = ?
   UNION ALL
-  select v.licenseId as license, v.brand, v.model, v.version, c.name 
+  select v.licenseId as license, v.brand, v.model, v.version, c.name, c.taxnum
   FROM vehicles v
   join owner o 
       on v.ownerId = o.id
@@ -64,13 +64,13 @@ let adminFilterOwner = async (req, res) => {
     `
     v.licenseId NOT IN 
   (SELECT registry.licenseId  FROM registry)
-  and taxnum = ?
+  and c.taxnum = ?
     `
     :
     `
   select re.licenseId as license, v.brand, v.model, v.version, ` +
     queryType +
-    `, re.expire, p.name
+    `, re.expire, p.name, p.ssn
     from registry re
   join vehicles v 
     on v.licenseId = re.licenseId
@@ -92,11 +92,11 @@ let adminFilterOwner = async (req, res) => {
   and expire` +
     type +
     `current_date()
-  and ssn = ?
+  and p.ssn = ?
           union all 
   select re.licenseId as license, v.brand, v.model, v.version, ` +
     queryType +
-    `, re.expire, c.name
+    `, re.expire, c.name, c.taxnum
     from registry re
   join vehicles v 
     on v.licenseId = re.licenseId
@@ -118,26 +118,28 @@ let adminFilterOwner = async (req, res) => {
   and expire` +
     type +
     `current_date()
-  and taxnum = ?
+  and c.taxnum = ?
     order by license`;
-    
+    console.log(query)
+    console.log(code)
   let rows = []
   let fields = []
   try {
     if (sub === "") {
-      const [rows, fields] = await pool.query(query, 
+      [rows, fields] = await pool.query(query, 
     [
       code,
       code]);
     }
     else {
-      const [rows, fields] = await pool.query(query, 
+      [rows, fields] = await pool.query(query, 
     [
       name,
       code,
       name,
       code]);
     }
+    console.log(rows)
   return res.send({ data: rows });
 }
   catch (err) {
