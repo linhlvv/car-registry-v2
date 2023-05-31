@@ -140,7 +140,7 @@ const scrollToTop = () => {
             </div>
         </div>
         <div ref="services" class="w-full grid grid-cols-2 max-sm:grid-cols-1 grid-rows-[repeat(x,max-content),1fr] items-center pt-24 pb-10 bg-[#2acc97]/10 px-10">
-            <div class="text-center p-20">
+            <div class="text-center pl-10 min-[500px]:p-20">
                 <p class="text-3xl font-semibold text-left"><span class="text-[#2acc97] text-5xl">S</span>ervices</p>
                 <p class="text-lg font-medium text-left">With these functions, management will be easier than ever</p>
             </div>
