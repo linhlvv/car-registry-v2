@@ -6,7 +6,6 @@ const emit = defineEmits(['searchEntered'])
 
 const searchInput = ref('');
 const searchHandler = () => {
-    console.log(`search bar entered ${searchInput.value.trim()}`);
     emit('searchEntered', searchInput.value.trim())
     searchInput.value = ''
 };

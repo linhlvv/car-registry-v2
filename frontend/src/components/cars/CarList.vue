@@ -2,9 +2,12 @@
 import RootRow from './RootRow.vue';
 import { watch, ref } from 'vue';
 import { useAccountStore } from '../../stores/AccountStore';
+import { useAdminSelectionStore } from '../../stores/AdminSelectionStore';
 import CarCard from './CarCard.vue';
 
-const accountStore = useAccountStore();
+
+const adminSelectionStore = useAdminSelectionStore()
+const isAdmin = localStorage.getItem('userType') == 1
 
 const emit = defineEmits(['openCarInfo', 'openCarRegistration', 'totalPageNum']);
 const props = defineProps([
@@ -16,6 +19,7 @@ const props = defineProps([
     'time',
     'carType',
     'sortOrder',
+    'timeSortOrder',
     'specificLicense',
     'reloaded'
 ])
@@ -43,29 +47,47 @@ const loading = ref(false)
 //TODO
 const fetchCarData = async() => {
     loading.value = true
-    let fetchRoute = `http://localhost:1111/vehicles/${props.carType}`;
+    let fetchRoute;
     let fetchBody;
-    if(accountStore.isAdmin) {
-
+    if(isAdmin) {
+        fetchRoute = `http://localhost:1111/vehicles/admin/${props.carType}`
+        if (adminSelectionStore.getSelected === 'all') {
+            fetchBody = { page: props.pageNumber, resPerPage: 7 }
+        } else if (adminSelectionStore.getSelected === 'region') {
+            fetchBody = {
+                page: props.pageNumber,
+                resPerPage: 7,
+                filter: 'region',
+                name: adminSelectionStore.getOptionSelected,
+            }
+        } else {
+            fetchBody = {
+                page: props.pageNumber,
+                resPerPage: 7,
+                filter: 'centre',
+                name: adminSelectionStore.getOptionSelected,
+            }
+        }
     } else {
-
+        fetchRoute = `http://localhost:1111/vehicles/${props.carType}`
+        fetchBody = { page: props.pageNumber, resPerPage: 7 }
     }
     const res = await fetch(fetchRoute, {
         method: 'POST',
         credentials: "include",
         headers: {
             'Content-Type': 'application/json',
-            'Authorization': `${accountStore.getToken}`
+            'Authorization': `${localStorage.getItem('token')}`
         },
-        body: JSON.stringify({page: props.pageNumber, resPerPage: 7}),
+        body: JSON.stringify(fetchBody),
     })
     if(res.error) {
         console.log(res.error);
     }
     const dataFetched = JSON.parse(await res.text())
-    console.log(`car list: ${JSON.stringify(dataFetched)}`);
+
     list.value = dataFetched.data
-    totalPage.value = dataFetched.count
+    totalPage.value = dataFetched.countPage
     postTotalPage()
     loading.value = false
 }
@@ -76,26 +98,46 @@ fetchCarData()
 const fetchCarByOwnerCode = async () => {
     let fetchRoute;
     let fetchBody;
-    if(accountStore.isAdmin) {
-
+    if(isAdmin) {
+        fetchRoute = `http://localhost:1111/filter/admin/owner`
+        if(adminSelectionStore.getSelected === 'all') {
+            fetchBody = {
+                carType: props.carType,
+                code: props.owner
+            }
+        } else if(adminSelectionStore.getSelected === 'region') {
+            fetchBody = {
+                carType: props.carType,
+                code: props.owner,
+                filter: 'region',
+                name: adminSelectionStore.getOptionSelected,
+            }
+        } else {
+            fetchBody = {
+                carType: props.carType,
+                code: props.owner,
+                filter: 'centre',
+                name: adminSelectionStore.getOptionSelected,
+            }
+        }
     } else {
-
+        fetchRoute = `http://localhost:1111/filter/owner`
+        fetchBody = {carType: props.carType, code: props.owner}
     }
     loading.value = true
-    const res = await fetch(`http://localhost:1111/filter/owner`, {
+    const res = await fetch(fetchRoute, {
         method: 'POST',
         credentials: "include",
         headers: {
             'Content-Type': 'application/json',
-            'Authorization': `${accountStore.getToken}`
+            'Authorization': `${localStorage.getItem('token')}`
         },
-        body: JSON.stringify({carType: props.carType, code: props.owner}),
+        body: JSON.stringify(fetchBody),
     })
     if(res.error) {
         console.log(res.error);
     }
     const dataFetched = JSON.parse(await res.text())
-    console.log(`owner cars: ${JSON.stringify(dataFetched)}`);
     list.value = dataFetched.data
     totalPage.value = 1
     postTotalPage()
@@ -108,35 +150,59 @@ const fetchCarByOwnerCode = async () => {
 const fetchDataSortedByBrand = async () => {
     let fetchRoute;
     let fetchBody;
-    if(accountStore.isAdmin) {
-
-    } else {
-
-    }
-    loading.value = true
-    const res = await fetch(`http://localhost:1111/filter/brand`, {
-        method: 'POST',
-        credentials: "include",
-        headers: {
-            'Content-Type': 'application/json',
-            'Authorization': `${accountStore.getToken}`
-        },
-        body: JSON.stringify(
-            {
+    if(isAdmin) {
+        fetchRoute = `http://localhost:1111/filter/admin/brand`
+        if(adminSelectionStore.getSelected === 'all') {
+            fetchBody = {
                 resPerPage: 7,
                 page: props.pageNumber,
                 carType: props.carType,
                 order: props.sortOrder,
             }
-        ),
+        } else if(adminSelectionStore.getSelected === 'region') {
+            fetchBody = {
+                resPerPage: 7,
+                page: props.pageNumber,
+                carType: props.carType,
+                order: props.sortOrder,
+                filter: 'region',
+                name: adminSelectionStore.getOptionSelected,
+            }
+        } else {
+            fetchBody = {
+                resPerPage: 7,
+                page: props.pageNumber,
+                carType: props.carType,
+                order: props.sortOrder,
+                filter: 'centre',
+                name: adminSelectionStore.getOptionSelected,
+            }
+        }
+    } else {
+        fetchRoute = `http://localhost:1111/filter/brand`
+        fetchBody = {
+            resPerPage: 7,
+            page: props.pageNumber,
+            carType: props.carType,
+            order: props.sortOrder,
+        }
+    }
+    loading.value = true
+    const res = await fetch(fetchRoute, {
+        method: 'POST',
+        credentials: "include",
+        headers: {
+            'Content-Type': 'application/json',
+            'Authorization': `${localStorage.getItem('token')}`
+        },
+        body: JSON.stringify(fetchBody),
     })
     if(res.error) {
         console.log(res.error);
     }
     const dataFetched = JSON.parse(await res.text())
-    // console.log(`cars by brands: ${JSON.stringify(dataFetched)}`);
     list.value = dataFetched.data
-    totalPage.value = dataFetched.count
+    totalPage.value = dataFetched.countPage
     postTotalPage()
     loading.value = false
 }
@@ -146,75 +212,133 @@ const fetchDataSortedByBrand = async () => {
 const fetchCarDataWithSpecificBrand = async () => {
     let fetchRoute;
     let fetchBody;
-    if(accountStore.isAdmin) {
-
-    } else {
-
-    }
-    loading.value = true
-    const res = await fetch(`http://localhost:1111/filter/brand/exact`, {
-        method: 'POST',
-        credentials: "include",
-        headers: {
-            'Content-Type': 'application/json',
-            'Authorization': `${accountStore.getToken}`
-        },
-        body: JSON.stringify(
-            {
+    if(isAdmin) {
+        fetchRoute = `http://localhost:1111/filter/admin/brand/exact`
+        if(adminSelectionStore.getSelected === 'all') {
+            fetchBody = {
                 resPerPage: 7,
                 page: props.pageNumber,
                 carType: props.carType,
                 brand: props.brand,
             }
-        ),
+        } else if(adminSelectionStore.getSelected === 'region') {
+            fetchBody = {
+                resPerPage: 7,
+                page: props.pageNumber,
+                carType: props.carType,
+                brand: props.brand,
+                filter: 'region',
+                name: adminSelectionStore.getOptionSelected,
+            }
+        } else {
+            fetchBody = {
+                resPerPage: 7,
+                page: props.pageNumber,
+                carType: props.carType,
+                brand: props.brand,
+                filter: 'centre',
+                name: adminSelectionStore.getOptionSelected,
+            }
+        }
+    } else {
+        fetchRoute = `http://localhost:1111/filter/brand/exact`
+        fetchBody = {
+            resPerPage: 7,
+            page: props.pageNumber,
+            carType: props.carType,
+            brand: props.brand,
+        }
+    }
+    loading.value = true
+    const res = await fetch(fetchRoute, {
+        method: 'POST',
+        credentials: "include",
+        headers: {
+            'Content-Type': 'application/json',
+            'Authorization': `${localStorage.getItem('token')}`
+        },
+        body: JSON.stringify(fetchBody),
     })
     if(res.error) {
         console.log(res.error);
     }
     const dataFetched = JSON.parse(await res.text())
-    console.log(`car brand: ${JSON.stringify(dataFetched)}`);
     list.value = dataFetched.data
-    totalPage.value = dataFetched.count
+    totalPage.value = dataFetched.countPage
     postTotalPage()
     loading.value = false
 }
 
 // logic - specific time
-//TODO
+//TODO remember to add order asc/desc
 const fetchCarDataWithSpecificTime = async () => {
     let fetchRoute;
     let fetchBody;
-    if(accountStore.isAdmin) {
-
-    } else {
-
-    }
-    loading.value = true
-    const res = await fetch(`http://localhost:1111/filter/time`, {
-        method: 'POST',
-        credentials: "include",
-        headers: {
-            'Content-Type': 'application/json',
-            'Authorization': `${accountStore.getToken}`
-        },
-        body: JSON.stringify(
-            {
+    if(isAdmin) {
+        fetchRoute = `http://localhost:1111/filter/admin/time`
+        if(adminSelectionStore.getSelected === 'all') {
+            fetchBody = {
                 resPerPage: 7,
                 page: props.pageNumber,
                 carType: props.carType,
                 year: props.time.year,
                 quarter: props.time.quarter,
                 month: props.time.month,
+                order: props.timeSortOrder,
             }
-        ),
+        } else if(adminSelectionStore.getSelected === 'region') {
+            fetchBody = {
+                resPerPage: 7,
+                page: props.pageNumber,
+                carType: props.carType,
+                year: props.time.year,
+                quarter: props.time.quarter,
+                month: props.time.month,
+                order: props.timeSortOrder,
+                filter: 'region',
+                name: adminSelectionStore.getOptionSelected,
+            }
+        } else {
+            fetchBody = {
+                resPerPage: 7,
+                page: props.pageNumber,
+                carType: props.carType,
+                year: props.time.year,
+                quarter: props.time.quarter,
+                month: props.time.month,
+                order: props.timeSortOrder,
+                filter: 'centre',
+                name: adminSelectionStore.getOptionSelected,
+            }
+        }
+    } else {
+        fetchRoute = `http://localhost:1111/filter/time`
+        fetchBody = {
+            resPerPage: 7,
+            page: props.pageNumber,
+            carType: props.carType,
+            year: props.time.year,
+            quarter: props.time.quarter,
+            month: props.time.month,
+            order: props.timeSortOrder
+        }
+    }
+    loading.value = true
+    const res = await fetch(fetchRoute, {
+        method: 'POST',
+        credentials: "include",
+        headers: {
+            'Content-Type': 'application/json',
+            'Authorization': `${localStorage.getItem('token')}`
+        },
+        body: JSON.stringify(fetchBody),
     })
     if(res.error) {
         console.log(res.error);
     }
     const dataFetched = JSON.parse(await res.text())
-    console.log(`car brand: ${JSON.stringify(dataFetched)}`);
     list.value = dataFetched.data
-    totalPage.value = dataFetched.count
+    totalPage.value = dataFetched.countPage
     postTotalPage()
     loading.value = false
 }
@@ -224,35 +348,48 @@ const fetchCarDataWithSpecificTime = async () => {
 const fetchCarDataWithSpecificCity = async () => {
     let fetchRoute;
     let fetchBody;
-    if(accountStore.isAdmin) {
-
+    if(isAdmin) {
+        if(adminSelectionStore.getSelected === 'all') {
+            fetchRoute = ``
+            fetchBody = {
+                
+            }
+        } else if(adminSelectionStore.getSelected === 'region') {
+            fetchRoute = ``
+            fetchBody = {
+                
+            }
+        } else {
+            fetchRoute = ``
+            fetchBody = {
+                
+            }
+        }
     } else {
-
+        fetchRoute = `http://localhost:1111/filter/city/exact`
+        fetchBody = {
+            resPerPage: 7,
+            page: props.pageNumber,
+            carType: props.carType,
+            city: props.city
+        }
     }
     loading.value = true
-    const res = await fetch(`http://localhost:1111/filter/city/exact`, {
+    const res = await fetch(fetchRoute, {
         method: 'POST',
         credentials: "include",
         headers: {
             'Content-Type': 'application/json',
-            'Authorization': `${accountStore.getToken}`
+            'Authorization': `${localStorage.getItem('token')}`
         },
-        body: JSON.stringify(
-            {
-                resPerPage: 7,
-                page: props.pageNumber,
-                carType: props.carType,
-                city: props.city
-            }
-        ),
+        body: JSON.stringify(fetchBody),
     })
     if(res.error) {
         console.log(res.error);
     }
     const dataFetched = JSON.parse(await res.text())
-    console.log(`car brand: ${JSON.stringify(dataFetched)}`);
     list.value = dataFetched.data
-    totalPage.value = dataFetched.count
+    totalPage.value = dataFetched.countPage
     postTotalPage()
     loading.value = false
 }
@@ -262,33 +399,50 @@ const fetchCarDataWithSpecificCity = async () => {
 const fetchCarByLicense = async () => {
     let fetchRoute;
     let fetchBody;
-    if(accountStore.isAdmin) {
-
+    if(isAdmin) {
+        fetchRoute = `http://localhost:1111/vehicles/admin/find`
+        if(adminSelectionStore.getSelected === 'all') {
+            fetchBody = {
+                licenseId: props.specificLicense,
+                carType: props.carType,
+            }
+        } else if(adminSelectionStore.getSelected === 'region') {
+            fetchBody = {
+                licenseId: props.specificLicense,
+                carType: props.carType,
+                filter: 'region',
+                name: adminSelectionStore.getOptionSelected,
+            }
+        } else {
+            fetchBody = {
+                licenseId: props.specificLicense,
+                carType: props.carType,
+                filter: 'centre',
+                name: adminSelectionStore.getOptionSelected,
+            }
+        }
     } else {
-
+        fetchRoute = `http://localhost:1111/vehicles/find`
+        fetchBody = {
+            license: props.specificLicense,
+            carType: props.carType,
+        }
     }
     loading.value = true
-    const res = await fetch(`http://localhost:1111/vehicles/find`, {
+    const res = await fetch(fetchRoute, {
         method: 'POST',
         credentials: "include",
         headers: {
             'Content-Type': 'application/json',
-            'Authorization': `${accountStore.getToken}`
+            'Authorization': `${localStorage.getItem('token')}`
         },
-        body: JSON.stringify(
-            {
-                license: props.specificLicense,
-                carType: props.carType,
-            }
-        ),
+        body: JSON.stringify(fetchBody),
     })
     if(res.error) {
         console.log(res.error);
     }
     const dataFetched = JSON.parse(await res.text())
-    console.log(`car license: ${JSON.stringify(dataFetched)}`);
     list.value = dataFetched.car
-    console.log(`car license: ${JSON.stringify(list.value)}`);
     // totalPage.value = 1
     loading.value = false
 }
@@ -296,8 +450,6 @@ const fetchCarByLicense = async () => {
 //SECTION - watchers
 // logic - page number watcher
 watch(() => props.pageNumber, async(newPageNumber, oldPageNumber) => {
-    console.log(`page number of carlist has changed to: ${props.pageNumber}`);
-        
     if(props.filter === 'No filter') {
         fetchCarData()
     }
@@ -310,7 +462,6 @@ watch(() => props.pageNumber, async(newPageNumber, oldPageNumber) => {
         fetchCarDataWithSpecificBrand()
     }
     if(props.filter === 'Time') {
-        console.log(props.pageNumber);
         fetchCarDataWithSpecificTime()
     }
     if(props.filter === 'City' && props.city !== 'All') {
@@ -322,27 +473,21 @@ watch(() => props.pageNumber, async(newPageNumber, oldPageNumber) => {
 
 // logic - general filter watcher
 watch(() => props.filter, async(newFilter, oldFilter) => {
-    // console.log(props.pageNumber, newPageNumber, oldPageNumber);
-    if(newFilter !== oldFilter) {
-        console.log(`filter has changed to: ${props.filter}`);
-        if(newFilter === 'No filter' || newFilter === 'Owner') {
-            fetchCarData()
-        }
-        if(newFilter === 'Brand') {
-            fetchDataSortedByBrand()
-        }
-        if(newFilter === 'Time') {
-            fetchCarDataWithSpecificTime()
-        }
+    if(newFilter === 'No filter' || newFilter === 'Owner') {
+        fetchCarData()
+    }
+    if(newFilter === 'Brand') {
+        fetchDataSortedByBrand()
+    }
+    if(newFilter === 'Time') {
+        fetchCarDataWithSpecificTime()
     }
     
 });
 
 // logic - city watcher
 watch(() => props.city, async(newCity, oldCity) => {
-    // console.log(props.pageNumber, newPageNumber, oldPageNumber);
     if(newCity !== oldCity) {
-        console.log(`city has changed to: ${props.city}`);
         if(newCity === 'All') {
             fetchCarData()
         } else {
@@ -363,9 +508,7 @@ watch(() => props.sortOrder, async(newOrder, oldOrder) => {
 
 // logic - brand watcher
 watch(() => props.brand, async(newBrand, oldBrand) => {
-    // console.log(props.pageNumber, newPageNumber, oldPageNumber);
     if(newBrand !== oldBrand) {
-        console.log(`brand has changed to: ${props.brand}`);
         if(newBrand === 'All') {
             fetchDataSortedByBrand()
         } else {
@@ -376,17 +519,14 @@ watch(() => props.brand, async(newBrand, oldBrand) => {
 
 // logic - owner watcher
 watch(() => props.owner, async(newOwner, oldOwner) => {
-    // console.log(props.pageNumber, newPageNumber, oldPageNumber);
-    if(newOwner !== oldOwner) {
-        console.log(`owner has changed to: ${props.owner}`);
+    if(props.owner !== null && props.owner !== '') {
         fetchCarByOwnerCode()
-    } 
+    }
 });
 
 // logic - time watcher
 watch(() => props.time, async(newTime, oldTime) => {
     if(newTime.year !== oldTime.year || newTime.month !== oldTime.month || newTime.quarter !== oldTime.quarter) {
-        console.log(`time has changed to: ${JSON.stringify(props.time)}`);
         fetchCarDataWithSpecificTime()
     }
 });
@@ -394,32 +534,67 @@ watch(() => props.time, async(newTime, oldTime) => {
 // logic - car type watcher
 watch(() => props.carType, async(newCarType, oldCarType) => {
     if(newCarType !== oldCarType) {
-        console.log('car type changed');
         fetchCarData()
     }
     
 });
 
 // logic - license id watcher
-watch(() => props.specificLicense, async(newLicense, oldLicense) => {
-    if(newLicense !== oldLicense) {
-        console.log(`license: ${newLicense}`);
+watch(() => props.specificLicense, () => {
+    if(props.specificLicense !== null && props.specificLicense !== '') {
         fetchCarByLicense()
     }
 });
 
 // logic - reload watcher
 watch(() => props.reloaded, async(newReloaded, oldReloaded) => {
-    console.log(newReloaded, oldReloaded);
     if(newReloaded !== oldReloaded) {
-        console.log(newReloaded);
         fetchCarData()
+    }
+});
+
+// logic - time sort order watcher
+watch(() => props.timeSortOrder, () => {
+    fetchCarDataWithSpecificTime()
+});
+
+// logic - admin option watcher
+watch(() => adminSelectionStore.getOptionSelected, () => {
+    if(props.filter === 'No filter' || props.filter === 'Owner') {
+        fetchCarData()
+    }
+    if(props.filter === 'Brand') {
+        if(props.brand === 'All') {
+            fetchDataSortedByBrand()
+        } else {
+            fetchCarDataWithSpecificBrand()
+        }
+    }
+    if(props.filter === 'Time') {
+        fetchCarDataWithSpecificTime()
+    }
+});
+
+watch(() => adminSelectionStore.getSelected, () => {
+    // fetchCarData()
+    if(props.filter === 'No filter' || props.filter === 'Owner') {
+        fetchCarData()
+    }
+    if(props.filter === 'Brand') {
+        if(props.brand === 'All') {
+            fetchDataSortedByBrand()
+        } else {
+            fetchCarDataWithSpecificBrand()
+        }
+    }
+    if(props.filter === 'Time') {
+        fetchCarDataWithSpecificTime()
     }
 });
 </script>
 
 <template>
-    <div class="w-full flex flex-col">
+    <div id="table" class="w-full flex flex-col overflow-x-scroll">
         <RootRow :carType="props.carType"/>
         <!-- <div>{{ reloaded }}</div> -->
         <div class="flex flex-col items-center w-full" style="{overflow-wrap: 'anywhere';}">
@@ -445,3 +620,22 @@ watch(() => props.reloaded, async(newReloaded, oldReloaded) => {
         </div>
     </div>
 </template>
+
+<style scoped>
+    #table::-webkit-scrollbar {
+        height: 6px;
+    }
+    
+    #table::-webkit-scrollbar-track {
+        border-radius: 12px;
+    }
+    
+    #table::-webkit-scrollbar-thumb {
+        background-color: #2acc97;
+        outline: none;
+        border-radius: 12px;
+    }
+    #table::-webkit-scrollbar-thumb:hover {
+        background-color: #0ce29b;
+    }
+</style>

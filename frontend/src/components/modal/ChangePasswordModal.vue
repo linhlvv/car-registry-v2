@@ -48,7 +48,6 @@ const confirmChange = async() => {
         }
         loadingOn.value = false
         const resData = JSON.parse(await res.text())
-        console.log(`password management message: ${JSON.stringify(resData)}`);
         if(resData.message === 'Password changed') {
             posted.value = true
             trigger()
@@ -110,14 +109,13 @@ const closeModal = () => {
 </script>
 
 <template>
-    <div class="bg-[#1d1d1d]/40 top-0 left-0 w-full h-screen blur-xl fixed z-10 backdrop-animation"></div>
-    <!-- <div class="bg-transparent fixed top-[16vh] left-[33.3333333%] w-1/3 z-50 flex items-end justify-end">
-        <i class="fa-solid fa-circle-xmark text-[#cc3d2a]"></i>
-    </div> -->
-    <div class="bg-white rounded-lg p-4 fixed top-[20vh] left-[33.3333333%] w-1/3 z-50 flex modal-animation overflow-hidden">
+    <div class="bg-[#1d1d1d]/40 top-0 left-0 w-full h-screen blur-xl fixed z-50 backdrop-animation"></div>
+    <div class="bg-white rounded-lg p-4 fixed top-[20vh] left-1/3 max-lg:left-[17%] max-sm:left-0 w-1/3 max-lg:w-2/3 max-sm:w-full z-50 flex modal-animation overflow-hidden">
         <div v-if="!posted" class="w-full flex flex-col">
             <div class="w-full flex items-center justify-end">
-                <i @click="closeModal" class="fa-solid fa-circle-xmark text-[#cc3d2a] cursor-pointer text-opacity-75 active:text-opacity-90"></i>
+                <svg @click="closeModal" xmlns="http://www.w3.org/2000/svg" class="w-5 h-5 text-[#cc3d2a] cursor-pointer text-opacity-75 active:text-opacity-90" viewBox="0 0 512 512">
+                    <path fill="currentColor" d="M256 512a256 256 0 1 0 0-512a256 256 0 1 0 0 512zm-81-337c9.4-9.4 24.6-9.4 33.9 0l47 47l47-47c9.4-9.4 24.6-9.4 33.9 0s9.4 24.6 0 33.9l-47 47l47 47c9.4 9.4 9.4 24.6 0 33.9s-24.6 9.4-33.9 0l-47-47l-47 47c-9.4 9.4-24.6 9.4-33.9 0s-9.4-24.6 0-33.9l47-47l-47-47c-9.4-9.4-9.4-24.6 0-33.9z"/>
+                </svg>
             </div>
             <div class="pb-2 text-xl font-semibold text-[#2acc97] flex justify-center text-center items-center">
                 Manage password
@@ -129,11 +127,20 @@ const closeModal = () => {
                 <ChangePasswordInput content="Confirm new password" v-model="password.newPassConfirmation"/>
             </div>
             <div v-if="passLengthType !== ''" class="w-full flex flex-col mb-3">
-                <div class="font-bold text-[12px]" :class="lengthTextColor">
-                    {{ passLengthType }}
-                    <i v-if="passLengthType === 'Weak'" class="fa-solid fa-face-tired"></i>
+                <div class="font-bold text-[12px] flex items-center space-x-1 mb-1" :class="lengthTextColor">
+                    <p>{{ passLengthType }}</p>
+                    <!-- <i v-if="passLengthType === 'Weak'" class="fa-solid fa-face-tired"></i>
                     <i v-else-if="passLengthType === 'Medium'" class="fa-solid fa-face-rolling-eyes"></i>
-                    <i v-else class="fa-solid fa-face-laugh-squint"></i>
+                    <i v-else class="fa-solid fa-face-laugh-squint"></i> -->
+                    <svg v-if="passLengthType === 'Weak'" xmlns="http://www.w3.org/2000/svg" class="w-4 h-4" viewBox="0 0 512 512">
+                        <path fill="currentColor" d="M256 512a256 256 0 1 0 0-512a256 256 0 1 0 0 512zm-91.3-183.3c22-22 53.9-40.7 91.3-40.7s69.3 18.7 91.3 40.7c11.1 11.1 20.1 23.4 26.4 35.4c6.2 11.7 10.3 24.4 10.3 35.9c0 5.2-2.6 10.2-6.9 13.2s-9.8 3.7-14.7 1.8l-20.5-7.7C315 397.2 286.4 392 257.6 392h-3.2c-28.8 0-57.3 5.2-84.3 15.3l-20.5 7.7c-4.9 1.8-10.4 1.2-14.7-1.8s-6.9-7.9-6.9-13.2c0-11.6 4.2-24.2 10.3-35.9c6.3-12 15.3-24.3 26.4-35.4zm-31.2-182l89.9 47.9c10.7 5.7 10.7 21.1 0 26.8l-89.9 47.9c-7.9 4.2-17.5-1.5-17.5-10.5c0-2.8 1-5.5 2.8-7.6l36-43.2l-36-43.2c-1.8-2.1-2.8-4.8-2.8-7.6c0-9 9.6-14.7 17.5-10.5zM396 157.1c0 2.8-1 5.5-2.8 7.6l-36 43.2l36 43.2c1.8 2.1 2.8 4.8 2.8 7.6c0 9-9.6 14.7-17.5 10.5l-89.9-47.9c-10.7-5.7-10.7-21.1 0-26.8l89.9-47.9c7.9-4.2 17.5 1.5 17.5 10.5z"/>
+                    </svg>
+                    <svg v-else-if="passLengthType === 'Medium'" xmlns="http://www.w3.org/2000/svg" class="w-4 h-4" viewBox="0 0 512 512">
+                        <path fill="currentColor" d="M256 512a256 256 0 1 0 0-512a256 256 0 1 0 0 512zm-64-144h128c8.8 0 16 7.2 16 16s-7.2 16-16 16H192c-8.8 0-16-7.2-16-16s7.2-16 16-16zm32-144c0 35.3-28.7 64-64 64s-64-28.7-64-64c0-26 15.5-48.4 37.8-58.4c-3.7 5.2-5.8 11.6-5.8 18.4c0 17.7 14.3 32 32 32s32-14.3 32-32c0-6.9-2.2-13.2-5.8-18.4c22.3 10 37.8 32.4 37.8 58.4zm128 64c-35.3 0-64-28.7-64-64c0-26 15.5-48.4 37.8-58.4c-3.7 5.2-5.8 11.6-5.8 18.4c0 17.7 14.3 32 32 32s32-14.3 32-32c0-6.9-2.2-13.2-5.8-18.4c22.3 10 37.8 32.4 37.8 58.4c0 35.3-28.7 64-64 64z"/>
+                    </svg>
+                    <svg v-else xmlns="http://www.w3.org/2000/svg" class="w-4 h-4" viewBox="0 0 512 512">
+                        <path fill="currentColor" d="M256 512a256 256 0 1 0 0-512a256 256 0 1 0 0 512zM96.8 314.1c-3.8-13.7 7.4-26.1 21.6-26.1h275.2c14.2 0 25.5 12.4 21.6 26.1C396.2 382 332.1 432 256 432S115.8 382 96.8 314.1zm36.7-199.4l89.9 47.9c10.7 5.7 10.7 21.1 0 26.8l-89.9 47.9c-7.9 4.2-17.5-1.5-17.5-10.5c0-2.8 1-5.5 2.8-7.6l36-43.2l-36-43.2c-1.8-2.1-2.8-4.8-2.8-7.6c0-9 9.6-14.7 17.5-10.5zM396 125.1c0 2.8-1 5.5-2.8 7.6l-36 43.2l36 43.2c1.8 2.1 2.8 4.8 2.8 7.6c0 9-9.6 14.7-17.5 10.5l-89.9-47.9c-10.7-5.7-10.7-21.1 0-26.8l89.9-47.9c7.9-4.2 17.5 1.5 17.5 10.5z"/>
+                    </svg>
                 </div>
                 <div class="w-full h-[3px]">
                     <div

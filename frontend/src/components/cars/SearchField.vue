@@ -3,13 +3,14 @@ import { ref, watch } from 'vue';
 import SearchBar from '../UI/SearchBar.vue';
 import { useAccountStore } from '../../stores/AccountStore';
 
-const accountStore = useAccountStore()
+const isAdmin = localStorage.getItem('userType') == 1
 
 const props = defineProps(['pageNum', 'totalPage', 'carType']);
 const emit = defineEmits([
     'nextPage',
     'prevPage',
     'sendSortOrder',
+    'sendTimeSortOrder',
     'specifiedPage',
     'licenseSearch',
     'selectedFilterClicked',
@@ -21,7 +22,10 @@ const emit = defineEmits([
 ]);
 
 //SECTION - Filter list
-const filterList = ['No filter', 'City', 'Owner', 'Brand', 'Time']
+let filterList = ['No filter', 'City', 'Owner', 'Brand', 'Time']
+if(isAdmin) {
+    filterList = ['No filter', 'Owner', 'Brand', 'Time']
+}
 const cityList = ref(['All'])
 const brandList = ref(['All'])
 const yearList = ['All', '2021', '2022', '2023']
@@ -62,38 +66,71 @@ const fromZtoAClicked = () => {
 };
 
 // logic - time order
-const timeAscending = ref(true)
+const timeAscending = ref('asc')
 const timeAscendingClicked = () => {
-    timeAscending.value = true
+    timeAscending.value = 'asc'
+    emit('sendTimeSortOrder', 'asc')
 }
 const timeDescendingClicked = () => {
-    timeAscending.value = false
+    timeAscending.value = 'desc'
+    emit('sendTimeSortOrder', 'desc')
 }
 
 
 //SECTION - find car by license
+const regex = /^\d\d[A-Z]\-\d\d\d\.\d\d$/g;
+const wrongLicenseFormat = ref(false)
+const errorTime = 5
+const wrongLicenseFormatMessageTime = ref(errorTime)
+let wrongLicenseFormatInterval
 const licenseSearch = (content) => {
-    emit('licenseSearch', content)
+    if(content.toUpperCase().match(regex) === null) {
+        wrongLicenseFormatMessageTime.value = errorTime
+        clearInterval(wrongLicenseFormatInterval)
+        wrongLicenseFormat.value = true
+        wrongLicenseFormatInterval = setInterval(() => {
+            wrongLicenseFormatMessageTime.value -= 1
+        }, 1000);
+    } else {
+        wrongLicenseFormatMessageTime.value = errorTime
+        clearInterval(wrongLicenseFormatInterval)
+        wrongLicenseFormat.value = false
+        emit('licenseSearch', content)
+    }
 };
 
 //SECTION - fetch all available brands
 const fetchAllAvailableBrands = async () => {
-    // console.log(`cartype: ${props.carType}`);
-    const res = await fetch(`http://localhost:1111/filter/brand/all`, {
-        method: 'POST',
-        credentials: "include",
-        headers: {
-            'Content-Type': 'application/json',
-            'Authorization': `${accountStore.getToken}`
-        },
-        body: JSON.stringify({carType: props.carType}),
-    })
-    if(res.error) {
-        console.log(res.error);
+    if(isAdmin) {
+        const res = await fetch(`http://localhost:1111/stats/brand`, {
+            credentials: "include",
+            headers: {
+                'Content-Type': 'application/json',
+                'Authorization': `${localStorage.getItem('token')}`
+            },
+        })
+        if(res.error) {
+            console.log(res.error);
+        }
+        const dataFetched = JSON.parse(await res.text())
+        brandList.value = ['All', ...dataFetched.brands]
+    } else {
+        const res = await fetch(`http://localhost:1111/filter/brand/all`, {
+            method: 'POST',
+            credentials: "include",
+            headers: {
+                'Content-Type': 'application/json',
+                'Authorization': `${localStorage.getItem('token')}`
+            },
+            body: JSON.stringify({carType: props.carType}),
+        })
+        if(res.error) {
+            console.log(res.error);
+        }
+        const dataFetched = JSON.parse(await res.text())
+        brandList.value = ['All', ...dataFetched.data]
     }
-    const dataFetched = JSON.parse(await res.text())
-    brandList.value = ['All', ...dataFetched.data]
-    // console.log(`all available brands: ${JSON.stringify(brandList.value)}`);
+    
 };
 
 //SECTION - fetch all available cities
@@ -103,7 +140,7 @@ const fetchAllAvailableCities = async () => {
         credentials: "include",
         headers: {
             'Content-Type': 'application/json',
-            'Authorization': `${accountStore.getToken}`
+            'Authorization': `${localStorage.getItem('token')}`
         },
         body: JSON.stringify({carType: props.carType}),
     })
@@ -112,23 +149,17 @@ const fetchAllAvailableCities = async () => {
     }
     const dataFetched = JSON.parse(await res.text())
     cityList.value = ['All', ...dataFetched.data]
-    // console.log(`all available citites: ${JSON.stringify(dataFetched.data)}`);
 }
 
 //SECTION - handle pagination
 // logic - pagination with previous and next button
-const pageNumber = ref(props.pageNum);
 const pageHandler = (direction) => {
-    console.log(direction);
     if(direction === 'left') {
-        if (pageNumber.value > 1) {
-            pageNumber.value -= +1;
+        if (props.pageNum > 1) {
             emit('prevPage');
         }
     } else {
-        console.log(pageNumber.value, props.totalPage);
-        if (pageNumber.value < props.totalPage) {
-            pageNumber.value += +1;
+        if (props.pageNum < props.totalPage) {
             emit('nextPage');
         }
     }
@@ -137,7 +168,6 @@ const pageHandler = (direction) => {
 // logic - navigate to exact page when enter is pressed
 const enterHandler = (number) => {
     if(1 <= number && number <= props.totalPage) {
-        pageNumber.value = +number;
         emit('specifiedPage', +number);
     }
 };
@@ -153,12 +183,10 @@ const time = ref({
 
 // logic - general filter
 const filterClickedHandler = (value) => {
-    pageNumber.value = 1
     brand.value = 'All'
     time.value = {
         year: 'All', quarter: 'All', month: 'All',
     }
-    console.log(`filter ${selected.value}`);
     if(selected.value === 'Brand') {
         fetchAllAvailableBrands()
     }
@@ -170,29 +198,36 @@ const filterClickedHandler = (value) => {
 
 // logic - city filter
 const cityClicked = (value) => {
-    pageNumber.value = 1
-    console.log(`city ${city.value}`);
     emit('selectedCityClicked', value)
 }
 
 // logic - owner filter
+const ssnRegex = /\d\d\d\d\-\d\d\d\d\-\d\d\d/gm
+const taxRegex = /\d\d\d\-\d\d\d\-\d\d\d/gm
+const ownerErrorMessageTime = ref(errorTime)
+const ownerError = ref(false)
+let ownerErrorMessageInterval
 const ownerClicked = (value) => {
-    pageNumber.value = 1
-    owner.value = value
-    console.log(`owner ${owner.value}`);
-    emit('selectedOwnerClicked', value)
+    if(value.toUpperCase().match(ssnRegex) === null && value.toUpperCase().match(taxRegex) === null) {
+        ownerErrorMessageTime.value = errorTime
+        clearInterval(ownerErrorMessageInterval)
+        ownerError.value = true
+        ownerErrorMessageInterval = setInterval(() => {
+            ownerErrorMessageTime.value -= 1
+        }, 1000);
+    } else {
+        owner.value = value
+        emit('selectedOwnerClicked', value)
+    }
 }
 
 // logic - brand filter
 const brandClicked = (value) => {
-    pageNumber.value = 1
-    console.log(`brand changes to ${brand.value}`);
     emit('selectedBrandClicked', value)
 }
 
 // logic - time filter with year + quarter or year + month
 const timeClicked = (value, type) => {
-    pageNumber.value = 1
     if(type === 'year') {
         time.value.year = value;
         time.value.month = 'All'
@@ -204,14 +239,12 @@ const timeClicked = (value, type) => {
         time.value.month = value
         time.value.quarter = 'All'
     }
-    // console.log(`time changes to ${{year: time.value.year, quarter: time.value.quarter, month: time.value.month}}`);
     emit('selectedTimeClicked', {year: time.value.year, quarter: time.value.quarter, month: time.value.month})
 };
 
 //SECTION - watcher
 // logic - reset filter after car type change event
 watch(() => props.carType, (newCarType, oldCarType) => {
-    pageNumber.value = 1
     if(newCarType !== oldCarType) {
         
         selected.value = 'No filter'
@@ -226,7 +259,6 @@ watch(() => props.carType, (newCarType, oldCarType) => {
 
 //SECTION - reload data
 const reload = async () => {
-    pageNumber.value = 1
     selected.value = 'No filter'
     brand.value = 'All'
     city.value = 'All'
@@ -234,29 +266,56 @@ const reload = async () => {
     emit('reloadData')
 };
 
+watch(wrongLicenseFormatMessageTime, () => {
+    if(wrongLicenseFormatMessageTime.value === 0) {
+        wrongLicenseFormat.value = false
+        wrongLicenseFormatMessageTime.value = errorTime
+        clearInterval(wrongLicenseFormatInterval)
+    }
+});
+
+watch(ownerErrorMessageTime, () => {
+    if(ownerErrorMessageTime.value === 0) {
+        ownerError.value = false
+        ownerErrorMessageTime.value = errorTime
+        clearInterval(ownerErrorMessageInterval)
+    }
+});
 </script>
 
 <template>
     <div class="bg-white w-full p-6 px-7 flex flex-col gap-3 justify-center">
-        <div class="w-full flex items-center">
-            <div class="flex items-center w-[77.5%] gap-3">
-                <SearchBar @search-entered="licenseSearch" width="w-[30%]" placeholder="Enter a license plate..."/>
-                <i @click="reload" class="fa-solid fa-rotate text-[#292929] p-[6px] rounded-[50%] hover:text-[#2acc97] active:bg-[#2acc97]/10 cursor-pointer"></i>
+        <div class="w-full flex items-center justify-between max-[535px]:items-start max-[535px]:flex-col-reverse max-[535px]:gap-y-2">
+            <div class="flex items-center w-1/2 gap-3 max-[535px]:w-full">
+                <SearchBar @search-entered="licenseSearch" width="w-full" placeholder="Enter a license plate..."/>
+                <svg @click="reload" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="w-8 h-8 text-[#292929] p-[6px] rounded-[50%] hover:text-[#2acc97] active:bg-[#2acc97]/10 cursor-pointer duration-300 ease-in-out transition-transform hover:rotate-180">
+                    <path stroke-linecap="round" stroke-linejoin="round" d="M16.023 9.348h4.992v-.001M2.985 19.644v-4.992m0 0h4.992m-4.993 0l3.181 3.183a8.25 8.25 0 0013.803-3.7M4.031 9.865a8.25 8.25 0 0113.803-3.7l3.181 3.182m0-4.991v4.99" />
+                </svg>
             </div>
-
             <!-- Pagination -->
-            <div class="flex items-center gap-2 w-[20%] justify-end">
-                <i class="fa-solid fa-circle-arrow-left text-[#1d1d1d] text-base cursor-pointer hover:text-[#2acc97]" @click="pageHandler('left')"></i>
+            <div class="flex items-center gap-2 w-fit justify-end max-[535px]:w-full">
+                <svg @click="pageHandler('left')" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor" class="w-6 h-6 text-[#1d1d1d] cursor-pointer duration-200 hover:text-[#2acc97]">
+                    <path fill-rule="evenodd" d="M12 2.25c-5.385 0-9.75 4.365-9.75 9.75s4.365 9.75 9.75 9.75 9.75-4.365 9.75-9.75S17.385 2.25 12 2.25zm-4.28 9.22a.75.75 0 000 1.06l3 3a.75.75 0 101.06-1.06l-1.72-1.72h5.69a.75.75 0 000-1.5h-5.69l1.72-1.72a.75.75 0 00-1.06-1.06l-3 3z" clip-rule="evenodd" />
+                </svg>
                 <div class="flex items-center">
                     <input type="number" min="1" :max="totalPage" :value="props.pageNum" @keyup.enter="enterHandler($event.target.value)" class="border border-[#1d1d1d] border-opacity-10 p-[2px] w-10 text-[14px] text-[#1d1d1d] font-semibold">
                     <div class="text-[14px] text-[#1d1d1d] font-semibold">/{{ totalPage }}</div>
-                    <!-- <div class="text-green-400">{{ typeof pageNumber }}</div> -->
                 </div>
-                <i class="fa-solid fa-circle-arrow-right text-[#1d1d1d] text-base cursor-pointer hover:text-[#2acc97]" @click="pageHandler('right')"></i>
+                <svg @click="pageHandler('right')" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor" class="w-6 h-6 text-[#1d1d1d] cursor-pointer duration-200 hover:text-[#2acc97]">
+                    <path fill-rule="evenodd" d="M12 2.25c-5.385 0-9.75 4.365-9.75 9.75s4.365 9.75 9.75 9.75 9.75-4.365 9.75-9.75S17.385 2.25 12 2.25zm4.28 10.28a.75.75 0 000-1.06l-3-3a.75.75 0 10-1.06 1.06l1.72 1.72H8.25a.75.75 0 000 1.5h5.69l-1.72 1.72a.75.75 0 101.06 1.06l3-3z" clip-rule="evenodd" />
+                </svg>
             </div>
         </div>
-        <div class="w-full flex items-center">
-            <div class="w-[30%] flex items-center gap-2">
+        <Transition name="slide-fade">
+            <div v-if="wrongLicenseFormat" class="w-full flex items-center space-x-1 text-red-500">
+                <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="w-6 h-6">
+                    <path stroke-linecap="round" stroke-linejoin="round" d="M12 9v3.75m9-.75a9 9 0 11-18 0 9 9 0 0118 0zm-9 3.75h.008v.008H12v-.008z" />
+                </svg>
+                <p class="text-sm font-semibold">Please enter the correct format (e.g. 29F-288.10)</p>
+            </div>
+        </Transition>
+        <div class="w-full min-[732px]:flex-row flex flex-col gap-y-2 min-[732px]:items-center">
+            <div class="w-full min-[732px]:w-[30%] flex items-center gap-2">
                 <div class="flex items-center">
                     <h1 class="text-[#9196a4] font-semibold">Filter</h1>
                 </div>
@@ -267,20 +326,32 @@ const reload = async () => {
                 </select>
 
                 <!-- Ordering -->
-                <div v-if="selected !== 'No filter' && selected !== 'Time' && city === 'All' && brand === 'All'" class="flex flex-col gap-1">
-                    <i @click="fromAtoZClicked" class="fa-solid fa-arrow-up-z-a text-[#1d1d1d] cursor-pointer" :class="fromAtoZ === 'asc' ? 'text-[#2acc97]' : ''"></i>
-                    <i @click="fromZtoAClicked" class="fa-solid fa-arrow-up-a-z text-[#1d1d1d] cursor-pointer" :class="fromAtoZ === 'desc' ? 'text-[#2acc97]' : ''"></i>
+                <div v-if="selected !== 'No filter' && selected === 'Brand' && brand === 'All'" class="flex flex-col gap-1">
+                    <svg @click="fromAtoZClicked" xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-arrow-big-up-filled w-5 h-5 cursor-pointer" :class="fromAtoZ === 'asc' ? 'text-[#2acc97]' : ''" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round">
+                        <path stroke="none" d="M0 0h24v24H0z" fill="none"></path>
+                        <path d="M10.586 3l-6.586 6.586a2 2 0 0 0 -.434 2.18l.068 .145a2 2 0 0 0 1.78 1.089h2.586v7a2 2 0 0 0 2 2h4l.15 -.005a2 2 0 0 0 1.85 -1.995l-.001 -7h2.587a2 2 0 0 0 1.414 -3.414l-6.586 -6.586a2 2 0 0 0 -2.828 0z" stroke-width="0" fill="currentColor"></path>
+                    </svg>
+                    <svg @click="fromZtoAClicked" xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-arrow-big-down-filled w-5 h-5 cursor-pointer" :class="fromAtoZ === 'desc' ? 'text-[#2acc97]' : ''" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round">
+                        <path stroke="none" d="M0 0h24v24H0z" fill="none"></path>
+                        <path d="M10 2l-.15 .005a2 2 0 0 0 -1.85 1.995v6.999l-2.586 .001a2 2 0 0 0 -1.414 3.414l6.586 6.586a2 2 0 0 0 2.828 0l6.586 -6.586a2 2 0 0 0 .434 -2.18l-.068 -.145a2 2 0 0 0 -1.78 -1.089l-2.586 -.001v-6.999a2 2 0 0 0 -2 -2h-4z" stroke-width="0" fill="currentColor"></path>
+                    </svg>
                 </div>
-                <div v-else-if="selected === 'Time'" class="flex flex-col gap-1">
-                    <i @click="timeAscendingClicked" class="fa-solid fa-arrow-up text-[#1d1d1d] cursor-pointer duration-100" :class="timeAscending ? 'text-[#2acc97]' : ''"></i>
-                    <i @click="timeDescendingClicked" class="fa-solid fa-arrow-down text-[#1d1d1d] cursor-pointer duration-100" :class="!timeAscending ? 'text-[#2acc97]' : ''"></i>
+                <div v-else-if="selected === 'Time'" class="flex flex-col">
+                    <svg @click="timeAscendingClicked" xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-arrow-badge-up-filled w-5 h-5 cursor-pointer" :class="timeAscending === 'asc' ? 'text-[#2acc97]' : ''" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round">
+                        <path stroke="none" d="M0 0h24v24H0z" fill="none"></path>
+                        <path d="M11.375 6.22l-5 4a1 1 0 0 0 -.375 .78v6l.006 .112a1 1 0 0 0 1.619 .669l4.375 -3.501l4.375 3.5a1 1 0 0 0 1.625 -.78v-6a1 1 0 0 0 -.375 -.78l-5 -4a1 1 0 0 0 -1.25 0z" stroke-width="0" fill="currentColor"></path>
+                    </svg>
+                    <svg @click="timeDescendingClicked" xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-arrow-badge-down-filled w-5 h-5 cursor-pointer" :class="timeAscending === 'desc' ? 'text-[#2acc97]' : ''" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round">
+                        <path stroke="none" d="M0 0h24v24H0z" fill="none"></path>
+                        <path d="M16.375 6.22l-4.375 3.498l-4.375 -3.5a1 1 0 0 0 -1.625 .782v6a1 1 0 0 0 .375 .78l5 4a1 1 0 0 0 1.25 0l5 -4a1 1 0 0 0 .375 -.78v-6a1 1 0 0 0 -1.625 -.78z" stroke-width="0" fill="currentColor"></path>
+                    </svg>
                 </div>
             </div>
-            <div class="w-[70%] flex items-center ml-3">
+            <div class="w-full min-[732px]:w-[70%] flex items-center max-[731px]:justify-end min-[732px]:ml-3">
                 <!-- City filter -->
                 <Transition name="slide-fade">
-                    <div v-show="selected === 'City'" class="flex items-center gap-2">
-                        <div class="flex items-center">
+                    <div v-show="selected === 'City'" class="flex max-[731px]:w-full max-[731px]:pr-[26px] items-center gap-2">
+                        <div class="flex items-center max-[731px]:pr-[10px]">
                             <h1 class="text-[#9196a4] font-semibold">City</h1>
                         </div>
                         <select v-model="city" @change="cityClicked(city)" id="countries" class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-[4px] focus:outline-[#2acc97] block w-full p-2.5">
@@ -303,7 +374,7 @@ const reload = async () => {
                 
                 <!-- Brand filter -->
                 <Transition name="slide-fade">
-                    <div v-show="selected === 'Brand'" class="flex items-center gap-2">
+                    <div v-show="selected === 'Brand'" class="flex max-[731px]:w-full items-center gap-2">
                         <div class="flex items-center">
                             <h1 class="text-[#9196a4] font-semibold">Brand</h1>
                         </div>
@@ -317,7 +388,7 @@ const reload = async () => {
                 
                 <!-- Time filter -->
                 <Transition name="slide-fade">
-                    <div v-show="selected === 'Time'" class="flex items-center gap-2 w-full">
+                    <div v-show="selected === 'Time'" class="flex max-[731px]:w-full items-center gap-2 w-full">
                         <select v-model="time.year" @change="timeClicked(time.year, 'year')" class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-[4px] focus:outline-[#2acc97] block w-full p-2.5">
                             <option v-for="singleYear in yearList" :key="singleYear" :value="singleYear">
                                 {{ singleYear }}
@@ -338,6 +409,14 @@ const reload = async () => {
                 
             </div>
         </div>
+        <Transition name="slide-fade">
+            <div v-if="ownerError" class="w-full flex items-center space-x-1 text-red-500">
+                <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="w-6 h-6">
+                    <path stroke-linecap="round" stroke-linejoin="round" d="M12 9v3.75m9-.75a9 9 0 11-18 0 9 9 0 0118 0zm-9 3.75h.008v.008H12v-.008z" />
+                </svg>
+                <p class="text-sm font-semibold">Please enter the correct format of SSN or Tax-number</p>
+            </div>
+        </Transition>
     </div>
 </template>
 

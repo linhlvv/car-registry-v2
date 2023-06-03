@@ -1,16 +1,18 @@
 <script setup>
-const props = defineProps(['description', 'detail', 'icon']);
+const props = defineProps(['description', 'detail']);
 </script>
 
 <template>
-    <div class="bg-[#f2f4f9] flex flex-col w-[27%] max-[860px]:w-[35%] max-[600px]:w-1/2 h-36 rounded-md active:border-2 active:border-[#2acc97] active:bg-[#cdfcec]/40">
-        <div class="text-[#1d1d1d] text-opacity-60 w-full h-[15%] font-semibold text-[10px] flex justify-center items-end text-center max-[1030px]:text-[8px] max-[860px]:text-[10px] max-[750px]:text-[8px]">
+    <div class="bg-[#f2f4f9] flex flex-col w-full h-36 rounded-md active:border-2 active:border-[#2acc97] active:bg-[#cdfcec]/40">
+        <div class="text-[#1d1d1d] text-opacity-60 w-full h-[15%] font-semibold text-[10px] flex justify-center items-end text-center">
             {{ description }}
         </div>
         <div class="flex items-center justify-center h-[55%]">
-            <i :class="icon" class="text-4xl text-[#1d1d1d] text-opacity-80"></i>
+            <slot name="i">
+
+            </slot>
         </div>
-        <div class="w-full h-[30%] flex justify-center items-center text-center font-medium text-[13px] max-[1030px]:text-[11px] max-[860px]:text-[13px] max-[750px]:text-[11px]">
+        <div class="w-full h-[30%] flex justify-center items-center text-center font-medium text-[13px]">
             {{ detail }}
         </div>
     </div>

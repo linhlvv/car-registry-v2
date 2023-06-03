@@ -1,0 +1,218 @@
+//import { YEAR } from 'mysql/lib/protocol/constants/types'
+import pool from "../../../configs/connectDB";
+
+//Functione trả về các năm hoạt động, mỗi năm gồm thông tin các tháng gồm số xe đăng kiểm, số xe hết hạn
+
+let adminGetDataForChart = async (req, res) => {
+  if (req.session.email === undefined) {
+    return res.redirect("/");
+  }
+
+  let filter = req.body.filter;
+  let name = req.body.name;
+
+  let sub = "where";
+  if (filter === "region") {
+    sub = 
+    `
+    LEFT JOIN region r ON
+    r.id = v.regionId 
+    WHERE r.name = 
+    `
+    sub = sub + "'" + name + "'" + "and "
+  }
+  else if (filter === "centre") {
+    sub = 
+    `
+    LEFT JOIN centre c ON
+    c.id = re.centreId 
+    WHERE c.name = 
+    `
+    sub = sub + "'" + name + "'" + "and "
+  }
+  
+  let regist_base =
+    `
+    select count(*) as Registed 
+    from registry re 
+    LEFT JOIN vehicles v
+    on re.licenseId = v.licenseId
+    ` + sub + `
+     date like ?`;
+  let expire_base =
+    `select count(*) as Expired
+     from registry re
+     LEFT JOIN vehicles v
+     on re.licenseId = v.licenseId
+     ` + sub + `
+     expire like ?
+     `;
+
+  let getStart = "select MIN(YEAR(activation)) as year from centre";
+  let [start, fields2] = await pool.query(getStart);
+  let start_year = start[0].year;
+
+  let end_year = new Date().getFullYear();
+
+  let cnt_regist = [];
+  let cnt_expire = [];
+
+  let cnt_regist_January = [];
+  let cnt_regist_February = [];
+  let cnt_regist_March = [];
+  let cnt_regist_April = [];
+  let cnt_regist_May = [];
+  let cnt_regist_June = [];
+  let cnt_regist_July = [];
+  let cnt_regist_August = [];
+  let cnt_regist_September = [];
+  let cnt_regist_October = [];
+  let cnt_regist_November = [];
+  let cnt_regist_December = [];
+
+  let cnt_expire_January = [];
+  let cnt_expire_February = [];
+  let cnt_expire_March = [];
+  let cnt_expire_April = [];
+  let cnt_expire_May = [];
+  let cnt_expire_June = [];
+  let cnt_expire_July = [];
+  let cnt_expire_August = [];
+  let cnt_expire_September = [];
+  let cnt_expire_October = [];
+  let cnt_expire_November = [];
+  let cnt_expire_December = [];
+
+  let data_regist = [];
+  let data_expire = [];
+
+  let data_year = [];
+  let arr_year = [];
+  for (let i = start_year; i <= end_year; i++) {
+    arr_year.push(i);
+    cnt_regist[i] = await pool.query(regist_base, [i + "-__-__"]);
+    cnt_expire[i] = await pool.query(expire_base, [i + "-__-__"]);
+
+    cnt_regist_January[i] = await pool.query(regist_base, [
+            i + "-01-__",
+    ]);
+    cnt_regist_February[i] = await pool.query(regist_base, [
+            i + "-02-__",
+    ]);
+    cnt_regist_March[i] = await pool.query(regist_base, [
+            i + "-03-__",
+    ]);
+    cnt_regist_April[i] = await pool.query(regist_base, [
+            i + "-04-__",
+    ]);
+    cnt_regist_May[i] = await pool.query(regist_base, [
+            i + "-05-__",
+    ]);
+    cnt_regist_June[i] = await pool.query(regist_base, [
+            i + "-06-__",
+    ]);
+    cnt_regist_July[i] = await pool.query(regist_base, [
+            i + "-07-__",
+    ]);
+    cnt_regist_August[i] = await pool.query(regist_base, [
+            i + "-08-__",
+    ]);
+    cnt_regist_September[i] = await pool.query(regist_base, [
+            i + "-09-__",
+    ]);
+    cnt_regist_October[i] = await pool.query(regist_base, [
+            i + "-10-__",
+    ]);
+    cnt_regist_November[i] = await pool.query(regist_base, [
+            i + "-11-__",
+    ]);
+    cnt_regist_December[i] = await pool.query(regist_base, [
+            i + "-12-__",
+    ]);
+
+    cnt_expire_January[i] = await pool.query(expire_base, [
+            i + "-01-__",
+    ]);
+    cnt_expire_February[i] = await pool.query(expire_base, [
+            i + "-02-__",
+    ]);
+    cnt_expire_March[i] = await pool.query(expire_base, [
+            i + "-03-__",
+    ]);
+    cnt_expire_April[i] = await pool.query(expire_base, [
+            i + "-04-__",
+    ]);
+    cnt_expire_May[i] = await pool.query(expire_base, [
+            i + "-05-__",
+    ]);
+    cnt_expire_June[i] = await pool.query(expire_base, [
+            i + "-06-__",
+    ]);
+    cnt_expire_July[i] = await pool.query(expire_base, [
+            i + "-07-__",
+    ]);
+    cnt_expire_August[i] = await pool.query(expire_base, [
+            i + "-08-__",
+    ]);
+    cnt_expire_September[i] = await pool.query(expire_base, [
+            i + "-09-__",
+    ]);
+    cnt_expire_October[i] = await pool.query(expire_base, [
+            i + "-10-__",
+    ]);
+    cnt_expire_November[i] = await pool.query(expire_base, [
+            i + "-11-__",
+    ]);
+    cnt_expire_December[i] = await pool.query(expire_base, [
+            i + "-12-__",
+    ]);
+
+    data_regist[i] = {
+      total: cnt_regist[i][0][0].Registed,
+      month: {
+        January: cnt_regist_January[i][0][0].Registed,
+        February: cnt_regist_February[i][0][0].Registed,
+        March: cnt_regist_March[i][0][0].Registed,
+        April: cnt_regist_April[i][0][0].Registed,
+        May: cnt_regist_May[i][0][0].Registed,
+        June: cnt_regist_June[i][0][0].Registed,
+        July: cnt_regist_July[i][0][0].Registed,
+        August: cnt_regist_August[i][0][0].Registed,
+        September: cnt_regist_September[i][0][0].Registed,
+        October: cnt_regist_October[i][0][0].Registed,
+        November: cnt_regist_November[i][0][0].Registed,
+        December: cnt_regist_December[i][0][0].Registed,
+      },
+    };
+
+    data_expire[i] = {
+      total: cnt_expire[i][0][0].Expired,
+      month: {
+        January: cnt_expire_January[i][0][0].Expired,
+        February: cnt_expire_February[i][0][0].Expired,
+        March: cnt_expire_March[i][0][0].Expired,
+        April: cnt_expire_April[i][0][0].Expired,
+        May: cnt_expire_May[i][0][0].Expired,
+        June: cnt_expire_June[i][0][0].Expired,
+        July: cnt_expire_July[i][0][0].Expired,
+        August: cnt_expire_August[i][0][0].Expired,
+        September: cnt_expire_September[i][0][0].Expired,
+        October: cnt_expire_October[i][0][0].Expired,
+        November: cnt_expire_November[i][0][0].Expired,
+        December: cnt_expire_December[i][0][0].Expired,
+      },
+    };
+    data_year[i - start_year] = {
+      year: i,
+      regist: data_regist[i],
+      expire: data_expire[i],
+    };
+  }
+  return res.send({
+    Year: arr_year,
+    Data: data_year,
+  });
+};
+module.exports = {
+  adminGetDataForChart
+};

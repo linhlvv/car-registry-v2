@@ -12,9 +12,9 @@ const navigate = () => {
 </script>
 
 <template>
-    <div class="w-1/2 flex flex-col items-center">
-        <div class="w-full bg-transparent flex flex-col items-center justify-center h-60 gap-2">
-            <div @mouseover="hovered = true" @mouseleave="hovered = false" @click="navigate" class="h-4/5 w-64 ease-in-out duration-150 hover:bg-[#2acc97]/70 hover:border-opacity-50 cursor-pointer rounded-xl bg-[#2acc97]/50 border-4 border-solid border-[#2acc97] border-opacity-20 flex flex-col justify-between items-center p-6 gap-4">
+    <div class="w-1/3 flex flex-col items-center">
+        <div class="w-4/5 bg-transparent flex flex-col items-center justify-center h-60 gap-2">
+            <div @mouseover="hovered = true" @mouseleave="hovered = false" @click="navigate" class="h-4/5 w-full ease-in-out duration-150 hover:bg-[#2acc97]/70 hover:border-opacity-50 cursor-pointer rounded-xl bg-[#2acc97]/50 border-4 border-solid border-[#2acc97] border-opacity-20 flex flex-col justify-between items-center p-6 gap-4">
                 <i :class="icon" class="text-[80px] text-white"></i>
                 <div class="text-lg font-semibold text-center text-white">
                     {{ content }}

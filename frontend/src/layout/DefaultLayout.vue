@@ -1,19 +1,51 @@
 <script setup>
-import { ref } from 'vue';
+import { nextTick, onBeforeUnmount, onMounted, ref, watch } from 'vue';
 import Navbar from '../components/UI/Navbar.vue';
 import VerticalNavbar from '../components/UI/VerticalNavbar.vue';
+import ChangePasswordModal from '../components/modal/ChangePasswordModal.vue';
 
 const verticalNavOpened = ref(false);
 const verticalNavHandler = () => {
     verticalNavOpened.value = !verticalNavOpened.value
 };
+
+const screenW = ref(window.innerWidth)
+
+const onResize = () => {
+    screenW.value = window.innerWidth
+}
+
+onMounted(() => {
+    nextTick(() => {
+        window.addEventListener('resize', onResize)
+    })
+});
+
+onBeforeUnmount(() => {
+    window.removeEventListener('resize', onResize)
+});
+
+watch(screenW, () => {
+    if(screenW.value >= 732) {
+        verticalNavOpened.value = false
+    }
+});
+
+const changePasswordModalOpened = ref(false);
+const handlePasswordModal = () => {
+    changePasswordModalOpened.value = !changePasswordModalOpened.value
+};
+
 </script>
 
 <template>
-    <Navbar @vertical-nav-clicked="verticalNavHandler"/>
-    <div v-if="verticalNavOpened">
-        <VerticalNavbar @turn-off-nav="verticalNavHandler"/>
-    </div>
+    <Navbar :vertical-nav-on="verticalNavOpened" @vertical-nav-clicked="verticalNavHandler"/>
+    <ChangePasswordModal v-if="changePasswordModalOpened" @close-modal="handlePasswordModal"/>
+    <Transition name="nav-slide-fade">
+        <div v-if="verticalNavOpened" class="fixed w-full top-0 z-50 h-screen">
+            <VerticalNavbar :nav-on="verticalNavOpened" @openChangePasswordModal="handlePasswordModal" @turn-off-nav="verticalNavHandler"/>
+        </div>
+    </Transition>
     <router-view v-slot="{ Component, route }">
         <transition :name="route.meta.transition || 'fade'" mode="out-in">
             <component :is="Component" />
@@ -42,6 +74,20 @@ const verticalNavHandler = () => {
     .slide-fade-enter-from,
     .slide-fade-leave-to {
         transform: translateX(20px);
+        opacity: 0;
+    }
+
+    .nav-slide-fade-enter-active {
+        transition: all 0.5s ease-in-out;
+    }
+
+    .nav-slide-fade-leave-active {
+        transition: all 0.3s cubic-bezier(1, 0.5, 0.8, 1);
+    }
+
+    .nav-slide-fade-enter-from,
+    .nav-slide-fade-leave-to {
+        transform: translateX(100px);
         opacity: 0;
     }
 

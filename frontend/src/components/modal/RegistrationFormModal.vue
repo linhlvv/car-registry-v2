@@ -36,13 +36,10 @@ const findCarInfo = async() => {
         console.log(res.error);
     }
     const dataFetched = JSON.parse(await res.text())
-    // console.log(`car info: ${JSON.stringify(dataFetched.data[0])}`);
     carDetailedInfo.value = dataFetched.data[0]
-    // console.log(dataFetched.ownerType);
     ownerType.value = dataFetched.ownerType
     registryCert.value.info = dataFetched.data2
     registryCert.value.valid = dataFetched.valid
-    console.log(`info: ${JSON.stringify(carDetailedInfo.value)}`);
     loading.value = false
 };
 
@@ -63,10 +60,7 @@ const fetchRegistrationInfo = async () => {
         console.log(res.error);
     }
     const dataFetched = JSON.parse(await res.text())
-    console.log(`car info: ${JSON.stringify(dataFetched)}`);
     registrationInfo.value = dataFetched
-    // console.log(dataFetched.ownerType);
-    console.log(`info: ${JSON.stringify(registrationInfo.value)}`);
     loading.value = false
 }
 
@@ -94,7 +88,6 @@ const submitFormHandler = async () => {
     if(res.error) {
         console.log(res.error);
     }
-    console.log(res.status);
     if(res.status === 200) {
         triggerInterval()
     }
@@ -119,7 +112,6 @@ watch(second, (newSec, oldSec) => {
     if(newSec === 3) {
         second.value = 0
         loadingSubmit.value = false
-        registrationCertStore.setRegistrationCertInfo(JSON.stringify(registryCert.value.info))
         const param = props.license.replace('.', '=')
         let route = router.resolve({ path: `/print-pdf/${param}` }) 
         window.open(route.href)
@@ -131,27 +123,29 @@ watch(second, (newSec, oldSec) => {
 </script>
 
 <template>
-    <div class="bg-black/40 backdrop-blur-[2px] top-0 left-0 w-full h-screen blur-xl fixed z-10 backdrop-animation" @click="exitModal"></div>
-    <div class="bg-[#f5f7fb] rounded-[8px] p-4 fixed top-[3vh] left-[10%] w-4/5 z-50 flex modal-animation overflow-hidden h-fit">
-        <div v-if="!loadingSubmit" class="flex flex-col gap-2 w-full">
-            <div ref="docs" class="w-full flex gap-2 h-[450px]">
-                <RegistrationCarAndOwner :owner-type="ownerType" :info="carDetailedInfo" :regist-new-car="false"/>
-                <RegistrationCert :registry-info="registrationInfo"/>
+    <div class="w-full h-screen flex items-center justify-center fixed z-50 top-0">
+        <div class="bg-black/40 backdrop-blur-[2px] top-0 left-0 w-full h-screen blur-xl fixed z-50" @click="exitModal"></div>
+        <div class="bg-[#f5f7fb] rounded-[8px] p-4 fixed w-3/5 max-xl:w-4/5 max-lg:w-full z-50 flex modal-animation overflow-hidden h-fit">
+            <div v-if="!loadingSubmit" class="flex flex-col gap-2 w-full">
+                <div id="modal" ref="docs" class="w-full flex max-md:flex-col gap-2 h-[450px] max-md:overflow-y-scroll">
+                    <RegistrationCarAndOwner :owner-type="ownerType" :info="carDetailedInfo" :regist-new-car="false"/>
+                    <RegistrationCert :registry-info="registrationInfo"/>
+                </div>
+                <div class="w-full flex gap-4 justify-end">
+                    <button @click="exitModal" class="bg-transparent hover:bg-[#2acc97]/10 active:bg-[#2acc97]/30 border border-solid border-[#2acc97] text-[#2acc97] font-semibold text-xs p-3 px-5 rounded-[4px]">
+                        Cancel
+                    </button>
+                    <button @click="submitFormHandler" class="bg-[#2acc97]/70 hover:bg-[#2acc97]/90 active:bg-[#2acc97] text-white font-semibold text-xs p-3 px-5 rounded-[4px]">
+                        Regist
+                    </button>
+                </div>
             </div>
-            <div class="w-full flex gap-4 justify-end">
-                <button @click="exitModal" class="bg-transparent hover:bg-[#2acc97]/10 active:bg-[#2acc97]/30 border border-solid border-[#2acc97] text-[#2acc97] font-semibold text-xs p-3 px-5 rounded-[4px]">
-                    Cancel
-                </button>
-                <button @click="submitFormHandler" class="bg-[#2acc97]/70 hover:bg-[#2acc97]/90 active:bg-[#2acc97] text-white font-semibold text-xs p-3 px-5 rounded-[4px]">
-                    Regist
-                </button>
+            <div v-else class="w-full flex gap-4 flex-col items-center justify-center bg-white h-[450px]">
+                <svg class="checkmark" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 52 52"><circle class="checkmark__circle" cx="26" cy="26" r="25" fill="none"/><path class="checkmark__check" fill="none" d="M14.1 27.2l7.1 7.2 16.7-16.8"/></svg>
+                <span class="w-full text-center text-[#1d1d1d] text-xl font-semibold">
+                    Regist successfully
+                </span>
             </div>
-        </div>
-        <div v-else class="w-full flex gap-4 flex-col items-center justify-center bg-white h-[450px]">
-            <svg class="checkmark" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 52 52"><circle class="checkmark__circle" cx="26" cy="26" r="25" fill="none"/><path class="checkmark__check" fill="none" d="M14.1 27.2l7.1 7.2 16.7-16.8"/></svg>
-            <span class="w-full text-center text-[#1d1d1d] text-xl font-semibold">
-                Regist successfully
-            </span>
         </div>
     </div>
 </template>
@@ -171,6 +165,23 @@ watch(second, (newSec, oldSec) => {
             opacity: 1;
             transform: translateY(0);
         }
+    }
+
+    #modal::-webkit-scrollbar {
+        width: 6px;
+    }
+    
+    #modal::-webkit-scrollbar-track {
+        border-radius: 12px;
+    }
+    
+    #modal::-webkit-scrollbar-thumb {
+        background-color: #2acc97;
+        outline: none;
+        border-radius: 12px;
+    }
+    #modal::-webkit-scrollbar-thumb:hover {
+        background-color: #0ce29b;
     }
 
     .checkmark__circle {

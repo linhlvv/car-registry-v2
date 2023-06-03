@@ -2,7 +2,11 @@
 import StatisticChart from '../components/statistics/StatisticChart.vue';
 import StatisticTable from '../components/statistics/StatisticTable.vue';
 import CertInfoModal from '../components/modal/CertInfoModal.vue';
+import NoSpecificSelect from '../components/UI/NoSpecificSelect.vue';
+import { useAdminSelectionStore } from '../stores/AdminSelectionStore';
 import { ref, watch } from 'vue';
+
+const adminSelectionStore = useAdminSelectionStore()
 
 const time = ref({
     year: 'All', quarter: 'All', month: 'All'
@@ -12,40 +16,59 @@ const handleTimeChange = (timeValue) => {
     time.value = timeValue
 };
 
-const scrollUp = () => {
-    document.documentElement.scrollTop = screen.height/5
-};
-
 const chart = ref(null);
 
-const openCertInfoModal = (license) => {
-    console.log(license);
+//SECTION - cert modal handler
+const modalOn = ref(false)
+const certId = ref(null)
+
+const openCertInfoModal = (id) => {
+    modalOn.value = true
+    certId.value = id
+};
+
+const closeModal = () => {
+    modalOn.value = false
 };
 
 </script>
 
 <template>
     <div class="w-full">
-        <div>
-            <CertInfoModal />
-        </div>
-        <div class="w-full flex items-center flex-col gap-5 py-5 relative z-0">
-            <StatisticTable :time="time" @selected-time-clicked="handleTimeChange" @openCertInfoModal="openCertInfoModal"/>
-            <Transition name="slide-fade">
-                <div ref="chart" class="w-full flex justify-center" v-if="time.year !== 'All'">
-                    <StatisticChart :year="parseInt(time.year)"/>
+        <Transition name="fade" mode="out-in">
+            <div v-if="!adminSelectionStore.getVerified" class="w-full flex items-center">
+                <NoSpecificSelect />
+            </div>
+            <div v-else class="w-full">
+                <div v-if="modalOn">
+                    <CertInfoModal :cert-id="certId" @exit-modal="closeModal"/>
                 </div>
-            </Transition>
-            <!-- <div v-if="time.year !== 'All'" class="absolute ml-[86vw] mt-[150vh] w-fit h-fit">
-                <svg @click="scrollUp" xmlns="http://www.w3.org/2000/svg" fill="#e3fff6" viewBox="0 0 24 24" stroke-width="1" stroke="currentColor" class="w-10 h-10  cursor-pointer absolute z-10 animate-bounce text-[#2acc97]">
-                    <path stroke-linecap="round" stroke-linejoin="round" d="M15 11.25l-3-3m0 0l-3 3m3-3v7.5M21 12a9 9 0 11-18 0 9 9 0 0118 0z" />
-                </svg>
-            </div> -->
-        </div>
+                <div class="w-full flex items-center flex-col gap-5 py-5">
+                    <StatisticTable :time="time" @selected-time-clicked="handleTimeChange" @openCertInfoModal="openCertInfoModal"/>
+                    <Transition name="slide-fade">
+                        <div ref="chart" class="w-full flex justify-center" v-if="time.year !== 'All'">
+                            <StatisticChart :year="parseInt(time.year)"/>
+                        </div>
+                    </Transition>
+                </div>
+            </div>
+        </Transition>
     </div>
 </template>
 
 <style scoped>
+
+
+.fade-enter-active,
+.fade-leave-active {
+    transition: all 0.3s ease;
+}
+
+.fade-enter-from,
+.fade-leave-to {
+    opacity: 0;
+}
+
 .slide-fade-enter-active {
     transition: all 0.3s ease-out;
 }

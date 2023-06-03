@@ -1,24 +1,17 @@
 <script setup>
-import { ref } from 'vue';
+import { onMounted, ref, watch } from 'vue';
 import AccountCard from './AccountCard.vue';
 import AccountManagementRootRow from './AccountManagementRootRow.vue';
 import { useAccountStore } from '../../stores/AccountStore';
 
-const emit = defineEmits(['openModificationModal'])
+const props = defineProps(['isRefetched'])
+const emit = defineEmits(['openModificationModal', 'stopRefetch', 'bindId'])
 
-const accountStore = useAccountStore()
-
-const openModModal = () => {
-    emit('openModificationModal')
+const openModModal = (item) => {
+    emit('openModificationModal', item)
 }
 
-const accountList = ref([
-    {id: 1, email: 'tuandeptrai@gmail.com', password: '123456'},
-    {id: 2, email: 'tuandeptrai@gmail.com', password: '123456'},
-    {id: 3, email: 'tuandeptrai@gmail.com', password: '123456'},
-    {id: 4, email: 'tuandeptrai@gmail.com', password: '123456'},
-    {id: 5, email: 'tuandeptrai@gmail.com', password: '123456'},
-]);
+const accountList = ref([]);
 const loading = ref(false)
 
 const fetchAvailableCenters = async () => {
@@ -27,7 +20,7 @@ const fetchAvailableCenters = async () => {
         credentials: "include",
         headers: {
             'Content-Type': 'application/json',
-            'Authorization': `${accountStore.getToken}`
+            'Authorization': `${localStorage.getItem('token')}`
         },
     })
     if(res.error) {
@@ -35,21 +28,31 @@ const fetchAvailableCenters = async () => {
     }
     const dataFetched = JSON.parse(await res.text())
     accountList.value = [...dataFetched.data]
-    console.log(`centers: ${JSON.stringify(accountList.value)}`);
+    emit('stopRefetch')
     loading.value = false
 };
 
-fetchAvailableCenters()
+onMounted(() => {
+    fetchAvailableCenters()
+});
+
+watch(() => props.isRefetched, (newStatus, oldStatus) => {
+    if(newStatus) {
+        fetchAvailableCenters()
+    }
+});
 
 </script>
 
 <template>
-    <div class="flex flex-col items-center w-3/4">
-        <AccountManagementRootRow />
-        <div class="mb-8 w-full">
-            <div class=" flex flex-col gap-[6px] items-center w-full">
+    <div id="table" class="flex flex-col items-center w-3/4 overflow-x-scroll mb-8">
+        <div class="w-full mb-1">
+            <div class=" flex flex-col-reverse gap-[6px] items-center w-full">
                 <div v-for="item in accountList" :key="item.id" class="w-full">
                     <AccountCard :item="item" @open-modification-modal="openModModal"/>
+                </div>
+                <div class="w-full">
+                    <AccountManagementRootRow />
                 </div>
             </div>
         </div>
@@ -57,10 +60,20 @@ fetchAvailableCenters()
 </template>
 
 <style scoped>
+    #table::-webkit-scrollbar {
+        height: 7px;
+    }
     
-    @media screen and (max-width: 640px) {
-        .item {
-            flex-direction: column;
-        }
+    #table::-webkit-scrollbar-track {
+        border-radius: 12px;
+    }
+    
+    #table::-webkit-scrollbar-thumb {
+        background-color: #2acc97;
+        outline: none;
+        border-radius: 12px;
+    }
+    #table::-webkit-scrollbar-thumb:hover {
+        background-color: #0ce29b;
     }
 </style>
