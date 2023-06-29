@@ -24,5 +24,9 @@ To run, use
 yarn dev
 ```
 
+In order to sign in as Admin, use the account: admin@registrytotal.com, password: z
+
+In order to sign in as normal user, use the account: northside1@registrytotal.com, password: z
+
 ## Contributing
 This website is built by Tuan, Quang, Linh, students at UET-VNU.
