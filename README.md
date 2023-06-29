@@ -11,9 +11,13 @@ This website is a SPA website, built with Vuejs, Tailwindcss, Expressjs. The dat
 Clone this into your computer
 Use this sql script file to create the database we are using: https://github.com/anhbanlinhle/car_registry/blob/main/backend/sql_generate/backup/car_regist.sql
 
-To run, use
+To install prerequisites, use
 ```bash
 yarn install
+```
+
+To run, use
+```bash
 yarn dev
 ```
 
