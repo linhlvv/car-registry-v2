@@ -1,0 +1,50 @@
+.container {
+  font-family: var(--font-geist-mono);
+  display: flex;
+  align-items: center;
+  height: 100vh;
+  background-color: #FAF9F6;
+}
+
+.background {
+  margin-left: auto;
+}
+
+.form {
+  flex: 1;
+  align-items: center;
+  justify-content: center;
+}
+
+.formContent {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 40px;
+  height: 50%;
+}
+
+.formTitle {
+  text-align: center;
+  font-size: 40px;
+  font-weight: 700;
+  color: #01d6a8;
+}
+
+.formInput {
+  width: 400px;
+  height: 40px;
+  border-bottom: 1px solid #01d6a8;
+}
+
+.formButton {
+  width: 200px;
+  height: 40px;
+  background-color: #01d6a8;
+  color: #fff;
+  font-family: var(--font-geist-mono);
+  font-size: 20px;
+  font-weight: 800;
+  border-radius: 50px;
+}
+
